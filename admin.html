@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | KitchenX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { fog: '#F2F4F7', coal: '#141517', orange: '#FF4F18' },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif; background: #F7F8FA; color: #141517; }
+    .nav-btn { position: relative; color: #667085; background: transparent; margin: 0 12px 2px; width: calc(100% - 24px); }
+    .nav-btn.is-active { color: #FF4F18; background: #FFF4F0; font-weight: 700; }
+    .nav-btn.is-active::before {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: #FF4F18;
+      border-radius: 0 2px 2px 0;
+    }
+    .search:focus { outline: none; border-color: rgba(255, 79, 24, 0.7); box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12); }
+    aside.collapsed { width: 76px; }
+    aside.collapsed .nav-label, aside.collapsed .nav-group, aside.collapsed .brand-sub, aside.collapsed .brand-full, aside.collapsed .help-box { display: none; }
+    aside.collapsed .brand-mark { display: inline; }
+    aside.collapsed .brand-row { justify-content: center; padding-left: 8px; padding-right: 8px; }
+    aside.collapsed .nav-btn { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 8px; margin-right: 8px; width: calc(100% - 16px); }
+    aside.collapsed .nav-btn.is-active::before { left: -8px; }
+    aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
+    .brand-mark { display: none; }
+    .collapse-fab {
+      position: absolute;
+      top: 26px;
+      right: -12px;
+      z-index: 45;
+      display: none;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid #EEF0F3;
+      background: #fff;
+      color: #667085;
+      box-shadow: 0 2px 8px rgba(20,21,23,.08);
+    }
+    .collapse-fab svg { display: block; }
+    @media (min-width: 1024px) { .collapse-fab { display: grid; } }
+    .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; width: 200px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
+    .user-wrap.open .user-menu { display: block; }
+
+    .kpi-card { display: flex; align-items: center; gap: 14px; border-radius: 22px; padding: 16px 18px; min-height: 96px; }
+    .kpi-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: #fff; flex-shrink: 0; }
+    .kpi-body { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0,1fr) auto; column-gap: 10px; align-items: end; }
+    .kpi-label { grid-column: 1; grid-row: 1; margin: 0; font-size: 13px; font-weight: 600; color: #667085; white-space: nowrap; }
+    .kpi-value { grid-column: 1; grid-row: 2; margin: 2px 0 0; font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+    .kpi-delta { grid-column: 2; grid-row: 1; margin: 0; font-size: 12px; font-weight: 700; color: #12B76A; text-align: right; white-space: nowrap; }
+    .kpi-delta.is-muted { color: #667085; }
+    .kpi-vs { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; font-weight: 600; color: #98A2B3; text-align: right; white-space: nowrap; }
+
+    .dash-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+    .dash-date { text-align: right; flex-shrink: 0; }
+    @media (max-width: 1024px) {
+      .dash-head { flex-wrap: wrap; }
+    }
+
+    .ot-chart { display: grid; grid-template-columns: 36px 1fr; gap: 8px; align-items: start; }
+    .ot-y { position: relative; height: 176px; }
+    .ot-y span { position: absolute; right: 0; font-size: 11px; font-weight: 600; color: #98A2B3; line-height: 1; transform: translateY(-50%); }
+    .ot-y span:nth-child(1) { top: 0; transform: none; }
+    .ot-y span:nth-child(2) { top: 25%; }
+    .ot-y span:nth-child(3) { top: 50%; }
+    .ot-y span:nth-child(4) { top: 75%; }
+    .ot-plot { position: relative; min-width: 0; }
+    .ot-plot svg { display: block; width: calc(100% - 52px); height: 176px; }
+    .ot-x { display: flex; justify-content: space-between; margin-top: 6px; margin-right: 52px; font-size: 11px; font-weight: 600; color: #98A2B3; }
+    .ot-tip { position: absolute; right: 0; top: 6px; border-radius: 8px; background: #FFF1EC; padding: 4px 8px; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+
+    .qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .qa-btn { border-radius: 18px; padding: 18px 8px 14px; text-align: center; }
+    .qa-icon { display: grid; place-items: center; width: 40px; height: 40px; margin: 0 auto; border-radius: 12px; background: #fff; }
+    .qa-label { margin-top: 8px; font-size: 11px; font-weight: 700; line-height: 1.25; color: #141517; }
+
+    .thumb { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
+
+    .crumb { font-size: 13px; font-weight: 700; color: #98A2B3; }
+    .crumb button { color: #98A2B3; font-weight: 700; }
+    .crumb button:hover { color: #FF4F18; }
+    .crumb .here { color: #FF4F18; }
+    .form-card { background: #fff; border-radius: 24px; padding: 22px 24px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
+    .form-title { margin: 0 0 16px; font-size: 16px; font-weight: 800; }
+    .lbl { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #344054; }
+    .req { color: #F04438; }
+    .field { width: 100%; height: 44px; border: 1px solid #E4E7EC; border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 500; background: #fff; color: #141517; }
+    textarea.field { height: auto; min-height: 92px; padding: 12px 14px; resize: vertical; }
+    select.field { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .field::placeholder { color: #98A2B3; }
+    .field:focus { outline: none; border-color: #FF4F18; box-shadow: 0 0 0 4px rgba(255,79,24,0.12); }
+    .hint { margin-top: 4px; font-size: 11px; font-weight: 600; color: #98A2B3; }
+    .dropzone { display: grid; place-items: center; border: 1.5px dashed #D0D5DD; border-radius: 16px; background: #F8FAFC; padding: 28px 16px; text-align: center; cursor: pointer; }
+    .dropzone.drag { border-color: #FF4F18; background: #FFF4F0; }
+    .browse { color: #FF4F18; font-weight: 800; }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; }
+    .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-ui { position: relative; width: 44px; height: 24px; border-radius: 999px; background: #E4E7EC; flex-shrink: 0; }
+    .toggle-ui::after { content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(20,21,23,0.15); transition: left .18s ease; }
+    .toggle input:checked + .toggle-ui { background: #FF4F18; }
+    .toggle input:checked + .toggle-ui::after { left: 22px; }
+    .btn-ghost { height: 44px; padding: 0 20px; border-radius: 12px; border: 1px solid #E4E7EC; background: #fff; font-size: 14px; font-weight: 800; color: #344054; }
+    .btn-save { height: 44px; padding: 0 20px; border-radius: 12px; border: 0; background: #FF4F18; font-size: 14px; font-weight: 800; color: #fff; }
+    .btn-save:hover { filter: brightness(0.96); }
+    .preview-stage { border-radius: 20px; background: #FFF6F2; padding: 28px 20px; text-align: center; }
+    .check-card { margin-top: 14px; border-radius: 16px; background: #EAF8F0; padding: 14px 16px; }
+    .check-card li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; font-weight: 700; color: #344054; margin-top: 6px; }
+    .check-card li:first-child { margin-top: 0; }
+    .check-card .tick { color: #12B76A; font-weight: 800; }
+    .img-thumb { position: relative; width: 92px; height: 92px; border-radius: 14px; overflow: hidden; border: 1px solid #EEF0F3; background: #fff; }
+    .img-thumb img, .img-thumb svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-x { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 999px; background: #F04438; color: #fff; font-size: 12px; font-weight: 800; line-height: 20px; text-align: center; }
+    .add-more { width: 92px; height: 92px; border-radius: 14px; border: 1.5px dashed #D0D5DD; background: #F8FAFC; color: #667085; font-size: 12px; font-weight: 700; }
+    #toast { position: fixed; right: 24px; bottom: 24px; z-index: 50; display: none; border-radius: 14px; background: #141517; color: #fff; padding: 12px 16px; font-size: 13px; font-weight: 700; box-shadow: 0 12px 30px rgba(20,21,23,0.18); }
+    #toast.show { display: block; }
+    .phone-cc { width: 92px; flex-shrink: 0; }
+    .inv-kpi { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); min-height: 92px; }
+    .inv-kpi .ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px; flex-shrink: 0; }
+    .badge { display: inline-flex; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; }
+    .badge-in { background: #EAF8F0; color: #12B76A; }
+    .badge-low { background: #FFF1EC; color: #FF4F18; }
+    .badge-out { background: #FEE4E2; color: #F04438; }
+    .line-table { width: 100%; text-align: left; font-size: 14px; font-weight: 600; }
+    .line-table th { padding: 10px 8px; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #98A2B3; }
+    .line-table td { padding: 12px 8px; border-top: 1px solid #F2F4F7; vertical-align: middle; }
+    .qty { width: 88px; height: 38px; }
+    .pager button { width: 32px; height: 32px; border-radius: 999px; font-size: 12px; font-weight: 800; color: #667085; }
+    .pager button.is-on { background: #FF4F18; color: #fff; }
+    .btn-scan { height: 44px; padding: 0 16px; border-radius: 12px; border: 0; background: #EAF8F0; color: #12B76A; font-size: 14px; font-weight: 800; }
+    .btn-scan.is-on { background: #12B76A; color: #fff; }
+    .btn-plus { height: 40px; padding: 0 14px; border-radius: 12px; border: 0; background: #FF4F18; color: #fff; font-size: 13px; font-weight: 800; }
+    .trash { color: #F04438; }
+    .modal-scrim { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; background: rgba(20,21,23,.35); }
+    .modal-scrim.show { display: grid; }
+    .badge-proc { background: #FFF1EC; color: #FF4F18; }
+    .badge-pack { background: #EAF8F0; color: #12B76A; }
+    .badge-ship { background: #F3EEFF; color: #7A5AF8; }
+    .badge-done { background: #EAF8F0; color: #12B76A; }
+    .badge-cancel { background: #FEE4E2; color: #F04438; }
+    .badge-open { background: #FFF8E8; color: #DC6803; }
+    .badge-prog { background: #EEF4FF; color: #1570EF; }
+    .badge-refund { background: #F3EEFF; color: #7A5AF8; }
+    .set-tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #EEF0F3; }
+    .set-tab { display: inline-flex; align-items: center; gap: 8px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: #667085; white-space: nowrap; border-bottom: 2px solid transparent; }
+    .set-tab.is-on { color: #FF4F18; border-bottom-color: #FF4F18; }
+    .pref-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; }
+    .link-act { color: #1570EF; font-weight: 800; font-size: 13px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
+      <div class="brand-row flex items-center gap-2 px-5 py-5">
+        <a href="kitchenx-v2.html" class="brand-full whitespace-nowrap text-[22px] font-extrabold tracking-tight">Kitchen<span class="text-orange">X</span></a>
+        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
+        <span class="brand-sub text-sm font-semibold text-[#98A2B3]">Admin</span>
+      </div>
+      <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
+        <button data-panel="dashboard" data-title="Dashboard" class="nav-btn is-active mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l8-7 8 7v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Catalogue</p>
+        <button data-panel="products" data-title="Products" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span class="nav-label">Products</span>
+        </button>
+        <button data-panel="categories" data-title="Categories" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span class="nav-label">Categories</span>
+        </button>
+        <button data-panel="brands" data-title="Brands" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+          <span class="nav-label">Brands</span>
+        </button>
+        <button data-panel="addons" data-title="Menu Add-ons" class="nav-btn mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+          <span class="nav-label">Menu Add-ons</span>
+        </button>
+
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Procurement</p>
+        <button data-panel="suppliers" data-title="Suppliers" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13v13H3z"/><path d="M16 10h5v10h-5"/></svg>
+          <span class="nav-label">Suppliers</span>
+        </button>
+        <button data-panel="purchase" data-title="Purchase Orders" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 7h11M9 12h11M9 17h11M4 7h.01M4 12h.01M4 17h.01"/></svg>
+          <span class="nav-label">Purchase Orders</span>
+        </button>
+        <button data-panel="inventory" data-title="Inventory" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+          <span class="nav-label">Inventory</span>
+        </button>
+        <button data-panel="goods" data-title="Goods Receiving" class="nav-btn mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
+          <span class="nav-label">Goods Receiving</span>
+        </button>
+
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Orders &amp; Fulfilment</p>
+        <button data-panel="orders" data-title="Orders" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span class="nav-label">Orders</span>
+        </button>
+        <button data-panel="delivery" data-title="Delivery & Logistics" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+          <span class="nav-label">Delivery &amp; Logistics</span>
+        </button>
+        <button data-panel="returns" data-title="Returns & Complaints" class="nav-btn mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          <span class="nav-label">Returns &amp; Complaints</span>
+        </button>
+
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Business Management</p>
+        <button data-panel="customers" data-title="Customers (B2B)" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span class="nav-label">Customers (B2B)</span>
+        </button>
+        <button data-panel="sellers" data-title="Sellers / Partners" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="nav-label">Sellers / Partners</span>
+        </button>
+        <button data-panel="offers" data-title="Price Lists & Offers" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16v13H4z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+          <span class="nav-label">Price Lists &amp; Offers</span>
+        </button>
+        <button data-panel="finance" data-title="Payments & Finance" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span class="nav-label">Payments &amp; Finance</span>
+        </button>
+        <button data-panel="reports" data-title="Reports & Analytics" class="nav-btn mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V8"/></svg>
+          <span class="nav-label">Reports &amp; Analytics</span>
+        </button>
+
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Platform</p>
+        <button data-panel="cms" data-title="Content & CMS" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V6l8-3 8 3v13.5"/><path d="M12 3v16"/></svg>
+          <span class="nav-label">Content &amp; CMS</span>
+        </button>
+        <button data-panel="notifications" data-title="Notifications" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="nav-label">Notifications</span>
+          <span class="nav-label ml-auto h-2 w-2 rounded-full bg-[#F04438]"></span>
+        </button>
+        <button data-panel="users" data-title="Users & Roles" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+          <span class="nav-label">Users &amp; Roles</span>
+        </button>
+        <button data-panel="settings" data-title="Settings" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+      <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <header class="flex items-center justify-between gap-4 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
+        <div class="flex min-w-0 flex-1 items-center gap-3">
+          <button id="menuBtn" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <label class="relative w-full max-w-[480px]">
+            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            </span>
+            <input id="adminSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-[#F7F8FA] pl-10 pr-4 text-sm font-medium" placeholder="Search for orders, products, suppliers, customers..." />
+          </label>
+        </div>
+        <div class="flex items-center justify-end gap-3">
+          <button class="relative grid h-10 w-10 place-items-center rounded-full text-[#667085]" aria-label="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#F04438]"></span>
+          </button>
+          <div class="user-wrap relative">
+            <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
+              <div class="grid h-9 w-9 place-items-center rounded-full bg-[#FFE8E0] text-sm font-extrabold text-orange">R</div>
+              <div class="hidden text-left sm:block">
+                <div class="text-sm font-extrabold leading-tight">Rahul Sharma</div>
+                <div class="text-[11px] font-semibold text-[#98A2B3]">Super Admin</div>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div id="userMenu" class="user-menu" role="menu">
+              <button id="logoutBtn" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog" role="menuitem">Logout</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 p-4 lg:p-6">
+        <section id="dashboardView" class="panel">
+          <div class="dash-head">
+            <div>
+              <h1 class="text-[32px] font-extrabold tracking-tight">Good morning, Rahul!</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Here's what's happening with KitchenX today.</p>
+            </div>
+            <div class="dash-date">
+              <div class="flex items-center justify-end gap-1.5 text-sm font-extrabold text-[#344054]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+                Tue, 24 Jun 2025
+              </div>
+              <select class="mt-1 bg-transparent text-xs font-semibold text-[#667085]">
+                <option>All locations</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi-card" style="background:#FFF1EC">
+              <div class="kpi-icon text-orange">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+              </div>
+              <div class="kpi-body">
+                <p class="kpi-label">Total Orders</p>
+                <p class="kpi-delta">↑ 12%</p>
+                <p class="kpi-value">1,482</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#EAF8F0">
+              <div class="kpi-icon text-emerald-600">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="kpi-body">
+                <p class="kpi-label">Active Customers</p>
+                <p class="kpi-delta">↑ 8%</p>
+                <p class="kpi-value">1,026</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#FFF8E8">
+              <div class="kpi-icon text-amber-600">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div class="kpi-body">
+                <p class="kpi-label">Products Listed</p>
+                <p class="kpi-delta is-muted">↓ 5%</p>
+                <p class="kpi-value">12,340</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#EEF4FF">
+              <div class="kpi-icon text-sky-600">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+              </div>
+              <div class="kpi-body">
+                <p class="kpi-label">On-Time Delivery</p>
+                <p class="kpi-delta">↑ 1.2%</p>
+                <p class="kpi-value">98.7%</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="mt-4 grid gap-4 xl:grid-cols-[1.4fr_0.8fr]">
+            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h2 class="text-lg font-extrabold">Order Trends</h2>
+                  <p class="text-sm font-medium text-[#667085]">Total orders in the last 30 days</p>
+                </div>
+                <button class="rounded-full border border-[#E4E7EC] px-3 py-1.5 text-xs font-bold text-[#667085]">Last 30 days</button>
+              </div>
+              <div class="relative mt-4">
+                <div class="ot-chart">
+                  <div class="ot-y"><span>400</span><span>300</span><span>200</span><span>100</span></div>
+                  <div class="ot-plot">
+                    <div class="ot-tip">342 orders</div>
+                    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#FF4F18" stop-opacity="0.18"/>
+                          <stop offset="100%" stop-color="#FF4F18" stop-opacity="0"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M0 200 L0 170 L50 148 L100 120 L150 108 L200 105 L250 118 L300 110 L350 90 L400 88 L450 62 L500 68 L550 72 L600 29 L600 200 Z" fill="url(#area)"/>
+                      <path d="M0 170 L50 148 L100 120 L150 108 L200 105 L250 118 L300 110 L350 90 L400 88 L450 62 L500 68 L550 72 L600 29" fill="none" stroke="#FF4F18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="600" cy="29" r="5" fill="#FF4F18"/>
+                    </svg>
+                    <div class="ot-x">
+                      <span>25 May</span><span>30 May</span><span>4 Jun</span><span>9 Jun</span><span>14 Jun</span><span>19 Jun</span><span>24 Jun</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <h2 class="text-lg font-extrabold">Quick Actions</h2>
+              <div class="qa-grid mt-4">
+                <button data-panel="products" class="js-go qa-btn" style="background:#FFF1EC">
+                  <div class="qa-icon text-orange text-lg font-extrabold">+</div>
+                  <div class="qa-label">Add Product</div>
+                </button>
+                <button data-panel="suppliers" class="js-go qa-btn" style="background:#F3EEFF">
+                  <div class="qa-icon text-violet-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </div>
+                  <div class="qa-label">Add Supplier</div>
+                </button>
+                <button data-panel="offers" class="js-go qa-btn" style="background:#EAF8F0">
+                  <div class="qa-icon text-emerald-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1" fill="currentColor"/></svg>
+                  </div>
+                  <div class="qa-label">Create Offer</div>
+                </button>
+                <button data-panel="purchase" class="js-go qa-btn" style="background:#EEF4FF">
+                  <div class="qa-icon text-sky-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16h16V8z"/><path d="M14 2v6h6"/></svg>
+                  </div>
+                  <div class="qa-label">Create Purchase Order</div>
+                </button>
+                <button data-panel="orders" class="js-go qa-btn" style="background:#F3F4F6">
+                  <div class="qa-icon text-coal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+                  </div>
+                  <div class="qa-label">Manage Orders</div>
+                </button>
+                <button data-panel="inventory" class="js-go qa-btn" style="background:#FFF8E8">
+                  <div class="qa-icon text-amber-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5z"/></svg>
+                  </div>
+                  <div class="qa-label">Update Inventory</div>
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <div class="mt-4 grid gap-4 xl:grid-cols-[1.25fr_0.95fr]">
+            <article class="overflow-hidden rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-extrabold">Recent Orders</h2>
+                <button data-panel="orders" class="js-go text-sm font-extrabold text-orange">View all →</button>
+              </div>
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full min-w-[640px] text-left text-sm">
+                  <thead class="text-xs font-bold uppercase tracking-wide text-[#98A2B3]">
+                    <tr>
+                      <th class="py-2 font-bold">#</th>
+                      <th class="py-2 font-bold">Customer</th>
+                      <th class="py-2 font-bold">Items</th>
+                      <th class="py-2 font-bold">Amount</th>
+                      <th class="py-2 font-bold">Status</th>
+                      <th class="py-2 font-bold">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody class="font-semibold">
+                    <tr class="border-t border-[#F2F4F7]">
+                      <td class="py-3 text-[#667085]">#ORD12456</td>
+                      <td class="py-3"><span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg bg-[#EEF4FF] text-[10px] font-extrabold text-sky-700">UT</span>The Urban Table</td>
+                      <td>12</td>
+                      <td class="text-sky-600">₹12,430</td>
+                      <td><span class="rounded-full bg-[#FFF1EC] px-2 py-1 text-[11px] font-extrabold text-orange">Processing</span></td>
+                      <td class="text-[#667085]">24 Jun, 10:24 AM</td>
+                    </tr>
+                    <tr class="border-t border-[#F2F4F7]">
+                      <td class="py-3 text-[#667085]">#ORD12455</td>
+                      <td class="py-3"><span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg bg-[#FFF1EC] text-[10px] font-extrabold text-orange">SR</span>Spice Route Cafe</td>
+                      <td>8</td>
+                      <td class="text-sky-600">₹8,220</td>
+                      <td><span class="rounded-full bg-[#EAF8F0] px-2 py-1 text-[11px] font-extrabold text-emerald-600">Packed</span></td>
+                      <td class="text-[#667085]">24 Jun, 09:18 AM</td>
+                    </tr>
+                    <tr class="border-t border-[#F2F4F7]">
+                      <td class="py-3 text-[#667085]">#ORD12454</td>
+                      <td class="py-3"><span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg bg-[#FFF8E8] text-[10px] font-extrabold text-amber-700">CH</span>Hotel Crest</td>
+                      <td>20</td>
+                      <td class="text-sky-600">₹21,650</td>
+                      <td><span class="rounded-full bg-[#FFF1EC] px-2 py-1 text-[11px] font-extrabold text-orange">Out for Delivery</span></td>
+                      <td class="text-[#667085]">24 Jun, 08:41 AM</td>
+                    </tr>
+                    <tr class="border-t border-[#F2F4F7]">
+                      <td class="py-3 text-[#667085]">#ORD12453</td>
+                      <td class="py-3"><span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg bg-[#F3EEFF] text-[10px] font-extrabold text-violet-700">BB</span>Bite &amp; Brew</td>
+                      <td>6</td>
+                      <td class="text-sky-600">₹6,980</td>
+                      <td><span class="rounded-full bg-[#EAF8F0] px-2 py-1 text-[11px] font-extrabold text-emerald-600">Delivered</span></td>
+                      <td class="text-[#667085]">24 Jun, 08:12 AM</td>
+                    </tr>
+                    <tr class="border-t border-[#F2F4F7]">
+                      <td class="py-3 text-[#667085]">#ORD12452</td>
+                      <td class="py-3"><span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg bg-[#EEF4FF] text-[10px] font-extrabold text-sky-700">SK</span>Sri Krishna Caterers</td>
+                      <td>15</td>
+                      <td class="text-sky-600">₹14,320</td>
+                      <td><span class="rounded-full bg-[#FFF1EC] px-2 py-1 text-[11px] font-extrabold text-orange">Processing</span></td>
+                      <td class="text-[#667085]">24 Jun, 07:55 AM</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-extrabold">Low Stock Alerts</h2>
+                <button data-panel="inventory" class="js-go text-sm font-extrabold text-orange">View all →</button>
+              </div>
+              <div class="mt-4 space-y-3 text-sm">
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-[#98A2B3]">
+                  <span>Product</span><span>SKU</span><span>Current</span><span class="whitespace-nowrap">Reorder At</span>
+                </div>
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2">
+                  <div class="flex items-center gap-2 font-bold">
+                    <svg class="thumb" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><circle cx="18" cy="21" r="10" fill="#E53935"/><circle cx="14.5" cy="18" r="2.6" fill="#FF8A80" opacity=".55"/><path d="M18 8c1.4 2.8 3.2 4.8 5.2 5.8" stroke="#43A047" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M18 8c-1.6 2.8-3.4 4.8-5.4 5.8" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="18" cy="9" r="2.1" fill="#43A047"/></svg>
+                    Tomatoes (1 kg)
+                  </div>
+                  <span class="text-[#667085]">PRD001</span><span class="font-extrabold text-orange">12 kg</span><span class="text-[#667085]">50 kg</span>
+                </div>
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2">
+                  <div class="flex items-center gap-2 font-bold">
+                    <svg class="thumb" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><rect x="7" y="12" width="22" height="14" rx="2" fill="#F2D36B"/><rect x="7" y="12" width="22" height="5" fill="#E6C14A"/><rect x="11" y="19" width="14" height="3" rx="1" fill="#FFF6D6"/></svg>
+                    Amul Butter (500 g)
+                  </div>
+                  <span class="text-[#667085]">DA002</span><span class="font-extrabold text-orange">6 pcs</span><span class="text-[#667085]">50 pcs</span>
+                </div>
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2">
+                  <div class="flex items-center gap-2 font-bold">
+                    <svg class="thumb" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><path d="M12 9h12l3 18H9z" fill="#E8D5B0"/><path d="M12 9h12l-1 4H13z" fill="#D7C09A"/><rect x="14" y="16" width="8" height="6" rx="1" fill="#C4A574"/></svg>
+                    Basmati Rice (5 kg)
+                  </div>
+                  <span class="text-[#667085]">GR014</span><span class="font-extrabold text-orange">8 bags</span><span class="text-[#667085]">50 bags</span>
+                </div>
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2">
+                  <div class="flex items-center gap-2 font-bold">
+                    <svg class="thumb" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><rect x="16" y="5" width="4" height="4" rx="1" fill="#F0C14A"/><path d="M14 9h8c1.2 0 2 .8 2 2v16c0 2-1.6 3-4 3h-4c-2.4 0-4-1-4-3V11c0-1.2.8-2 2-2z" fill="#F5C842"/><path d="M16 14h4v10h-4z" fill="#FFE082" opacity=".7"/></svg>
+                    Cooking Oil (1 L)
+                  </div>
+                  <span class="text-[#667085]">OIL009</span><span class="font-extrabold text-orange">10 pcs</span><span class="text-[#667085]">50 pcs</span>
+                </div>
+                <div class="grid grid-cols-[1fr_64px_64px_72px] items-center gap-2">
+                  <div class="flex items-center gap-2 font-bold">
+                    <svg class="thumb" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><rect x="10" y="10" width="3.5" height="16" rx="1.2" fill="#F5C842"/><rect x="15" y="8" width="3.5" height="18" rx="1.2" fill="#FFD54F"/><rect x="20" y="11" width="3.5" height="15" rx="1.2" fill="#F6C244"/><rect x="25" y="9" width="3.5" height="17" rx="1.2" fill="#FFCA28"/><ellipse cx="18" cy="28" rx="10" ry="3" fill="#E0A800" opacity=".35"/></svg>
+                    Frozen French Fries (2.5 kg)
+                  </div>
+                  <span class="text-[#667085]">FF023</span><span class="font-extrabold text-orange">4 pcs</span><span class="text-[#667085]">50 pcs</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="productsView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="products">Products</button> <span class="mx-1">›</span> <span class="here">Add Product</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Add New Product</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Add product details to list it in the catalogue</p>
+          <form id="productForm" class="mt-5 grid items-start gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div class="space-y-4">
+              <article class="form-card">
+                <h2 class="form-title">Basic Information</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label class="lbl" for="pName">Product Name <span class="req">*</span></label>
+                    <input id="pName" class="field" placeholder="e.g. Amul Butter" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pSku">SKU</label>
+                    <input id="pSku" class="field" placeholder="e.g. AMB500" />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pCat">Category <span class="req">*</span></label>
+                    <select id="pCat" class="field" required>
+                      <option value="">Select category</option>
+                      <option>Dairy</option>
+                      <option>Produce</option>
+                      <option>Grains</option>
+                      <option>Beverages</option>
+                      <option>Oil &amp; Ghee</option>
+                      <option>Frozen</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="lbl" for="pBrand">Brand <span class="req">*</span></label>
+                    <select id="pBrand" class="field" required>
+                      <option value="">Select brand</option>
+                      <option>Amul</option>
+                      <option>Nestle</option>
+                      <option>ITC</option>
+                      <option>Aashirvaad</option>
+                      <option>Local</option>
+                    </select>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="lbl" for="pDesc">Short Description</label>
+                    <textarea id="pDesc" class="field" placeholder="Brief description about the product..."></textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Product Details</h2>
+                <div class="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label class="lbl" for="pUnit">Unit <span class="req">*</span></label>
+                    <select id="pUnit" class="field" required>
+                      <option value="">Select unit</option>
+                      <option>Packet</option>
+                      <option>Bag</option>
+                      <option>Bottle</option>
+                      <option>Crate</option>
+                      <option>Carton</option>
+                      <option>Piece</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="lbl" for="pWeight">Net Weight / Volume <span class="req">*</span></label>
+                    <input id="pWeight" class="field" placeholder="e.g. 500" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pUnitType">Unit Type</label>
+                    <select id="pUnitType" class="field">
+                      <option>g</option>
+                      <option>kg</option>
+                      <option>ml</option>
+                      <option>L</option>
+                      <option>pcs</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="lbl" for="pBarcode">Barcode (optional)</label>
+                    <input id="pBarcode" class="field" placeholder="Scan or enter barcode" />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pHsn">HSN Code (optional)</label>
+                    <input id="pHsn" class="field" placeholder="e.g. 0405" />
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="space-y-4">
+              <article class="form-card">
+                <h2 class="form-title">Product Images</h2>
+                <label class="dropzone" id="pDrop">
+                  <input id="pFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple class="hidden" />
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-[#EEF4FF] text-sky-500">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.5A4.5 4.5 0 0018 8h-1.1A6.5 6.5 0 105 15.5"/><path d="M12 12v7"/><path d="M8.5 15.5L12 12l3.5 3.5"/></svg>
+                  </div>
+                  <p class="mt-3 text-sm font-bold text-[#344054]">Drag &amp; drop images here</p>
+                  <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                  <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 5 MB)</p>
+                </label>
+                <div id="pThumbs" class="mt-4 flex flex-wrap gap-3">
+                  <div class="img-thumb" data-default="1">
+                    <svg viewBox="0 0 92 92" aria-hidden="true"><rect width="92" height="92" fill="#F6C445"/><rect x="8" y="18" width="76" height="56" rx="6" fill="#E8B92E"/><rect x="8" y="18" width="76" height="18" fill="#C41E3A"/><text x="46" y="32" text-anchor="middle" font-size="11" font-weight="800" fill="#fff" font-family="Georgia, serif">Amul</text><text x="46" y="58" text-anchor="middle" font-size="10" font-weight="800" fill="#7A4E00">BUTTER</text></svg>
+                    <button type="button" class="img-x" aria-label="Remove image">×</button>
+                  </div>
+                  <button type="button" id="pAddMore" class="add-more">+<br />Add more</button>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Pricing &amp; Stock</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label class="lbl" for="pPurchase">Purchase Price (₹) <span class="req">*</span></label>
+                    <input id="pPurchase" class="field" value="305.55" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pMrp">MRP (₹)</label>
+                    <input id="pMrp" class="field" value="320.00" />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pSell">Selling Price (₹) <span class="req">*</span></label>
+                    <input id="pSell" class="field" value="305.55" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="pStock">Opening Stock</label>
+                    <input id="pStock" class="field" value="0" />
+                  </div>
+                </div>
+                <label class="toggle mt-5">
+                  <input id="pActive" type="checkbox" checked />
+                  <span class="toggle-ui"></span>
+                  Active
+                </label>
+              </article>
+              <div class="mt-auto flex justify-end gap-3">
+                <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+                <button type="submit" class="btn-save">Save Product</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="categoriesView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="categories">Categories</button> <span class="mx-1">›</span> <span class="here">Add Category</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Add New Category</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Create a product category to organize your catalogue</p>
+          <form id="categoryForm" class="mt-5 grid items-stretch gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div class="space-y-4">
+              <article class="form-card">
+                <h2 class="form-title">Category Information</h2>
+                <div class="space-y-4">
+                  <div>
+                    <label class="lbl" for="cName">Category Name <span class="req">*</span></label>
+                    <input id="cName" class="field" placeholder="e.g. Dairy" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="cParent">Parent Category</label>
+                    <select id="cParent" class="field">
+                      <option>None (Top Level)</option>
+                      <option>Dairy</option>
+                      <option>Produce</option>
+                      <option>Grains</option>
+                      <option>Frozen</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="lbl" for="cDesc">Description</label>
+                    <textarea id="cDesc" class="field" placeholder="Brief description about this category..."></textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Category Image</h2>
+                <label class="dropzone" id="cDrop">
+                  <input id="cFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-[#EEF4FF] text-sky-500">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.5A4.5 4.5 0 0018 8h-1.1A6.5 6.5 0 105 15.5"/><path d="M12 12v7"/><path d="M8.5 15.5L12 12l3.5 3.5"/></svg>
+                  </div>
+                  <p class="mt-3 text-sm font-bold text-[#344054]">Drag &amp; drop image here</p>
+                  <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                  <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 2 MB)</p>
+                </label>
+                <div id="cThumb" class="mt-3"></div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Display Settings</h2>
+                <div class="flex flex-wrap items-end justify-between gap-4">
+                  <div class="w-40">
+                    <label class="lbl" for="cSort">Sort Order</label>
+                    <input id="cSort" class="field" value="0" />
+                    <p class="hint">Lower numbers appear first</p>
+                  </div>
+                  <label class="toggle mb-1">
+                    <input id="cActive" type="checkbox" checked />
+                    <span class="toggle-ui"></span>
+                    Active
+                  </label>
+                </div>
+              </article>
+            </div>
+            <div class="flex h-full flex-col gap-4">
+              <article class="form-card">
+                <h2 class="form-title">Category Preview</h2>
+                <div class="preview-stage">
+                  <div id="cPreviewImg" class="mx-auto grid h-28 w-28 place-items-center rounded-[28px] bg-[#E8F4FF]">
+                    <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="10" width="28" height="40" rx="6" fill="#90CAF9"/><rect x="22" y="16" width="20" height="12" rx="3" fill="#BBDEFB"/><circle cx="32" cy="38" r="8" fill="#42A5F5"/><rect x="28" y="6" width="8" height="8" rx="2" fill="#64B5F6"/></svg>
+                  </div>
+                  <h3 id="cPreviewName" class="mt-4 text-xl font-extrabold">Dairy</h3>
+                  <p id="cPreviewDesc" class="mx-auto mt-1 max-w-[220px] text-sm font-medium text-[#667085]">Milk, cheese, butter and other dairy products</p>
+                </div>
+              </article>
+              <div class="mt-auto flex justify-end gap-3">
+                <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+                <button type="submit" class="btn-save">Save Category</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="brandsView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="brands">Brands</button> <span class="mx-1">›</span> <span class="here">Add Brand</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Add New Brand</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Add a brand to organize products by manufacturer</p>
+          <form id="brandForm" class="mt-5 grid items-stretch gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div class="space-y-4">
+              <article class="form-card">
+                <h2 class="form-title">Brand Information</h2>
+                <div class="space-y-4">
+                  <div>
+                    <label class="lbl" for="bName">Brand Name <span class="req">*</span></label>
+                    <input id="bName" class="field" placeholder="e.g. Amul" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="bDesc">Description</label>
+                    <textarea id="bDesc" class="field" placeholder="Brief description about the brand..."></textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Brand Logo</h2>
+                <label class="dropzone" id="bDrop">
+                  <input id="bFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-[#EEF4FF] text-sky-500">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.5A4.5 4.5 0 0018 8h-1.1A6.5 6.5 0 105 15.5"/><path d="M12 12v7"/><path d="M8.5 15.5L12 12l3.5 3.5"/></svg>
+                  </div>
+                  <p class="mt-3 text-sm font-bold text-[#344054]">Drag &amp; drop logo here</p>
+                  <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                  <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 2 MB)</p>
+                </label>
+                <div id="bThumb" class="mt-3"></div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Status</h2>
+                <label class="toggle">
+                  <input id="bActive" type="checkbox" checked />
+                  <span class="toggle-ui"></span>
+                  Active
+                </label>
+              </article>
+            </div>
+            <div class="flex h-full flex-col gap-4">
+              <article class="form-card">
+                <h2 class="form-title">Brand Preview</h2>
+                <div class="preview-stage">
+                  <div id="bPreviewLogo" class="mx-auto grid h-36 w-36 place-items-center rounded-[28px] bg-white shadow-sm">
+                    <span id="bPreviewWord" class="text-[34px] font-black leading-none" style="font-family:Georgia,'Times New Roman',serif;color:#C41E3A">Amul</span>
+                  </div>
+                  <h3 id="bPreviewName" class="mt-4 text-xl font-extrabold">Amul</h3>
+                  <p id="bPreviewDesc" class="mt-1 text-sm font-medium text-[#667085]">India's trusted dairy brand</p>
+                </div>
+                <ul class="check-card">
+                  <li><span class="tick">✓</span> Logo will be used across the platform</li>
+                  <li><span class="tick">✓</span> Helps in product identification</li>
+                  <li><span class="tick">✓</span> Can be edited later anytime</li>
+                </ul>
+              </article>
+              <div class="mt-auto flex justify-end gap-3">
+                <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+                <button type="submit" class="btn-save">Save Brand</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="addonsView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="addons">Menu Add-ons</button> <span class="mx-1">›</span> <span class="here">Add Add-on</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Add New Menu Add-on</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Create add-ons to be used with menu items (e.g. extra cheese, sauces, toppings)</p>
+          <form id="addonForm" class="mt-5 grid items-stretch gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div class="space-y-4">
+              <article class="form-card">
+                <h2 class="form-title">Add-on Information</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label class="lbl" for="aName">Add-on Name <span class="req">*</span></label>
+                    <input id="aName" class="field" placeholder="e.g. Extra Cheese" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="aCat">Category</label>
+                    <select id="aCat" class="field">
+                      <option value="">Select add-on category</option>
+                      <option>Cheese</option>
+                      <option>Sauces</option>
+                      <option>Toppings</option>
+                      <option>Sides</option>
+                    </select>
+                    <p class="hint">You can manage add-on categories in settings</p>
+                  </div>
+                  <div>
+                    <label class="lbl" for="aPrice">Price (₹) <span class="req">*</span></label>
+                    <input id="aPrice" class="field" placeholder="e.g. 30" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="aTax">Tax Type</label>
+                    <select id="aTax" class="field">
+                      <option>GST 5%</option>
+                      <option>GST 12%</option>
+                      <option>GST 18%</option>
+                      <option>Exempt</option>
+                    </select>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="lbl" for="aDesc">Description (optional)</label>
+                    <textarea id="aDesc" class="field" placeholder="Brief description..."></textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <div class="grid gap-6 lg:grid-cols-2">
+                  <div>
+                    <h2 class="form-title">Add-on Image (optional)</h2>
+                    <label class="dropzone" id="aDrop">
+                      <input id="aFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                      <div class="grid h-12 w-12 place-items-center rounded-full bg-[#EEF4FF] text-sky-500">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.5A4.5 4.5 0 0018 8h-1.1A6.5 6.5 0 105 15.5"/><path d="M12 12v7"/><path d="M8.5 15.5L12 12l3.5 3.5"/></svg>
+                      </div>
+                      <p class="mt-3 text-sm font-bold text-[#344054]">Drag &amp; drop image here</p>
+                      <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                      <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 2 MB)</p>
+                    </label>
+                    <div id="aThumb" class="mt-3"></div>
+                  </div>
+                  <div>
+                    <h2 class="form-title">Availability</h2>
+                    <label class="flex items-start gap-2 text-sm font-bold">
+                      <input id="aAll" type="checkbox" checked class="mt-1 h-4 w-4 accent-orange" />
+                      <span>Available for all menu items<br /><span class="text-xs font-semibold text-[#98A2B3]">You can restrict it to specific menu items later</span></span>
+                    </label>
+                    <div class="mt-6">
+                      <h2 class="form-title">Status</h2>
+                      <label class="toggle">
+                        <input id="aActive" type="checkbox" checked />
+                        <span class="toggle-ui"></span>
+                        Active
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="flex h-full flex-col gap-4">
+              <article class="form-card">
+                <h2 class="form-title">Preview</h2>
+                <div class="preview-stage">
+                  <div id="aPreviewImg" class="mx-auto grid h-32 w-32 place-items-center overflow-hidden rounded-full bg-white">
+                    <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><ellipse cx="48" cy="78" rx="26" ry="8" fill="#E5E7EB"/><path d="M22 52c2 18 50 18 52 0V44c0-10-12-16-26-16S22 34 22 44z" fill="#F3F4F6" stroke="#E5E7EB"/><ellipse cx="48" cy="46" rx="24" ry="12" fill="#F7D774"/><path d="M30 44c8-10 28-10 36 0" fill="none" stroke="#E8B84A" stroke-width="3"/><path d="M34 48l4-10 3 9" fill="none" stroke="#FFE08A" stroke-width="3" stroke-linecap="round"/><path d="M46 50l5-12 4 11" fill="none" stroke="#F5C542" stroke-width="3" stroke-linecap="round"/><path d="M58 48l3-9 3 8" fill="none" stroke="#FFE08A" stroke-width="3" stroke-linecap="round"/></svg>
+                  </div>
+                  <h3 id="aPreviewName" class="mt-4 text-xl font-extrabold">Extra Cheese</h3>
+                  <p id="aPreviewPrice" class="mt-1 text-lg font-extrabold text-orange">₹30</p>
+                  <span id="aPreviewStatus" class="mt-2 inline-flex rounded-full bg-[#EAF8F0] px-3 py-1 text-xs font-extrabold text-emerald-600">Active</span>
+                </div>
+                <div class="check-card">
+                  <p class="text-sm font-extrabold">This add-on can be used for:</p>
+                  <ul class="mt-2">
+                    <li><span class="tick">✓</span> Pizzas</li>
+                    <li><span class="tick">✓</span> Burgers</li>
+                    <li><span class="tick">✓</span> Pasta</li>
+                    <li><span class="tick">✓</span> Sandwiches</li>
+                    <li><span class="tick">✓</span> And more...</li>
+                  </ul>
+                </div>
+              </article>
+              <div class="mt-auto flex justify-end gap-3">
+                <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+                <button type="submit" class="btn-save">Save Add-on</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="suppliersView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="suppliers">Suppliers</button> <span class="mx-1">›</span> <span class="here">Add Supplier</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Add New Supplier</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Add supplier details to manage your procurement network</p>
+          <form id="supplierForm" class="mt-5 grid items-stretch gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+            <article class="form-card">
+              <h2 class="form-title">Supplier Information</h2>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="lbl" for="sName">Supplier Name <span class="req">*</span></label>
+                  <input id="sName" class="field" placeholder="e.g. Fresh Farms Pvt Ltd" required />
+                </div>
+                <div>
+                  <label class="lbl" for="sType">Supplier Type <span class="req">*</span></label>
+                  <select id="sType" class="field" required>
+                    <option value="">Select type</option>
+                    <option>Manufacturer</option>
+                    <option>Distributor</option>
+                    <option>Wholesaler</option>
+                    <option>Farm / Producer</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="lbl" for="sContact">Contact Person <span class="req">*</span></label>
+                  <input id="sContact" class="field" placeholder="e.g. Ramesh Kumar" required />
+                </div>
+                <div>
+                  <label class="lbl" for="sEmail">Email <span class="req">*</span></label>
+                  <input id="sEmail" class="field" type="email" placeholder="e.g. ramesh@freshfarms.com" required />
+                </div>
+                <div>
+                  <label class="lbl" for="sPhone">Phone <span class="req">*</span></label>
+                  <div class="flex gap-2">
+                    <select class="field phone-cc" aria-label="Country code"><option>+91</option></select>
+                    <input id="sPhone" class="field" placeholder="e.g. 98765 43210" required />
+                  </div>
+                </div>
+                <div>
+                  <label class="lbl" for="sAlt">Alternate Phone</label>
+                  <input id="sAlt" class="field" placeholder="e.g. 98765 43210" />
+                </div>
+                <div>
+                  <label class="lbl" for="sGst">GST Number</label>
+                  <input id="sGst" class="field" placeholder="e.g. 22AAAAA0000A1Z5" />
+                </div>
+                <div>
+                  <label class="lbl" for="sPay">Payment Terms</label>
+                  <select id="sPay" class="field">
+                    <option value="">Select payment terms</option>
+                    <option>Advance</option>
+                    <option>Net 7</option>
+                    <option>Net 15</option>
+                    <option>Net 30</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="lbl" for="sAddr">Address <span class="req">*</span></label>
+                  <textarea id="sAddr" class="field" placeholder="Enter complete address..." required></textarea>
+                </div>
+              </div>
+            </article>
+            <div class="flex h-full flex-col gap-4">
+              <article class="form-card">
+                <h2 class="form-title">Supplier Logo</h2>
+                <label class="dropzone" id="sDrop">
+                  <input id="sFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-[#EEF4FF] text-sky-500">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.5A4.5 4.5 0 0018 8h-1.1A6.5 6.5 0 105 15.5"/><path d="M12 12v7"/><path d="M8.5 15.5L12 12l3.5 3.5"/></svg>
+                  </div>
+                  <p class="mt-3 text-sm font-bold text-[#344054]">Drag &amp; drop logo here</p>
+                  <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                  <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 2 MB)</p>
+                </label>
+                <div id="sThumb" class="mt-3"></div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Supply Categories</h2>
+                <select id="sCats" class="field">
+                  <option value="">Select categories supplied</option>
+                  <option>Produce</option>
+                  <option>Dairy</option>
+                  <option>Meat &amp; Poultry</option>
+                  <option>Oil &amp; Ghee</option>
+                  <option>Grains</option>
+                </select>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Status</h2>
+                <label class="toggle">
+                  <input id="sActive" type="checkbox" checked />
+                  <span class="toggle-ui"></span>
+                  Active
+                </label>
+                <p class="hint">Active suppliers can be used in purchase orders</p>
+              </article>
+              <div class="mt-auto flex justify-end gap-3">
+                <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+                <button type="submit" class="btn-save">Save Supplier</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="purchaseView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="purchase">Purchase Orders</button> <span class="mx-1">›</span> <span class="here">Create Purchase Order</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Create Purchase Order</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Create a new purchase order for your supplier</p>
+          <form id="poForm" class="mt-5 space-y-4">
+            <article class="form-card">
+              <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div>
+                  <label class="lbl" for="poSupplier">Supplier <span class="req">*</span></label>
+                  <select id="poSupplier" class="field" required>
+                    <option value="">Select supplier</option>
+                    <option value="fresh" selected>Fresh Farms Pvt Ltd</option>
+                    <option value="amul">Amul Dairy</option>
+                    <option value="local">Local Produce Co</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="lbl" for="poNum">PO Number <span class="req">*</span></label>
+                  <div class="relative">
+                    <input id="poNum" class="field pr-11" value="PO20250624001" required />
+                    <button type="button" id="poRefresh" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#98A2B3]" aria-label="Refresh PO number">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label class="lbl" for="poDate">PO Date <span class="req">*</span></label>
+                  <input id="poDate" class="field" value="24 Jun 2025" required />
+                </div>
+                <div>
+                  <label class="lbl" for="poEta">Expected Delivery Date</label>
+                  <input id="poEta" class="field" placeholder="Select date" />
+                </div>
+              </div>
+            </article>
+            <div class="grid gap-4 xl:grid-cols-2">
+              <article class="form-card">
+                <h2 class="form-title">Supplier Details</h2>
+                <div class="flex items-start gap-3">
+                  <div id="poAvatar" class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#FFF1EC] text-lg font-extrabold text-orange">F</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <p id="poSupName" class="font-extrabold">Fresh Farms Pvt Ltd</p>
+                        <p id="poSupMeta" class="mt-1 text-xs font-semibold text-[#667085]">GST: 22AAAAA0000A1Z5<br />ramesh@freshfarms.com &nbsp;|&nbsp; +91 98765 43210</p>
+                      </div>
+                      <button type="button" class="shrink-0 text-sm font-extrabold text-orange" data-panel="suppliers">View Profile →</button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Delivery Location</h2>
+                <select id="poLoc" class="field">
+                  <option>Main Warehouse (Delhi)</option>
+                  <option>Mumbai Hub</option>
+                  <option>Bengaluru Dark Store</option>
+                </select>
+                <p id="poLocAddr" class="mt-2 text-sm font-semibold text-[#667085]">12A, Food Hub, Nehru Place, New Delhi - 110019</p>
+              </article>
+            </div>
+            <article class="form-card">
+              <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <h2 class="form-title mb-0">Order Items</h2>
+                <div class="flex items-center gap-2">
+                  <label class="relative">
+                    <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                    </span>
+                    <input id="poSearch" class="field h-10 w-56 pl-9" placeholder="Search products..." />
+                  </label>
+                  <button type="button" id="poAddItem" class="btn-plus">+ Add Item</button>
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="line-table min-w-[720px]">
+                  <thead>
+                    <tr>
+                      <th>#</th><th>Product</th><th>SKU</th><th>Unit</th><th>Price (₹)</th><th>Quantity</th><th>Total (₹)</th><th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="poRows"></tbody>
+                </table>
+              </div>
+              <div class="mt-5 grid gap-4 lg:grid-cols-[1fr_260px]">
+                <div>
+                  <label class="lbl" for="poNotes">Notes (optional)</label>
+                  <textarea id="poNotes" class="field" placeholder="Add any special instructions for this order..."></textarea>
+                </div>
+                <div class="text-sm font-bold">
+                  <div class="flex justify-between py-1 text-[#667085]"><span>Subtotal</span><span id="poSub">20,300.00</span></div>
+                  <div class="flex justify-between py-1 text-[#667085]"><span>GST (5%)</span><span id="poGst">1,015.00</span></div>
+                  <div class="mt-2 flex justify-between border-t border-[#EEF0F3] pt-2 text-base font-extrabold"><span>Total (₹)</span><span id="poTotal" class="text-orange">21,315.00</span></div>
+                </div>
+              </div>
+            </article>
+            <div class="flex justify-end gap-3">
+              <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+              <button type="submit" class="btn-save">Create Purchase Order</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="inventoryView" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="crumb"><button type="button" data-panel="inventory">Inventory</button> <span class="mx-1">›</span> <span class="here">All Stock</span></p>
+              <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Inventory Management</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Track stock levels, movements and availability across locations</p>
+            </div>
+            <button type="button" id="addStockBtn" class="btn-plus mt-6">+ Add Stock</button>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="inv-kpi">
+              <div class="ico bg-[#EEF4FF] text-sky-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5z"/></svg></div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-[#667085]">Total Products</p>
+                <p class="text-[26px] font-extrabold leading-none">1,230 <span class="text-sm font-bold text-emerald-600">↑ 8%</span></p>
+                <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">vs last month</p>
+              </div>
+            </article>
+            <article class="inv-kpi">
+              <div class="ico bg-[#FFF1EC] text-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.7L2.5 19h19L13.7 4.7a2 2 0 0 0-3.4 0z"/></svg></div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-[#667085]">Low Stock Items</p>
+                <p class="text-[26px] font-extrabold leading-none">48 <span class="text-sm font-bold text-emerald-600">↑ 12%</span></p>
+                <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">vs last month</p>
+              </div>
+            </article>
+            <article class="inv-kpi">
+              <div class="ico bg-[#EAF8F0] text-emerald-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-[#667085]">Total Stock Value</p>
+                <p class="text-[26px] font-extrabold leading-none">₹ 12.4L <span class="text-sm font-bold text-emerald-600">↑ 18%</span></p>
+                <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">vs last month</p>
+              </div>
+            </article>
+            <article class="inv-kpi">
+              <div class="ico bg-[#FEE4E2] text-[#F04438]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg></div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-[#667085]">Out of Stock</p>
+                <p class="text-[26px] font-extrabold leading-none">12 <span class="text-sm font-bold text-[#F04438]">↑ 20%</span></p>
+                <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">vs last month</p>
+              </div>
+            </article>
+          </div>
+          <article class="form-card mt-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="relative min-w-[220px] flex-1">
+                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                </span>
+                <input id="invSearch" class="field pl-9" placeholder="Search products by name, SKU..." />
+              </label>
+              <select id="invCat" class="field w-auto min-w-[140px]"><option>All Categories</option><option>Fruits &amp; Vegetables</option><option>Dairy</option><option>Rice &amp; Rice Products</option><option>Edible Oils</option><option>Chicken &amp; Eggs</option><option>Menu Add-ons</option></select>
+              <select id="invLoc" class="field w-auto min-w-[140px]"><option>All Locations</option><option>Main WH</option></select>
+              <select id="invStatus" class="field w-auto min-w-[130px]"><option>Stock Status</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select>
+              <button type="button" id="invExport" class="btn-ghost h-11">Export</button>
+            </div>
+            <div class="mt-4 overflow-x-auto">
+              <table class="line-table min-w-[900px]">
+                <thead>
+                  <tr>
+                    <th><input id="invAll" type="checkbox" class="h-4 w-4 accent-orange" /></th>
+                    <th>Product</th><th>SKU</th><th>Category</th><th>Current Stock</th><th>Reorder At</th><th>Status</th><th>Location</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="invRows"></tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-[#667085]">
+              <p>Showing 1-6 of 1,230 products</p>
+              <div class="pager flex items-center gap-1">
+                <button type="button" aria-label="Previous">‹</button>
+                <button type="button" class="is-on">1</button>
+                <button type="button">2</button>
+                <button type="button">3</button>
+                <button type="button">4</button>
+                <button type="button">5</button>
+                <span class="px-1">...</span>
+                <button type="button">205</button>
+                <button type="button" aria-label="Next">›</button>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section id="goodsView" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="crumb"><button type="button" data-panel="goods">Goods Receiving</button> <span class="mx-1">›</span> <span class="here">New Receipt</span></p>
+              <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Record Goods Receiving</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Record received items against a purchase order</p>
+            </div>
+            <button type="button" id="scanMode" class="btn-scan mt-6 inline-flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h3M17 5h3v2M4 17v2h3M17 19h3v-2M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>
+              Scan Mode
+            </button>
+          </div>
+          <form id="grnForm" class="mt-5 space-y-4">
+            <article class="form-card">
+              <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div>
+                  <label class="lbl" for="grnPo">Purchase Order <span class="req">*</span></label>
+                  <select id="grnPo" class="field" required>
+                    <option value="">Select purchase order</option>
+                    <option value="PO20250624001">PO20250624001</option>
+                    <option value="PO20250618012">PO20250618012</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="lbl">Supplier</label>
+                  <p id="grnSup" class="flex h-11 items-center text-sm font-bold text-[#667085]">-</p>
+                </div>
+                <div>
+                  <label class="lbl">PO Date</label>
+                  <p id="grnPoDate" class="flex h-11 items-center text-sm font-bold text-[#667085]">-</p>
+                </div>
+                <div>
+                  <label class="lbl">Expected Delivery</label>
+                  <p id="grnEta" class="flex h-11 items-center text-sm font-bold text-[#667085]">-</p>
+                </div>
+              </div>
+            </article>
+            <div class="grid items-start gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+              <article class="form-card">
+                <h2 class="form-title">Receiving Details</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label class="lbl" for="grnDate">Receiving Date <span class="req">*</span></label>
+                    <input id="grnDate" class="field" value="24 Jun 2025" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="grnBy">Received By <span class="req">*</span></label>
+                    <input id="grnBy" class="field" value="Rahul Sharma" required />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="lbl" for="grnLoc">Location <span class="req">*</span></label>
+                    <select id="grnLoc" class="field">
+                      <option>Main Warehouse (Delhi)</option>
+                      <option>Mumbai Hub</option>
+                      <option>Bengaluru Dark Store</option>
+                    </select>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="lbl" for="grnRef">Reference Number</label>
+                    <input id="grnRef" class="field" placeholder="e.g. GRN12345" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="lbl" for="grnNotes">Notes (optional)</label>
+                    <textarea id="grnNotes" class="field" placeholder="Add any notes..."></textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="form-card">
+                <h2 class="form-title">Items to Receive</h2>
+                <div class="overflow-x-auto">
+                  <table class="line-table min-w-[520px]">
+                    <thead>
+                      <tr>
+                        <th>#</th><th>Product</th><th>Ordered</th><th>Previously Received</th><th>Receiving Now</th><th>Unit</th>
+                      </tr>
+                    </thead>
+                    <tbody id="grnRows"></tbody>
+                  </table>
+                </div>
+                <div class="check-card mt-4 flex items-start gap-3">
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white text-emerald-600">✓</span>
+                  <div>
+                    <p class="text-sm font-extrabold">Stock will be updated automatically</p>
+                    <p class="mt-1 text-xs font-semibold text-[#667085]">Once you save, inventory will be updated and available for use.</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="flex justify-end gap-3">
+              <button type="button" class="btn-ghost" data-panel="dashboard">Cancel</button>
+              <button type="submit" class="btn-save">Save Goods Receipt</button>
+            </div>
+          </form>
+        </section>
+
+        <div id="stockModal" class="modal-scrim">
+          <form id="stockForm" class="form-card w-[min(100%,420px)]">
+            <h2 class="form-title">Add Stock</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="lbl" for="stProduct">Product <span class="req">*</span></label>
+                <select id="stProduct" class="field" required>
+                  <option value="">Select product</option>
+                  <option>Tomatoes (1 kg)</option>
+                  <option>Amul Butter (500 g)</option>
+                  <option>Basmati Rice (5 kg)</option>
+                  <option>Cooking Oil (1 L)</option>
+                  <option>Chicken Breast</option>
+                  <option>Extra Cheese (1 kg)</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl" for="stQty">Quantity <span class="req">*</span></label>
+                <input id="stQty" class="field" placeholder="e.g. 50" required />
+              </div>
+              <div>
+                <label class="lbl" for="stWh">Location</label>
+                <select id="stWh" class="field"><option>Main WH</option></select>
+              </div>
+            </div>
+            <div class="mt-5 flex justify-end gap-3">
+              <button type="button" id="stockCancel" class="btn-ghost">Cancel</button>
+              <button type="submit" class="btn-save">Save Stock</button>
+            </div>
+          </form>
+        </div>
+
+        <section id="ordersView" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="crumb"><button type="button" data-panel="orders">Orders</button> <span class="mx-1">›</span> <span class="here">All Orders</span></p>
+              <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Orders</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">View and manage all customer orders</p>
+            </div>
+            <div class="mt-6 flex items-center gap-2">
+              <select class="field w-auto"><option>24 Jun 2025 - 24 Jun 2025</option></select>
+              <button type="button" id="createOrderBtn" class="btn-plus">+ Create Order</button>
+            </div>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="inv-kpi"><div class="ico bg-[#FFF1EC] text-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">1,482</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Orders</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#EAF8F0] text-emerald-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">1,026</p><p class="mt-1 text-sm font-semibold text-[#667085]">Delivered</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#EEF4FF] text-sky-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">320</p><p class="mt-1 text-sm font-semibold text-[#667085]">Processing</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#FEE4E2] text-[#F04438]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">136</p><p class="mt-1 text-sm font-semibold text-[#667085]">Cancelled</p></div></article>
+          </div>
+          <article class="form-card mt-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="relative min-w-[220px] flex-1">
+                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
+                <input id="ordSearch" class="field pl-9" placeholder="Search by order ID, customer name..." />
+              </label>
+              <select id="ordStatus" class="field w-auto min-w-[130px]"><option>All Status</option><option>Processing</option><option>Packed</option><option>Out for Delivery</option><option>Delivered</option><option>Cancelled</option></select>
+              <select id="ordCust" class="field w-auto min-w-[140px]"><option>All Customers</option><option>The Urban Table</option><option>Spice Route Cafe</option><option>Hotel Crest</option><option>Bite &amp; Brew</option><option>Sri Krishna Caterers</option><option>Cloud Kitchen Co.</option></select>
+              <select id="ordLoc" class="field w-auto min-w-[130px]"><option>All Locations</option><option>Delhi</option></select>
+              <button type="button" id="ordExport" class="btn-ghost h-11">Export</button>
+            </div>
+            <div class="mt-4 overflow-x-auto">
+              <table class="line-table min-w-[860px]">
+                <thead><tr><th>#</th><th>Customer</th><th>Items</th><th>Amount</th><th>Status</th><th>Order Date</th><th>Action</th></tr></thead>
+                <tbody id="ordRows"></tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-[#667085]">
+              <p>Showing 1-6 of 1,482 orders</p>
+              <div class="pager flex items-center gap-1" id="ordPager"><button type="button">‹</button><button type="button" class="is-on">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button><span class="px-1">...</span><button type="button">248</button><button type="button">›</button></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="deliveryView" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="crumb"><button type="button" data-panel="delivery">Delivery &amp; Logistics</button> <span class="mx-1">›</span> <span class="here">Shipments</span></p>
+              <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Delivery &amp; Logistics</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Track and manage deliveries across all locations</p>
+            </div>
+            <div class="mt-6 flex items-center gap-2">
+              <select class="field w-auto"><option>All Locations</option><option>Delhi</option></select>
+              <button type="button" id="assignBtn" class="btn-plus">+ Assign Delivery</button>
+            </div>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="inv-kpi"><div class="ico bg-[#EEF4FF] text-sky-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">1,026</p><p class="mt-1 text-sm font-semibold text-[#667085]">Out for Delivery</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#EAF8F0] text-emerald-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-6"/><path d="M20 19v-3"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">98.7%</p><p class="mt-1 text-sm font-semibold text-[#667085]">On-Time Delivery</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#FFF8E8] text-amber-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.7L2.5 19h19L13.7 4.7a2 2 0 0 0-3.4 0z"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">12</p><p class="mt-1 text-sm font-semibold text-[#667085]">Delayed</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#FEE4E2] text-[#F04438]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">3</p><p class="mt-1 text-sm font-semibold text-[#667085]">Failed Attempts</p></div></article>
+          </div>
+          <article class="form-card mt-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="relative min-w-[220px] flex-1">
+                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
+                <input id="delSearch" class="field pl-9" placeholder="Search by order ID, driver, vehicle..." />
+              </label>
+              <select id="delStatus" class="field w-auto min-w-[130px]"><option>All Status</option><option>Out for Delivery</option><option>Delivered</option><option>Delayed</option><option>Picked</option></select>
+              <select id="delLoc" class="field w-auto min-w-[130px]"><option>All Locations</option><option>Delhi</option></select>
+              <select class="field w-auto"><option>24 Jun 2025 - 24 Jun 2025</option></select>
+              <button type="button" id="delExport" class="btn-ghost h-11">Export</button>
+            </div>
+            <div class="mt-4 overflow-x-auto">
+              <table class="line-table min-w-[920px]">
+                <thead><tr><th>#</th><th>Order ID</th><th>Customer</th><th>Driver</th><th>Vehicle</th><th>Status</th><th>ETA</th><th>Action</th></tr></thead>
+                <tbody id="delRows"></tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-[#667085]">
+              <p>Showing 1-6 of 1,026 shipments</p>
+              <div class="pager flex items-center gap-1" id="delPager"><button type="button">‹</button><button type="button" class="is-on">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button><span class="px-1">...</span><button type="button">171</button><button type="button">›</button></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="returnsView" class="panel hidden">
+          <div>
+            <p class="crumb"><button type="button" data-panel="returns">Returns &amp; Complaints</button> <span class="mx-1">›</span> <span class="here">All Requests</span></p>
+            <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Returns &amp; Complaints</h1>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Manage product returns, replacements and customer complaints</p>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="inv-kpi"><div class="ico bg-[#EEF4FF] text-sky-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">28</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Requests</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#FFF8E8] text-amber-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">12</p><p class="mt-1 text-sm font-semibold text-[#667085]">Open</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#EAF8F0] text-emerald-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">10</p><p class="mt-1 text-sm font-semibold text-[#667085]">Resolved</p></div></article>
+            <article class="inv-kpi"><div class="ico bg-[#FEE4E2] text-[#F04438]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div><div><p class="text-[26px] font-extrabold leading-none">6</p><p class="mt-1 text-sm font-semibold text-[#667085]">Refunded</p></div></article>
+          </div>
+          <article class="form-card mt-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="relative min-w-[220px] flex-1">
+                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
+                <input id="retSearch" class="field pl-9" placeholder="Search by request ID, order ID, customer..." />
+              </label>
+              <select id="retType" class="field w-auto min-w-[120px]"><option>All Types</option><option>Return</option><option>Complaint</option><option>Refund</option><option>Replacement</option></select>
+              <select id="retStatus" class="field w-auto min-w-[130px]"><option>All Status</option><option>Open</option><option>In Progress</option><option>Resolved</option><option>Refunded</option></select>
+              <select class="field w-auto"><option>24 Jun 2025 - 24 Jun 2025</option></select>
+              <button type="button" id="retExport" class="btn-ghost h-11">Export</button>
+            </div>
+            <div class="mt-4 overflow-x-auto">
+              <table class="line-table min-w-[920px]">
+                <thead><tr><th>#</th><th>Request ID</th><th>Order ID</th><th>Customer</th><th>Type</th><th>Status</th><th>Created On</th><th>Action</th></tr></thead>
+                <tbody id="retRows"></tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-[#667085]">
+              <p>Showing 1-6 of 28 requests</p>
+              <div class="pager flex items-center gap-1" id="retPager"><button type="button">‹</button><button type="button" class="is-on">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button><span class="px-1">...</span><button type="button">›</button></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="settingsView" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="crumb"><span class="here">Settings</span></p>
+              <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Settings</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Manage your platform configuration and preferences</p>
+            </div>
+            <button type="button" id="saveSettings" class="btn-save mt-6">Save Changes</button>
+          </div>
+          <div class="set-tabs mt-5" id="setTabs">
+            <button type="button" class="set-tab is-on" data-tab="general">General</button>
+            <button type="button" class="set-tab" data-tab="users">Users &amp; Roles</button>
+            <button type="button" class="set-tab" data-tab="locations">Locations</button>
+            <button type="button" class="set-tab" data-tab="notifications">Notifications</button>
+            <button type="button" class="set-tab" data-tab="integrations">Integrations</button>
+            <button type="button" class="set-tab" data-tab="business">Business Settings</button>
+          </div>
+          <form id="settingsForm" class="mt-4">
+            <div data-set="general" class="set-pane grid items-start gap-4 xl:grid-cols-2">
+              <article class="form-card">
+                <h2 class="form-title">General Information</h2>
+                <div class="space-y-4">
+                  <div>
+                    <label class="lbl" for="setBiz">Business Name <span class="req">*</span></label>
+                    <input id="setBiz" class="field" value="KitchenX" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="setEmail">Email <span class="req">*</span></label>
+                    <input id="setEmail" class="field" type="email" value="admin@kitchenx.com" required />
+                  </div>
+                  <div>
+                    <label class="lbl" for="setPhone">Phone <span class="req">*</span></label>
+                    <div class="flex gap-2">
+                      <select class="field phone-cc"><option>+91</option></select>
+                      <input id="setPhone" class="field" value="98765 43210" required />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="lbl" for="setAddr">Address</label>
+                    <textarea id="setAddr" class="field">12A, Food Hub, Nehru Place, New Delhi - 110019</textarea>
+                  </div>
+                  <div>
+                    <label class="lbl" for="setTz">Timezone</label>
+                    <select id="setTz" class="field"><option>(GMT+05:30) India Standard Time</option></select>
+                  </div>
+                  <div>
+                    <label class="lbl" for="setCur">Currency</label>
+                    <select id="setCur" class="field"><option>INR (₹) - Indian Rupee</option></select>
+                  </div>
+                </div>
+              </article>
+              <div class="space-y-4">
+                <article class="form-card">
+                  <h2 class="form-title">Platform Preferences</h2>
+                  <label class="pref-row"><span>Enable Multi-location</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Enable Customer Signup</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Enable Supplier Portal</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Allow COD Orders</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Low Stock Notifications</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Order Email Notifications</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                  <label class="pref-row"><span>Marketing Emails</span><span class="toggle"><input type="checkbox" /><span class="toggle-ui"></span></span></label>
+                </article>
+                <article class="form-card">
+                  <h2 class="form-title">Logo &amp; Branding</h2>
+                  <div class="flex flex-wrap items-center gap-4">
+                    <div class="grid h-24 w-[220px] shrink-0 place-items-center rounded-2xl border border-[#EEF0F3] bg-white text-[22px] font-extrabold tracking-tight whitespace-nowrap">Kitchen<span class="text-orange">X</span></div>
+                    <label class="dropzone flex-1" id="setDrop">
+                      <input id="setFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                      <p class="text-sm font-bold text-[#344054]">Drag &amp; drop logo here</p>
+                      <p class="text-sm font-semibold text-[#667085]">or click to <span class="browse">browse</span></p>
+                      <p class="mt-1 text-[11px] font-semibold text-[#98A2B3]">Supports JPG, PNG (Max 2 MB)</p>
+                    </label>
+                  </div>
+                  <div id="setThumb" class="mt-3"></div>
+                </article>
+              </div>
+            </div>
+            <div data-set="users" class="set-pane hidden">
+              <article class="form-card">
+                <h2 class="form-title">Users &amp; Roles</h2>
+                <table class="line-table">
+                  <thead><tr><th>User</th><th>Role</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="font-bold">Rahul Sharma</td><td>Super Admin</td><td><span class="badge badge-done">Active</span></td></tr>
+                    <tr><td class="font-bold">Priya Nair</td><td>Ops Manager</td><td><span class="badge badge-done">Active</span></td></tr>
+                    <tr><td class="font-bold">Amit Singh</td><td>Delivery Lead</td><td><span class="badge badge-done">Active</span></td></tr>
+                  </tbody>
+                </table>
+              </article>
+            </div>
+            <div data-set="locations" class="set-pane hidden">
+              <article class="form-card">
+                <h2 class="form-title">Locations</h2>
+                <div class="space-y-3 text-sm font-semibold">
+                  <p>Main Warehouse (Delhi) — 12A, Food Hub, Nehru Place</p>
+                  <p>Mumbai Hub — Plot 4, Andheri Food Park</p>
+                  <p>Bengaluru Dark Store — 18, Whitefield Supply Lane</p>
+                </div>
+              </article>
+            </div>
+            <div data-set="notifications" class="set-pane hidden">
+              <article class="form-card">
+                <h2 class="form-title">Notifications</h2>
+                <label class="pref-row"><span>New order alerts</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                <label class="pref-row"><span>Delivery delay alerts</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+                <label class="pref-row"><span>Return request alerts</span><span class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></span></label>
+              </article>
+            </div>
+            <div data-set="integrations" class="set-pane hidden">
+              <article class="form-card">
+                <h2 class="form-title">Integrations</h2>
+                <p class="text-sm font-semibold text-[#667085]">Payment, SMS and accounting connections can be added here when credentials are issued.</p>
+              </article>
+            </div>
+            <div data-set="business" class="set-pane hidden">
+              <article class="form-card max-w-xl">
+                <h2 class="form-title">Business Settings</h2>
+                <div class="space-y-4">
+                  <div><label class="lbl">GSTIN</label><input class="field" value="07AABCK9999P1Z5" /></div>
+                  <div><label class="lbl">Invoice prefix</label><input class="field" value="KX-" /></div>
+                </div>
+              </article>
+            </div>
+          </form>
+        </section>
+
+        <div id="orderModal" class="modal-scrim">
+          <form id="orderForm" class="form-card w-[min(100%,420px)]">
+            <h2 class="form-title">Create Order</h2>
+            <div class="space-y-4">
+              <div><label class="lbl">Customer <span class="req">*</span></label><select id="newOrdCust" class="field" required><option value="">Select customer</option><option>The Urban Table</option><option>Spice Route Cafe</option><option>Hotel Crest</option></select></div>
+              <div><label class="lbl">Items <span class="req">*</span></label><input id="newOrdItems" class="field" placeholder="e.g. 12" required /></div>
+              <div><label class="lbl">Amount (₹) <span class="req">*</span></label><input id="newOrdAmt" class="field" placeholder="e.g. 12430" required /></div>
+            </div>
+            <div class="mt-5 flex justify-end gap-3">
+              <button type="button" class="btn-ghost js-close-modal" data-modal="orderModal">Cancel</button>
+              <button type="submit" class="btn-save">Create Order</button>
+            </div>
+          </form>
+        </div>
+        <div id="assignModal" class="modal-scrim">
+          <form id="assignForm" class="form-card w-[min(100%,420px)]">
+            <h2 class="form-title">Assign Delivery</h2>
+            <div class="space-y-4">
+              <div><label class="lbl">Order <span class="req">*</span></label><select class="field" required><option value="">Select order</option><option>#ORD12454</option><option>#ORD12452</option></select></div>
+              <div><label class="lbl">Driver <span class="req">*</span></label><input class="field" placeholder="e.g. Amit Singh" required /></div>
+              <div><label class="lbl">Vehicle</label><input class="field" placeholder="e.g. DL01AB1234" /></div>
+            </div>
+            <div class="mt-5 flex justify-end gap-3">
+              <button type="button" class="btn-ghost js-close-modal" data-modal="assignModal">Cancel</button>
+              <button type="submit" class="btn-save">Assign</button>
+            </div>
+          </form>
+        </div>
+        <div id="trackModal" class="modal-scrim">
+          <div class="form-card w-[min(100%,420px)]">
+            <h2 class="form-title" id="trackTitle">Shipment</h2>
+            <ol class="space-y-3 text-sm font-semibold">
+              <li class="flex gap-2"><span class="text-emerald-600">✓</span> Packed at Main Warehouse</li>
+              <li class="flex gap-2"><span class="text-emerald-600">✓</span> Out for delivery</li>
+              <li class="flex gap-2 text-[#667085]"><span>○</span> Delivered to customer</li>
+            </ol>
+            <div class="mt-5 flex justify-end"><button type="button" class="btn-ghost js-close-modal" data-modal="trackModal">Close</button></div>
+          </div>
+        </div>
+        <div id="returnModal" class="modal-scrim">
+          <div class="form-card w-[min(100%,420px)]">
+            <h2 class="form-title" id="retTitle">Request</h2>
+            <p id="retBody" class="text-sm font-semibold text-[#667085]"></p>
+            <div class="mt-5 flex justify-end"><button type="button" class="btn-ghost js-close-modal" data-modal="returnModal">Close</button></div>
+          </div>
+        </div>
+
+        <section id="pageView" class="panel hidden rounded-[24px] bg-white p-8">
+          <h1 id="pageTitle" class="text-2xl font-extrabold">Page</h1>
+          <p class="mt-2 text-sm font-medium text-[#667085]">This section uses the same KitchenX admin shell. Detailed records for this area are not wired yet.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
+  <div id="toast" role="status"></div>
+
+  <script>
+    if (sessionStorage.getItem('kxRole') !== 'admin') {
+      window.location.href = 'kitchenx-v2.html#login';
+    }
+
+    const sidebar = document.getElementById('sidebar');
+    const scrim = document.getElementById('scrim');
+    const FORM_PANELS = ['products', 'categories', 'brands', 'addons', 'suppliers', 'purchase', 'inventory', 'goods', 'orders', 'delivery', 'returns', 'settings'];
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      scrim.classList.toggle('hidden');
+    });
+    scrim.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+    });
+    document.getElementById('collapseBtn').addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
+    });
+    const userWrap = document.querySelector('.user-wrap');
+    const userBtn = document.getElementById('userBtn');
+    userBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userWrap.classList.toggle('open');
+      userBtn.setAttribute('aria-expanded', userWrap.classList.contains('open') ? 'true' : 'false');
+    });
+    document.addEventListener('click', () => {
+      userWrap.classList.remove('open');
+      userBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    function showPanel(id, title) {
+      const isDash = id === 'dashboard';
+      const isForm = FORM_PANELS.includes(id);
+      document.getElementById('dashboardView').classList.toggle('hidden', !isDash);
+      FORM_PANELS.forEach((p) => {
+        const el = document.getElementById(p + 'View');
+        if (el) el.classList.toggle('hidden', id !== p);
+      });
+      document.getElementById('pageView').classList.toggle('hidden', isDash || isForm);
+      if (!isDash && !isForm) {
+        document.getElementById('pageTitle').textContent = title || id;
+      }
+      document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id);
+      });
+      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+    }
+
+    document.querySelectorAll('[data-panel]').forEach((btn) => {
+      btn.addEventListener('click', () => showPanel(btn.getAttribute('data-panel'), btn.getAttribute('data-title')));
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('kxRole');
+      sessionStorage.removeItem('kxUser');
+      window.location.href = 'kitchenx-v2.html';
+    });
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    function bindDrop(zone, input, onFiles) {
+      if (zone.tagName !== 'LABEL') {
+        zone.addEventListener('click', () => input.click());
+      }
+      zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag'); });
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag');
+        if (e.dataTransfer.files.length) onFiles(e.dataTransfer.files);
+      });
+      input.addEventListener('change', () => { if (input.files.length) onFiles(input.files); input.value = ''; });
+    }
+
+    function readImage(file, maxMb, done) {
+      if (!file || !file.type.startsWith('image/')) return;
+      if (file.size > maxMb * 1024 * 1024) { toast('Image must be under ' + maxMb + ' MB'); return; }
+      const reader = new FileReader();
+      reader.onload = () => done(reader.result);
+      reader.readAsDataURL(file);
+    }
+
+    function thumbHtml(src) {
+      const wrap = document.createElement('div');
+      wrap.className = 'img-thumb';
+      wrap.innerHTML = '<img alt="" /><button type="button" class="img-x" aria-label="Remove image">×</button>';
+      wrap.querySelector('img').src = src;
+      wrap.querySelector('.img-x').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); wrap.remove(); });
+      return wrap;
+    }
+
+    const pThumbs = document.getElementById('pThumbs');
+    pThumbs.querySelectorAll('.img-x').forEach((btn) => {
+      btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); btn.closest('.img-thumb').remove(); });
+    });
+    bindDrop(document.getElementById('pDrop'), document.getElementById('pFiles'), (files) => {
+      [...files].forEach((file) => readImage(file, 5, (src) => {
+        pThumbs.insertBefore(thumbHtml(src), document.getElementById('pAddMore'));
+      }));
+    });
+    document.getElementById('pAddMore').addEventListener('click', () => document.getElementById('pFiles').click());
+
+    function singlePreview(thumbId, previewId, fallbackHtml, maxMb) {
+      return (files) => readImage(files[0], maxMb, (src) => {
+        const box = document.getElementById(thumbId);
+        box.innerHTML = '';
+        box.appendChild(thumbHtml(src));
+        const preview = document.getElementById(previewId);
+        if (preview) preview.innerHTML = '<img class="h-full w-full object-cover rounded-[28px]" alt="" src="' + src + '" />';
+      });
+    }
+    bindDrop(document.getElementById('cDrop'), document.getElementById('cFile'), singlePreview('cThumb', 'cPreviewImg', '', 2));
+    bindDrop(document.getElementById('bDrop'), document.getElementById('bFile'), (files) => readImage(files[0], 2, (src) => {
+      document.getElementById('bThumb').innerHTML = '';
+      document.getElementById('bThumb').appendChild(thumbHtml(src));
+      document.getElementById('bPreviewLogo').innerHTML = '<img class="h-full w-full object-contain rounded-[28px] p-4" alt="" src="' + src + '" />';
+    }));
+    bindDrop(document.getElementById('aDrop'), document.getElementById('aFile'), singlePreview('aThumb', 'aPreviewImg', '', 2));
+
+    function bindLive(id, target, fallback, prefix) {
+      const el = document.getElementById(id);
+      const out = document.getElementById(target);
+      const apply = () => {
+        const v = el.value.trim();
+        out.textContent = v ? (prefix || '') + v : fallback;
+      };
+      el.addEventListener('input', apply);
+    }
+    bindLive('cName', 'cPreviewName', 'Dairy');
+    bindLive('cDesc', 'cPreviewDesc', 'Milk, cheese, butter and other dairy products');
+    bindLive('bName', 'bPreviewName', 'Amul');
+    bindLive('bName', 'bPreviewWord', 'Amul');
+    bindLive('bDesc', 'bPreviewDesc', "India's trusted dairy brand");
+    bindLive('aName', 'aPreviewName', 'Extra Cheese');
+    const aPrice = document.getElementById('aPrice');
+    const aPreviewPrice = document.getElementById('aPreviewPrice');
+    aPrice.addEventListener('input', () => {
+      aPreviewPrice.textContent = aPrice.value.trim() ? '₹' + aPrice.value.trim() : '₹30';
+    });
+    document.getElementById('aActive').addEventListener('change', (e) => {
+      const pill = document.getElementById('aPreviewStatus');
+      pill.textContent = e.target.checked ? 'Active' : 'Inactive';
+      pill.className = e.target.checked
+        ? 'mt-2 inline-flex rounded-full bg-[#EAF8F0] px-3 py-1 text-xs font-extrabold text-emerald-600'
+        : 'mt-2 inline-flex rounded-full bg-[#F2F4F7] px-3 py-1 text-xs font-extrabold text-[#667085]';
+    });
+
+    document.getElementById('productForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Product saved'); });
+    document.getElementById('categoryForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Category saved'); });
+    document.getElementById('brandForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Brand saved'); });
+    document.getElementById('addonForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Add-on saved'); });
+    document.getElementById('supplierForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Supplier saved'); });
+    document.getElementById('poForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Purchase order created'); });
+    document.getElementById('grnForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Goods receipt saved'); });
+
+    bindDrop(document.getElementById('sDrop'), document.getElementById('sFile'), (files) => readImage(files[0], 2, (src) => {
+      document.getElementById('sThumb').innerHTML = '';
+      document.getElementById('sThumb').appendChild(thumbHtml(src));
+    }));
+
+    const ICO = {
+      tomato: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><circle cx="18" cy="21" r="10" fill="#E53935"/><circle cx="18" cy="9" r="2.1" fill="#43A047"/></svg>',
+      chicken: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><ellipse cx="18" cy="20" rx="11" ry="8" fill="#E8B4A0"/><ellipse cx="14" cy="18" rx="3" ry="2" fill="#F3D1C4"/></svg>',
+      oil: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><rect x="16" y="5" width="4" height="4" rx="1" fill="#F0C14A"/><path d="M14 9h8c1.2 0 2 .8 2 2v16c0 2-1.6 3-4 3h-4c-2.4 0-4-1-4-3V11c0-1.2.8-2 2-2z" fill="#F5C842"/></svg>',
+      butter: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><rect x="7" y="12" width="22" height="14" rx="2" fill="#F2D36B"/></svg>',
+      rice: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><path d="M12 9h12l3 18H9z" fill="#E8D5B0"/></svg>',
+      cheese: '<svg class="thumb" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#F3F4F6"/><ellipse cx="18" cy="22" rx="10" ry="7" fill="#F6C445"/></svg>'
+    };
+
+    const poItems = [
+      { name: 'Tomatoes (1 kg)', sku: 'PRD001', unit: 'kg', price: 60, qty: 100, ico: 'tomato' },
+      { name: 'Chicken Breast', sku: 'PRD112', unit: 'kg', price: 220, qty: 50, ico: 'chicken' },
+      { name: 'Cooking Oil (1 L)', sku: 'PRD045', unit: 'bottle', price: 110, qty: 30, ico: 'oil' }
+    ];
+    const extraPo = [
+      { name: 'Basmati Rice (5 kg)', sku: 'GR014', unit: 'bag', price: 450, qty: 10, ico: 'rice' },
+      { name: 'Amul Butter (500 g)', sku: 'DA002', unit: 'pcs', price: 58, qty: 40, ico: 'butter' }
+    ];
+    function money(n) { return n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function renderPo() {
+      const q = (document.getElementById('poSearch').value || '').toLowerCase();
+      const body = document.getElementById('poRows');
+      body.innerHTML = poItems.map((it, i) => {
+        if (q && !it.name.toLowerCase().includes(q) && !it.sku.toLowerCase().includes(q)) return '';
+        const line = it.price * it.qty;
+        return '<tr data-i="'+i+'"><td>'+(i+1)+'.</td><td><div class="flex items-center gap-2">'+ICO[it.ico]+it.name+'</div></td><td class="text-[#667085]">'+it.sku+'</td><td>'+it.unit+'</td><td>'+money(it.price)+'</td><td><input class="field qty po-qty" type="number" min="1" value="'+it.qty+'" /></td><td class="po-line">'+money(line)+'</td><td><button type="button" class="trash po-del" aria-label="Remove"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>';
+      }).join('');
+      let sub = 0;
+      poItems.forEach((it) => { sub += it.price * it.qty; });
+      const gst = sub * 0.05;
+      document.getElementById('poSub').textContent = money(sub);
+      document.getElementById('poGst').textContent = money(gst);
+      document.getElementById('poTotal').textContent = money(sub + gst);
+    }
+    document.getElementById('poRows').addEventListener('input', (e) => {
+      const tr = e.target.closest('tr');
+      if (!tr || !e.target.classList.contains('po-qty')) return;
+      const i = Number(tr.getAttribute('data-i'));
+      poItems[i].qty = Math.max(1, Number(e.target.value) || 1);
+      renderPo();
+    });
+    document.getElementById('poRows').addEventListener('click', (e) => {
+      const btn = e.target.closest('.po-del');
+      if (!btn) return;
+      const i = Number(btn.closest('tr').getAttribute('data-i'));
+      poItems.splice(i, 1);
+      renderPo();
+    });
+    document.getElementById('poAddItem').addEventListener('click', () => {
+      const next = extraPo.find((x) => !poItems.some((p) => p.sku === x.sku));
+      if (!next) { toast('All catalogue items are on this order'); return; }
+      poItems.push(Object.assign({}, next));
+      renderPo();
+    });
+    document.getElementById('poSearch').addEventListener('input', renderPo);
+    document.getElementById('poRefresh').addEventListener('click', () => {
+      document.getElementById('poNum').value = 'PO' + Date.now().toString().slice(-11);
+    });
+    const SUP = {
+      fresh: { av: 'F', name: 'Fresh Farms Pvt Ltd', meta: 'GST: 22AAAAA0000A1Z5<br />ramesh@freshfarms.com &nbsp;|&nbsp; +91 98765 43210' },
+      amul: { av: 'A', name: 'Amul Dairy', meta: 'GST: 24AADBA1234C1Z8<br />orders@amul.example &nbsp;|&nbsp; +91 98765 11111' },
+      local: { av: 'L', name: 'Local Produce Co', meta: 'GST: 07AABCL9988P1Z2<br />hello@localproduce.example &nbsp;|&nbsp; +91 98765 22222' }
+    };
+    document.getElementById('poSupplier').addEventListener('change', () => {
+      const s = SUP[document.getElementById('poSupplier').value];
+      document.getElementById('poAvatar').textContent = s ? s.av : '—';
+      document.getElementById('poSupName').textContent = s ? s.name : 'Select a supplier';
+      document.getElementById('poSupMeta').innerHTML = s ? s.meta : '';
+    });
+    document.getElementById('poLoc').addEventListener('change', () => {
+      const map = {
+        'Main Warehouse (Delhi)': '12A, Food Hub, Nehru Place, New Delhi - 110019',
+        'Mumbai Hub': 'Plot 4, Andheri Food Park, Mumbai - 400053',
+        'Bengaluru Dark Store': '18, Whitefield Supply Lane, Bengaluru - 560066'
+      };
+      document.getElementById('poLocAddr').textContent = map[document.getElementById('poLoc').value];
+    });
+    renderPo();
+
+    const invData = [
+      { name: 'Tomatoes (1 kg)', sku: 'PRD001', cat: 'Fruits & Vegetables', cur: '120 kg', reorder: '50 kg', status: 'In Stock', loc: 'Main WH', ico: 'tomato' },
+      { name: 'Amul Butter (500 g)', sku: 'DA002', cat: 'Dairy', cur: '6 pcs', reorder: '50 pcs', status: 'Low Stock', loc: 'Main WH', ico: 'butter' },
+      { name: 'Basmati Rice (5 kg)', sku: 'GR014', cat: 'Rice & Rice Products', cur: '0 bags', reorder: '50 bags', status: 'Out of Stock', loc: 'Main WH', ico: 'rice' },
+      { name: 'Cooking Oil (1 L)', sku: 'OIL009', cat: 'Edible Oils', cur: '10 pcs', reorder: '50 pcs', status: 'Low Stock', loc: 'Main WH', ico: 'oil' },
+      { name: 'Chicken Breast', sku: 'PRD112', cat: 'Chicken & Eggs', cur: '200 kg', reorder: '100 kg', status: 'In Stock', loc: 'Main WH', ico: 'chicken' },
+      { name: 'Extra Cheese (1 kg)', sku: 'AD001', cat: 'Menu Add-ons', cur: '4 pcs', reorder: '20 pcs', status: 'Low Stock', loc: 'Main WH', ico: 'cheese' }
+    ];
+    function statusBadge(s) {
+      if (s === 'In Stock') return '<span class="badge badge-in">In Stock</span>';
+      if (s === 'Low Stock') return '<span class="badge badge-low">Low Stock</span>';
+      return '<span class="badge badge-out">Out of Stock</span>';
+    }
+    function renderInv() {
+      const q = (document.getElementById('invSearch').value || '').toLowerCase();
+      const cat = document.getElementById('invCat').value;
+      const loc = document.getElementById('invLoc').value;
+      const st = document.getElementById('invStatus').value;
+      const rows = invData.filter((it) => {
+        if (q && !it.name.toLowerCase().includes(q) && !it.sku.toLowerCase().includes(q)) return false;
+        if (cat !== 'All Categories' && it.cat !== cat) return false;
+        if (loc !== 'All Locations' && it.loc !== loc) return false;
+        if (st !== 'Stock Status' && it.status !== st) return false;
+        return true;
+      });
+      document.getElementById('invRows').innerHTML = rows.map((it) => {
+        const warn = it.status === 'In Stock' ? '' : 'text-orange';
+        return '<tr><td><input type="checkbox" class="inv-ck h-4 w-4 accent-orange" /></td><td><div class="flex items-center gap-2 font-bold">'+ICO[it.ico]+it.name+'</div></td><td class="text-[#667085]">'+it.sku+'</td><td>'+it.cat+'</td><td class="font-extrabold '+warn+'">'+it.cur+'</td><td class="text-[#667085]">'+it.reorder+'</td><td>'+statusBadge(it.status)+'</td><td>'+it.loc+'</td><td><button type="button" class="text-[#98A2B3]" aria-label="More">⋯</button></td></tr>';
+      }).join('');
+    }
+    ['invSearch','invCat','invLoc','invStatus'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderInv);
+      document.getElementById(id).addEventListener('change', renderInv);
+    });
+    document.getElementById('invAll').addEventListener('change', (e) => {
+      document.querySelectorAll('.inv-ck').forEach((ck) => { ck.checked = e.target.checked; });
+    });
+    document.getElementById('invExport').addEventListener('click', () => toast('Inventory exported'));
+    document.querySelectorAll('.pager').forEach((pager) => {
+      pager.querySelectorAll('button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          pager.querySelectorAll('button').forEach((b) => b.classList.remove('is-on'));
+          if (/^\d+$/.test(btn.textContent.trim())) btn.classList.add('is-on');
+        });
+      });
+    });
+    renderInv();
+
+    const stockModal = document.getElementById('stockModal');
+    document.getElementById('addStockBtn').addEventListener('click', () => stockModal.classList.add('show'));
+    document.getElementById('stockCancel').addEventListener('click', () => stockModal.classList.remove('show'));
+    stockModal.addEventListener('click', (e) => { if (e.target === stockModal) stockModal.classList.remove('show'); });
+    document.getElementById('stockForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      stockModal.classList.remove('show');
+      toast('Stock added');
+    });
+
+    const grnCatalog = [
+      { name: 'Tomatoes (1 kg)', ordered: 100, prev: 0, now: 100, unit: 'kg', ico: 'tomato' },
+      { name: 'Chicken Breast', ordered: 50, prev: 0, now: 50, unit: 'kg', ico: 'chicken' },
+      { name: 'Cooking Oil (1 L)', ordered: 30, prev: 0, now: 30, unit: 'bottle', ico: 'oil' }
+    ];
+    function renderGrn(items) {
+      document.getElementById('grnRows').innerHTML = items.map((it, i) => (
+        '<tr><td>'+(i+1)+'.</td><td><div class="flex items-center gap-2">'+ICO[it.ico]+it.name+'</div></td><td>'+it.ordered+'</td><td>'+it.prev+'</td><td><input class="field qty" type="number" min="0" value="'+it.now+'" /></td><td>'+it.unit+'</td></tr>'
+      )).join('');
+    }
+    renderGrn(grnCatalog);
+    document.getElementById('grnPo').addEventListener('change', () => {
+      const v = document.getElementById('grnPo').value;
+      document.getElementById('grnSup').textContent = v ? 'Fresh Farms Pvt Ltd' : '-';
+      document.getElementById('grnPoDate').textContent = v ? '24 Jun 2025' : '-';
+      document.getElementById('grnEta').textContent = v ? '30 Jun 2025' : '-';
+    });
+    document.getElementById('scanMode').addEventListener('click', () => {
+      document.getElementById('scanMode').classList.toggle('is-on');
+      toast(document.getElementById('scanMode').classList.contains('is-on') ? 'Scan mode on' : 'Scan mode off');
+    });
+
+    function av(code, bg, fg, name) {
+      return '<span class="mr-2 inline-grid h-7 w-7 place-items-center rounded-lg '+bg+' text-[10px] font-extrabold '+fg+'">'+code+'</span>'+name;
+    }
+    function pill(cls, text) { return '<span class="badge '+cls+'">'+text+'</span>'; }
+    const orderRows = [
+      { id: '#ORD12456', cust: av('UT','bg-[#EEF4FF]','text-sky-700','The Urban Table'), name: 'The Urban Table', items: 12, amt: '₹12,430', status: 'Processing', date: '24 Jun 2025, 10:24 AM' },
+      { id: '#ORD12455', cust: av('SR','bg-[#FFF1EC]','text-orange','Spice Route Cafe'), name: 'Spice Route Cafe', items: 8, amt: '₹8,220', status: 'Packed', date: '24 Jun 2025, 09:18 AM' },
+      { id: '#ORD12454', cust: av('CH','bg-[#FFF8E8]','text-amber-700','Hotel Crest'), name: 'Hotel Crest', items: 20, amt: '₹21,650', status: 'Out for Delivery', date: '24 Jun 2025, 08:41 AM' },
+      { id: '#ORD12453', cust: av('BB','bg-[#F3EEFF]','text-violet-700','Bite & Brew'), name: 'Bite & Brew', items: 6, amt: '₹6,980', status: 'Delivered', date: '24 Jun 2025, 08:12 AM' },
+      { id: '#ORD12452', cust: av('SK','bg-[#EEF4FF]','text-sky-700','Sri Krishna Caterers'), name: 'Sri Krishna Caterers', items: 15, amt: '₹14,320', status: 'Processing', date: '24 Jun 2025, 07:55 AM' },
+      { id: '#ORD12451', cust: av('CK','bg-[#FEE4E2]','text-[#F04438]','Cloud Kitchen Co.'), name: 'Cloud Kitchen Co.', items: 10, amt: '₹9,450', status: 'Cancelled', date: '24 Jun 2025, 06:42 AM' }
+    ];
+    const statusClass = { 'Processing': 'badge-proc', 'Packed': 'badge-pack', 'Out for Delivery': 'badge-ship', 'Delivered': 'badge-done', 'Cancelled': 'badge-cancel', 'Delayed': 'badge-open', 'Picked': 'badge-prog' };
+    function renderOrders() {
+      const q = (document.getElementById('ordSearch').value || '').toLowerCase();
+      const st = document.getElementById('ordStatus').value;
+      const cu = document.getElementById('ordCust').value;
+      document.getElementById('ordRows').innerHTML = orderRows.filter((r) => {
+        if (q && !r.id.toLowerCase().includes(q) && !r.name.toLowerCase().includes(q)) return false;
+        if (st !== 'All Status' && r.status !== st) return false;
+        if (cu !== 'All Customers' && r.name !== cu) return false;
+        return true;
+      }).map((r) => '<tr><td class="text-[#667085]">'+r.id+'</td><td>'+r.cust+'</td><td>'+r.items+'</td><td class="text-sky-600">'+r.amt+'</td><td>'+pill(statusClass[r.status], r.status)+'</td><td class="text-[#667085]">'+r.date+'</td><td><button type="button" class="text-[#98A2B3]" aria-label="More">⋯</button></td></tr>').join('');
+    }
+    ['ordSearch','ordStatus','ordCust','ordLoc'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderOrders);
+      document.getElementById(id).addEventListener('change', renderOrders);
+    });
+    document.getElementById('ordExport').addEventListener('click', () => toast('Orders exported'));
+    renderOrders();
+
+    const delRows = [
+      { id: '#ORD12454', cust: 'Hotel Crest', driver: 'Amit Singh', veh: 'DL01AB1234', status: 'Out for Delivery', eta: 'Today, 11:30 AM' },
+      { id: '#ORD12453', cust: 'Bite & Brew', driver: 'Ravi Verma', veh: 'DL09XY5678', status: 'Delivered', eta: 'Today, 10:15 AM' },
+      { id: '#ORD12452', cust: 'Sri Krishna Caterers', driver: 'Imran Shaikh', veh: 'DL01CD9012', status: 'Out for Delivery', eta: 'Today, 12:00 PM' },
+      { id: '#ORD12450', cust: 'Tasty Bites', driver: 'Suresh Yadav', veh: 'DL08EF3456', status: 'Delayed', eta: 'Today, 02:30 PM' },
+      { id: '#ORD12449', cust: 'Food Plaza', driver: 'Manoj Kumar', veh: 'DL01GH7890', status: 'Picked', eta: 'Today, 04:00 PM' },
+      { id: '#ORD12448', cust: 'Green Leaf Café', driver: 'Vikram Patel', veh: 'DL07IJ1122', status: 'Delivered', eta: 'Today, 09:10 AM' }
+    ];
+    function renderDel() {
+      const q = (document.getElementById('delSearch').value || '').toLowerCase();
+      const st = document.getElementById('delStatus').value;
+      document.getElementById('delRows').innerHTML = delRows.filter((r) => {
+        if (q && ![r.id, r.cust, r.driver, r.veh].join(' ').toLowerCase().includes(q)) return false;
+        if (st !== 'All Status' && r.status !== st) return false;
+        return true;
+      }).map((r, i) => '<tr><td>'+(i+1)+'</td><td class="text-[#667085]">'+r.id+'</td><td class="font-bold">'+r.cust+'</td><td>'+r.driver+'</td><td>'+r.veh+'</td><td>'+pill(statusClass[r.status], r.status)+'</td><td>'+r.eta+'</td><td><button type="button" class="link-act js-track" data-id="'+r.id+'">Track</button></td></tr>').join('');
+    }
+    ['delSearch','delStatus','delLoc'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderDel);
+      document.getElementById(id).addEventListener('change', renderDel);
+    });
+    document.getElementById('delExport').addEventListener('click', () => toast('Shipments exported'));
+    document.getElementById('delRows').addEventListener('click', (e) => {
+      const btn = e.target.closest('.js-track');
+      if (!btn) return;
+      document.getElementById('trackTitle').textContent = 'Tracking ' + btn.getAttribute('data-id');
+      document.getElementById('trackModal').classList.add('show');
+    });
+    renderDel();
+
+    const retRows = [
+      { n: 1, req: '#RNT001', ord: '#ORD12432', cust: 'The Urban Table', type: 'Return', status: 'Open', date: '24 Jun 2025' },
+      { n: 2, req: '#RNT002', ord: '#ORD12428', cust: 'Spice Route Cafe', type: 'Complaint', status: 'In Progress', date: '23 Jun 2025' },
+      { n: 3, req: '#RNT003', ord: '#ORD12421', cust: 'Bite & Brew', type: 'Return', status: 'Resolved', date: '22 Jun 2025' },
+      { n: 4, req: '#RNT004', ord: '#ORD12419', cust: 'Hotel Crest', type: 'Refund', status: 'Open', date: '21 Jun 2025' },
+      { n: 5, req: '#RNT005', ord: '#ORD12410', cust: 'Food Plaza', type: 'Complaint', status: 'Resolved', date: '20 Jun 2025' },
+      { n: 6, req: '#RNT006', ord: '#ORD12405', cust: 'Green Leaf Café', type: 'Replacement', status: 'Refunded', date: '19 Jun 2025' }
+    ];
+    const retPill = { 'Open': 'badge-open', 'In Progress': 'badge-prog', 'Resolved': 'badge-done', 'Refunded': 'badge-refund' };
+    function renderRet() {
+      const q = (document.getElementById('retSearch').value || '').toLowerCase();
+      const ty = document.getElementById('retType').value;
+      const st = document.getElementById('retStatus').value;
+      document.getElementById('retRows').innerHTML = retRows.filter((r) => {
+        if (q && ![r.req, r.ord, r.cust].join(' ').toLowerCase().includes(q)) return false;
+        if (ty !== 'All Types' && r.type !== ty) return false;
+        if (st !== 'All Status' && r.status !== st) return false;
+        return true;
+      }).map((r) => '<tr><td>'+r.n+'</td><td class="text-[#667085]">'+r.req+'</td><td class="text-[#667085]">'+r.ord+'</td><td class="font-bold">'+r.cust+'</td><td>'+r.type+'</td><td>'+pill(retPill[r.status], r.status)+'</td><td>'+r.date+'</td><td><button type="button" class="link-act js-ret" data-req="'+r.req+'" data-cust="'+r.cust+'" data-type="'+r.type+'" data-st="'+r.status+'">View</button></td></tr>').join('');
+    }
+    ['retSearch','retType','retStatus'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderRet);
+      document.getElementById(id).addEventListener('change', renderRet);
+    });
+    document.getElementById('retExport').addEventListener('click', () => toast('Requests exported'));
+    document.getElementById('retRows').addEventListener('click', (e) => {
+      const btn = e.target.closest('.js-ret');
+      if (!btn) return;
+      document.getElementById('retTitle').textContent = btn.getAttribute('data-req');
+      document.getElementById('retBody').textContent = btn.getAttribute('data-cust') + ' · ' + btn.getAttribute('data-type') + ' · ' + btn.getAttribute('data-st');
+      document.getElementById('returnModal').classList.add('show');
+    });
+    renderRet();
+
+    document.getElementById('createOrderBtn').addEventListener('click', () => document.getElementById('orderModal').classList.add('show'));
+    document.getElementById('assignBtn').addEventListener('click', () => document.getElementById('assignModal').classList.add('show'));
+    document.querySelectorAll('.js-close-modal').forEach((btn) => {
+      btn.addEventListener('click', () => document.getElementById(btn.getAttribute('data-modal')).classList.remove('show'));
+    });
+    ['orderModal','assignModal','trackModal','returnModal'].forEach((id) => {
+      document.getElementById(id).addEventListener('click', (e) => { if (e.target.id === id) e.currentTarget.classList.remove('show'); });
+    });
+    document.getElementById('orderForm').addEventListener('submit', (e) => { e.preventDefault(); document.getElementById('orderModal').classList.remove('show'); toast('Order created'); });
+    document.getElementById('assignForm').addEventListener('submit', (e) => { e.preventDefault(); document.getElementById('assignModal').classList.remove('show'); toast('Delivery assigned'); });
+    document.getElementById('saveSettings').addEventListener('click', () => toast('Settings saved'));
+    document.getElementById('settingsForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Settings saved'); });
+    document.querySelectorAll('#setTabs .set-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('#setTabs .set-tab').forEach((t) => t.classList.remove('is-on'));
+        tab.classList.add('is-on');
+        document.querySelectorAll('.set-pane').forEach((p) => p.classList.toggle('hidden', p.getAttribute('data-set') !== tab.getAttribute('data-tab')));
+      });
+    });
+    bindDrop(document.getElementById('setDrop'), document.getElementById('setFile'), (files) => readImage(files[0], 2, (src) => {
+      document.getElementById('setThumb').innerHTML = '';
+      document.getElementById('setThumb').appendChild(thumbHtml(src));
+    }));
+
+    const start = (location.hash || '').replace('#', '');
+    if (start) {
+      const btn = document.querySelector('#sideNav [data-panel="' + start + '"]');
+      showPanel(start, btn ? btn.getAttribute('data-title') : start);
+    }
+  </script>
+</body>
+</html>

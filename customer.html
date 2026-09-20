@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer | KitchenX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { fog: '#F2F4F7', coal: '#141517', orange: '#FF4F18' },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif; background: #F7F8FA; color: #141517; }
+    .nav-btn { position: relative; color: #667085; background: transparent; margin: 0 10px 2px; width: calc(100% - 20px); }
+    .nav-btn.is-active { color: #FF4F18; background: #FFF4F0; font-weight: 700; }
+    .search:focus, .field:focus { outline: none; border-color: #FF4F18; box-shadow: 0 0 0 4px rgba(255,79,24,0.12); }
+    aside.collapsed { width: 76px; }
+    aside.collapsed .nav-label, aside.collapsed .brand-sub, aside.collapsed .brand-full, aside.collapsed .help-box { display: none; }
+    aside.collapsed .brand-mark { display: inline; }
+    aside.collapsed .brand-row { justify-content: center; padding-left: 8px; padding-right: 8px; }
+    aside.collapsed .nav-btn { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 8px; margin-right: 8px; width: calc(100% - 16px); }
+    aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
+    .brand-mark { display: none; }
+    .collapse-fab {
+      position: absolute;
+      top: 26px;
+      right: -12px;
+      z-index: 45;
+      display: none;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid #EEF0F3;
+      background: #fff;
+      color: #667085;
+      box-shadow: 0 2px 8px rgba(20,21,23,.08);
+    }
+    .collapse-fab svg { display: block; }
+    @media (min-width: 1024px) { .collapse-fab { display: grid; } }
+    .kpi { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); min-height: 92px; }
+    .kpi .ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; flex-shrink: 0; }
+    .card { background: #fff; border-radius: 22px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
+    .chip { height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; font-size: 13px; font-weight: 700; color: #344054; white-space: nowrap; }
+    .chip.is-on { background: #FF4F18; color: #fff; border-color: #FF4F18; }
+    .field { width: 100%; height: 44px; border: 1px solid #E4E7EC; border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 500; background: #fff; color: #141517; }
+    textarea.field { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; }
+    select.field { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .btn-save { height: 40px; padding: 0 16px; border-radius: 12px; border: 0; background: #FF4F18; font-size: 13px; font-weight: 800; color: #fff; }
+    .btn-ghost { height: 40px; padding: 0 16px; border-radius: 12px; border: 1px solid #E4E7EC; background: #fff; font-size: 13px; font-weight: 800; color: #344054; }
+    .btn-add { height: 36px; padding: 0 16px; border-radius: 999px; border: 1px solid #FF4F18; background: #fff; color: #FF4F18; font-size: 13px; font-weight: 800; }
+    .btn-add:hover { background: #FFF4F0; }
+    .stepper { display: inline-flex; align-items: center; height: 36px; border: 1px solid #E4E7EC; border-radius: 999px; overflow: hidden; background: #fff; }
+    .stepper button { width: 32px; height: 36px; font-size: 16px; font-weight: 700; color: #667085; }
+    .stepper span { min-width: 22px; text-align: center; font-size: 13px; font-weight: 800; }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; }
+    .badge-proc { background: #FFF1EC; color: #FF4F18; }
+    .badge-done { background: #EAF8F0; color: #12B76A; }
+    .badge-ship { background: #F3EEFF; color: #7A5AF8; }
+    .badge-cancel { background: #FEE4E2; color: #F04438; }
+    .badge-open { background: #FFF8E8; color: #DC6803; }
+    .badge-prog { background: #EEF4FF; color: #1570EF; }
+    .badge-refund { background: #F3EEFF; color: #7A5AF8; }
+    .badge-pay { background: #FFF1EC; color: #FF4F18; }
+    .line-table { width: 100%; text-align: left; font-size: 14px; font-weight: 600; }
+    .line-table th { padding: 10px 8px; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #98A2B3; }
+    .line-table td { padding: 14px 8px; border-top: 1px solid #F2F4F7; vertical-align: middle; }
+    .set-tabs { display: flex; gap: 4px; overflow-x: auto; }
+    .set-tab { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #667085; border: 1px solid #E4E7EC; background: #fff; white-space: nowrap; }
+    .set-tab.is-on { color: #fff; background: #FF4F18; border-color: #FF4F18; }
+    .heart { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 999px; background: #fff; display: grid; place-items: center; color: #98A2B3; box-shadow: 0 4px 12px rgba(20,21,23,.08); }
+    .heart.is-on { color: #FF4F18; }
+    .prod-img { height: 148px; display: grid; place-items: center; background: #fff; padding: 8px 16px 4px; }
+    .prod-img img { max-height: 132px; max-width: 78%; width: auto; height: auto; object-fit: contain; }
+    .thumb { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; background: #fff; object-fit: contain; border: 1px solid #EEF0F3; padding: 3px; }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; }
+    .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-ui { position: relative; width: 44px; height: 24px; border-radius: 999px; background: #E4E7EC; flex-shrink: 0; }
+    .toggle-ui::after { content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(20,21,23,0.15); transition: left .18s ease; }
+    .toggle input:checked + .toggle-ui { background: #FF4F18; }
+    .toggle input:checked + .toggle-ui::after { left: 22px; }
+    .pref-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; }
+    #toast { position: fixed; right: 24px; bottom: 24px; z-index: 60; display: none; border-radius: 14px; background: #141517; color: #fff; padding: 12px 16px; font-size: 13px; font-weight: 700; box-shadow: 0 12px 30px rgba(20,21,23,0.18); }
+    #toast.show { display: block; }
+    .modal-scrim { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; background: rgba(20,21,23,.35); padding: 20px; }
+    .modal-scrim.show { display: grid; }
+    .help-btn { height: 40px; border-radius: 12px; background: #FFF1EC; color: #FF4F18; font-size: 13px; font-weight: 800; }
+    .loc-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 280px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
+    .loc-wrap.open .loc-menu { display: block; }
+    .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; width: 200px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
+    .user-wrap.open .user-menu { display: block; }
+    .qa { border-radius: 20px; background: #fff; padding: 18px 16px; text-align: left; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
+    .qa .qico { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
+      <div class="brand-row flex items-center gap-2 px-5 py-5">
+        <a href="kitchenx-v2.html" class="brand-full whitespace-nowrap text-[22px] font-extrabold tracking-tight">Kitchen<span class="text-orange">X</span></a>
+        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
+        <span class="brand-sub text-sm font-semibold text-[#98A2B3]">Customer</span>
+      </div>
+      <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
+        <button data-panel="dashboard" class="nav-btn is-active mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button data-panel="catalogue" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span class="nav-label">Browse Catalogue</span>
+        </button>
+        <button data-panel="orders" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg>
+          <span class="nav-label">My Orders</span>
+        </button>
+        <button data-panel="repeat" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          <span class="nav-label">Repeat Orders</span>
+        </button>
+        <button data-panel="lists" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="nav-label">My Lists</span>
+        </button>
+        <button data-panel="invoices" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+          <span class="nav-label">Invoices &amp; Payments</span>
+        </button>
+        <button data-panel="deliveries" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+          <span class="nav-label">Deliveries</span>
+        </button>
+        <button data-panel="returns" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+          <span class="nav-label">Returns &amp; Support</span>
+        </button>
+        <button data-panel="account" class="nav-btn flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+          <span class="nav-label">My Account</span>
+        </button>
+      </nav>
+      <div class="help-box mx-4 mb-5 rounded-2xl bg-[#FFF8F6] px-4 py-4">
+        <div class="flex items-start gap-3">
+          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-orange">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3h5zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3H3z"/></svg>
+          </span>
+          <div>
+            <p class="text-sm font-extrabold">Need help?</p>
+            <p class="text-xs font-semibold text-[#98A2B3]">Talk to our support team</p>
+          </div>
+        </div>
+        <button data-panel="support" class="help-btn mt-3 w-full">Contact Support</button>
+      </div>
+      <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </aside>
+
+    <div class="flex min-h-screen flex-1 flex-col">
+      <header class="flex items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
+        <button id="menuBtn" class="grid h-10 w-10 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="loc-wrap relative hidden md:block">
+          <button id="locBtn" class="flex items-center gap-2 rounded-xl px-1 py-1 text-left">
+            <span class="grid h-9 w-9 place-items-center text-orange">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <span>
+              <span class="block text-[11px] font-semibold text-[#98A2B3]">Deliver to</span>
+              <span id="locLabel" class="block text-sm font-extrabold leading-tight">Main Kitchen, Connaught Place, Delhi</span>
+            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="loc-menu">
+            <button data-loc="Main Kitchen, Connaught Place, Delhi" class="loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog">Main Kitchen, Connaught Place, Delhi</button>
+            <button data-loc="Prep Hub, Nehru Place, Delhi" class="loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog">Prep Hub, Nehru Place, Delhi</button>
+          </div>
+        </div>
+        <label class="relative min-w-0 flex-1">
+          <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+          </span>
+          <input id="topSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search for products, categories, brands..." />
+        </label>
+        <button id="bellBtn" class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#E4E7EC] bg-white" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+        <div class="user-wrap relative shrink-0">
+          <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
+            <span id="avatar" class="grid h-10 w-10 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">RC</span>
+            <div class="hidden text-left sm:block">
+              <p id="orgName" class="text-sm font-extrabold leading-tight">The Urban Table</p>
+              <p class="text-[11px] font-semibold text-[#98A2B3]">Restaurant</p>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="userMenu" class="user-menu" role="menu">
+            <button data-panel="account" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog">My Account</button>
+            <button id="logoutBtn" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog" role="menuitem">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 p-4 lg:p-6">
+        <section data-view="dashboard" class="panel">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p id="greet" class="text-sm font-semibold text-[#667085]">Good morning,</p>
+              <h1 id="dashOrg" class="text-3xl font-extrabold tracking-tight">The Urban Table</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Everything you need to run your kitchen, in one place.</p>
+            </div>
+            <article class="flex items-center gap-3 rounded-[20px] bg-white px-4 py-3 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#FFF1EC] text-orange">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </span>
+              <div>
+                <p class="text-[11px] font-bold text-[#98A2B3]">Next delivery</p>
+                <p class="text-sm font-extrabold">Tomorrow, 10:00 AM</p>
+                <p class="text-[11px] font-semibold text-[#98A2B3]">32 items</p>
+              </div>
+            </article>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><p class="text-2xl font-extrabold leading-none">5</p><p class="mt-1 text-sm font-semibold text-[#667085]">Active Orders</p></div></article>
+            <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg></span><div><p class="text-2xl font-extrabold leading-none">12</p><p class="mt-1 text-sm font-semibold text-[#667085]">Items in Lists</p></div></article>
+            <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹24,680</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Spend (Jun)</p></div></article>
+            <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">98%</p><p class="mt-1 text-sm font-semibold text-[#667085]">On-time Deliveries</p></div></article>
+          </div>
+          <h2 class="mt-8 text-lg font-extrabold">Quick Actions</h2>
+          <div class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <button data-panel="catalogue" class="qa">
+              <span class="qico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
+              <p class="mt-3 text-sm font-extrabold">Browse Catalogue</p>
+              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Explore 10,000+ products</p>
+            </button>
+            <button data-panel="repeat" class="qa">
+              <span class="qico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
+              <p class="mt-3 text-sm font-extrabold">Repeat Order</p>
+              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Reorder in 1 click</p>
+            </button>
+            <button data-panel="orders" class="qa">
+              <span class="qico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <p class="mt-3 text-sm font-extrabold">Order History</p>
+              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">View past orders</p>
+            </button>
+            <button id="qaCreateList" class="qa">
+              <span class="qico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg></span>
+              <p class="mt-3 text-sm font-extrabold">Create List</p>
+              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Save your frequent items</p>
+            </button>
+          </div>
+          <div class="mt-8 flex items-center justify-between">
+            <h2 class="text-lg font-extrabold">Your Frequently Ordered Items</h2>
+            <button data-panel="catalogue" class="text-sm font-extrabold text-orange">View All</button>
+          </div>
+          <div id="freqGrid" class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"></div>
+        </section>
+
+        <section data-view="catalogue" class="panel hidden">
+          <h1 class="text-3xl font-extrabold tracking-tight">Product Catalogue</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Explore high-quality products from trusted brands</p>
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <label class="relative min-w-[240px] flex-1">
+              <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
+              <input id="catSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-white pl-10 pr-4 text-sm font-medium" placeholder="Search for products, brands or categories..." />
+            </label>
+            <button id="scanBtn" class="btn-ghost inline-flex items-center gap-2 rounded-full">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 12h10"/></svg>
+              Scan Barcode
+            </button>
+          </div>
+          <div id="catChips" class="mt-4 flex gap-2 overflow-x-auto pb-1"></div>
+          <div class="mt-4 grid gap-4 lg:grid-cols-[220px_1fr]">
+            <aside class="card h-fit p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-extrabold">Filters</h3>
+                <button id="clearFilters" class="text-xs font-extrabold text-orange">Clear All</button>
+              </div>
+              <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Category</p>
+              <div id="catChecks" class="mt-2 grid gap-2 text-sm font-semibold text-[#344054]"></div>
+              <p class="mt-5 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Brand</p>
+              <div id="brandChecks" class="mt-2 grid gap-2 text-sm font-semibold text-[#344054]"></div>
+              <p class="mt-5 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Price Range (₹)</p>
+              <div class="mt-2 grid grid-cols-2 gap-2">
+                <input id="minPrice" class="field h-10" type="number" min="0" placeholder="Min" />
+                <input id="maxPrice" class="field h-10" type="number" min="0" placeholder="Max" />
+              </div>
+              <p class="mt-5 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Availability</p>
+              <label class="mt-2 flex items-center gap-2 text-sm font-semibold"><input id="stockOnly" type="checkbox" checked class="accent-[#FF4F18]" /> In Stock Only</label>
+            </aside>
+            <div>
+              <div class="mb-3 flex items-center justify-between gap-3">
+                <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
+                <select id="catSort" class="field h-10 w-44">
+                  <option>Sort by: Relevance</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Name A–Z</option>
+                </select>
+              </div>
+              <div id="catGrid" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"></div>
+            </div>
+          </div>
+        </section>
+
+        <section data-view="orders" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">My Orders</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Track, manage and reorder your past orders</p>
+            </div>
+            <select id="orderRange" class="field h-10 w-40">
+              <option>Last 3 Months</option>
+              <option>Last 30 Days</option>
+              <option>This Year</option>
+            </select>
+          </div>
+          <div id="orderTabs" class="mt-4 flex gap-2 overflow-x-auto"></div>
+          <div id="orderList" class="mt-4 grid gap-3"></div>
+        </section>
+
+        <section data-view="repeat" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">Repeat Orders</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Reorder your regular kitchen supplies in one click</p>
+            </div>
+            <button data-panel="catalogue" class="btn-save">Browse Catalogue</button>
+          </div>
+          <div id="repeatList" class="mt-5 grid gap-3"></div>
+        </section>
+
+        <section data-view="lists" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">My Lists</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Save frequent items for faster ordering</p>
+            </div>
+            <button id="createListBtn" class="btn-save">+ Create List</button>
+          </div>
+          <div id="listsGrid" class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3"></div>
+        </section>
+
+        <section data-view="invoices" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">Invoices &amp; Payments</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">View your invoices, manage payments and download statements</p>
+            </div>
+            <select class="field h-10 w-40">
+              <option>Last 3 Months</option>
+              <option>Last 30 Days</option>
+              <option>This Year</option>
+            </select>
+          </div>
+          <div id="invTabs" class="mt-4 flex gap-2">
+            <button data-inv="invoices" class="set-tab is-on">Invoices</button>
+            <button data-inv="payments" class="set-tab">Payments</button>
+            <button data-inv="credit" class="set-tab">Credit &amp; Wallet</button>
+          </div>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16h16V8z"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹84,320</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Invoices</p></div></article>
+            <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹72,650</p><p class="mt-1 text-sm font-semibold text-[#667085]">Paid</p></div></article>
+            <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹11,670</p><p class="mt-1 text-sm font-semibold text-[#667085]">Pending</p></div></article>
+            <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹5,000</p><p class="mt-1 text-sm font-semibold text-[#667085]">Available Credit</p></div></article>
+          </div>
+          <div id="invPane" class="card mt-4 overflow-x-auto p-4"></div>
+        </section>
+
+        <section data-view="deliveries" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">Deliveries</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Track incoming shipments to your kitchen</p>
+            </div>
+            <article class="flex items-center gap-3 rounded-[20px] bg-white px-4 py-3 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#FFF1EC] text-orange">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </span>
+              <div>
+                <p class="text-[11px] font-bold text-[#98A2B3]">Next delivery</p>
+                <p class="text-sm font-extrabold">Tomorrow, 10:00 AM</p>
+                <p class="text-[11px] font-semibold text-[#98A2B3]">32 items · Main Kitchen</p>
+              </div>
+            </article>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/></svg></span><div><p class="text-2xl font-extrabold leading-none">1</p><p class="mt-1 text-sm font-semibold text-[#667085]">Out for Delivery</p></div></article>
+            <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><p class="text-2xl font-extrabold leading-none">2</p><p class="mt-1 text-sm font-semibold text-[#667085]">Scheduled</p></div></article>
+            <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">8</p><p class="mt-1 text-sm font-semibold text-[#667085]">Delivered this month</p></div></article>
+            <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span><div><p class="text-2xl font-extrabold leading-none">98%</p><p class="mt-1 text-sm font-semibold text-[#667085]">On-time</p></div></article>
+          </div>
+          <div id="delTabs" class="mt-5 flex gap-2">
+            <button data-del="all" class="set-tab is-on">All</button>
+            <button data-del="Out for Delivery" class="set-tab">Out for Delivery</button>
+            <button data-del="Scheduled" class="set-tab">Scheduled</button>
+            <button data-del="Delivered" class="set-tab">Delivered</button>
+          </div>
+          <div id="delList" class="mt-4 grid gap-3"></div>
+        </section>
+
+        <section data-view="returns" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">Returns &amp; Support</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Manage product returns, replacements and kitchen issues</p>
+            </div>
+            <button id="raiseBtn" class="btn-save">+ Raise Request</button>
+          </div>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></span><div><p class="text-2xl font-extrabold leading-none">6</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Requests</p></div></article>
+            <article class="kpi"><span class="ico bg-[#FFF8E8] text-[#DC6803]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span><div><p class="text-2xl font-extrabold leading-none">2</p><p class="mt-1 text-sm font-semibold text-[#667085]">Open</p></div></article>
+            <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">3</p><p class="mt-1 text-sm font-semibold text-[#667085]">Resolved</p></div></article>
+            <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span><div><p class="text-2xl font-extrabold leading-none">1</p><p class="mt-1 text-sm font-semibold text-[#667085]">Refunded</p></div></article>
+          </div>
+          <div class="card mt-4 overflow-x-auto p-4">
+            <table class="line-table">
+              <thead><tr><th>#</th><th>Request ID</th><th>Order #</th><th>Type</th><th>Status</th><th>Created On</th><th>Action</th></tr></thead>
+              <tbody id="retBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section data-view="account" class="panel hidden">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 class="text-3xl font-extrabold tracking-tight">My Account</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Manage your kitchen profile, addresses and preferences</p>
+            </div>
+            <button id="saveAcc" class="btn-save">Save Changes</button>
+          </div>
+          <div class="mt-5 grid gap-4 xl:grid-cols-2">
+            <article class="card p-5">
+              <h3 class="text-base font-extrabold">Business Information</h3>
+              <label class="mt-4 block text-sm font-bold">Kitchen / Business Name</label>
+              <input id="accOrg" class="field mt-1" />
+              <label class="mt-4 block text-sm font-bold">Email</label>
+              <input id="accEmail" class="field mt-1" type="email" />
+              <label class="mt-4 block text-sm font-bold">Phone</label>
+              <input id="accPhone" class="field mt-1" value="+91 98765 43210" />
+              <label class="mt-4 block text-sm font-bold">GSTIN</label>
+              <input class="field mt-1" value="07AABCU9603R1ZX" />
+            </article>
+            <article class="card p-5">
+              <h3 class="text-base font-extrabold">Delivery Addresses</h3>
+              <div class="mt-4 rounded-2xl border border-[#EEF0F3] p-4">
+                <p class="text-sm font-extrabold">Main Kitchen</p>
+                <p class="mt-1 text-sm font-medium text-[#667085]">12A, Food Hub, Connaught Place, New Delhi - 110001</p>
+                <p class="mt-2 text-xs font-extrabold text-orange">Default</p>
+              </div>
+              <div class="mt-3 rounded-2xl border border-[#EEF0F3] p-4">
+                <p class="text-sm font-extrabold">Prep Hub</p>
+                <p class="mt-1 text-sm font-medium text-[#667085]">Nehru Place, New Delhi - 110019</p>
+              </div>
+            </article>
+            <article class="card p-5">
+              <h3 class="text-base font-extrabold">Order Preferences</h3>
+              <div class="pref-row mt-2"><span>Order email notifications</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Low stock reminders</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Allow COD orders</span><label class="toggle"><input type="checkbox" /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Marketing emails</span><label class="toggle"><input type="checkbox" /><span class="toggle-ui"></span></label></div>
+            </article>
+            <article class="card p-5">
+              <h3 class="text-base font-extrabold">Credit Summary</h3>
+              <p class="mt-3 text-3xl font-extrabold">₹5,000 <span class="text-sm font-bold text-[#98A2B3]">available</span></p>
+              <p class="mt-1 text-sm font-semibold text-[#667085]">of ₹25,000 credit limit</p>
+              <div class="mt-4 h-2 overflow-hidden rounded-full bg-fog"><div class="h-full w-1/5 rounded-full bg-orange"></div></div>
+              <p class="mt-3 text-sm font-semibold text-[#667085]">Payment terms: Net 15</p>
+            </article>
+          </div>
+        </section>
+
+        <section data-view="support" class="panel hidden">
+          <h1 class="text-3xl font-extrabold tracking-tight">Contact Support</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Reach the KitchenX desk for orders, deliveries and invoices</p>
+          <div class="mt-5 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+            <article class="card p-5">
+              <h3 class="text-base font-extrabold">Send a message</h3>
+              <form id="supForm" class="mt-4 grid gap-3">
+                <label class="text-sm font-bold">Topic
+                  <select class="field mt-1">
+                    <option>Order issue</option>
+                    <option>Delivery</option>
+                    <option>Invoice &amp; payments</option>
+                    <option>Product quality</option>
+                    <option>Account</option>
+                  </select>
+                </label>
+                <label class="text-sm font-bold">Related order
+                  <input class="field mt-1" placeholder="e.g. #ORD12456" />
+                </label>
+                <label class="text-sm font-bold">Message
+                  <textarea class="field mt-1" placeholder="Describe what you need help with"></textarea>
+                </label>
+                <button class="btn-save w-fit" type="submit">Submit Request</button>
+              </form>
+            </article>
+            <div class="grid gap-4">
+              <article class="card p-5">
+                <h3 class="text-base font-extrabold">Talk to us</h3>
+                <p class="mt-3 text-sm font-bold">Phone</p>
+                <p class="text-sm font-semibold text-[#667085]">+91 1800-120-5544</p>
+                <p class="mt-3 text-sm font-bold">Email</p>
+                <p class="text-sm font-semibold text-[#667085]">support@kitchenx.com</p>
+                <p class="mt-3 text-sm font-bold">Hours</p>
+                <p class="text-sm font-semibold text-[#667085]">Mon–Sat, 8:00 AM – 8:00 PM IST</p>
+              </article>
+              <article class="card p-5">
+                <h3 class="text-base font-extrabold">Common questions</h3>
+                <button data-panel="deliveries" class="mt-3 block w-full rounded-xl bg-fog px-3 py-3 text-left text-sm font-bold">Where is my delivery?</button>
+                <button data-panel="invoices" class="mt-2 block w-full rounded-xl bg-fog px-3 py-3 text-left text-sm font-bold">How do I download an invoice?</button>
+                <button data-panel="returns" class="mt-2 block w-full rounded-xl bg-fog px-3 py-3 text-left text-sm font-bold">How do I raise a return?</button>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
+  <div id="toast" role="status"></div>
+  <div id="orderModal" class="modal-scrim"><div class="card w-full max-w-lg p-6"><div class="flex items-start justify-between gap-3"><h3 id="omTitle" class="text-lg font-extrabold"></h3><button data-close="orderModal" class="btn-ghost h-9 px-3">Close</button></div><div id="omBody" class="mt-4"></div></div></div>
+  <div id="listModal" class="modal-scrim"><form id="listForm" class="card w-full max-w-md p-6"><h3 class="text-lg font-extrabold">Create List</h3><label class="mt-4 block text-sm font-bold">List name<input id="listName" class="field mt-1" required placeholder="e.g. Weekend brunch prep" /></label><div class="mt-5 flex justify-end gap-2"><button type="button" data-close="listModal" class="btn-ghost">Cancel</button><button class="btn-save" type="submit">Save List</button></div></form></div>
+  <div id="raiseModal" class="modal-scrim"><form id="raiseForm" class="card w-full max-w-md p-6"><h3 class="text-lg font-extrabold">Raise Request</h3><label class="mt-4 block text-sm font-bold">Type<select id="raiseType" class="field mt-1"><option>Return</option><option>Replacement</option><option>Complaint</option><option>Refund</option></select></label><label class="mt-3 block text-sm font-bold">Order ID<input id="raiseOrder" class="field mt-1" placeholder="#ORD12456" /></label><label class="mt-3 block text-sm font-bold">Details<textarea id="raiseNote" class="field mt-1" required></textarea></label><div class="mt-5 flex justify-end gap-2"><button type="button" data-close="raiseModal" class="btn-ghost">Cancel</button><button class="btn-save" type="submit">Submit</button></div></form></div>
+
+  <script>
+    const org = sessionStorage.getItem('kxOrg') || 'The Urban Table';
+    const user = sessionStorage.getItem('kxUser') || '';
+    const email = user.includes('@') ? user : 'orders@' + org.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.com';
+    const initials = (function () {
+      if (user && !user.includes('@')) {
+        const parts = user.split(/\s+/).filter(Boolean);
+        return (parts.length >= 2 ? parts[0][0] + parts[1][0] : user.slice(0, 2)).toUpperCase();
+      }
+      return 'RC';
+    })();
+    document.getElementById('orgName').textContent = org;
+    document.getElementById('dashOrg').textContent = org;
+    document.getElementById('avatar').textContent = initials.length === 1 ? (initials + initials) : initials.slice(0, 2);
+    document.getElementById('accOrg').value = org;
+    document.getElementById('accEmail').value = email;
+    document.getElementById('greet').textContent = 'Good morning,';
+
+    const sidebar = document.getElementById('sidebar');
+    const scrim = document.getElementById('scrim');
+    document.getElementById('menuBtn').addEventListener('click', () => { sidebar.classList.toggle('-translate-x-full'); scrim.classList.toggle('hidden'); });
+    scrim.addEventListener('click', () => { sidebar.classList.add('-translate-x-full'); scrim.classList.add('hidden'); });
+    document.getElementById('collapseBtn').addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
+    });
+
+    const PANELS = ['dashboard','catalogue','orders','repeat','lists','invoices','deliveries','returns','account','support'];
+    function showPanel(id) {
+      document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('hidden', el.getAttribute('data-view') !== id));
+      document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id));
+      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+      if (id === 'catalogue') renderCat();
+    }
+    document.querySelectorAll('[data-panel]').forEach((btn) => btn.addEventListener('click', () => showPanel(btn.getAttribute('data-panel'))));
+    let bootPanel = (location.hash || '#dashboard').slice(1);
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function openModal(id) { document.getElementById(id).classList.add('show'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+    document.querySelectorAll('[data-close]').forEach((btn) => btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close'))));
+    document.querySelectorAll('.modal-scrim').forEach((m) => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); }));
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('kxRole');
+      sessionStorage.removeItem('kxUser');
+      sessionStorage.removeItem('kxOrg');
+      window.location.href = 'kitchenx-v2.html';
+    });
+    document.getElementById('saveAcc').addEventListener('click', () => {
+      const name = document.getElementById('accOrg').value.trim();
+      if (name) {
+        sessionStorage.setItem('kxOrg', name);
+        document.getElementById('orgName').textContent = name;
+        document.getElementById('dashOrg').textContent = name;
+      }
+      toast('Account changes saved');
+    });
+    document.getElementById('bellBtn').addEventListener('click', () => toast('No new notifications'));
+    document.getElementById('scanBtn').addEventListener('click', () => toast('Connect a scanner to this workstation'));
+    document.getElementById('locBtn').addEventListener('click', (e) => { e.stopPropagation(); document.querySelector('.loc-wrap').classList.toggle('open'); document.querySelector('.user-wrap').classList.remove('open'); });
+    document.querySelectorAll('.loc-opt').forEach((btn) => btn.addEventListener('click', () => {
+      document.getElementById('locLabel').textContent = btn.getAttribute('data-loc');
+      document.querySelector('.loc-wrap').classList.remove('open');
+      toast('Delivering to ' + btn.getAttribute('data-loc'));
+    }));
+    const userWrap = document.querySelector('.user-wrap');
+    const userBtn = document.getElementById('userBtn');
+    userBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userWrap.classList.toggle('open');
+      userBtn.setAttribute('aria-expanded', userWrap.classList.contains('open') ? 'true' : 'false');
+      document.querySelector('.loc-wrap').classList.remove('open');
+    });
+    document.addEventListener('click', () => {
+      document.querySelector('.loc-wrap').classList.remove('open');
+      userWrap.classList.remove('open');
+      userBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    function money(n) { return '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function picSrc(kind) { return 'assets/customer/products/' + (kind || 'tomato') + '.png'; }
+    function pic(kind, cls) {
+      return '<img class="' + (cls || 'thumb') + '" src="' + picSrc(kind) + '" alt="" />';
+    }
+    function picLg(kind) {
+      return '<div class="prod-img"><img src="' + picSrc(kind) + '" alt="" /></div>';
+    }
+
+    const PRODUCTS = [
+      { id: 'p1', name: 'Amul Butter (500 g)', brand: 'Amul', cat: 'Dairy', price: 305.55, pic: 'butter', stock: true },
+      { id: 'p2', name: 'Fresh Tomatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 60, pic: 'tomato', stock: true },
+      { id: 'p3', name: 'Chicken Breast (1 kg)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 220, pic: 'chicken', stock: true },
+      { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Fortune', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true },
+      { id: 'p5', name: 'Amul Fresh Cream (1 L)', brand: 'Amul', cat: 'Dairy', price: 247, pic: 'cream', stock: true },
+      { id: 'p6', name: 'Aashirvaad Atta (5 kg)', brand: 'Aashirvaad', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true },
+      { id: 'p7', name: 'Onions (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 35, pic: 'onion', stock: true },
+      { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'India Gate', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true }
+    ];
+    const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Pantry & Staples','Beverages'];
+    const BRANDS = ['Amul','Nestlé','Tata','Fortune','Aashirvaad','India Gate'];
+    const qty = {};
+    const fav = {};
+    PRODUCTS.forEach((p) => { qty[p.id] = 1; });
+    let chip = 'All Categories';
+
+    document.getElementById('catChips').innerHTML = CATS.map((c) => '<button data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + c + '</button>').join('') + '<button class="chip">More</button>';
+    document.getElementById('catChecks').innerHTML = CATS.slice(1, 5).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreCats">+ Show more</button>';
+    document.getElementById('brandChecks').innerHTML = ['Amul','Nestlé','Tata','Fortune'].map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreBrands">+ Show more</button>';
+
+    function activeChecks(sel) { return Array.from(document.querySelectorAll(sel)).filter((i) => i.checked).map((i) => i.value); }
+    function renderCat() {
+      const q = ((document.getElementById('catSearch').value || document.getElementById('topSearch').value) || '').toLowerCase();
+      const cats = activeChecks('.f-cat');
+      const brands = activeChecks('.f-brand');
+      const min = Number(document.getElementById('minPrice').value) || 0;
+      const max = Number(document.getElementById('maxPrice').value) || Infinity;
+      const stockOnly = document.getElementById('stockOnly').checked;
+      const sort = document.getElementById('catSort').value;
+      let list = PRODUCTS.filter((p) => {
+        if (chip !== 'All Categories' && p.cat !== chip) return false;
+        if (cats.length && !cats.includes(p.cat)) return false;
+        if (brands.length && !brands.includes(p.brand)) return false;
+        if (p.price < min || p.price > max) return false;
+        if (stockOnly && !p.stock) return false;
+        if (q && !(p.name + p.brand + p.cat).toLowerCase().includes(q)) return false;
+        return true;
+      });
+      if (sort.includes('Low')) list = list.slice().sort((a,b) => a.price - b.price);
+      if (sort.includes('High')) list = list.slice().sort((a,b) => b.price - a.price);
+      if (sort.includes('Name')) list = list.slice().sort((a,b) => a.name.localeCompare(b.name));
+      document.getElementById('catCount').textContent = (list.length === PRODUCTS.length ? '1,248' : list.length) + ' products';
+      document.getElementById('catGrid').innerHTML = list.map((p) => `
+        <article class="card overflow-hidden" data-pid="${p.id}">
+          <div class="relative">
+            ${picLg(p.pic)}
+            <button class="heart${fav[p.id] ? ' is-on' : ''}" data-fav="${p.id}" aria-label="Save">${fav[p.id] ? '♥' : '♡'}</button>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-extrabold leading-snug">${p.name}</p>
+            <p class="mt-0.5 text-xs font-semibold text-[#98A2B3]">${p.brand}</p>
+            <p class="mt-2 text-sm font-extrabold text-orange">${money(p.price)}</p>
+            <p class="mt-1 text-xs font-extrabold text-[#12B76A]">In Stock</p>
+            <div class="mt-3 flex items-center justify-between gap-2">
+              <div class="stepper"><button data-q="-">−</button><span>${qty[p.id]}</span><button data-q="+">+</button></div>
+              <button class="btn-add" data-add="${p.id}">Add</button>
+            </div>
+          </div>
+        </article>`).join('') || '<p class="text-sm font-semibold text-[#667085]">No products match these filters.</p>';
+    }
+    document.getElementById('catChips').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-chip]');
+      if (!btn) { if (e.target.textContent === 'More') toast('More categories are opening soon'); return; }
+      chip = btn.getAttribute('data-chip');
+      document.querySelectorAll('#catChips .chip').forEach((c) => c.classList.toggle('is-on', c.getAttribute('data-chip') === chip));
+      renderCat();
+    });
+    ['catSearch','minPrice','maxPrice','catSort'].forEach((id) => document.getElementById(id).addEventListener('input', renderCat));
+    document.getElementById('catSort').addEventListener('change', renderCat);
+    document.getElementById('stockOnly').addEventListener('change', renderCat);
+    document.getElementById('catChecks').addEventListener('change', renderCat);
+    document.getElementById('brandChecks').addEventListener('change', renderCat);
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      chip = 'All Categories';
+      document.querySelectorAll('#catChips .chip').forEach((c) => c.classList.toggle('is-on', c.getAttribute('data-chip') === chip));
+      document.querySelectorAll('.f-cat,.f-brand').forEach((i) => { i.checked = false; });
+      document.getElementById('minPrice').value = '';
+      document.getElementById('maxPrice').value = '';
+      document.getElementById('stockOnly').checked = true;
+      document.getElementById('catSearch').value = '';
+      renderCat();
+    });
+    document.getElementById('moreCats').addEventListener('click', () => {
+      document.getElementById('catChecks').innerHTML = CATS.slice(1).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('');
+    });
+    document.getElementById('moreBrands').addEventListener('click', () => {
+      document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
+    });
+    document.getElementById('catGrid').addEventListener('click', (e) => {
+      const card = e.target.closest('[data-pid]');
+      if (!card) return;
+      const id = card.getAttribute('data-pid');
+      const p = PRODUCTS.find((x) => x.id === id);
+      if (e.target.closest('[data-fav]')) { fav[id] = !fav[id]; renderCat(); return; }
+      const qbtn = e.target.closest('[data-q]');
+      if (qbtn) { qty[id] = Math.max(1, qty[id] + (qbtn.getAttribute('data-q') === '+' ? 1 : -1)); renderCat(); return; }
+      if (e.target.closest('[data-add]')) toast(p.name + ' added · qty ' + qty[id]);
+    });
+    document.getElementById('topSearch').addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      document.getElementById('catSearch').value = e.target.value;
+      showPanel('catalogue');
+    });
+
+    document.getElementById('freqGrid').innerHTML = PRODUCTS.slice(0, 4).map((p) => `
+      <article class="card overflow-hidden">
+        ${picLg(p.pic)}
+        <div class="px-3 pb-3">
+          <p class="text-sm font-extrabold leading-snug">${p.name}</p>
+          <p class="mt-1 text-sm font-extrabold text-orange">${money(p.price)}</p>
+          <button class="btn-add mt-3" data-add="${p.id}">Add</button>
+        </div>
+      </article>`).join('');
+    document.getElementById('freqGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-add]');
+      if (!btn) return;
+      const p = PRODUCTS.find((x) => x.id === btn.getAttribute('data-add'));
+      toast(p.name + ' added');
+    });
+
+    const ORDERS = [
+      { id: '#ORD12456', date: '24 Jun 2025, 10:24 AM', status: 'Processing', extra: 8, pics: ['tomato','oil'], track: true, items: '12 items · ₹12,430' },
+      { id: '#ORD12455', date: '23 Jun 2025, 09:18 AM', status: 'Delivered', extra: 4, pics: ['chicken','tomato'], buy: true, items: '8 items · ₹8,220' },
+      { id: '#ORD12454', date: '20 Jun 2025, 08:41 AM', status: 'Delivered', extra: 16, pics: ['cream','atta','onion'], buy: true, items: '20 items · ₹21,650' },
+      { id: '#ORD12453', date: '16 Jun 2025, 11:12 AM', status: 'Cancelled', extra: 2, pics: ['chicken'], items: '6 items · ₹6,980' },
+      { id: '#ORD12452', date: '15 Jun 2025, 04:42 AM', status: 'Delivered', extra: 11, pics: ['chicken','rice'], buy: true, items: '15 items · ₹14,255' }
+    ];
+    const OTABS = ['All Orders','Processing','Out for Delivery','Delivered','Cancelled'];
+    let otab = 'All Orders';
+    function badge(st) {
+      const map = { Processing: 'badge-proc', Delivered: 'badge-done', 'Out for Delivery': 'badge-ship', Cancelled: 'badge-cancel', Scheduled: 'badge-prog', Open: 'badge-open', 'In Progress': 'badge-prog', Resolved: 'badge-done', Refunded: 'badge-refund', Paid: 'badge-done', Pending: 'badge-pay' };
+      return '<span class="badge ' + (map[st] || 'badge-prog') + '">● ' + st + '</span>';
+    }
+    function renderOrders() {
+      document.getElementById('orderTabs').innerHTML = OTABS.map((t) => '<button data-ot="' + t + '" class="set-tab' + (t === otab ? ' is-on' : '') + '">' + t + '</button>').join('');
+      const list = ORDERS.filter((o) => otab === 'All Orders' || o.status === otab);
+        document.getElementById('orderList').innerHTML = list.map((o) => `
+        <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+          <input type="checkbox" class="accent-[#FF4F18]" />
+          <div class="min-w-[140px]">
+            <p class="text-sm font-extrabold">${o.id}</p>
+            <p class="text-xs font-semibold text-[#98A2B3]">${o.date}</p>
+          </div>
+          ${badge(o.status)}
+          <div class="flex items-center">${o.pics.map((p) => pic(p)).join('')}<span class="ml-2 text-xs font-extrabold text-[#667085]">+${o.extra}</span></div>
+          <div class="ml-auto flex flex-wrap gap-2">
+            <button class="btn-ghost" data-odetail="${o.id}">View Details</button>
+            ${o.track ? '<button class="btn-add" data-track="'+o.id+'">Track Order</button>' : ''}
+            ${o.buy ? '<button class="btn-add" data-buy="'+o.id+'">Buy Again</button>' : ''}
+          </div>
+        </article>`).join('') || '<p class="text-sm font-semibold text-[#667085]">No orders in this view.</p>';
+    }
+    document.getElementById('orderTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-ot]');
+      if (!btn) return;
+      otab = btn.getAttribute('data-ot');
+      renderOrders();
+    });
+    document.getElementById('orderList').addEventListener('click', (e) => {
+      const d = e.target.closest('[data-odetail]');
+      const t = e.target.closest('[data-track]');
+      const b = e.target.closest('[data-buy]');
+      if (d) {
+        const o = ORDERS.find((x) => x.id === d.getAttribute('data-odetail'));
+        document.getElementById('omTitle').textContent = o.id;
+        document.getElementById('omBody').innerHTML = '<p class="text-sm font-semibold text-[#667085]">' + o.date + '</p><p class="mt-2">' + badge(o.status) + '</p><p class="mt-3 text-sm font-bold">' + o.items + '</p><p class="mt-2 text-sm font-medium text-[#667085]">Deliver to ' + document.getElementById('locLabel').textContent + '</p>';
+        openModal('orderModal');
+      }
+      if (t) {
+        document.getElementById('omTitle').textContent = 'Track ' + t.getAttribute('data-track');
+        document.getElementById('omBody').innerHTML = '<ol class="grid gap-3 text-sm font-bold"><li class="text-[#12B76A]">Placed · 24 Jun, 10:24 AM</li><li class="text-[#12B76A]">Packed · 24 Jun, 11:40 AM</li><li class="text-orange">Out for delivery · today</li><li class="text-[#98A2B3]">Arriving at Main Kitchen</li></ol>';
+        openModal('orderModal');
+      }
+      if (b) toast(b.getAttribute('data-buy') + ' added to your next order');
+    });
+    renderOrders();
+
+    const REPEATS = [
+      { name: 'Weekly Produce Run', when: 'Every Monday', last: '16 Jun 2025', items: 8, total: 4280, pics: ['tomato','onion'] },
+      { name: 'Dairy Restock', when: 'Every Wednesday', last: '18 Jun 2025', items: 5, total: 2140, pics: ['butter','cream'] },
+      { name: 'Protein Box', when: 'Every Friday', last: '13 Jun 2025', items: 6, total: 6900, pics: ['chicken'] }
+    ];
+    document.getElementById('repeatList').innerHTML = REPEATS.map((r) => `
+      <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+        <div class="flex">${r.pics.map((p) => pic(p)).join('')}</div>
+        <div class="min-w-[180px]">
+          <p class="text-sm font-extrabold">${r.name}</p>
+          <p class="text-xs font-semibold text-[#98A2B3]">${r.when} · Last ${r.last}</p>
+        </div>
+        <p class="text-sm font-bold text-[#667085]">${r.items} items</p>
+        <p class="text-sm font-extrabold">${money(r.total)}</p>
+        <button class="btn-add ml-auto" data-rep="${r.name}">Repeat Now</button>
+      </article>`).join('');
+    document.getElementById('repeatList').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-rep]');
+      if (btn) toast(btn.getAttribute('data-rep') + ' placed');
+    });
+
+    let LISTS = [
+      { name: 'Weekly Produce', n: 4, pics: ['tomato','onion'] },
+      { name: 'Dairy Staples', n: 5, pics: ['butter','cream'] },
+      { name: 'Meat & Poultry', n: 3, pics: ['chicken'] }
+    ];
+    function renderLists() {
+      document.getElementById('listsGrid').innerHTML = LISTS.map((l) => `
+        <article class="card p-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-extrabold">${l.name}</h3>
+            <span class="text-xs font-bold text-[#98A2B3]">${l.n} items</span>
+          </div>
+          <div class="mt-3 flex">${l.pics.map((p) => pic(p)).join('')}</div>
+          <div class="mt-4 flex gap-2">
+            <button class="btn-ghost" data-openlist="${l.name}">View</button>
+            <button class="btn-add" data-addlist="${l.name}">Add All</button>
+          </div>
+        </article>`).join('');
+    }
+    renderLists();
+    function openListModal() { document.getElementById('listName').value = ''; openModal('listModal'); showPanel('lists'); }
+    document.getElementById('createListBtn').addEventListener('click', openListModal);
+    document.getElementById('qaCreateList').addEventListener('click', openListModal);
+    document.getElementById('listForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      LISTS.push({ name: document.getElementById('listName').value.trim(), n: 0, pics: ['tomato'] });
+      closeModal('listModal');
+      renderLists();
+      toast('List saved');
+    });
+    document.getElementById('listsGrid').addEventListener('click', (e) => {
+      if (e.target.closest('[data-addlist]')) toast(e.target.closest('[data-addlist]').getAttribute('data-addlist') + ' added to order');
+      if (e.target.closest('[data-openlist]')) toast('Opening ' + e.target.closest('[data-openlist]').getAttribute('data-openlist'));
+    });
+
+    const INVOICES = [
+      { id: 'INV-2025-0624', order: '#ORD12456', date: '24 Jun 2025', amt: 12430, status: 'Pending' },
+      { id: 'INV-2025-0622', order: '#ORD12455', date: '22 Jun 2025', amt: 8220, status: 'Paid' },
+      { id: 'INV-2025-0620', order: '#ORD12454', date: '20 Jun 2025', amt: 21650, status: 'Paid' },
+      { id: 'INV-2025-0618', order: '#ORD12453', date: '18 Jun 2025', amt: 6980, status: 'Paid' },
+      { id: 'INV-2025-0615', order: '#ORD12452', date: '15 Jun 2025', amt: 14320, status: 'Paid' }
+    ];
+    const PAYS = [
+      { id: 'PAY-8841', via: 'UPI', date: '22 Jun 2025', amt: 8220, order: '#ORD12455' },
+      { id: 'PAY-8830', via: 'Credit', date: '20 Jun 2025', amt: 21650, order: '#ORD12454' },
+      { id: 'PAY-8812', via: 'NEFT', date: '18 Jun 2025', amt: 6980, order: '#ORD12453' }
+    ];
+    function renderInv(tab) {
+      document.querySelectorAll('#invTabs .set-tab').forEach((t) => t.classList.toggle('is-on', t.getAttribute('data-inv') === tab));
+      const pane = document.getElementById('invPane');
+      if (tab === 'payments') {
+        pane.innerHTML = '<table class="line-table"><thead><tr><th>Payment #</th><th>Order #</th><th>Date</th><th>Method</th><th>Amount</th></tr></thead><tbody>' +
+          PAYS.map((p) => '<tr><td>' + p.id + '</td><td>' + p.order + '</td><td>' + p.date + '</td><td>' + p.via + '</td><td>' + money(p.amt) + '</td></tr>').join('') + '</tbody></table>';
+        return;
+      }
+      if (tab === 'credit') {
+        pane.innerHTML = '<div class="grid gap-3 sm:grid-cols-2"><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Available credit</p><p class="mt-1 text-2xl font-extrabold">₹5,000</p></div><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Credit limit</p><p class="mt-1 text-2xl font-extrabold">₹25,000</p></div></div><p class="mt-4 text-sm font-semibold text-[#667085]">Outstanding on credit: ₹11,670 · Net 15</p>';
+        return;
+      }
+      pane.innerHTML = '<table class="line-table"><thead><tr><th>Invoice #</th><th>Order #</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
+        INVOICES.map((r) => '<tr><td class="font-extrabold">' + r.id + '</td><td>' + r.order + '</td><td>' + r.date + '</td><td>' + money(r.amt) + '</td><td>' + badge(r.status) + '</td><td><button class="inline-flex items-center gap-1 text-sm font-extrabold text-[#1570EF]" data-dl="' + r.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg> Download</button></td></tr>').join('') + '</tbody></table>';
+    }
+    document.getElementById('invTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-inv]');
+      if (btn) renderInv(btn.getAttribute('data-inv'));
+    });
+    document.getElementById('invPane').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-dl]');
+      if (btn) toast(btn.getAttribute('data-dl') + ' downloaded');
+    });
+    renderInv('invoices');
+
+    const DELS = [
+      { id: '#ORD12456', status: 'Out for Delivery', eta: 'Today, 4:30 PM', loc: 'Main Kitchen', driver: 'Amit Singh' },
+      { id: '#ORD12460', status: 'Scheduled', eta: 'Tomorrow, 10:00 AM', loc: 'Main Kitchen', driver: '—' },
+      { id: '#ORD12461', status: 'Scheduled', eta: '25 Jun 2025, 09:00 AM', loc: 'Prep Hub', driver: '—' },
+      { id: '#ORD12455', status: 'Delivered', eta: '23 Jun 2025, 09:18 AM', loc: 'Main Kitchen', driver: 'Ravi Verma' }
+    ];
+    let dtab = 'all';
+    function renderDel() {
+      document.querySelectorAll('#delTabs .set-tab').forEach((t) => t.classList.toggle('is-on', t.getAttribute('data-del') === dtab));
+      const list = DELS.filter((d) => dtab === 'all' || d.status === dtab);
+      document.getElementById('delList').innerHTML = list.map((d) => `
+        <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+          <div class="min-w-[120px]"><p class="text-sm font-extrabold">${d.id}</p><p class="text-xs font-semibold text-[#98A2B3]">${d.loc}</p></div>
+          ${badge(d.status)}
+          <p class="text-sm font-bold text-[#667085]">ETA ${d.eta}</p>
+          <p class="text-sm font-semibold text-[#98A2B3]">${d.driver}</p>
+          <button class="btn-add ml-auto" data-track="${d.id}">Track</button>
+        </article>`).join('');
+    }
+    document.getElementById('delTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-del]');
+      if (!btn) return;
+      dtab = btn.getAttribute('data-del');
+      renderDel();
+    });
+    document.getElementById('delList').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-track]');
+      if (!btn) return;
+      document.getElementById('omTitle').textContent = 'Track ' + btn.getAttribute('data-track');
+      document.getElementById('omBody').innerHTML = '<ol class="grid gap-3 text-sm font-bold"><li class="text-[#12B76A]">Dispatched from hub</li><li class="text-orange">On the way to your kitchen</li><li class="text-[#98A2B3]">Arrival window as shown</li></ol>';
+      openModal('orderModal');
+    });
+    renderDel();
+
+    const RETS = [
+      { id: '#RNT001', order: '#ORD12432', type: 'Return', status: 'Open', date: '24 Jun 2025' },
+      { id: '#RNT002', order: '#ORD12428', type: 'Complaint', status: 'In Progress', date: '23 Jun 2025' },
+      { id: '#RNT003', order: '#ORD12421', type: 'Return', status: 'Resolved', date: '22 Jun 2025' },
+      { id: '#RNT004', order: '#ORD12419', type: 'Refund', status: 'Open', date: '21 Jun 2025' },
+      { id: '#RNT005', order: '#ORD12410', type: 'Complaint', status: 'Resolved', date: '20 Jun 2025' },
+      { id: '#RNT006', order: '#ORD12405', type: 'Replacement', status: 'Refunded', date: '19 Jun 2025' }
+    ];
+    function renderRet() {
+      document.getElementById('retBody').innerHTML = RETS.map((r, i) => '<tr><td>' + (i + 1) + '</td><td class="font-extrabold">' + r.id + '</td><td>' + r.order + '</td><td>' + r.type + '</td><td>' + badge(r.status) + '</td><td>' + r.date + '</td><td><button class="text-sm font-extrabold text-[#1570EF]" data-rview="' + r.id + '">View</button></td></tr>').join('');
+    }
+    renderRet();
+    document.getElementById('retBody').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-rview]');
+      if (!btn) return;
+      const r = RETS.find((x) => x.id === btn.getAttribute('data-rview'));
+      document.getElementById('omTitle').textContent = r.id;
+      document.getElementById('omBody').innerHTML = '<p class="text-sm font-bold">' + r.type + ' · ' + r.order + '</p><p class="mt-2">' + badge(r.status) + '</p><p class="mt-3 text-sm font-medium text-[#667085]">Opened ' + r.date + '</p>';
+      openModal('orderModal');
+    });
+    document.getElementById('raiseBtn').addEventListener('click', () => openModal('raiseModal'));
+    document.getElementById('raiseForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      RETS.unshift({ id: '#RNT' + String(RETS.length + 7).padStart(3, '0'), order: document.getElementById('raiseOrder').value || '—', type: document.getElementById('raiseType').value, status: 'Open', date: '18 Sep 2026' });
+      closeModal('raiseModal');
+      renderRet();
+      toast('Request submitted');
+    });
+    document.getElementById('supForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Support request sent'); e.target.reset(); });
+    showPanel(PANELS.includes(bootPanel) ? bootPanel : 'dashboard');
+  </script>
+</body>
+</html>

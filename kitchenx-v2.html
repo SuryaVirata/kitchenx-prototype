@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KitchenX | B2B Supplies. Bigger Possibilities.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fog: '#F2F4F7',
+            coal: '#141517',
+            orange: '#FF4F18',
+            paper: '#FFFFFF'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --fog: #F2F4F7;
+      --coal: #141517;
+      --orange: #FF4F18;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+      background: var(--fog);
+      color: var(--coal);
+    }
+    .hero-slide {
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 600ms ease-in-out;
+    }
+    .hero-slide.is-active {
+      opacity: 1;
+      z-index: 2;
+    }
+    .dot {
+      height: 7px;
+      width: 7px;
+      border-radius: 999px;
+      background: #D0D5DD;
+      transition: width 250ms ease, background 250ms ease;
+    }
+    .dot.is-active {
+      width: 22px;
+      background: var(--orange);
+    }
+    .nav-link { color: #344054; font-size: 14px; font-weight: 600; }
+    .nav-link:hover { color: var(--orange); }
+    .field:focus, .search:focus {
+      outline: none;
+      border-color: rgba(255, 79, 24, 0.7);
+      box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-slide { transition: none; }
+      html { scroll-behavior: auto; }
+    }
+    body.auth-open { overflow: hidden; }
+    #authOverlay { display: none; }
+    #authOverlay.is-open { display: flex; }
+    .auth-eye { color: #667085; }
+    .tab-active { color: #FF4F18; border-color: #FF4F18; }
+    .tab-idle { color: #667085; border-color: transparent; }
+    .page-wrap {
+      width: 100%;
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 40px;
+      padding-right: 32px;
+    }
+    @media (min-width: 1280px) {
+      .page-wrap {
+        padding-left: 48px;
+        padding-right: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="sticky top-0 z-50 border-b border-[#E8ECF1] bg-white/95 backdrop-blur-xl">
+    <div class="page-wrap flex h-[72px] items-center gap-6">
+      <a href="#top" class="shrink-0 text-[26px] font-extrabold tracking-tight text-coal">
+        Kitchen<span class="text-orange">X</span>
+      </a>
+      <nav class="hidden items-center gap-7 lg:flex">
+        <a class="nav-link" href="#categories">Products</a>
+        <a class="nav-link" href="#businesses">For Business</a>
+        <a class="nav-link" href="#how">How it Works</a>
+        <a class="nav-link" href="#impact">About</a>
+      </nav>
+      <div class="ml-auto hidden items-center gap-3 lg:flex">
+        <label class="relative">
+          <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+          </span>
+          <input class="search h-10 w-64 rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium text-coal placeholder:text-[#98A2B3]" placeholder="Search products, categories..." />
+        </label>
+        <div class="flex items-center gap-3 translate-x-[6px]">
+          <a href="#login" data-auth-open="login" class="px-3 py-2 text-sm font-bold text-coal hover:text-orange">Login</a>
+          <a href="#signup" data-auth-open="signup" class="rounded-full bg-orange px-5 py-2.5 text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)] hover:brightness-95">Create Account</a>
+        </div>
+      </div>
+      <button id="menuBtn" class="ml-auto grid h-11 w-11 place-items-center rounded-xl border border-[#E4E7EC] bg-white lg:hidden" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-[#E8ECF1] bg-white px-4 py-4 lg:hidden">
+      <label class="relative mb-4 block">
+        <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        </span>
+        <input class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search products, categories..." />
+      </label>
+      <div class="grid gap-3 text-sm font-bold">
+        <a href="#categories">Products</a>
+        <a href="#businesses">For Business</a>
+        <a href="#how">How it Works</a>
+        <a href="#impact">About</a>
+        <a href="#login" data-auth-open="login" class="pt-2">Login</a>
+        <a href="#signup" data-auth-open="signup" class="rounded-full bg-orange px-5 py-3 text-center text-white">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="relative overflow-hidden bg-white">
+      <div class="pointer-events-none absolute inset-0 hidden xl:block">
+        <img data-hero="desktop" class="hero-slide is-active absolute inset-0 h-full w-full object-cover object-center" src="assets/home/hero-1.png" alt="KitchenX fresh produce crate" />
+        <img data-hero="desktop" class="hero-slide absolute inset-0 h-full w-full object-cover object-center" src="assets/home/hero-2.png" alt="Chef plating with fresh ingredients" />
+        <img data-hero="desktop" class="hero-slide absolute inset-0 h-full w-full object-cover object-center" src="assets/home/hero-3.png" alt="Fresh vegetables for kitchens" />
+        <img data-hero="desktop" class="hero-slide absolute inset-0 h-full w-full object-cover object-center" src="assets/home/hero-4.png" alt="KitchenX warehouse fulfilment" />
+      </div>
+
+      <div class="page-wrap relative grid items-center py-10 xl:min-h-[640px] xl:grid-cols-[520px_1fr] xl:py-16">
+        <div class="relative z-10 max-w-[520px]">
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.22em] text-orange">Foodservice supply made simple</p>
+          <h1 class="mt-4 text-[40px] font-extrabold leading-[1.05] tracking-tight text-coal sm:text-5xl xl:text-[58px]">
+            Everything your kitchen needs.
+            <span class="block text-orange">Delivered reliably.</span>
+          </h1>
+          <p class="mt-5 max-w-[440px] text-base font-medium leading-relaxed text-[#475467] sm:text-lg">
+            Quality ingredients, packaging and kitchen essentials for restaurants, cafes, hotels, cloud kitchens and caterers.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#signup" data-auth-open="signup" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)] hover:brightness-95">
+              Create your business account
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#categories" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal hover:border-orange hover:text-orange">
+              Explore products
+            </a>
+          </div>
+          <div class="mt-8 flex flex-col gap-3 text-sm font-semibold text-[#475467] sm:flex-row sm:gap-6">
+            <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>Better prices</div>
+            <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>Trusted quality</div>
+            <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>On-time delivery</div>
+          </div>
+        </div>
+
+        <div class="relative mt-8 overflow-hidden rounded-[28px] xl:hidden">
+          <div class="relative h-56 sm:h-80">
+            <img data-hero="mobile" class="hero-slide is-active absolute inset-0 h-full w-full object-cover object-right" src="assets/home/hero-1.png" alt="" />
+            <img data-hero="mobile" class="hero-slide absolute inset-0 h-full w-full object-cover object-right" src="assets/home/hero-2.png" alt="" />
+            <img data-hero="mobile" class="hero-slide absolute inset-0 h-full w-full object-cover object-right" src="assets/home/hero-3.png" alt="" />
+            <img data-hero="mobile" class="hero-slide absolute inset-0 h-full w-full object-cover object-right" src="assets/home/hero-4.png" alt="" />
+          </div>
+        </div>
+      </div>
+      <div id="heroDots" class="relative z-10 flex justify-center gap-2 pb-6 xl:absolute xl:bottom-6 xl:left-1/2 xl:hidden xl:-translate-x-1/2"></div>
+    </section>
+
+    <section class="page-wrap py-8 lg:py-10">
+      <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+        <div class="flex items-center gap-4">
+          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold tracking-tight">10K+</div>
+            <div class="text-xs font-semibold text-[#667085]">Food businesses trust us</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold tracking-tight">500+</div>
+            <div class="text-xs font-semibold text-[#667085]">Quality brands</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold tracking-tight">20+</div>
+            <div class="text-xs font-semibold text-[#667085]">Cities (and growing)</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold tracking-tight">99%</div>
+            <div class="text-xs font-semibold text-[#667085]">On-time delivery rate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="page-wrap py-8 lg:py-12">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Shop by category</p>
+          <h2 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Popular categories</h2>
+        </div>
+        <a href="#grow" class="hidden text-sm font-extrabold text-orange sm:inline-flex">View all categories →</a>
+      </div>
+      <div class="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/produce.jpg" alt="Fresh produce" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Fresh Produce</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/dairy.jpg" alt="Dairy and eggs" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Dairy &amp; Eggs</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/meat.jpg" alt="Meat, poultry and seafood" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Meat, Poultry &amp; Seafood</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/grains.jpg" alt="Staples and grains" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Staples &amp; Grains</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/packaging.jpg" alt="Packaging" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Packaging</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/beverages.jpg" alt="Beverages" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Beverages</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/appliances.jpg" alt="Kitchen appliances" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Kitchen Appliances</h3>
+        </article>
+        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/cleaning.jpg" alt="Cleaning and hygiene" />
+          <h3 class="mt-3 text-center text-sm font-extrabold">Cleaning &amp; Hygiene</h3>
+        </article>
+      </div>
+      <a href="#grow" class="mt-5 inline-flex text-sm font-extrabold text-orange sm:hidden">View all categories →</a>
+    </section>
+
+    <section id="how" class="page-wrap py-8 lg:py-14">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-end">
+        <div>
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">How KitchenX works</p>
+          <h2 class="mt-2 max-w-md text-4xl font-extrabold leading-[1.12] tracking-tight">
+            From sourcing to your kitchen.
+            <span class="text-orange">In four simple steps.</span>
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <article>
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">1</div>
+            <h3 class="mt-4 text-lg font-extrabold">Discover</h3>
+            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Find what your kitchen needs from 10,000+ products.</p>
+          </article>
+          <article>
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">2</div>
+            <h3 class="mt-4 text-lg font-extrabold">Order</h3>
+            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Get the best prices and flexible payment options.</p>
+          </article>
+          <article>
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">3</div>
+            <h3 class="mt-4 text-lg font-extrabold">We prepare</h3>
+            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Quality checks and careful handling.</p>
+          </article>
+          <article>
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">4</div>
+            <h3 class="mt-4 text-lg font-extrabold">We deliver</h3>
+            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">On time, every time.</p>
+          </article>
+        </div>
+      </div>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="#supply" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)]">See how it works →</a>
+        <a href="#supply" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal">Watch our story (1 min)</a>
+      </div>
+    </section>
+
+    <section id="supply" class="page-wrap py-6 lg:py-10">
+      <div class="relative overflow-hidden rounded-[32px] bg-coal text-white">
+        <img class="pointer-events-none hidden h-full min-h-[440px] w-full object-cover object-center lg:block" src="assets/home/supply.png" alt="Chef plating a dish for service" />
+        <div class="relative z-10 p-8 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[38%] lg:flex-col lg:justify-center lg:bg-transparent lg:p-14">
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-orange">Supplying a stronger food tomorrow</p>
+          <h2 class="mt-5 max-w-md text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">Reliable supply for a growing food industry.</h2>
+          <p class="mt-5 max-w-md text-base font-medium leading-relaxed text-white/70">
+            We work with farmers, manufacturers and trusted partners to make high-quality food more accessible to every food business across India.
+          </p>
+          <a href="#grow" class="mt-8 inline-flex w-max items-center text-sm font-extrabold text-white hover:text-orange">Learn more →</a>
+        </div>
+        <img class="h-72 w-full object-cover object-[72%_center] lg:hidden" src="assets/home/supply.png" alt="Chef plating a dish for service" />
+      </div>
+    </section>
+
+    <section id="businesses" class="page-wrap py-10 lg:py-14">
+      <div class="text-center">
+        <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Built for every food business</p>
+        <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Different kitchens. Same trusted partner.</h2>
+      </div>
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4z"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          </div>
+          <h3 class="mt-5 text-lg font-extrabold">Restaurants</h3>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Consistent supply for daily operations.</p>
+        </article>
+        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M9 19v-5h6v5"/></svg>
+          </div>
+          <h3 class="mt-5 text-lg font-extrabold">Cafes</h3>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Ingredients, beverages and more.</p>
+        </article>
+        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M10 21v-6h4v6"/></svg>
+          </div>
+          <h3 class="mt-5 text-lg font-extrabold">Hotels</h3>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Large volumes, reliable sourcing.</p>
+        </article>
+        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
+          </div>
+          <h3 class="mt-5 text-lg font-extrabold">Cloud Kitchens</h3>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Built for speed, scale and repeat orders.</p>
+        </article>
+        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:col-span-2 lg:col-span-1">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11a4 4 0 1 1 8 0"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/><path d="M12 11V4"/><path d="M9 7h6"/></svg>
+          </div>
+          <h3 class="mt-5 text-lg font-extrabold">Caterers</h3>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Everything for every occasion.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="impact" class="page-wrap py-8 lg:py-12">
+      <div>
+        <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Trusted by food businesses</p>
+        <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Real businesses. Real impact.</h2>
+      </div>
+      <div class="mt-8 grid gap-4 lg:grid-cols-3">
+        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <p class="text-lg font-bold leading-relaxed text-[#344054]">“KitchenX has simplified our procurement. Great quality and always on time.”</p>
+          <div class="mt-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="" />
+              <div>
+                <div class="font-extrabold">Rohit Mehta</div>
+                <div class="text-sm font-medium text-[#667085]">Owner, Cafe Basil</div>
+              </div>
+            </div>
+            <div class="text-right text-xs font-extrabold uppercase tracking-wider text-[#98A2B3]">Cafe<br/>Basil</div>
+          </div>
+        </article>
+        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <p class="text-lg font-bold leading-relaxed text-[#344054]">“Reliable supply and competitive pricing. It helps us focus on what we do best — food.”</p>
+          <div class="mt-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80" alt="" />
+              <div>
+                <div class="font-extrabold">Aanya Iyer</div>
+                <div class="text-sm font-medium text-[#667085]">F&amp;B Director, Hotel Crest</div>
+              </div>
+            </div>
+            <div class="text-right text-xs font-extrabold uppercase tracking-wider text-[#98A2B3]">Hotel<br/>Crest</div>
+          </div>
+        </article>
+        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+          <p class="text-lg font-bold leading-relaxed text-[#344054]">“A partner we can count on, especially during peak seasons.”</p>
+          <div class="mt-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="" />
+              <div>
+                <div class="font-extrabold">Karan Shah</div>
+                <div class="text-sm font-medium text-[#667085]">Founder, Urban Bites</div>
+              </div>
+            </div>
+            <div class="text-right text-xs font-extrabold uppercase tracking-wider text-[#98A2B3]">Urban<br/>Bites</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="grow" class="page-wrap pb-16">
+      <div class="relative overflow-hidden rounded-[32px] bg-[#FFF4EF]">
+        <img class="pointer-events-none hidden min-h-[340px] w-full object-cover object-center lg:block" src="assets/home/cta.png" alt="Packaging and produce for growing food businesses" />
+        <div class="relative z-10 p-8 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[46%] lg:flex-col lg:justify-center lg:p-14">
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-orange">Let’s build a stronger food ecosystem</p>
+          <h2 class="mt-3 max-w-md text-3xl font-extrabold tracking-tight sm:text-4xl">Ready to grow your food business?</h2>
+          <p class="mt-3 max-w-xl text-base font-medium leading-relaxed text-[#475467]">
+            Join thousands of restaurants, cafes, hotels and cloud kitchens that trust KitchenX for quality, reliability and better margins.
+          </p>
+          <a href="#signup" data-auth-open="signup" class="mt-7 inline-flex w-max items-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)]">
+            Create your business account
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <img class="h-56 w-full object-cover object-right lg:hidden" src="assets/home/cta.png" alt="Packaging and produce for growing food businesses" />
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-coal text-white">
+    <div class="page-wrap grid gap-10 py-14 lg:grid-cols-[1.15fr_2fr_1.05fr]">
+      <div>
+        <div class="text-3xl font-extrabold">Kitchen<span class="text-orange">X</span></div>
+        <p class="mt-2 text-sm font-semibold text-white/70">For every food business.</p>
+        <p class="mt-3 max-w-xs text-sm font-medium leading-relaxed text-white/55">Quality supply. Stronger kitchens. A better food tomorrow.</p>
+        <div class="mt-5 flex gap-3">
+          <a href="#impact" class="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/70 hover:text-white" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 9H3.7v11.3h2.8V9zM5.1 3.7A1.64 1.64 0 1 0 5.1 7a1.64 1.64 0 0 0 0-3.3zM20.3 13.4c0-3.2-1.7-4.7-4-4.7-1.8 0-2.6 1-3.1 1.7V9H10.4c0 1.9 0 11.3 0 11.3h2.8v-6.3c0-.3 0-.7.1-1 .3-.7.9-1.4 2-1.4 1.4 0 2 1.1 2 2.7v6H20.3v-6.3z"/></svg>
+          </a>
+          <a href="#impact" class="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/70 hover:text-white" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#impact" class="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/70 hover:text-white" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6 sm:grid-cols-4">
+        <div>
+          <h4 class="font-extrabold">Products</h4>
+          <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
+            <a class="block hover:text-white" href="#categories">All Products</a>
+            <a class="block hover:text-white" href="#categories">Categories</a>
+            <a class="block hover:text-white" href="#categories">Brands</a>
+            <a class="block hover:text-white" href="#grow">Deals</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-extrabold">For Business</h4>
+          <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
+            <a class="block hover:text-white" href="#businesses">Restaurants</a>
+            <a class="block hover:text-white" href="#businesses">Cafes</a>
+            <a class="block hover:text-white" href="#businesses">Hotels</a>
+            <a class="block hover:text-white" href="#businesses">Cloud Kitchens</a>
+            <a class="block hover:text-white" href="#businesses">Caterers</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-extrabold">Company</h4>
+          <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
+            <a class="block hover:text-white" href="#impact">About Us</a>
+            <a class="block hover:text-white" href="#how">Careers</a>
+            <a class="block hover:text-white" href="#impact">Press</a>
+            <a class="block hover:text-white" href="#supply">Sustainability</a>
+            <a class="block hover:text-white" href="#impact">Blog</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-extrabold">Support</h4>
+          <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
+            <a class="block hover:text-white" href="#grow">Help Center</a>
+            <a class="block hover:text-white" href="#grow">Contact Us</a>
+            <a class="block hover:text-white" href="#grow">Terms of Use</a>
+            <a class="block hover:text-white" href="#grow">Privacy Policy</a>
+            <a class="block hover:text-white" href="#grow">Supplier Desk</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-extrabold">Stay updated</h4>
+        <p class="mt-2 text-sm font-medium text-white/55">Get updates from KitchenX.</p>
+        <form id="newsletter" class="mt-4 flex rounded-2xl bg-white p-1">
+          <input class="field min-w-0 flex-1 rounded-xl px-4 text-sm font-semibold text-coal outline-none" placeholder="Enter your email" type="email" required />
+          <button class="rounded-xl bg-orange px-4 py-3 text-sm font-extrabold text-white" type="submit">→</button>
+        </form>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="page-wrap flex flex-col gap-2 py-5 text-xs font-semibold text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 KitchenX. All rights reserved.</p>
+        <p>Serving today. A stronger food tomorrow.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="authOverlay" class="fixed inset-0 z-[80] items-start justify-center overflow-y-auto px-4 py-10 sm:items-center">
+    <button type="button" id="authBackdrop" class="absolute inset-0 bg-[#F2F4F7]/55 backdrop-blur-[10px]" aria-label="Close"></button>
+    <div class="relative z-10 mx-auto w-full max-w-[440px]">
+      <button type="button" id="authBack" class="mb-3 grid h-10 w-10 place-items-center rounded-full border border-[#E4E7EC] bg-white/90 text-coal shadow-sm" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      </button>
+
+      <div class="rounded-[28px] border border-[#E8ECF1] bg-white p-6 shadow-[0_18px_50px_rgba(20,21,23,0.12)] sm:p-8">
+        <div id="authLogin">
+          <div id="loginMain">
+            <h2 class="text-2xl font-extrabold tracking-tight">Login</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Choose Customer or Admin.</p>
+            <div class="mt-6 grid grid-cols-2 border-b border-[#E8ECF1]">
+              <button type="button" id="tabCustomer" class="tab-active border-b-2 py-3 text-sm font-extrabold">Customer</button>
+              <button type="button" id="tabAdmin" class="tab-idle border-b-2 py-3 text-sm font-extrabold">Admin</button>
+            </div>
+            <form id="loginForm" class="mt-6 grid gap-4" autocomplete="off">
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold">Username or email</span>
+                <input id="userInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter username or email" />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold">Password</span>
+                <span class="relative block">
+                  <input id="passInput" class="field h-12 w-full rounded-2xl border border-[#E4E7EC] bg-fog px-4 pr-12 text-sm font-semibold" type="password" placeholder="Enter password" />
+                  <button type="button" class="auth-eye absolute right-3 top-1/2 -translate-y-1/2" data-eye="passInput" aria-label="Show password">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </span>
+              </label>
+              <p id="formError" class="hidden text-sm font-bold text-orange"></p>
+              <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Login</button>
+            </form>
+            <div id="customerExtras" class="mt-4 flex flex-wrap justify-between gap-2 text-sm font-bold">
+              <button type="button" id="forgotUserBtn" class="text-[#667085] hover:text-orange">Forgot username</button>
+              <button type="button" id="forgotPassBtn" class="text-[#667085] hover:text-orange">Forgot password</button>
+            </div>
+            <p id="createWrap" class="mt-5 text-center text-sm font-semibold text-[#667085]">
+              New business? <a href="#signup" data-auth-open="signup" class="font-extrabold text-orange">Create an account</a>
+            </p>
+          </div>
+          <div id="forgotPanel" class="hidden">
+            <h2 id="forgotTitle" class="text-2xl font-extrabold tracking-tight">Forgot password</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Enter the email on the account. This page does not send email.</p>
+            <label class="mt-6 grid gap-1.5">
+              <span class="text-sm font-bold">Email</span>
+              <input id="forgotEmail" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" type="email" />
+            </label>
+            <p id="forgotMsg" class="mt-3 hidden text-sm font-bold text-coal"></p>
+            <button type="button" id="forgotSubmit" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Submit</button>
+            <p class="mt-5 text-center text-sm font-semibold text-[#667085]">
+              <button type="button" id="forgotToLogin" class="font-extrabold text-orange">Login</button>
+              <span class="mx-2 text-[#D0D5DD]">·</span>
+              <a href="#signup" data-auth-open="signup" class="font-extrabold text-orange">Sign up</a>
+            </p>
+          </div>
+        </div>
+
+        <div id="authSignup" class="hidden">
+          <div id="signupStep">
+            <h2 class="text-2xl font-extrabold tracking-tight">Create an account</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">For restaurants, cafes, hotels, cloud kitchens and caterers.</p>
+            <form id="signupForm" class="mt-6 grid gap-4" autocomplete="off">
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold">Organization name</span>
+                <input id="orgInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter organization name" />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold">Email</span>
+                <input id="emailInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" type="email" />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold">Password</span>
+                <span class="relative block">
+                  <input id="signupPass" class="field h-12 w-full rounded-2xl border border-[#E4E7EC] bg-fog px-4 pr-12 text-sm font-semibold" type="password" placeholder="Enter password" />
+                  <button type="button" class="auth-eye absolute right-3 top-1/2 -translate-y-1/2" data-eye="signupPass" aria-label="Show password">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </span>
+              </label>
+              <p id="signupError" class="hidden text-sm font-bold text-orange"></p>
+              <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
+            </form>
+            <p class="mt-5 text-center text-sm font-semibold text-[#667085]">
+              Already have an account? <a href="#login" data-auth-open="login" class="font-extrabold text-orange">Login</a>
+            </p>
+          </div>
+          <div id="otpStep" class="hidden">
+            <h2 class="text-2xl font-extrabold tracking-tight">Verify email</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Enter the 6-digit code. This page does not send a real email. Any code you enter will confirm.</p>
+            <p id="otpEmailLabel" class="mt-3 text-sm font-bold text-coal"></p>
+            <div id="otpBoxes" class="mt-6 flex justify-between gap-2">
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
+            </div>
+            <p id="otpTimer" class="mt-4 text-sm font-bold text-[#667085]">Resend OTP in 60s</p>
+            <button type="button" id="resendBtn" class="mt-1 hidden text-sm font-extrabold text-orange" disabled>Resend OTP</button>
+            <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const desktopSlides = [...document.querySelectorAll('[data-hero="desktop"]')];
+    const mobileSlides = [...document.querySelectorAll('[data-hero="mobile"]')];
+    const dotsWrap = document.getElementById('heroDots');
+    let index = 0;
+    const total = 4;
+
+    function renderDots() {
+      dotsWrap.innerHTML = Array.from({ length: total }, (_, i) =>
+        `<button class="dot ${i === index ? 'is-active' : ''}" data-slide="${i}" aria-label="Show image ${i + 1}"></button>`
+      ).join('');
+      dotsWrap.querySelectorAll('[data-slide]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          index = Number(btn.dataset.slide);
+          show(index);
+        });
+      });
+    }
+
+    function show(next) {
+      desktopSlides.forEach((el, i) => el.classList.toggle('is-active', i === next));
+      mobileSlides.forEach((el, i) => el.classList.toggle('is-active', i === next));
+      dotsWrap.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('is-active', i === next));
+    }
+
+    renderDots();
+    const HOLD_MS = 5000;
+    let timer = setInterval(nextSlide, HOLD_MS);
+
+    function nextSlide() {
+      index = (index + 1) % total;
+      show(index);
+    }
+
+    function restartTimer() {
+      clearInterval(timer);
+      timer = setInterval(nextSlide, HOLD_MS);
+    }
+
+    dotsWrap.addEventListener('click', (e) => {
+      if (e.target.closest('[data-slide]')) restartTimer();
+    });
+
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+    document.querySelectorAll('#mobileMenu a').forEach((link) => {
+      link.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
+    });
+    document.getElementById('newsletter').addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.target.reset();
+    });
+
+    const ADMIN_USER = 'Admin';
+    const ADMIN_PASS = 'Admin@123';
+    const overlay = document.getElementById('authOverlay');
+    const authLogin = document.getElementById('authLogin');
+    const authSignup = document.getElementById('authSignup');
+    let loginMode = 'customer';
+    let pending = { org: '', email: '' };
+    let otpSeconds = 60;
+    let otpTimer = null;
+    const eyeOpen = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+    const eyeOff = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.4"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-3.2 3.6"/><path d="M6.1 6.1A18 18 0 0 0 2 12s4 7 10 7a10.4 10.4 0 0 0 4.2-.9"/></svg>';
+
+    function openAuth(kind) {
+      overlay.classList.add('is-open');
+      document.body.classList.add('auth-open');
+      document.getElementById('mobileMenu').classList.add('hidden');
+      document.getElementById('forgotPanel').classList.add('hidden');
+      document.getElementById('loginMain').classList.remove('hidden');
+      if (kind === 'signup') {
+        authLogin.classList.add('hidden');
+        authSignup.classList.remove('hidden');
+        document.getElementById('signupStep').classList.remove('hidden');
+        document.getElementById('otpStep').classList.add('hidden');
+      } else {
+        authSignup.classList.add('hidden');
+        authLogin.classList.remove('hidden');
+        setLoginMode('customer');
+      }
+      history.replaceState(null, '', kind === 'signup' ? '#signup' : '#login');
+    }
+
+    function closeAuth() {
+      overlay.classList.remove('is-open');
+      document.body.classList.remove('auth-open');
+      clearInterval(otpTimer);
+      if (location.hash === '#login' || location.hash === '#signup') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    }
+
+    function setLoginMode(next) {
+      loginMode = next;
+      document.getElementById('tabCustomer').className = next === 'customer' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
+      document.getElementById('tabAdmin').className = next === 'admin' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
+      document.getElementById('customerExtras').classList.toggle('hidden', next === 'admin');
+      document.getElementById('createWrap').classList.toggle('hidden', next === 'admin');
+      document.getElementById('formError').classList.add('hidden');
+      document.getElementById('userInput').value = '';
+      document.getElementById('passInput').value = '';
+    }
+
+    document.querySelectorAll('[data-auth-open]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuth(el.getAttribute('data-auth-open'));
+      });
+    });
+    document.getElementById('authBackdrop').addEventListener('click', closeAuth);
+    document.getElementById('authBack').addEventListener('click', closeAuth);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeAuth();
+    });
+    document.getElementById('tabCustomer').addEventListener('click', () => setLoginMode('customer'));
+    document.getElementById('tabAdmin').addEventListener('click', () => setLoginMode('admin'));
+
+    document.querySelectorAll('[data-eye]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById(btn.getAttribute('data-eye'));
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.innerHTML = show ? eyeOff : eyeOpen;
+        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('userInput').value.trim();
+      const pass = document.getElementById('passInput').value;
+      const formError = document.getElementById('formError');
+      formError.classList.add('hidden');
+      if (!user || !pass) {
+        formError.textContent = 'Enter both fields to continue.';
+        formError.classList.remove('hidden');
+        return;
+      }
+      if (loginMode === 'admin') {
+        if (user === ADMIN_USER && pass === ADMIN_PASS) {
+          sessionStorage.setItem('kxRole', 'admin');
+          sessionStorage.setItem('kxUser', user);
+          window.location.href = 'admin.html';
+          return;
+        }
+        formError.textContent = 'Admin username or password is incorrect.';
+        formError.classList.remove('hidden');
+        return;
+      }
+      sessionStorage.setItem('kxRole', 'customer');
+      sessionStorage.setItem('kxUser', user);
+      window.location.href = 'customer.html';
+    });
+
+    function showForgot(kind) {
+      document.getElementById('loginMain').classList.add('hidden');
+      document.getElementById('forgotPanel').classList.remove('hidden');
+      document.getElementById('forgotTitle').textContent = kind === 'user' ? 'Forgot username' : 'Forgot password';
+      document.getElementById('forgotMsg').classList.add('hidden');
+      document.getElementById('forgotEmail').value = '';
+    }
+
+    function showLoginMain() {
+      document.getElementById('forgotPanel').classList.add('hidden');
+      document.getElementById('loginMain').classList.remove('hidden');
+    }
+
+    document.getElementById('forgotUserBtn').addEventListener('click', () => showForgot('user'));
+    document.getElementById('forgotPassBtn').addEventListener('click', () => showForgot('pass'));
+    document.getElementById('forgotToLogin').addEventListener('click', showLoginMain);
+    document.getElementById('forgotSubmit').addEventListener('click', () => {
+      const email = document.getElementById('forgotEmail').value.trim();
+      const forgotMsg = document.getElementById('forgotMsg');
+      if (!email) {
+        forgotMsg.textContent = 'Enter an email first.';
+        forgotMsg.classList.remove('hidden');
+        return;
+      }
+      forgotMsg.textContent = 'If this email is on a KitchenX account, the next step would be sent there. This page does not send email.';
+      forgotMsg.classList.remove('hidden');
+    });
+
+    function startOtpTimer() {
+      otpSeconds = 60;
+      const label = document.getElementById('otpTimer');
+      const resend = document.getElementById('resendBtn');
+      resend.classList.add('hidden');
+      resend.disabled = true;
+      label.classList.remove('hidden');
+      label.textContent = 'Resend OTP in 60s';
+      clearInterval(otpTimer);
+      otpTimer = setInterval(() => {
+        otpSeconds -= 1;
+        if (otpSeconds <= 0) {
+          clearInterval(otpTimer);
+          label.classList.add('hidden');
+          resend.classList.remove('hidden');
+          resend.disabled = false;
+          return;
+        }
+        label.textContent = 'Resend OTP in ' + otpSeconds + 's';
+      }, 1000);
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const org = document.getElementById('orgInput').value.trim();
+      const email = document.getElementById('emailInput').value.trim();
+      const pass = document.getElementById('signupPass').value;
+      const error = document.getElementById('signupError');
+      if (!org || !email || !pass) {
+        error.textContent = 'Enter organization name, email and password.';
+        error.classList.remove('hidden');
+        return;
+      }
+      pending = { org, email };
+      document.getElementById('signupStep').classList.add('hidden');
+      document.getElementById('otpStep').classList.remove('hidden');
+      document.getElementById('otpEmailLabel').textContent = 'Code for ' + email;
+      document.querySelectorAll('.otp').forEach((box) => { box.value = ''; });
+      document.querySelectorAll('.otp')[0].focus();
+      startOtpTimer();
+    });
+
+    const otpBoxes = [...document.querySelectorAll('.otp')];
+    otpBoxes.forEach((box, i) => {
+      box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '').slice(0, 1);
+        if (box.value && otpBoxes[i + 1]) otpBoxes[i + 1].focus();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && otpBoxes[i - 1]) otpBoxes[i - 1].focus();
+      });
+    });
+    document.getElementById('resendBtn').addEventListener('click', () => {
+      otpBoxes.forEach((box) => { box.value = ''; });
+      otpBoxes[0].focus();
+      startOtpTimer();
+    });
+    document.getElementById('confirmOtp').addEventListener('click', () => {
+      sessionStorage.setItem('kxRole', 'customer');
+      sessionStorage.setItem('kxUser', pending.email);
+      sessionStorage.setItem('kxOrg', pending.org);
+      window.location.href = 'customer.html';
+    });
+
+    if (location.hash === '#login') openAuth('login');
+    else if (location.hash === '#signup') openAuth('signup');
+    else if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+  </script>
+</body>
+</html>
