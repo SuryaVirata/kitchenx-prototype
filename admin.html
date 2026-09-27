@@ -76,6 +76,15 @@
     @media (max-width: 1024px) {
       .dash-head { flex-wrap: wrap; }
     }
+    @media (max-width: 767px) {
+      .qa-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-value { font-size: 22px; }
+      .dash-date { text-align: left; }
+      #toast { left: 16px; right: 16px; bottom: 16px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .qa-grid { grid-template-columns: repeat(3, 1fr); }
+    }
 
     .ot-chart { display: grid; grid-template-columns: 36px 1fr; gap: 8px; align-items: start; }
     .ot-y { position: relative; height: 176px; }

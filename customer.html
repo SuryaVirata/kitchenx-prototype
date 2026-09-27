@@ -49,6 +49,26 @@
     @media (min-width: 1024px) { .collapse-fab { display: grid; } }
     .kpi { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); min-height: 92px; }
     .kpi .ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; flex-shrink: 0; }
+    .qa {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      min-height: 132px;
+      padding: 18px;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(20,21,23,0.04);
+    }
+    .qa:hover { box-shadow: 0 10px 28px rgba(20,21,23,0.07); }
+    .qico {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      flex-shrink: 0;
+    }
     .card { background: #fff; border-radius: 22px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
     .chip { height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; font-size: 13px; font-weight: 700; color: #344054; white-space: nowrap; }
     .chip.is-on { background: #FF4F18; color: #fff; border-color: #FF4F18; }
@@ -77,10 +97,126 @@
     .set-tabs { display: flex; gap: 4px; overflow-x: auto; }
     .set-tab { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #667085; border: 1px solid #E4E7EC; background: #fff; white-space: nowrap; }
     .set-tab.is-on { color: #fff; background: #FF4F18; border-color: #FF4F18; }
-    .heart { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 999px; background: #fff; display: grid; place-items: center; color: #98A2B3; box-shadow: 0 4px 12px rgba(20,21,23,.08); }
+    .heart {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: #98A2B3;
+      box-shadow: 0 4px 12px rgba(20,21,23,.08);
+    }
+    .heart svg { width: 22px; height: 22px; display: block; }
     .heart.is-on { color: #FF4F18; }
+    .heart.is-on svg { fill: currentColor; }
+    .cat-grid {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      align-items: stretch;
+    }
+    .cat-grid > .card {
+      height: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .cat-grid > .card .p-3 { flex: 1; display: flex; flex-direction: column; }
+    .cat-grid > .card .p-3 .mt-3 { margin-top: auto; }
+    .also-head { width: 100%; }
+    .deal-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      background: #FF4F18;
+      white-space: nowrap;
+    }
+    .deal-badge.is-seller { background: #12B76A; }
+    .deal-badge.is-save { background: #7A5AF8; }
+    .deal-badge.is-flash { background: #141517; }
+    .price-was {
+      margin-left: 6px;
+      color: #98A2B3;
+      text-decoration: line-through;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .flash-banner {
+      display: grid;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: linear-gradient(90deg, #FFF4F0 0%, #FFE8E0 58%, #FFF8F6 100%);
+      overflow: hidden;
+    }
+    .flash-off {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #FF4F18;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .flash-timer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .flash-unit {
+      display: grid;
+      place-items: center;
+      min-width: 46px;
+      height: 46px;
+      padding: 0 8px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(255, 79, 24, 0.12);
+    }
+    .flash-unit b { font-size: 16px; font-weight: 800; color: #FF4F18; line-height: 1; }
+    .flash-unit span { font-size: 9px; font-weight: 800; color: #98A2B3; letter-spacing: .04em; text-transform: uppercase; }
+    .flash-art {
+      display: none;
+      height: 88px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .flash-art img { height: 80px; width: auto; object-fit: contain; }
+    @media (min-width: 640px) {
+      .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1280px) {
+      .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+      .flash-banner {
+        grid-template-columns: auto auto 1fr auto auto;
+        gap: 18px;
+        padding: 12px 16px 12px 18px;
+      }
+      .flash-art { display: flex; }
+    }
     .prod-img { height: 148px; display: grid; place-items: center; background: #fff; padding: 8px 16px 4px; }
-    .prod-img img { max-height: 132px; max-width: 78%; width: auto; height: auto; object-fit: contain; }
+    .prod-img img { max-height: 132px; max-width: 100%; width: auto; height: auto; object-fit: contain; }
     .thumb { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; background: #fff; object-fit: contain; border: 1px solid #EEF0F3; padding: 3px; }
     .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; }
     .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -98,8 +234,304 @@
     .loc-wrap.open .loc-menu { display: block; }
     .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; width: 200px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
     .user-wrap.open .user-menu { display: block; }
-    .qa { border-radius: 20px; background: #fff; padding: 18px 16px; text-align: left; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
-    .qa .qico { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; }
+    .line-table { min-width: 720px; }
+    .panel h1 { font-size: 1.5rem; }
+    @media (min-width: 640px) { .panel h1 { font-size: 1.875rem; } }
+    #mNav { display: none; }
+    .m-only { display: none; }
+    #sideClose, .m-profile, .m-logout, .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create, .nav-settings { display: none !important; }
+    #catCount { display: none !important; }
+    .m-order-shortcuts { display: none !important; }
+    @media (max-width: 767px) {
+      #toast { left: 16px; right: 16px; bottom: 16px; }
+      .loc-menu { left: auto; right: 0; width: min(280px, calc(100vw - 24px)); }
+      .user-menu { width: min(200px, calc(100vw - 24px)); }
+      .modal-scrim { padding: 12px; align-items: end; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .panel h1 { font-size: 1.75rem; }
+    }
+    @media (max-width: 1023px) {
+      body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); overflow-x: hidden; }
+      .stock-ok { display: none; }
+      #listsGrid .btn-ghost, #listsGrid .btn-add { display: none; }
+      html, body, main, .panel { max-width: 100vw; overflow-x: hidden; }
+      #catChips {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+      #catChips, .flash-banner, .cat-grid, .set-tabs, #orderTabs, #delTabs, #invTabs { min-width: 0; max-width: 100%; }
+      header.topbar {
+        position: sticky;
+        top: 0;
+        z-index: 25;
+      }
+      .panel h1 { font-size: 1.35rem; }
+      .desk-copy { display: none !important; }
+      .m-only { display: block; }
+      .kpi { min-height: 76px; padding: 12px 14px; gap: 10px; border-radius: 18px; }
+      .kpi .ico { width: 40px; height: 40px; border-radius: 12px; }
+      .kpi p.text-2xl { font-size: 1.25rem; }
+      .qa { min-height: 0; padding: 14px; border-radius: 18px; }
+      .qico { width: 40px; height: 40px; }
+      .qa-sub { display: none; }
+      .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .cat-grid .stepper { display: none; }
+      .prod-img { height: 112px; padding: 6px 10px 2px; }
+      .prod-img img { max-height: 100px; max-width: 86%; }
+      .heart { width: 36px; height: 36px; top: 8px; right: 8px; }
+      .heart svg { width: 18px; height: 18px; }
+      .flash-banner { padding: 12px; border-radius: 18px; gap: 10px; }
+      .flash-banner .btn-save {
+        width: 100%;
+        height: 40px;
+      }
+      .flash-unit { min-width: 40px; height: 40px; }
+      .line-table { min-width: 0; }
+      .table-desk { display: none !important; }
+      .stack-m { display: grid !important; }
+      #toast { left: 12px; right: 12px; bottom: calc(80px + env(safe-area-inset-bottom)); }
+      #filterPane.is-sheet {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 55;
+        display: block;
+        max-height: 78vh;
+        overflow: auto;
+        margin: 0;
+        border-radius: 24px 24px 0 0;
+        padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
+        box-shadow: 0 -12px 40px rgba(20,21,23,.16);
+      }
+      #mNav {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 40;
+        background: #fff;
+        border-top: 1px solid #EEF0F3;
+        padding: 4px 2px calc(8px + env(safe-area-inset-bottom));
+      }
+      #mNav button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-height: 52px;
+        color: #98A2B3;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .01em;
+      }
+      #mNav button.is-on { color: #FF4F18; }
+      #mNav svg { display: block; }
+      #mNav .shop-tab { position: relative; top: -18px; }
+      #mNav .shop-fab {
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: #FF4F18;
+        border: 4px solid #F7F8FA;
+        box-shadow: 0 10px 24px rgba(20,21,23,.14);
+      }
+      #mNav .shop-tab.is-on .shop-fab {
+        background: #FF4F18;
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(255,79,24,.38);
+      }
+      #sidebar {
+        width: 100%;
+        max-width: 100vw;
+        z-index: 55;
+      }
+      #sideClose, .m-profile, .m-logout { display: flex !important; }
+      .nav-settings { display: flex !important; }
+      .desk-home { display: none !important; }
+      .m-home { display: block !important; }
+      .plus-add { display: grid !important; }
+      .acc-m { display: block !important; }
+      .m-cat-bar { display: flex !important; align-items: center; gap: 8px; margin-top: 12px; }
+      .desk-cat-tools { display: none !important; }
+      #flashDeal { display: none !important; }
+      #orderRange, .m-order-shortcuts { display: none !important; }
+      #orderTabs {
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+        border-bottom: 1px solid #EEF0F3;
+        padding: 0;
+      }
+      #orderTabs .set-tab {
+        border: 0;
+        background: transparent;
+        border-radius: 0;
+        height: 42px;
+        padding: 0 14px;
+        color: #98A2B3;
+        box-shadow: none;
+        flex-shrink: 0;
+      }
+      #orderTabs .set-tab.is-on {
+        color: #FF4F18;
+        background: transparent;
+        box-shadow: inset 0 -2px 0 #FF4F18;
+        font-weight: 800;
+      }
+      .plus-add {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        margin-left: auto;
+        border-radius: 999px;
+        border: 1.5px solid #FF4F18;
+        background: #fff;
+        color: #FF4F18;
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .cat-grid .btn-add, .cat-grid .stepper,
+      #freqGrid .btn-add, #freqGrid .stepper { display: none !important; }
+      .acc-desk { display: none !important; }
+      .acc-desk.is-open { display: grid !important; }
+      .acc-m { display: block; }
+      .acc-m.is-hide { display: none !important; }
+      #scrim { z-index: 50; }
+      .oos-note { color: #DC6803; font-size: 11px; font-weight: 800; }
+      .oos-sub { color: #98A2B3; font-size: 10px; font-weight: 700; }
+      .nav-settings { display: flex; }
+      .m-cat-bar { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+      .m-cat-bar button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1px solid #E4E7EC;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        color: #344054;
+      }
+      .list-tabs { display: flex !important; gap: 8px; margin-top: 12px; overflow-x: auto; }
+      .m-create { display: flex !important; }
+      .m-hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        min-height: 168px;
+        padding: 20px 18px;
+        background: linear-gradient(105deg, #1a1a1a 0%, #2a241c 48%, #3a2a18 100%);
+        color: #fff;
+      }
+      .m-hero h2 { font-size: 1.35rem; font-weight: 800; line-height: 1.2; max-width: 58%; }
+      .m-hero p { margin-top: 6px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.78); max-width: 54%; }
+      .m-hero .btn-save { margin-top: 14px; height: 34px; padding: 0 14px; font-size: 12px; }
+      .m-hero-art {
+        position: absolute;
+        right: -8px;
+        bottom: -6px;
+        height: 148px;
+        width: 52%;
+        object-fit: cover;
+        object-position: center;
+      }
+      .m-cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+      .m-cat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 4px;
+        background: transparent;
+      }
+      .m-cat span {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(20,21,23,.06);
+        font-size: 20px;
+      }
+      .m-cat p { font-size: 10px; font-weight: 800; color: #344054; text-align: center; line-height: 1.2; }
+      .m-flash {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: #FFF4F0;
+      }
+      .acc-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 14px 4px;
+        border-bottom: 1px solid #F2F4F7;
+        background: transparent;
+        text-align: left;
+      }
+      .acc-row svg:last-child { margin-left: auto; color: #D0D5DD; }
+      .pdp-sheet { width: 100%; max-width: 480px; max-height: 92vh; overflow: auto; border-radius: 24px 24px 0 0; padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); }
+      .tl { display: grid; gap: 0; }
+      .tl li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; position: relative; padding-bottom: 18px; }
+      .tl li::before { content: ""; position: absolute; left: 10px; top: 18px; bottom: 0; width: 2px; background: #EEF0F3; }
+      .tl li:last-child { padding-bottom: 0; }
+      .tl li:last-child::before { display: none; }
+      .tl .dot { width: 18px; height: 18px; border-radius: 999px; background: #12B76A; color: #fff; display: grid; place-items: center; z-index: 1; }
+      .tl .dot.is-wait { background: #EEF0F3; color: #98A2B3; }
+      .tl .dot.is-now { background: #FF4F18; }
+      #orderTabs .ot-cancel { display: none; }
+      .heart { width: 32px; height: 32px; }
+      .plus-add.is-oos { border-color: #E4E7EC; color: #D0D5DD; pointer-events: none; }
+      .order-card .badge { justify-self: start; width: max-content; }
+      .order-card, .repeat-card, .del-card {
+        display: grid !important;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        gap: 8px 12px;
+      }
+      .order-card > input { display: none; }
+      .order-card .order-meta { grid-column: 1 / -1; }
+      .order-card .order-thumbs { grid-column: 1 / -1; }
+      .order-card .order-actions {
+        grid-column: 1 / -1;
+        margin-left: 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+      }
+      .order-card .order-actions .btn-ghost,
+      .order-card .order-actions .btn-add {
+        width: 100%;
+        min-width: 0;
+        padding: 0 10px;
+      }
+      .repeat-card .btn-add, .del-card .btn-add { margin-left: 0 !important; width: 100%; }
+      .repeat-card .repeat-cta, .del-card .del-cta { grid-column: 1 / -1; }
+    }
+    .stack-m { display: none; }
+    @media (min-width: 1024px) {
+      .stack-m { display: none !important; }
+      .table-desk { display: block; }
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -109,6 +541,16 @@
         <a href="kitchenx-v2.html" class="brand-full whitespace-nowrap text-[22px] font-extrabold tracking-tight">Kitchen<span class="text-orange">X</span></a>
         <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
         <span class="brand-sub text-sm font-semibold text-[#98A2B3]">Customer</span>
+        <button id="sideClose" class="ml-auto grid h-10 w-10 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="m-profile mx-4 mb-3 items-center gap-3 rounded-2xl bg-[#F7F8FA] px-3 py-3">
+        <span id="sideAvatar" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">CU</span>
+        <div class="min-w-0">
+          <p id="sideName" class="truncate text-sm font-extrabold">Customer</p>
+          <p id="sideEmail" class="truncate text-xs font-semibold text-[#98A2B3]">orders@kitchenx.com</p>
+        </div>
       </div>
       <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
         <button data-panel="dashboard" class="nav-btn is-active mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
@@ -147,6 +589,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
           <span class="nav-label">My Account</span>
         </button>
+        <button data-panel="account" class="nav-btn nav-settings mb-0.5 hidden items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          <span class="nav-label">Settings</span>
+        </button>
       </nav>
       <div class="help-box mx-4 mb-5 rounded-2xl bg-[#FFF8F6] px-4 py-4">
         <div class="flex items-start gap-3">
@@ -160,24 +606,28 @@
         </div>
         <button data-panel="support" class="help-btn mt-3 w-full">Contact Support</button>
       </div>
+      <button id="sideLogout" class="m-logout mx-4 mb-6 items-center justify-center gap-2 rounded-xl py-3 text-sm font-extrabold text-[#F04438]" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
       <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
     </aside>
 
     <div class="flex min-h-screen flex-1 flex-col">
-      <header class="flex items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
+      <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
         <button id="menuBtn" class="grid h-10 w-10 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
-        <div class="loc-wrap relative hidden md:block">
+        <div class="loc-wrap relative min-w-0 flex-1 lg:flex-none">
           <button id="locBtn" class="flex items-center gap-2 rounded-xl px-1 py-1 text-left">
             <span class="grid h-9 w-9 place-items-center text-orange">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
             </span>
-            <span>
+            <span class="min-w-0">
               <span class="block text-[11px] font-semibold text-[#98A2B3]">Deliver to</span>
-              <span id="locLabel" class="block text-sm font-extrabold leading-tight">Main Kitchen, Connaught Place, Delhi</span>
+              <span id="locLabel" class="block max-w-[52vw] truncate text-sm font-extrabold leading-tight md:max-w-[280px]">Main Kitchen, Connaught Place, Delhi</span>
             </span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
@@ -186,13 +636,13 @@
             <button data-loc="Prep Hub, Nehru Place, Delhi" class="loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog">Prep Hub, Nehru Place, Delhi</button>
           </div>
         </div>
-        <label class="relative min-w-0 flex-1">
+        <label class="relative min-w-0 flex-1 basis-full sm:basis-auto order-last sm:order-none">
           <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
           </span>
           <input id="topSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search for products, categories, brands..." />
         </label>
-        <button id="bellBtn" class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#E4E7EC] bg-white" aria-label="Notifications">
+        <button id="bellBtn" class="hidden h-11 w-11 shrink-0 place-items-center rounded-full border border-[#E4E7EC] bg-white lg:grid" aria-label="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
         </button>
         <div class="user-wrap relative shrink-0">
@@ -200,9 +650,9 @@
             <span id="avatar" class="grid h-10 w-10 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">RC</span>
             <div class="hidden text-left sm:block">
               <p id="orgName" class="text-sm font-extrabold leading-tight">The Urban Table</p>
-              <p class="text-[11px] font-semibold text-[#98A2B3]">Restaurant</p>
+              <p id="orgType" class="text-[11px] font-semibold text-[#98A2B3]">Restaurant</p>
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            <svg class="hidden lg:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="userMenu" class="user-menu" role="menu">
             <button data-panel="account" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog">My Account</button>
@@ -211,13 +661,14 @@
         </div>
       </header>
 
-      <main class="flex-1 p-4 lg:p-6">
+      <main class="flex-1 p-3 sm:p-4 lg:p-6">
         <section data-view="dashboard" class="panel">
+          <div class="desk-home">
           <div class="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p id="greet" class="text-sm font-semibold text-[#667085]">Good morning,</p>
               <h1 id="dashOrg" class="text-3xl font-extrabold tracking-tight">The Urban Table</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Everything you need to run your kitchen, in one place.</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Everything you need to run your kitchen, in one place.</p>
             </div>
             <article class="flex items-center gap-3 rounded-[20px] bg-white px-4 py-3 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
               <span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#FFF1EC] text-orange">
@@ -230,61 +681,95 @@
               </div>
             </article>
           </div>
-          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
             <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><p class="text-2xl font-extrabold leading-none">5</p><p class="mt-1 text-sm font-semibold text-[#667085]">Active Orders</p></div></article>
             <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg></span><div><p class="text-2xl font-extrabold leading-none">12</p><p class="mt-1 text-sm font-semibold text-[#667085]">Items in Lists</p></div></article>
             <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹24,680</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Spend (Jun)</p></div></article>
             <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">98%</p><p class="mt-1 text-sm font-semibold text-[#667085]">On-time Deliveries</p></div></article>
           </div>
           <h2 class="mt-8 text-lg font-extrabold">Quick Actions</h2>
-          <div class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="mt-3 grid grid-cols-2 gap-3 xl:grid-cols-4">
             <button data-panel="catalogue" class="qa">
               <span class="qico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
               <p class="mt-3 text-sm font-extrabold">Browse Catalogue</p>
-              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Explore 10,000+ products</p>
+              <p class="qa-sub mt-1 text-xs font-semibold text-[#98A2B3]">Explore 10,000+ products</p>
             </button>
             <button data-panel="repeat" class="qa">
               <span class="qico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
               <p class="mt-3 text-sm font-extrabold">Repeat Order</p>
-              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Reorder in 1 click</p>
+              <p class="qa-sub mt-1 text-xs font-semibold text-[#98A2B3]">Reorder in 1 click</p>
             </button>
             <button data-panel="orders" class="qa">
               <span class="qico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
               <p class="mt-3 text-sm font-extrabold">Order History</p>
-              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">View past orders</p>
+              <p class="qa-sub mt-1 text-xs font-semibold text-[#98A2B3]">View past orders</p>
             </button>
             <button id="qaCreateList" class="qa">
               <span class="qico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg></span>
               <p class="mt-3 text-sm font-extrabold">Create List</p>
-              <p class="mt-1 text-xs font-semibold text-[#98A2B3]">Save your frequent items</p>
+              <p class="qa-sub mt-1 text-xs font-semibold text-[#98A2B3]">Save your frequent items</p>
             </button>
           </div>
-          <div class="mt-8 flex items-center justify-between">
+          </div>
+          <div class="m-home">
+            <article class="m-hero">
+              <h2>Fresh supplies for a better tomorrow</h2>
+              <p>Quality ingredients. Stronger kitchens.</p>
+              <button type="button" data-panel="catalogue" class="btn-save">Shop Now →</button>
+              <img class="m-hero-art" src="assets/home/hero-1.png" alt="" />
+            </article>
+            <div class="m-cats">
+              <button type="button" class="m-cat" data-gocat="Fruits &amp; Vegetables"><span>🥦</span><p>Fruits &amp; Vegetables</p></button>
+              <button type="button" class="m-cat" data-gocat="Dairy"><span>🥛</span><p>Dairy</p></button>
+              <button type="button" class="m-cat" data-gocat="Meat &amp; Seafood"><span>🥩</span><p>Meat &amp; Seafood</p></button>
+              <button type="button" class="m-cat" data-gocat="Pantry &amp; Staples"><span>🛒</span><p>Grocery</p></button>
+            </div>
+            <div class="m-flash">
+              <p class="text-sm font-extrabold text-orange">Flash Deals</p>
+              <p class="flash-mini text-sm font-extrabold tracking-wide">02:15:43</p>
+              <button type="button" id="viewDealsM" class="text-sm font-extrabold text-orange">View All</button>
+            </div>
+          </div>
+          <div class="mt-8 flex items-center justify-between desk-home">
             <h2 class="text-lg font-extrabold">Your Frequently Ordered Items</h2>
             <button data-panel="catalogue" class="text-sm font-extrabold text-orange">View All</button>
           </div>
-          <div id="freqGrid" class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"></div>
+          <div id="freqGrid" class="mt-3 grid grid-cols-2 gap-3 xl:grid-cols-4"></div>
         </section>
 
         <section data-view="catalogue" class="panel hidden">
-          <h1 class="text-3xl font-extrabold tracking-tight">Product Catalogue</h1>
-          <p class="mt-1 text-sm font-medium text-[#667085]">Explore high-quality products from trusted brands</p>
-          <div class="mt-4 flex flex-wrap items-center gap-3">
-            <label class="relative min-w-[240px] flex-1">
-              <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></span>
-              <input id="catSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-white pl-10 pr-4 text-sm font-medium" placeholder="Search for products, brands or categories..." />
-            </label>
-            <button id="scanBtn" class="btn-ghost inline-flex items-center gap-2 rounded-full">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 12h10"/></svg>
-              Scan Barcode
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0 hidden lg:block">
+              <h1 class="text-3xl font-extrabold tracking-tight">Product Catalogue</h1>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Explore high-quality products from trusted brands</p>
+            </div>
+            <div class="flex shrink-0 items-center gap-2 hidden lg:flex">
+              <button id="filterToggleDesk" class="btn-ghost hidden">Filters</button>
+              <button id="scanBtn" class="btn-ghost inline-flex items-center gap-2 rounded-full whitespace-nowrap" aria-label="Scan barcode">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 12h10"/></svg>
+                <span>Scan Barcode</span>
+              </button>
+            </div>
+          </div>
+          <div id="catChips" class="mt-4 flex min-w-0 max-w-full gap-2 overflow-x-auto pb-1"></div>
+          <div class="m-cat-bar">
+            <button id="filterToggle" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              Filters
+            </button>
+            <button id="mSortBtn" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h10M4 12h7M4 17h4"/><path d="M16 7l3 3 3-3M19 10v10"/></svg>
+              Sort
             </button>
           </div>
-          <div id="catChips" class="mt-4 flex gap-2 overflow-x-auto pb-1"></div>
-          <div class="mt-4 grid gap-4 lg:grid-cols-[220px_1fr]">
-            <aside class="card h-fit p-4">
+          <div class="mt-4 grid min-w-0 gap-4 lg:grid-cols-[220px_1fr]">
+            <aside id="filterPane" class="card mb-4 hidden h-fit p-4 lg:mb-0 lg:block">
               <div class="flex items-center justify-between">
                 <h3 class="text-sm font-extrabold">Filters</h3>
-                <button id="clearFilters" class="text-xs font-extrabold text-orange">Clear All</button>
+                <div class="flex items-center gap-3">
+                  <button id="clearFilters" class="text-xs font-extrabold text-orange">Clear All</button>
+                  <button id="filterClose" class="btn-ghost h-8 px-3 lg:hidden" type="button">Done</button>
+                </div>
               </div>
               <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Category</p>
               <div id="catChecks" class="mt-2 grid gap-2 text-sm font-semibold text-[#344054]"></div>
@@ -295,20 +780,50 @@
                 <input id="minPrice" class="field h-10" type="number" min="0" placeholder="Min" />
                 <input id="maxPrice" class="field h-10" type="number" min="0" placeholder="Max" />
               </div>
+              <p class="mt-5 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Offers</p>
+              <label class="mt-2 flex items-center gap-2 text-sm font-semibold"><input id="offerDiscount" type="checkbox" class="accent-[#FF4F18]" /> On Discount</label>
+              <label class="mt-2 flex items-center gap-2 text-sm font-semibold"><input id="offerFlash" type="checkbox" class="accent-[#FF4F18]" /> Flash Sale</label>
               <p class="mt-5 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Availability</p>
               <label class="mt-2 flex items-center gap-2 text-sm font-semibold"><input id="stockOnly" type="checkbox" checked class="accent-[#FF4F18]" /> In Stock Only</label>
             </aside>
-            <div>
-              <div class="mb-3 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div id="flashDeal" class="flash-banner">
+                <div class="flash-copy">
+                  <p class="flex flex-wrap items-center gap-2 text-base font-extrabold text-orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
+                    Flash Deals
+                    <span class="flash-off">Up to 20% OFF</span>
+                  </p>
+                  <p class="mt-0.5 text-xs font-semibold text-[#667085]">Fresh savings for your kitchen</p>
+                </div>
+                <div class="flash-timer">
+                  <span class="text-[11px] font-extrabold text-[#667085]">Ends in</span>
+                  <div class="flash-unit"><b id="flashH">02</b><span>Hours</span></div>
+                  <div class="flash-unit"><b id="flashM">15</b><span>Minutes</span></div>
+                  <div class="flash-unit"><b id="flashS">43</b><span>Seconds</span></div>
+                </div>
+                <p class="hidden text-sm font-bold text-[#344054] xl:block">Up to 20% off on kitchen essentials. Stock up now.</p>
+                <button type="button" id="viewDeals" class="btn-save whitespace-nowrap rounded-full">View All Deals →</button>
+                <div class="flash-art" aria-hidden="true">
+                  <img src="assets/customer/products/tomato.png" alt="" />
+                  <img src="assets/customer/products/carrot.png" alt="" />
+                  <img src="assets/customer/products/cabbage.png" alt="" />
+                </div>
+              </div>
+              <div class="desk-cat-tools mb-3 flex items-center justify-end gap-3">
                 <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
-                <select id="catSort" class="field h-10 w-44">
+                <select id="catSort" class="field h-10 w-full sm:w-44">
                   <option>Sort by: Relevance</option>
                   <option>Price: Low to High</option>
                   <option>Price: High to Low</option>
                   <option>Name A–Z</option>
                 </select>
               </div>
-              <div id="catGrid" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"></div>
+              <div id="alsoBlock" class="also-head mb-3 hidden">
+                <h2 id="alsoTitle" class="text-lg font-extrabold">Kitchens also order these vegetables</h2>
+                <p class="mt-1 text-sm font-medium text-[#667085]">Suggested with your search, from the same produce run.</p>
+              </div>
+              <div id="catGrid" class="cat-grid min-w-0"></div>
             </div>
           </div>
         </section>
@@ -317,13 +832,23 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">My Orders</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Track, manage and reorder your past orders</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Track, manage and reorder your past orders</p>
             </div>
             <select id="orderRange" class="field h-10 w-40">
               <option>Last 3 Months</option>
               <option>Last 30 Days</option>
               <option>This Year</option>
             </select>
+          </div>
+          <div class="m-order-shortcuts mt-4 grid grid-cols-2 gap-3">
+            <button data-panel="repeat" class="qa min-h-0 py-3">
+              <span class="qico bg-[#EEF4FF] text-[#1570EF]"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
+              <p class="mt-2 text-sm font-extrabold">Repeat orders</p>
+            </button>
+            <button data-panel="deliveries" class="qa min-h-0 py-3">
+              <span class="qico bg-[#FFF1EC] text-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/></svg></span>
+              <p class="mt-2 text-sm font-extrabold">Track delivery</p>
+            </button>
           </div>
           <div id="orderTabs" class="mt-4 flex gap-2 overflow-x-auto"></div>
           <div id="orderList" class="mt-4 grid gap-3"></div>
@@ -333,7 +858,7 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">Repeat Orders</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Reorder your regular kitchen supplies in one click</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Reorder your regular kitchen supplies in one click</p>
             </div>
             <button data-panel="catalogue" class="btn-save">Browse Catalogue</button>
           </div>
@@ -344,10 +869,16 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">My Lists</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Save frequent items for faster ordering</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Save frequent items for faster ordering</p>
             </div>
-            <button id="createListBtn" class="btn-save">+ Create List</button>
+            <button id="createListBtn" class="btn-save hidden lg:inline-flex">+ Create List</button>
           </div>
+          <div class="list-tabs" id="listTabs">
+            <button type="button" data-ltab="all" class="set-tab is-on">All Lists</button>
+            <button type="button" data-ltab="fav" class="set-tab">Favorites</button>
+            <button type="button" data-ltab="shared" class="set-tab">Shared</button>
+          </div>
+          <button id="createListBtnM" class="m-create mt-4 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-orange py-3 text-sm font-extrabold text-orange" type="button">+ Create New List</button>
           <div id="listsGrid" class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3"></div>
         </section>
 
@@ -355,7 +886,7 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">Invoices &amp; Payments</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">View your invoices, manage payments and download statements</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">View your invoices, manage payments and download statements</p>
             </div>
             <select class="field h-10 w-40">
               <option>Last 3 Months</option>
@@ -363,25 +894,26 @@
               <option>This Year</option>
             </select>
           </div>
-          <div id="invTabs" class="mt-4 flex gap-2">
+          <div id="invTabs" class="set-tabs mt-4">
             <button data-inv="invoices" class="set-tab is-on">Invoices</button>
             <button data-inv="payments" class="set-tab">Payments</button>
             <button data-inv="credit" class="set-tab">Credit &amp; Wallet</button>
           </div>
-          <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
             <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16h16V8z"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹84,320</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Invoices</p></div></article>
             <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹72,650</p><p class="mt-1 text-sm font-semibold text-[#667085]">Paid</p></div></article>
             <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹11,670</p><p class="mt-1 text-sm font-semibold text-[#667085]">Pending</p></div></article>
             <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><div><p class="text-2xl font-extrabold leading-none">₹5,000</p><p class="mt-1 text-sm font-semibold text-[#667085]">Available Credit</p></div></article>
           </div>
-          <div id="invPane" class="card mt-4 overflow-x-auto p-4"></div>
+          <div id="invPane" class="card table-desk mt-4 overflow-x-auto p-4"></div>
+          <div id="invCards" class="stack-m mt-4 grid gap-3"></div>
         </section>
 
         <section data-view="deliveries" class="panel hidden">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">Deliveries</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Track incoming shipments to your kitchen</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Track incoming shipments to your kitchen</p>
             </div>
             <article class="flex items-center gap-3 rounded-[20px] bg-white px-4 py-3 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
               <span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#FFF1EC] text-orange">
@@ -394,13 +926,13 @@
               </div>
             </article>
           </div>
-          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
             <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/></svg></span><div><p class="text-2xl font-extrabold leading-none">1</p><p class="mt-1 text-sm font-semibold text-[#667085]">Out for Delivery</p></div></article>
             <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><p class="text-2xl font-extrabold leading-none">2</p><p class="mt-1 text-sm font-semibold text-[#667085]">Scheduled</p></div></article>
             <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">8</p><p class="mt-1 text-sm font-semibold text-[#667085]">Delivered this month</p></div></article>
             <article class="kpi"><span class="ico bg-[#FFF1EC] text-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span><div><p class="text-2xl font-extrabold leading-none">98%</p><p class="mt-1 text-sm font-semibold text-[#667085]">On-time</p></div></article>
           </div>
-          <div id="delTabs" class="mt-5 flex gap-2">
+          <div id="delTabs" class="set-tabs mt-5">
             <button data-del="all" class="set-tab is-on">All</button>
             <button data-del="Out for Delivery" class="set-tab">Out for Delivery</button>
             <button data-del="Scheduled" class="set-tab">Scheduled</button>
@@ -413,33 +945,83 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">Returns &amp; Support</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Manage product returns, replacements and kitchen issues</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Manage product returns, replacements and kitchen issues</p>
             </div>
             <button id="raiseBtn" class="btn-save">+ Raise Request</button>
           </div>
-          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
             <article class="kpi"><span class="ico bg-[#EEF4FF] text-[#1570EF]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></span><div><p class="text-2xl font-extrabold leading-none">6</p><p class="mt-1 text-sm font-semibold text-[#667085]">Total Requests</p></div></article>
             <article class="kpi"><span class="ico bg-[#FFF8E8] text-[#DC6803]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span><div><p class="text-2xl font-extrabold leading-none">2</p><p class="mt-1 text-sm font-semibold text-[#667085]">Open</p></div></article>
             <article class="kpi"><span class="ico bg-[#EAF8F0] text-[#12B76A]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span><div><p class="text-2xl font-extrabold leading-none">3</p><p class="mt-1 text-sm font-semibold text-[#667085]">Resolved</p></div></article>
             <article class="kpi"><span class="ico bg-[#F3EEFF] text-[#7A5AF8]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span><div><p class="text-2xl font-extrabold leading-none">1</p><p class="mt-1 text-sm font-semibold text-[#667085]">Refunded</p></div></article>
           </div>
-          <div class="card mt-4 overflow-x-auto p-4">
+          <div class="card table-desk mt-4 overflow-x-auto p-4">
             <table class="line-table">
               <thead><tr><th>#</th><th>Request ID</th><th>Order #</th><th>Type</th><th>Status</th><th>Created On</th><th>Action</th></tr></thead>
               <tbody id="retBody"></tbody>
             </table>
           </div>
+          <div id="retCards" class="stack-m mt-4 grid gap-3"></div>
         </section>
 
         <section data-view="account" class="panel hidden">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 class="text-3xl font-extrabold tracking-tight">My Account</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Manage your kitchen profile, addresses and preferences</p>
+              <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Manage your kitchen profile, addresses and preferences</p>
             </div>
-            <button id="saveAcc" class="btn-save">Save Changes</button>
+            <button id="saveAcc" class="btn-save hidden lg:inline-flex">Save Changes</button>
+            <button id="editAcc" class="text-sm font-extrabold text-orange lg:hidden" type="button">Edit</button>
           </div>
-          <div class="mt-5 grid gap-4 xl:grid-cols-2">
+          <div class="acc-m mt-4">
+            <div class="flex items-center gap-3 pb-4">
+              <span id="accAvatar" class="grid h-14 w-14 place-items-center rounded-full bg-[#FFE8E0] text-sm font-extrabold text-orange">CU</span>
+              <div class="min-w-0">
+                <p id="accHeadName" class="text-base font-extrabold">Customer</p>
+                <p id="accHeadEmail" class="text-xs font-semibold text-[#98A2B3]">orders@kitchenx.com</p>
+              </div>
+            </div>
+            <button type="button" class="acc-row" data-panel="account" data-accgo="profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+              <span class="text-sm font-bold">Business Profile</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-accgo="addr">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span class="text-sm font-bold">Delivery Addresses</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-panel="invoices">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+              <span class="text-sm font-bold">Payment Methods</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-panel="invoices">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="text-sm font-bold">Invoices &amp; GST</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-accgo="prefs">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+              <span class="text-sm font-bold">Notification Settings</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-panel="support">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+              <span class="text-sm font-bold">Help &amp; Support</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-accgo="terms">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+              <span class="text-sm font-bold">Terms &amp; Policies</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" id="accLogout" class="acc-row" style="border-bottom:0;color:#F04438">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+              <span class="text-sm font-extrabold">Logout</span>
+            </button>
+          </div>
+          <div class="acc-desk mt-5 grid gap-4 xl:grid-cols-2">
             <article class="card p-5">
               <h3 class="text-base font-extrabold">Business Information</h3>
               <label class="mt-4 block text-sm font-bold">Kitchen / Business Name</label>
@@ -448,6 +1030,8 @@
               <input id="accEmail" class="field mt-1" type="email" />
               <label class="mt-4 block text-sm font-bold">Phone</label>
               <input id="accPhone" class="field mt-1" value="+91 98765 43210" />
+              <label class="mt-4 block text-sm font-bold">Business type</label>
+              <input id="accBiz" class="field mt-1" readonly />
               <label class="mt-4 block text-sm font-bold">GSTIN</label>
               <input class="field mt-1" value="07AABCU9603R1ZX" />
             </article>
@@ -455,7 +1039,7 @@
               <h3 class="text-base font-extrabold">Delivery Addresses</h3>
               <div class="mt-4 rounded-2xl border border-[#EEF0F3] p-4">
                 <p class="text-sm font-extrabold">Main Kitchen</p>
-                <p class="mt-1 text-sm font-medium text-[#667085]">12A, Food Hub, Connaught Place, New Delhi - 110001</p>
+                <p id="accAddr" class="mt-1 text-sm font-medium text-[#667085]">12A, Food Hub, Connaught Place, New Delhi - 110001</p>
                 <p class="mt-2 text-xs font-extrabold text-orange">Default</p>
               </div>
               <div class="mt-3 rounded-2xl border border-[#EEF0F3] p-4">
@@ -482,7 +1066,7 @@
 
         <section data-view="support" class="panel hidden">
           <h1 class="text-3xl font-extrabold tracking-tight">Contact Support</h1>
-          <p class="mt-1 text-sm font-medium text-[#667085]">Reach the KitchenX desk for orders, deliveries and invoices</p>
+          <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Reach the KitchenX desk for orders, deliveries and invoices</p>
           <div class="mt-5 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
             <article class="card p-5">
               <h3 class="text-base font-extrabold">Send a message</h3>
@@ -528,46 +1112,108 @@
     </div>
   </div>
 
+  <nav id="mNav" aria-label="Customer">
+    <button type="button" data-panel="dashboard">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+      Home
+    </button>
+    <button type="button" data-panel="catalogue" class="shop-tab">
+      <span class="shop-fab">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+      </span>
+      Shop
+    </button>
+    <button type="button" data-panel="orders">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg>
+      Orders
+    </button>
+    <button type="button" data-panel="lists">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Lists
+    </button>
+    <button type="button" data-panel="account">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+      Account
+    </button>
+  </nav>
   <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
+  <div id="filterScrim" class="fixed inset-0 z-50 hidden bg-black/30 lg:hidden"></div>
   <div id="toast" role="status"></div>
   <div id="orderModal" class="modal-scrim"><div class="card w-full max-w-lg p-6"><div class="flex items-start justify-between gap-3"><h3 id="omTitle" class="text-lg font-extrabold"></h3><button data-close="orderModal" class="btn-ghost h-9 px-3">Close</button></div><div id="omBody" class="mt-4"></div></div></div>
+  <div id="pdpModal" class="modal-scrim"><div class="card pdp-sheet"><div class="flex items-center justify-between"><button data-close="pdpModal" class="btn-ghost h-9 px-3" type="button">Close</button><div class="flex gap-2"><button class="heart relative static top-0 right-0" id="pdpFav" type="button" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.4 4.4 0 0 1 12 6.2a4.4 4.4 0 0 1 8.8 2.4z"/></svg></button></div></div><div id="pdpBody" class="mt-3"></div></div></div>
   <div id="listModal" class="modal-scrim"><form id="listForm" class="card w-full max-w-md p-6"><h3 class="text-lg font-extrabold">Create List</h3><label class="mt-4 block text-sm font-bold">List name<input id="listName" class="field mt-1" required placeholder="e.g. Weekend brunch prep" /></label><div class="mt-5 flex justify-end gap-2"><button type="button" data-close="listModal" class="btn-ghost">Cancel</button><button class="btn-save" type="submit">Save List</button></div></form></div>
   <div id="raiseModal" class="modal-scrim"><form id="raiseForm" class="card w-full max-w-md p-6"><h3 class="text-lg font-extrabold">Raise Request</h3><label class="mt-4 block text-sm font-bold">Type<select id="raiseType" class="field mt-1"><option>Return</option><option>Replacement</option><option>Complaint</option><option>Refund</option></select></label><label class="mt-3 block text-sm font-bold">Order ID<input id="raiseOrder" class="field mt-1" placeholder="#ORD12456" /></label><label class="mt-3 block text-sm font-bold">Details<textarea id="raiseNote" class="field mt-1" required></textarea></label><div class="mt-5 flex justify-end gap-2"><button type="button" data-close="raiseModal" class="btn-ghost">Cancel</button><button class="btn-save" type="submit">Submit</button></div></form></div>
 
   <script>
     const org = sessionStorage.getItem('kxOrg') || 'The Urban Table';
     const user = sessionStorage.getItem('kxUser') || '';
+    const bizType = sessionStorage.getItem('kxBizType') || 'Restaurant';
+    const savedLoc = sessionStorage.getItem('kxLocation') || '';
+    const savedAddr = sessionStorage.getItem('kxAddress') || '';
     const email = user.includes('@') ? user : 'orders@' + org.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.com';
     const initials = (function () {
       if (user && !user.includes('@')) {
         const parts = user.split(/\s+/).filter(Boolean);
         return (parts.length >= 2 ? parts[0][0] + parts[1][0] : user.slice(0, 2)).toUpperCase();
       }
-      return 'RC';
+      return org.replace(/[^a-zA-Z]/g, '').slice(0, 2).toUpperCase() || 'KX';
     })();
     document.getElementById('orgName').textContent = org;
     document.getElementById('dashOrg').textContent = org;
+    document.getElementById('orgType').textContent = bizType;
     document.getElementById('avatar').textContent = initials.length === 1 ? (initials + initials) : initials.slice(0, 2);
     document.getElementById('accOrg').value = org;
     document.getElementById('accEmail').value = email;
+    document.getElementById('accBiz').value = bizType;
     document.getElementById('greet').textContent = 'Good morning,';
+    const av = document.getElementById('avatar').textContent;
+    ['sideAvatar','accAvatar'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = av; });
+    const sideName = document.getElementById('sideName');
+    if (sideName) sideName.textContent = user && !user.includes('@') ? user : org;
+    const sideEmail = document.getElementById('sideEmail');
+    if (sideEmail) sideEmail.textContent = email;
+    const accHeadName = document.getElementById('accHeadName');
+    if (accHeadName) accHeadName.textContent = user && !user.includes('@') ? user : org;
+    const accHeadEmail = document.getElementById('accHeadEmail');
+    if (accHeadEmail) accHeadEmail.textContent = email;
+    if (savedLoc) {
+      document.getElementById('locLabel').textContent = savedLoc;
+      const locMenu = document.querySelector('.loc-menu');
+      const exists = [...locMenu.querySelectorAll('.loc-opt')].some((btn) => btn.getAttribute('data-loc') === savedLoc);
+      if (!exists) {
+        const btn = document.createElement('button');
+        btn.className = 'loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog';
+        btn.setAttribute('data-loc', savedLoc);
+        btn.textContent = savedLoc;
+        locMenu.prepend(btn);
+      }
+    }
+    if (savedAddr || savedLoc) {
+      document.getElementById('accAddr').textContent = savedAddr ? (savedAddr + (sessionStorage.getItem('kxArea') ? ', ' + sessionStorage.getItem('kxArea') : '') + (sessionStorage.getItem('kxCity') ? ', ' + sessionStorage.getItem('kxCity') : '')) : savedLoc;
+    }
 
     const sidebar = document.getElementById('sidebar');
     const scrim = document.getElementById('scrim');
+    function closeSide() { sidebar.classList.add('-translate-x-full'); scrim.classList.add('hidden'); }
     document.getElementById('menuBtn').addEventListener('click', () => { sidebar.classList.toggle('-translate-x-full'); scrim.classList.toggle('hidden'); });
-    scrim.addEventListener('click', () => { sidebar.classList.add('-translate-x-full'); scrim.classList.add('hidden'); });
+    document.getElementById('sideClose').addEventListener('click', closeSide);
+    scrim.addEventListener('click', closeSide);
     document.getElementById('collapseBtn').addEventListener('click', () => {
       sidebar.classList.toggle('collapsed');
       document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
     });
 
     const PANELS = ['dashboard','catalogue','orders','repeat','lists','invoices','deliveries','returns','account','support'];
+    const M_TAB = { dashboard: 'dashboard', catalogue: 'catalogue', orders: 'orders', repeat: 'orders', lists: 'lists', invoices: 'account', deliveries: 'orders', returns: 'account', support: 'account', account: 'account' };
     function showPanel(id) {
       document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('hidden', el.getAttribute('data-view') !== id));
       document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id));
+      document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === (M_TAB[id] || 'dashboard')));
       if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
       sidebar.classList.add('-translate-x-full');
       scrim.classList.add('hidden');
+      closeFilters();
+      window.scrollTo(0, 0);
       if (id === 'catalogue') renderCat();
     }
     document.querySelectorAll('[data-panel]').forEach((btn) => btn.addEventListener('click', () => showPanel(btn.getAttribute('data-panel'))));
@@ -585,12 +1231,31 @@
     document.querySelectorAll('[data-close]').forEach((btn) => btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close'))));
     document.querySelectorAll('.modal-scrim').forEach((m) => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); }));
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      sessionStorage.removeItem('kxRole');
-      sessionStorage.removeItem('kxUser');
-      sessionStorage.removeItem('kxOrg');
-      window.location.href = 'kitchenx-v2.html';
+    const filterPane = document.getElementById('filterPane');
+    const filterScrim = document.getElementById('filterScrim');
+    function closeFilters() {
+      filterPane.classList.add('hidden');
+      filterPane.classList.remove('is-sheet');
+      filterScrim.classList.add('hidden');
+    }
+    function openFilters() {
+      filterPane.classList.remove('hidden');
+      filterPane.classList.add('is-sheet');
+      filterScrim.classList.remove('hidden');
+    }
+    document.getElementById('filterToggle').addEventListener('click', () => {
+      if (filterPane.classList.contains('is-sheet')) closeFilters();
+      else openFilters();
     });
+    document.getElementById('filterClose').addEventListener('click', closeFilters);
+    filterScrim.addEventListener('click', closeFilters);
+    function doLogout() {
+      ['kxRole','kxUser','kxOrg','kxBizType','kxNeeds','kxCity','kxArea','kxAddress','kxOutlets','kxLocation'].forEach((k) => sessionStorage.removeItem(k));
+      window.location.href = 'kitchenx-v2.html';
+    }
+    document.getElementById('logoutBtn').addEventListener('click', doLogout);
+    document.getElementById('sideLogout').addEventListener('click', doLogout);
+    document.getElementById('accLogout').addEventListener('click', doLogout);
     document.getElementById('saveAcc').addEventListener('click', () => {
       const name = document.getElementById('accOrg').value.trim();
       if (name) {
@@ -600,8 +1265,31 @@
       }
       toast('Account changes saved');
     });
+    function openAccForm() {
+      document.querySelector('.acc-m').classList.add('is-hide');
+      document.querySelector('.acc-desk').classList.add('is-open');
+      document.getElementById('saveAcc').classList.remove('hidden');
+    }
+    document.getElementById('editAcc').addEventListener('click', openAccForm);
+    document.querySelectorAll('[data-accgo]').forEach((btn) => btn.addEventListener('click', () => {
+      const go = btn.getAttribute('data-accgo');
+      if (go === 'terms') { toast('Terms & policies'); return; }
+      openAccForm();
+    }));
     document.getElementById('bellBtn').addEventListener('click', () => toast('No new notifications'));
     document.getElementById('scanBtn').addEventListener('click', () => toast('Connect a scanner to this workstation'));
+    function openDeals() {
+      dealOnly = true;
+      document.getElementById('topSearch').value = '';
+      chip = 'All Categories';
+      document.querySelectorAll('#catChips .chip').forEach((c) => c.classList.toggle('is-on', c.getAttribute('data-chip') === chip));
+      document.getElementById('offerDiscount').checked = false;
+      document.getElementById('offerFlash').checked = false;
+      showPanel('catalogue');
+      toast('Showing flash deals and discounts');
+    }
+    document.getElementById('viewDeals').addEventListener('click', openDeals);
+    document.getElementById('viewDealsM').addEventListener('click', openDeals);
     document.getElementById('locBtn').addEventListener('click', (e) => { e.stopPropagation(); document.querySelector('.loc-wrap').classList.toggle('open'); document.querySelector('.user-wrap').classList.remove('open'); });
     document.querySelectorAll('.loc-opt').forEach((btn) => btn.addEventListener('click', () => {
       document.getElementById('locLabel').textContent = btn.getAttribute('data-loc');
@@ -632,14 +1320,37 @@
     }
 
     const PRODUCTS = [
-      { id: 'p1', name: 'Amul Butter (500 g)', brand: 'Amul', cat: 'Dairy', price: 305.55, pic: 'butter', stock: true },
-      { id: 'p2', name: 'Fresh Tomatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 60, pic: 'tomato', stock: true },
-      { id: 'p3', name: 'Chicken Breast (1 kg)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 220, pic: 'chicken', stock: true },
-      { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Fortune', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true },
-      { id: 'p5', name: 'Amul Fresh Cream (1 L)', brand: 'Amul', cat: 'Dairy', price: 247, pic: 'cream', stock: true },
-      { id: 'p6', name: 'Aashirvaad Atta (5 kg)', brand: 'Aashirvaad', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true },
-      { id: 'p7', name: 'Onions (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 35, pic: 'onion', stock: true },
-      { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'India Gate', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true }
+      { id: 'p1', name: 'Amul Butter (500 g)', brand: 'Amul', cat: 'Dairy', price: 305.55, pic: 'butter', stock: true, tags: 'butter dairy' },
+      { id: 'p2', name: 'Fresh Tomatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 48, was: 60, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', tags: 'tomato vegetable salad gravy' },
+      { id: 'p3', name: 'Chicken Breast (1 kg)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 220, pic: 'chicken', stock: true, tags: 'chicken meat' },
+      { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Fortune', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true, tags: 'oil pantry' },
+      { id: 'p5', name: 'Amul Fresh Cream (1 L)', brand: 'Amul', cat: 'Dairy', price: 247, pic: 'cream', stock: true, tags: 'cream dairy' },
+      { id: 'p6', name: 'Aashirvaad Atta (5 kg)', brand: 'Aashirvaad', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true, tags: 'atta flour' },
+      { id: 'p7', name: 'Onions (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 32, was: 36, deal: { badge: '10% OFF', kind: 'off' }, pic: 'onion', stock: true, group: 'veg', tags: 'onion vegetable gravy' },
+      { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'India Gate', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true, tags: 'rice grain' },
+      { id: 'p11', name: 'Potatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 28, was: 34, deal: { badge: 'Flash Sale', kind: 'flash' }, pic: 'potato', stock: true, group: 'veg', tags: 'potato vegetable' },
+      { id: 'p12', name: 'Carrots (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 44, was: 50, deal: { badge: '12% OFF', kind: 'off' }, pic: 'carrot', stock: true, group: 'veg', tags: 'carrot vegetable salad' },
+      { id: 'p13', name: 'Capsicum Mix (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 80, deal: { badge: 'Best Seller', kind: 'seller' }, pic: 'capsicum', stock: true, group: 'veg', tags: 'capsicum pepper vegetable salad' },
+      { id: 'p14', name: 'Cucumber (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 32, pic: 'cucumber', stock: true, group: 'veg', tags: 'cucumber vegetable salad' },
+      { id: 'p15', name: 'Cabbage (1 pc)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 30, pic: 'cabbage', stock: true, group: 'veg', tags: 'cabbage vegetable' },
+      { id: 'p16', name: 'Green Chillies (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 18, was: 20, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chilli', stock: true, group: 'veg', tags: 'chilli vegetable spice' },
+      { id: 'p17', name: 'Garlic (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'garlic', stock: true, group: 'veg', tags: 'garlic vegetable spice' },
+      { id: 'p18', name: 'Lemon (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 70, was: 76, deal: { badge: 'Save 8%', kind: 'save' }, pic: 'lemon', stock: true, group: 'veg', tags: 'lemon vegetable citrus' },
+      { id: 'p21', name: 'Amul Toned Milk (1 L)', brand: 'Amul', cat: 'Dairy', price: 58, was: 64, deal: { badge: '10% OFF', kind: 'off' }, pic: 'cream', stock: true, tags: 'milk dairy' },
+      { id: 'p22', name: 'Amul Fresh Curd (1 kg)', brand: 'Amul', cat: 'Dairy', price: 75, pic: 'cream', stock: true, tags: 'curd dahi dairy yogurt' },
+      { id: 'p23', name: 'Amul Paneer (200 g)', brand: 'Amul', cat: 'Dairy', price: 95, pic: 'butter', stock: true, tags: 'paneer dairy' },
+      { id: 'p24', name: 'Amul Cow Ghee (1 L)', brand: 'Amul', cat: 'Dairy', price: 620, pic: 'butter', stock: true, tags: 'ghee dairy' },
+      { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'chicken', stock: true, tags: 'eggs chicken' },
+      { id: 'p26', name: 'Rohu Fish (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 280, pic: 'chicken', stock: true, tags: 'fish seafood meat' },
+      { id: 'p27', name: 'Prawns (500 g)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 320, was: 360, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chicken', stock: true, tags: 'prawns seafood meat' },
+      { id: 'p28', name: 'Mutton Curry Cut (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 720, pic: 'chicken', stock: true, tags: 'mutton meat' },
+      { id: 'p19', name: 'Fresh Tomatoes (5 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 220, was: 275, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk' },
+      { id: 'p20', name: 'Fresh Tomatoes (25 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 950, was: 1200, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk kitchen' },
+      { id: 'p30', name: 'Tata Tea Gold (1 kg)', brand: 'Tata', cat: 'Beverages', price: 520, pic: 'atta', stock: false, demand: true, tags: 'tea beverage drink' },
+      { id: 'p31', name: 'Nescafé Classic (200 g)', brand: 'Nestlé', cat: 'Beverages', price: 340, pic: 'cream', stock: false, demand: true, tags: 'coffee beverage drink' },
+      { id: 'p32', name: 'Real Mixed Fruit (1 L)', brand: 'Dabur', cat: 'Beverages', price: 110, pic: 'lemon', stock: false, demand: true, tags: 'juice beverage drink' },
+      { id: 'p33', name: 'Amul Lassi (1 L)', brand: 'Amul', cat: 'Dairy', price: 80, pic: 'cream', stock: false, demand: true, tags: 'lassi dairy beverage drink' },
+      { id: 'p34', name: 'Tropicana Orange (1 L)', brand: 'Tropicana', cat: 'Beverages', price: 125, pic: 'lemon', stock: false, demand: true, tags: 'orange juice beverage drink' }
     ];
     const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Pantry & Staples','Beverages'];
     const BRANDS = ['Amul','Nestlé','Tata','Fortune','Aashirvaad','India Gate'];
@@ -647,50 +1358,127 @@
     const fav = {};
     PRODUCTS.forEach((p) => { qty[p.id] = 1; });
     let chip = 'All Categories';
+    let dealOnly = false;
+    const FLASH_END = Date.now() + (2 * 3600 + 15 * 60 + 43) * 1000;
+    function flashParts() {
+      let left = Math.max(0, Math.floor((FLASH_END - Date.now()) / 1000));
+      const h = String(Math.floor(left / 3600)).padStart(2, '0');
+      left %= 3600;
+      const m = String(Math.floor(left / 60)).padStart(2, '0');
+      const s = String(left % 60).padStart(2, '0');
+      return { h, m, s };
+    }
+    function flashClock() {
+      const t = flashParts();
+      return t.h + ':' + t.m + ':' + t.s;
+    }
+    function tickFlash() {
+      const t = flashParts();
+      const hours = document.getElementById('flashH');
+      if (!hours) return;
+      hours.textContent = t.h;
+      document.getElementById('flashM').textContent = t.m;
+      document.getElementById('flashS').textContent = t.s;
+      document.querySelectorAll('.flash-mini').forEach((el) => { el.textContent = t.h + ':' + t.m + ':' + t.s; });
+    }
+    tickFlash();
+    setInterval(tickFlash, 1000);
 
     document.getElementById('catChips').innerHTML = CATS.map((c) => '<button data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + c + '</button>').join('') + '<button class="chip">More</button>';
     document.getElementById('catChecks').innerHTML = CATS.slice(1, 5).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreCats">+ Show more</button>';
     document.getElementById('brandChecks').innerHTML = ['Amul','Nestlé','Tata','Fortune'].map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreBrands">+ Show more</button>';
 
     function activeChecks(sel) { return Array.from(document.querySelectorAll(sel)).filter((i) => i.checked).map((i) => i.value); }
-    function renderCat() {
-      const q = ((document.getElementById('catSearch').value || document.getElementById('topSearch').value) || '').toLowerCase();
+    function productHay(p) { return (p.name + ' ' + p.brand + ' ' + p.cat + ' ' + (p.tags || '')).toLowerCase(); }
+    function passesFilters(p, q) {
       const cats = activeChecks('.f-cat');
       const brands = activeChecks('.f-brand');
       const min = Number(document.getElementById('minPrice').value) || 0;
       const max = Number(document.getElementById('maxPrice').value) || Infinity;
       const stockOnly = document.getElementById('stockOnly').checked;
-      const sort = document.getElementById('catSort').value;
-      let list = PRODUCTS.filter((p) => {
-        if (chip !== 'All Categories' && p.cat !== chip) return false;
-        if (cats.length && !cats.includes(p.cat)) return false;
-        if (brands.length && !brands.includes(p.brand)) return false;
-        if (p.price < min || p.price > max) return false;
-        if (stockOnly && !p.stock) return false;
-        if (q && !(p.name + p.brand + p.cat).toLowerCase().includes(q)) return false;
-        return true;
-      });
-      if (sort.includes('Low')) list = list.slice().sort((a,b) => a.price - b.price);
-      if (sort.includes('High')) list = list.slice().sort((a,b) => b.price - a.price);
-      if (sort.includes('Name')) list = list.slice().sort((a,b) => a.name.localeCompare(b.name));
-      document.getElementById('catCount').textContent = (list.length === PRODUCTS.length ? '1,248' : list.length) + ' products';
-      document.getElementById('catGrid').innerHTML = list.map((p) => `
+      if (chip !== 'All Categories' && p.cat !== chip) return false;
+      if (cats.length && !cats.includes(p.cat)) return false;
+      if (brands.length && !brands.includes(p.brand)) return false;
+      if (p.price < min || p.price > max) return false;
+      if (stockOnly && !p.stock && !q) return false;
+      const wantDiscount = document.getElementById('offerDiscount').checked;
+      const wantFlash = document.getElementById('offerFlash').checked;
+      if (wantDiscount && !(p.deal && (p.deal.kind === 'off' || p.deal.kind === 'save'))) return false;
+      if (wantFlash && !(p.deal && p.deal.kind === 'flash')) return false;
+      if (dealOnly && !p.deal) return false;
+      if (p.variant && !(q && productHay(p).includes(q))) return false;
+      if (q && !productHay(p).includes(q)) return false;
+      return true;
+    }
+    function productCard(p) {
+      const deal = p.deal;
+      const badge = deal ? '<span class="deal-badge' + (deal.kind === 'seller' ? ' is-seller' : deal.kind === 'flash' ? ' is-flash' : deal.kind === 'save' ? ' is-save' : '') + '">' + deal.badge + (deal.kind === 'flash' ? ' <span class="flash-mini">' + flashClock() + '</span>' : '') + '</span>' : '';
+      const was = p.was ? '<span class="price-was">' + money(p.was) + '</span>' : '';
+      const stockLine = p.stock
+        ? '<p class="stock-ok mt-1 text-xs font-extrabold text-[#12B76A]">In Stock</p>'
+        : '<p class="oos-note mt-1">Out of stock</p><p class="oos-sub">Highly demanded · restocking soon</p>';
+      const actions = p.stock
+        ? '<div class="mt-3 flex items-center justify-between gap-2"><div class="stepper"><button data-q="-">−</button><span>' + qty[p.id] + '</span><button data-q="+">+</button></div><button class="btn-add" data-add="' + p.id + '">Add</button><button class="plus-add" data-add="' + p.id + '" aria-label="Add">+</button></div>'
+        : '<div class="mt-3 flex items-center justify-between gap-2"><span class="text-[11px] font-extrabold text-[#98A2B3]">Notify when back</span><button class="plus-add is-oos" type="button" aria-label="Unavailable">+</button></div>';
+      return `
         <article class="card overflow-hidden" data-pid="${p.id}">
           <div class="relative">
             ${picLg(p.pic)}
-            <button class="heart${fav[p.id] ? ' is-on' : ''}" data-fav="${p.id}" aria-label="Save">${fav[p.id] ? '♥' : '♡'}</button>
+            ${badge}
+            <button class="heart${fav[p.id] ? ' is-on' : ''}" data-fav="${p.id}" aria-label="Save">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.4 4.4 0 0 1 12 6.2a4.4 4.4 0 0 1 8.8 2.4z"/></svg>
+            </button>
           </div>
           <div class="p-3">
             <p class="text-sm font-extrabold leading-snug">${p.name}</p>
             <p class="mt-0.5 text-xs font-semibold text-[#98A2B3]">${p.brand}</p>
-            <p class="mt-2 text-sm font-extrabold text-orange">${money(p.price)}</p>
-            <p class="mt-1 text-xs font-extrabold text-[#12B76A]">In Stock</p>
-            <div class="mt-3 flex items-center justify-between gap-2">
-              <div class="stepper"><button data-q="-">−</button><span>${qty[p.id]}</span><button data-q="+">+</button></div>
-              <button class="btn-add" data-add="${p.id}">Add</button>
-            </div>
+            <p class="mt-2 text-sm font-extrabold text-orange">${money(p.price)}${was}</p>
+            ${stockLine}
+            ${actions}
           </div>
-        </article>`).join('') || '<p class="text-sm font-semibold text-[#667085]">No products match these filters.</p>';
+        </article>`;
+    }
+    function mixByCategory(list) {
+      const buckets = {};
+      list.forEach((p) => {
+        (buckets[p.cat] || (buckets[p.cat] = [])).push(p);
+      });
+      const cats = Object.keys(buckets);
+      const out = [];
+      let i = 0;
+      while (out.length < list.length) {
+        cats.forEach((c) => {
+          if (buckets[c][i]) out.push(buckets[c][i]);
+        });
+        i += 1;
+      }
+      return out;
+    }
+    function sortList(list, sort) {
+      if (sort.includes('Low')) return list.slice().sort((a,b) => a.price - b.price);
+      if (sort.includes('High')) return list.slice().sort((a,b) => b.price - a.price);
+      if (sort.includes('Name')) return list.slice().sort((a,b) => a.name.localeCompare(b.name));
+      return list;
+    }
+    function renderCat() {
+      const q = (document.getElementById('topSearch').value || '').trim().toLowerCase();
+      const sort = document.getElementById('catSort').value;
+      let list = PRODUCTS.filter((p) => passesFilters(p, q));
+      if (!list.length) {
+        list = PRODUCTS.filter((p) => !p.stock && (chip === 'All Categories' || p.cat === chip) && (!q || productHay(p).includes(q)));
+      }
+      list = (!q && sort.includes('Relevance')) ? mixByCategory(list) : sortList(list, sort);
+      const alsoBlock = document.getElementById('alsoBlock');
+      const vegHit = q && list.some((p) => p.group === 'veg');
+      let related = [];
+      if (vegHit) {
+        const ids = new Set(list.map((p) => p.id));
+        related = sortList(PRODUCTS.filter((p) => p.group === 'veg' && !p.variant && !ids.has(p.id) && p.stock), sort);
+      }
+      alsoBlock.classList.toggle('hidden', !related.length);
+      document.getElementById('catCount').textContent = list.length + (related.length ? ' match' + (list.length === 1 ? '' : 'es') + ' · ' + related.length + ' also ordered' : ' products');
+      const cards = list.concat(related);
+      document.getElementById('catGrid').innerHTML = cards.map(productCard).join('') || '<article class="card p-4 col-span-2"><p class="oos-note">Currently out of stock</p><p class="oos-sub mt-1">Highly demanded in kitchens · we are restocking this line</p></article>';
     }
     document.getElementById('catChips').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-chip]');
@@ -699,9 +1487,11 @@
       document.querySelectorAll('#catChips .chip').forEach((c) => c.classList.toggle('is-on', c.getAttribute('data-chip') === chip));
       renderCat();
     });
-    ['catSearch','minPrice','maxPrice','catSort'].forEach((id) => document.getElementById(id).addEventListener('input', renderCat));
+    ['minPrice','maxPrice','catSort'].forEach((id) => document.getElementById(id).addEventListener('input', renderCat));
     document.getElementById('catSort').addEventListener('change', renderCat);
     document.getElementById('stockOnly').addEventListener('change', renderCat);
+    document.getElementById('offerDiscount').addEventListener('change', renderCat);
+    document.getElementById('offerFlash').addEventListener('change', renderCat);
     document.getElementById('catChecks').addEventListener('change', renderCat);
     document.getElementById('brandChecks').addEventListener('change', renderCat);
     document.getElementById('clearFilters').addEventListener('click', () => {
@@ -711,7 +1501,9 @@
       document.getElementById('minPrice').value = '';
       document.getElementById('maxPrice').value = '';
       document.getElementById('stockOnly').checked = true;
-      document.getElementById('catSearch').value = '';
+      document.getElementById('offerDiscount').checked = false;
+      document.getElementById('offerFlash').checked = false;
+      dealOnly = false;
       renderCat();
     });
     document.getElementById('moreCats').addEventListener('click', () => {
@@ -720,36 +1512,88 @@
     document.getElementById('moreBrands').addEventListener('click', () => {
       document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
     });
-    document.getElementById('catGrid').addEventListener('click', (e) => {
+    function openPdp(p) {
+      const was = p.was ? '<span class="price-was">' + money(p.was) + '</span>' : '';
+      const sizes = ['250 g','500 g','1 kg'];
+      document.getElementById('pdpFav').classList.toggle('is-on', !!fav[p.id]);
+      document.getElementById('pdpFav').setAttribute('data-fav', p.id);
+      document.getElementById('pdpBody').innerHTML =
+        picLg(p.pic) +
+        '<h2 class="mt-3 text-xl font-extrabold">' + p.name + '</h2>' +
+        '<p class="mt-1 text-sm font-semibold text-[#98A2B3]">' + p.brand + '</p>' +
+        '<p class="mt-1 text-xs font-bold text-[#667085]">★ 4.6 · kitchens reorder this weekly</p>' +
+        '<p class="mt-3 text-lg font-extrabold text-orange">' + money(p.price) + was + (p.deal ? ' <span class="deal-badge relative top-0 left-0">' + p.deal.badge + '</span>' : '') + '</p>' +
+        (p.stock
+          ? '<p class="mt-2 text-sm font-extrabold text-[#12B76A]">In Stock</p><p class="text-xs font-semibold text-[#98A2B3]">Usually delivered in 1 day</p>'
+          : '<p class="oos-note mt-2">Out of stock · Highly demanded</p><p class="oos-sub">We are restocking this for kitchens this week</p>') +
+        '<p class="mt-4 text-sm font-extrabold">Select Quantity</p>' +
+        '<div class="mt-2 flex gap-2">' + sizes.map((s, i) => '<button type="button" class="chip' + (i === 2 ? ' is-on' : '') + '">' + s + '</button>').join('') + '</div>' +
+        (p.stock
+          ? '<div class="mt-4 flex items-center gap-3"><div class="stepper"><button data-q="-">−</button><span>' + qty[p.id] + '</span><button data-q="+">+</button></div><button class="btn-save flex-1" data-add="' + p.id + '">Add to Cart</button></div>'
+          : '<button class="btn-ghost mt-4 w-full" type="button">Notify me when back</button>') +
+        '<p class="mt-4 rounded-2xl bg-[#EAF8F0] px-3 py-3 text-xs font-bold text-[#12B76A]">Free delivery on orders above ₹500</p>';
+      document.getElementById('pdpBody').setAttribute('data-pid', p.id);
+      openModal('pdpModal');
+    }
+    function onProductCardClick(e) {
       const card = e.target.closest('[data-pid]');
       if (!card) return;
       const id = card.getAttribute('data-pid');
       const p = PRODUCTS.find((x) => x.id === id);
-      if (e.target.closest('[data-fav]')) { fav[id] = !fav[id]; renderCat(); return; }
+      if (e.target.closest('[data-fav]')) { fav[id] = !fav[id]; if (card.closest('#catGrid')) renderCat(); else card.querySelector('.heart').classList.toggle('is-on', fav[id]); return; }
       const qbtn = e.target.closest('[data-q]');
-      if (qbtn) { qty[id] = Math.max(1, qty[id] + (qbtn.getAttribute('data-q') === '+' ? 1 : -1)); renderCat(); return; }
-      if (e.target.closest('[data-add]')) toast(p.name + ' added · qty ' + qty[id]);
+      if (qbtn) { qty[id] = Math.max(1, qty[id] + (qbtn.getAttribute('data-q') === '+' ? 1 : -1)); if (card.closest('#catGrid')) renderCat(); return; }
+      if (e.target.closest('[data-add]')) { if (!p.stock) { toast(p.name + ' is out of stock · highly demanded'); return; } toast(p.name + ' added · qty ' + qty[id]); return; }
+      openPdp(p);
+    }
+    document.getElementById('catGrid').addEventListener('click', onProductCardClick);
+    document.getElementById('freqGrid').innerHTML = PRODUCTS.filter((p) => p.stock && !p.variant).slice(0, 4).map(productCard).join('');
+    document.getElementById('freqGrid').addEventListener('click', onProductCardClick);
+    document.getElementById('pdpBody').addEventListener('click', (e) => {
+      const id = document.getElementById('pdpBody').getAttribute('data-pid');
+      const p = PRODUCTS.find((x) => x.id === id);
+      if (!p) return;
+      if (e.target.closest('.chip')) {
+        document.querySelectorAll('#pdpBody .chip').forEach((c) => c.classList.toggle('is-on', c === e.target.closest('.chip')));
+        return;
+      }
+      const qbtn = e.target.closest('[data-q]');
+      if (qbtn) {
+        qty[id] = Math.max(1, qty[id] + (qbtn.getAttribute('data-q') === '+' ? 1 : -1));
+        openPdp(p);
+        return;
+      }
+      if (e.target.closest('[data-add]')) {
+        if (!p.stock) { toast(p.name + ' is out of stock · highly demanded'); return; }
+        toast(p.name + ' added · qty ' + qty[id]);
+        closeModal('pdpModal');
+      }
+    });
+    document.getElementById('pdpFav').addEventListener('click', () => {
+      const id = document.getElementById('pdpFav').getAttribute('data-fav');
+      if (!id) return;
+      fav[id] = !fav[id];
+      document.getElementById('pdpFav').classList.toggle('is-on', !!fav[id]);
+    });
+    document.querySelectorAll('[data-gocat]').forEach((btn) => btn.addEventListener('click', () => {
+      chip = btn.getAttribute('data-gocat');
+      document.querySelectorAll('#catChips .chip').forEach((c) => c.classList.toggle('is-on', c.getAttribute('data-chip') === chip));
+      showPanel('catalogue');
+    }));
+    document.getElementById('mSortBtn').addEventListener('click', () => {
+      const sel = document.getElementById('catSort');
+      sel.selectedIndex = (sel.selectedIndex + 1) % sel.options.length;
+      renderCat();
+      toast(sel.value);
     });
     document.getElementById('topSearch').addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
-      document.getElementById('catSearch').value = e.target.value;
       showPanel('catalogue');
     });
-
-    document.getElementById('freqGrid').innerHTML = PRODUCTS.slice(0, 4).map((p) => `
-      <article class="card overflow-hidden">
-        ${picLg(p.pic)}
-        <div class="px-3 pb-3">
-          <p class="text-sm font-extrabold leading-snug">${p.name}</p>
-          <p class="mt-1 text-sm font-extrabold text-orange">${money(p.price)}</p>
-          <button class="btn-add mt-3" data-add="${p.id}">Add</button>
-        </div>
-      </article>`).join('');
-    document.getElementById('freqGrid').addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-add]');
-      if (!btn) return;
-      const p = PRODUCTS.find((x) => x.id === btn.getAttribute('data-add'));
-      toast(p.name + ' added');
+    document.getElementById('topSearch').addEventListener('input', () => {
+      dealOnly = false;
+      if (document.querySelector('[data-view="catalogue"]').classList.contains('hidden')) return;
+      renderCat();
     });
 
     const ORDERS = [
@@ -766,21 +1610,24 @@
       return '<span class="badge ' + (map[st] || 'badge-prog') + '">● ' + st + '</span>';
     }
     function renderOrders() {
-      document.getElementById('orderTabs').innerHTML = OTABS.map((t) => '<button data-ot="' + t + '" class="set-tab' + (t === otab ? ' is-on' : '') + '">' + t + '</button>').join('');
+      document.getElementById('orderTabs').innerHTML = OTABS.map((t) => {
+        const label = t === 'All Orders' ? '<span class="lg:hidden">All</span><span class="hidden lg:inline">All Orders</span>' : t;
+        return '<button data-ot="' + t + '" class="set-tab' + (t === otab ? ' is-on' : '') + (t === 'Cancelled' ? ' ot-cancel' : '') + '">' + label + '</button>';
+      }).join('');
       const list = ORDERS.filter((o) => otab === 'All Orders' || o.status === otab);
         document.getElementById('orderList').innerHTML = list.map((o) => `
-        <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+        <article class="card order-card flex flex-wrap items-center gap-4 px-4 py-4">
           <input type="checkbox" class="accent-[#FF4F18]" />
-          <div class="min-w-[140px]">
+          <div class="order-meta min-w-[140px]">
             <p class="text-sm font-extrabold">${o.id}</p>
             <p class="text-xs font-semibold text-[#98A2B3]">${o.date}</p>
           </div>
           ${badge(o.status)}
-          <div class="flex items-center">${o.pics.map((p) => pic(p)).join('')}<span class="ml-2 text-xs font-extrabold text-[#667085]">+${o.extra}</span></div>
-          <div class="ml-auto flex flex-wrap gap-2">
+          <div class="order-thumbs flex items-center">${o.pics.map((p) => pic(p)).join('')}<span class="ml-2 text-xs font-extrabold text-[#667085]">+${o.extra} <span class="lg:hidden">Items</span></span></div>
+          <div class="order-actions ml-auto flex flex-wrap gap-2">
             <button class="btn-ghost" data-odetail="${o.id}">View Details</button>
-            ${o.track ? '<button class="btn-add" data-track="'+o.id+'">Track Order</button>' : ''}
-            ${o.buy ? '<button class="btn-add" data-buy="'+o.id+'">Buy Again</button>' : ''}
+            ${o.track ? '<button class="btn-add" data-track="'+o.id+'"><span class="lg:hidden">Track Order</span><span class="hidden lg:inline">Track Order</span></button>' : ''}
+            ${o.buy ? '<button class="btn-add" data-buy="'+o.id+'"><span class="lg:hidden">Reorder</span><span class="hidden lg:inline">Buy Again</span></button>' : ''}
           </div>
         </article>`).join('') || '<p class="text-sm font-semibold text-[#667085]">No orders in this view.</p>';
     }
@@ -796,8 +1643,23 @@
       const b = e.target.closest('[data-buy]');
       if (d) {
         const o = ORDERS.find((x) => x.id === d.getAttribute('data-odetail'));
-        document.getElementById('omTitle').textContent = o.id;
-        document.getElementById('omBody').innerHTML = '<p class="text-sm font-semibold text-[#667085]">' + o.date + '</p><p class="mt-2">' + badge(o.status) + '</p><p class="mt-3 text-sm font-bold">' + o.items + '</p><p class="mt-2 text-sm font-medium text-[#667085]">Deliver to ' + document.getElementById('locLabel').textContent + '</p>';
+        const placed = o.status !== 'Cancelled';
+        const processing = o.status === 'Processing' || o.status === 'Out for Delivery' || o.status === 'Delivered';
+        const out = o.status === 'Out for Delivery' || o.status === 'Delivered';
+        const done = o.status === 'Delivered';
+        document.getElementById('omTitle').textContent = 'Order ' + o.id;
+        document.getElementById('omBody').innerHTML =
+          '<ol class="tl text-sm">' +
+          '<li><span class="dot' + (placed ? '' : ' is-wait') + '">✓</span><div><p class="font-extrabold">Order Placed</p><p class="text-xs font-semibold text-[#98A2B3]">' + o.date + '</p></div></li>' +
+          '<li><span class="dot' + (processing ? (o.status === 'Processing' ? ' is-now' : '') : ' is-wait') + '">' + (processing && o.status !== 'Processing' ? '✓' : '') + '</span><div><p class="font-extrabold">Processing</p><p class="text-xs font-semibold text-[#98A2B3]">' + (processing ? '24 Jun, 11:10 AM' : 'Waiting') + '</p></div></li>' +
+          '<li><span class="dot' + (out ? (o.status === 'Out for Delivery' ? ' is-now' : '') : ' is-wait') + '">' + (done ? '✓' : '') + '</span><div><p class="font-extrabold">Out for Delivery</p><p class="text-xs font-semibold text-[#98A2B3]">' + (out ? 'Today' : 'Waiting') + '</p></div></li>' +
+          '<li><span class="dot' + (done ? '' : ' is-wait') + '">' + (done ? '✓' : '') + '</span><div><p class="font-extrabold">Delivered</p><p class="text-xs font-semibold text-[#98A2B3]">' + (done ? o.date : 'Waiting') + '</p></div></li>' +
+          '</ol>' +
+          '<h4 class="mt-5 text-sm font-extrabold">Items</h4>' +
+          '<p class="mt-2 text-sm font-bold">' + o.items + '</p>' +
+          '<div class="mt-3 flex items-center">' + o.pics.map((p) => pic(p)).join('') + '<span class="ml-2 text-xs font-extrabold text-[#667085]">+' + o.extra + ' Items</span></div>' +
+          (o.buy ? '<button class="btn-save mt-5 w-full" data-buy="' + o.id + '">Reorder All</button>' : '') +
+          (o.track ? '<button class="btn-save mt-5 w-full" data-track="' + o.id + '">Track Order</button>' : '');
         openModal('orderModal');
       }
       if (t) {
@@ -807,6 +1669,15 @@
       }
       if (b) toast(b.getAttribute('data-buy') + ' added to your next order');
     });
+    document.getElementById('omBody').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-buy]');
+      const t = e.target.closest('[data-track]');
+      if (b) { toast(b.getAttribute('data-buy') + ' added to your next order'); closeModal('orderModal'); }
+      if (t) {
+        document.getElementById('omTitle').textContent = 'Track ' + t.getAttribute('data-track');
+        document.getElementById('omBody').innerHTML = '<ol class="tl text-sm"><li><span class="dot">✓</span><div><p class="font-extrabold">Placed</p><p class="text-xs font-semibold text-[#98A2B3]">24 Jun, 10:24 AM</p></div></li><li><span class="dot">✓</span><div><p class="font-extrabold">Packed</p><p class="text-xs font-semibold text-[#98A2B3]">24 Jun, 11:40 AM</p></div></li><li><span class="dot is-now"></span><div><p class="font-extrabold">Out for delivery</p><p class="text-xs font-semibold text-[#98A2B3]">Today</p></div></li><li><span class="dot is-wait"></span><div><p class="font-extrabold">Arriving at kitchen</p></div></li></ol>';
+      }
+    });
     renderOrders();
 
     const REPEATS = [
@@ -815,7 +1686,7 @@
       { name: 'Protein Box', when: 'Every Friday', last: '13 Jun 2025', items: 6, total: 6900, pics: ['chicken'] }
     ];
     document.getElementById('repeatList').innerHTML = REPEATS.map((r) => `
-      <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+      <article class="card repeat-card flex flex-wrap items-center gap-4 px-4 py-4">
         <div class="flex">${r.pics.map((p) => pic(p)).join('')}</div>
         <div class="min-w-[180px]">
           <p class="text-sm font-extrabold">${r.name}</p>
@@ -823,7 +1694,7 @@
         </div>
         <p class="text-sm font-bold text-[#667085]">${r.items} items</p>
         <p class="text-sm font-extrabold">${money(r.total)}</p>
-        <button class="btn-add ml-auto" data-rep="${r.name}">Repeat Now</button>
+        <div class="repeat-cta ml-auto"><button class="btn-add" data-rep="${r.name}">Repeat Now</button></div>
       </article>`).join('');
     document.getElementById('repeatList').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-rep]');
@@ -831,31 +1702,45 @@
     });
 
     let LISTS = [
-      { name: 'Weekly Produce', n: 4, pics: ['tomato','onion'] },
-      { name: 'Dairy Staples', n: 5, pics: ['butter','cream'] },
-      { name: 'Meat & Poultry', n: 3, pics: ['chicken'] }
+      { name: 'Weekly Produce', n: 12, pics: ['tomato','cabbage','carrot'], tab: 'all' },
+      { name: 'Dairy Staples', n: 8, pics: ['butter','cream'], tab: 'all' },
+      { name: 'Meat & Poultry', n: 6, pics: ['chicken'], tab: 'all' },
+      { name: 'Basic Grocery', n: 14, pics: ['atta','rice'], tab: 'all' },
+      { name: 'Saved tomatoes', n: 3, pics: ['tomato'], tab: 'fav' }
     ];
+    let listTab = 'all';
     function renderLists() {
-      document.getElementById('listsGrid').innerHTML = LISTS.map((l) => `
+      const rows = LISTS.filter((l) => listTab === 'all' || l.tab === listTab);
+      document.getElementById('listsGrid').innerHTML = rows.map((l) => `
         <article class="card p-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-extrabold">${l.name}</h3>
-            <span class="text-xs font-bold text-[#98A2B3]">${l.n} items</span>
+          <div class="flex items-center gap-3">
+            <div class="flex">${l.pics.map((p) => pic(p)).join('')}</div>
+            <div class="min-w-0">
+              <h3 class="text-base font-extrabold">${l.name}</h3>
+              <p class="text-xs font-bold text-[#98A2B3]">${l.n} items</p>
+            </div>
           </div>
-          <div class="mt-3 flex">${l.pics.map((p) => pic(p)).join('')}</div>
           <div class="mt-4 flex gap-2">
             <button class="btn-ghost" data-openlist="${l.name}">View</button>
             <button class="btn-add" data-addlist="${l.name}">Add All</button>
           </div>
-        </article>`).join('');
+        </article>`).join('') || '<p class="text-sm font-semibold text-[#667085]">No lists in this view yet.</p>';
     }
     renderLists();
+    document.getElementById('listTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-ltab]');
+      if (!btn) return;
+      listTab = btn.getAttribute('data-ltab');
+      document.querySelectorAll('#listTabs .set-tab').forEach((t) => t.classList.toggle('is-on', t.getAttribute('data-ltab') === listTab));
+      renderLists();
+    });
     function openListModal() { document.getElementById('listName').value = ''; openModal('listModal'); showPanel('lists'); }
     document.getElementById('createListBtn').addEventListener('click', openListModal);
+    document.getElementById('createListBtnM').addEventListener('click', openListModal);
     document.getElementById('qaCreateList').addEventListener('click', openListModal);
     document.getElementById('listForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      LISTS.push({ name: document.getElementById('listName').value.trim(), n: 0, pics: ['tomato'] });
+      LISTS.push({ name: document.getElementById('listName').value.trim(), n: 0, pics: ['tomato'], tab: 'all' });
       closeModal('listModal');
       renderLists();
       toast('List saved');
@@ -880,23 +1765,32 @@
     function renderInv(tab) {
       document.querySelectorAll('#invTabs .set-tab').forEach((t) => t.classList.toggle('is-on', t.getAttribute('data-inv') === tab));
       const pane = document.getElementById('invPane');
+      const cards = document.getElementById('invCards');
       if (tab === 'payments') {
         pane.innerHTML = '<table class="line-table"><thead><tr><th>Payment #</th><th>Order #</th><th>Date</th><th>Method</th><th>Amount</th></tr></thead><tbody>' +
           PAYS.map((p) => '<tr><td>' + p.id + '</td><td>' + p.order + '</td><td>' + p.date + '</td><td>' + p.via + '</td><td>' + money(p.amt) + '</td></tr>').join('') + '</tbody></table>';
+        cards.innerHTML = PAYS.map((p) => '<article class="card p-4"><div class="flex items-start justify-between gap-3"><div><p class="text-sm font-extrabold">' + p.id + '</p><p class="mt-1 text-xs font-semibold text-[#98A2B3]">' + p.order + ' · ' + p.date + '</p></div><p class="text-sm font-extrabold">' + money(p.amt) + '</p></div><p class="mt-3 text-xs font-extrabold text-[#667085]">' + p.via + '</p></article>').join('');
         return;
       }
       if (tab === 'credit') {
-        pane.innerHTML = '<div class="grid gap-3 sm:grid-cols-2"><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Available credit</p><p class="mt-1 text-2xl font-extrabold">₹5,000</p></div><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Credit limit</p><p class="mt-1 text-2xl font-extrabold">₹25,000</p></div></div><p class="mt-4 text-sm font-semibold text-[#667085]">Outstanding on credit: ₹11,670 · Net 15</p>';
+        const credit = '<div class="grid gap-3 sm:grid-cols-2"><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Available credit</p><p class="mt-1 text-2xl font-extrabold">₹5,000</p></div><div class="rounded-2xl bg-fog p-4"><p class="text-sm font-semibold text-[#667085]">Credit limit</p><p class="mt-1 text-2xl font-extrabold">₹25,000</p></div></div><p class="mt-4 text-sm font-semibold text-[#667085]">Outstanding on credit: ₹11,670 · Net 15</p>';
+        pane.innerHTML = credit;
+        cards.innerHTML = '<article class="card p-4">' + credit + '</article>';
         return;
       }
       pane.innerHTML = '<table class="line-table"><thead><tr><th>Invoice #</th><th>Order #</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
         INVOICES.map((r) => '<tr><td class="font-extrabold">' + r.id + '</td><td>' + r.order + '</td><td>' + r.date + '</td><td>' + money(r.amt) + '</td><td>' + badge(r.status) + '</td><td><button class="inline-flex items-center gap-1 text-sm font-extrabold text-[#1570EF]" data-dl="' + r.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg> Download</button></td></tr>').join('') + '</tbody></table>';
+      cards.innerHTML = INVOICES.map((r) => '<article class="card p-4"><div class="flex items-start justify-between gap-3"><div><p class="text-sm font-extrabold">' + r.id + '</p><p class="mt-1 text-xs font-semibold text-[#98A2B3]">' + r.order + ' · ' + r.date + '</p></div>' + badge(r.status) + '</div><div class="mt-3 flex items-center justify-between"><p class="text-base font-extrabold">' + money(r.amt) + '</p><button class="text-sm font-extrabold text-[#1570EF]" data-dl="' + r.id + '">Download</button></div></article>').join('');
     }
     document.getElementById('invTabs').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-inv]');
       if (btn) renderInv(btn.getAttribute('data-inv'));
     });
     document.getElementById('invPane').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-dl]');
+      if (btn) toast(btn.getAttribute('data-dl') + ' downloaded');
+    });
+    document.getElementById('invCards').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-dl]');
       if (btn) toast(btn.getAttribute('data-dl') + ' downloaded');
     });
@@ -913,12 +1807,12 @@
       document.querySelectorAll('#delTabs .set-tab').forEach((t) => t.classList.toggle('is-on', t.getAttribute('data-del') === dtab));
       const list = DELS.filter((d) => dtab === 'all' || d.status === dtab);
       document.getElementById('delList').innerHTML = list.map((d) => `
-        <article class="card flex flex-wrap items-center gap-4 px-4 py-4">
+        <article class="card del-card flex flex-wrap items-center gap-4 px-4 py-4">
           <div class="min-w-[120px]"><p class="text-sm font-extrabold">${d.id}</p><p class="text-xs font-semibold text-[#98A2B3]">${d.loc}</p></div>
           ${badge(d.status)}
           <p class="text-sm font-bold text-[#667085]">ETA ${d.eta}</p>
           <p class="text-sm font-semibold text-[#98A2B3]">${d.driver}</p>
-          <button class="btn-add ml-auto" data-track="${d.id}">Track</button>
+          <div class="del-cta"><button class="btn-add ml-auto" data-track="${d.id}">Track</button></div>
         </article>`).join('');
     }
     document.getElementById('delTabs').addEventListener('click', (e) => {
@@ -946,9 +1840,18 @@
     ];
     function renderRet() {
       document.getElementById('retBody').innerHTML = RETS.map((r, i) => '<tr><td>' + (i + 1) + '</td><td class="font-extrabold">' + r.id + '</td><td>' + r.order + '</td><td>' + r.type + '</td><td>' + badge(r.status) + '</td><td>' + r.date + '</td><td><button class="text-sm font-extrabold text-[#1570EF]" data-rview="' + r.id + '">View</button></td></tr>').join('');
+      document.getElementById('retCards').innerHTML = RETS.map((r) => '<article class="card p-4"><div class="flex items-start justify-between gap-3"><div><p class="text-sm font-extrabold">' + r.id + '</p><p class="mt-1 text-xs font-semibold text-[#98A2B3]">' + r.type + ' · ' + r.order + '</p><p class="mt-1 text-xs font-semibold text-[#98A2B3]">' + r.date + '</p></div>' + badge(r.status) + '</div><button class="mt-3 text-sm font-extrabold text-[#1570EF]" data-rview="' + r.id + '">View</button></article>').join('');
     }
     renderRet();
     document.getElementById('retBody').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-rview]');
+      if (!btn) return;
+      const r = RETS.find((x) => x.id === btn.getAttribute('data-rview'));
+      document.getElementById('omTitle').textContent = r.id;
+      document.getElementById('omBody').innerHTML = '<p class="text-sm font-bold">' + r.type + ' · ' + r.order + '</p><p class="mt-2">' + badge(r.status) + '</p><p class="mt-3 text-sm font-medium text-[#667085]">Opened ' + r.date + '</p>';
+      openModal('orderModal');
+    });
+    document.getElementById('retCards').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-rview]');
       if (!btn) return;
       const r = RETS.find((x) => x.id === btn.getAttribute('data-rview'));

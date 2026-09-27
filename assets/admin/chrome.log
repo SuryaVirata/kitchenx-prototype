@@ -1,0 +1,5 @@
+[15708:21328:0918/172130.499:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:241] No machine level policy manager exists.
+[25108:1320:0918/172130.601:ERROR:ui\gl\direct_composition_support.cc:254] GetGpuDriverOverlayInfo: Failed to retrieve video device
+[15708:21328:0918/172130.629:WARNING:chrome\browser\extensions\external_registry_loader_win.cc:236] Error observing HKLM: Access is denied. (0x5)
+[6400:27012:0918/172131.025:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:181] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:231 to client_task_runner_.
+[6400:27012:0918/172131.025:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:181] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:231 to client_task_runner_.

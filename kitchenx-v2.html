@@ -59,7 +59,86 @@
     }
     .nav-link { color: #344054; font-size: 14px; font-weight: 600; }
     .nav-link:hover { color: var(--orange); }
-    .field:focus, .search:focus {
+    .loc-wrap { position: relative; flex-shrink: 0; }
+    .loc-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      max-width: 220px;
+      padding: 0 10px 0 8px;
+      border-radius: 999px;
+      background: #F2F4F7;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .loc-btn.has-loc { background: #FFF4F0; color: #141517; }
+    .loc-btn .loc-pin { color: #FF4F18; flex-shrink: 0; }
+    .loc-btn .loc-label { overflow: hidden; text-overflow: ellipsis; }
+    .loc-btn .loc-chev { color: #98A2B3; flex-shrink: 0; transition: transform 160ms ease; }
+    .loc-wrap.is-open .loc-chev { transform: rotate(180deg); }
+    .loc-drop {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      width: 280px;
+      padding: 8px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid #EEF0F3;
+      box-shadow: 0 18px 40px rgba(16, 24, 40, 0.12);
+      z-index: 70;
+    }
+    .loc-wrap.is-open .loc-drop { display: block; }
+    .loc-drop.is-inline {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .loc-detect, .loc-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #141517;
+      text-align: left;
+    }
+    .loc-detect { font-weight: 800; }
+    .loc-detect:hover, .loc-opt:hover { background: #F2F4F7; }
+    .loc-opt.is-on { background: #FFF4F0; }
+    .loc-opt .loc-check { margin-left: auto; color: #FF4F18; visibility: hidden; flex-shrink: 0; }
+    .loc-opt.is-on .loc-check { visibility: visible; }
+    .loc-search-wrap { position: relative; margin: 4px 0 6px; }
+    .loc-search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #98A2B3;
+      pointer-events: none;
+    }
+    .loc-search {
+      width: 100%;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #F2F4F7;
+      padding: 0 14px 0 36px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #141517;
+    }
+    .loc-hint { padding: 0 10px 6px; font-size: 11px; font-weight: 700; color: #F04438; }
+    .field:focus, .search:focus, .loc-search:focus {
       outline: none;
       border-color: rgba(255, 79, 24, 0.7);
       box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12);
@@ -79,8 +158,14 @@
       max-width: 1440px;
       margin-left: auto;
       margin-right: auto;
-      padding-left: 40px;
-      padding-right: 32px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    @media (min-width: 768px) {
+      .page-wrap {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
     }
     @media (min-width: 1280px) {
       .page-wrap {
@@ -88,16 +173,177 @@
         padding-right: 40px;
       }
     }
+    .social-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      width: 100%;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      color: #141517;
+      white-space: nowrap;
+    }
+    .social-btn svg { flex-shrink: 0; display: block; }
+    .social-btn:hover { border-color: #D0D5DD; background: #F2F4F7; }
+    .or-line {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      color: #98A2B3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .or-line::before, .or-line::after { content: ""; height: 1px; background: #E8ECF1; }
+    .choice {
+      display: flex;
+      min-height: 86px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      border: 1px solid #E4E7EC;
+      border-radius: 18px;
+      background: #F2F4F7;
+      padding: 14px;
+      text-align: left;
+    }
+    .choice.is-on {
+      border-color: #FF4F18;
+      background: #FFF4F0;
+      box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12);
+    }
+    .choice-ico { color: #FF4F18; }
+    .step-dot {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #F2F4F7;
+      color: #667085;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .step-dot.is-on { background: #FF4F18; color: #fff; }
+    .step-dot.is-done { background: #FFE8E0; color: #FF4F18; }
+    .outlet-chip {
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid #E4E7EC;
+      background: #F2F4F7;
+      font-size: 13px;
+      font-weight: 800;
+      color: #344054;
+    }
+    .outlet-chip.is-on { border-color: #FF4F18; background: #FFF4F0; color: #FF4F18; }
+    @media (max-width: 640px) {
+      #authOverlay { padding: 12px; align-items: flex-start; }
+      .auth-card { padding: 20px; }
+      h1 { word-break: break-word; }
+    }
+    .how-step {
+      padding: 14px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(20, 21, 23, 0.04);
+    }
+    @media (min-width: 1024px) {
+      .how-step {
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+    }
+    @media (max-width: 767px) {
+      #impactGrid:not(.is-open) .quote-2,
+      #impactGrid:not(.is-open) .quote-3 { display: none; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #impactGrid:not(.is-open) .quote-3 { display: none; }
+    }
+    @media (min-width: 1024px) {
+      #impactMore { display: none !important; }
+    }
+    #mobileMenu .loc-btn {
+      width: 100%;
+      max-width: none;
+      height: 44px;
+    }
+    #mobileMenu .m-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 12px;
+    }
+    #mobileMenu .m-nav a {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 4px;
+      color: #141517;
+      font-size: 14px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
   <header class="sticky top-0 z-50 border-b border-[#E8ECF1] bg-white/95 backdrop-blur-xl">
-    <div class="page-wrap flex h-[72px] items-center gap-6">
-      <a href="#top" class="shrink-0 text-[26px] font-extrabold tracking-tight text-coal">
+    <div class="page-wrap flex h-16 items-center gap-3 lg:h-[72px] lg:gap-6">
+      <a href="#top" class="shrink-0 text-[22px] font-extrabold tracking-tight text-coal lg:text-[26px]">
         Kitchen<span class="text-orange">X</span>
       </a>
+      <div class="loc-wrap hidden lg:block" data-loc-menu>
+        <button type="button" class="loc-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Select location">
+          <svg class="loc-pin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span class="loc-label">Select location</span>
+          <svg class="loc-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="loc-drop" role="listbox">
+          <button type="button" class="loc-detect">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            <span class="loc-detect-label">Detect my location</span>
+          </button>
+          <div class="loc-search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            <input class="loc-search" type="search" placeholder="Search city or area" autocomplete="off" />
+          </div>
+          <p class="loc-hint hidden"></p>
+          <button type="button" class="loc-opt" data-loc="Hyderabad, Telangana">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Hyderabad, Telangana</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Bengaluru, Karnataka">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Bengaluru, Karnataka</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Chennai, Tamil Nadu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Chennai, Tamil Nadu</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Mumbai, Maharashtra">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Mumbai, Maharashtra</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+        </div>
+      </div>
       <nav class="hidden items-center gap-7 lg:flex">
-        <a class="nav-link" href="#categories">Products</a>
+        <a class="nav-link" href="customer.html#catalogue">Products</a>
+        <a class="nav-link" href="customer.html#catalogue">Categories</a>
         <a class="nav-link" href="#businesses">For Business</a>
         <a class="nav-link" href="#how">How it Works</a>
         <a class="nav-link" href="#impact">About</a>
@@ -114,24 +360,66 @@
           <a href="#signup" data-auth-open="signup" class="rounded-full bg-orange px-5 py-2.5 text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)] hover:brightness-95">Create Account</a>
         </div>
       </div>
-      <button id="menuBtn" class="ml-auto grid h-11 w-11 place-items-center rounded-xl border border-[#E4E7EC] bg-white lg:hidden" aria-label="Open menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <button id="menuBtn" class="ml-auto grid h-11 w-11 place-items-center rounded-xl border border-[#E4E7EC] bg-white lg:hidden" aria-label="Open menu" aria-expanded="false">
+        <svg class="menu-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="menu-icon-close hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
     <div id="mobileMenu" class="hidden border-t border-[#E8ECF1] bg-white px-4 py-4 lg:hidden">
-      <label class="relative mb-4 block">
+      <label class="relative mb-3 block">
         <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
         </span>
         <input class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search products, categories..." />
       </label>
-      <div class="grid gap-3 text-sm font-bold">
-        <a href="#categories">Products</a>
+      <div class="loc-wrap mb-3" data-loc-menu>
+        <button type="button" class="loc-btn justify-start" aria-haspopup="listbox" aria-expanded="false" aria-label="Select location">
+          <svg class="loc-pin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span class="loc-label">Select location</span>
+          <svg class="loc-chev ml-auto" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="loc-drop is-inline" role="listbox">
+          <button type="button" class="loc-detect">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            <span class="loc-detect-label">Detect my location</span>
+          </button>
+          <div class="loc-search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            <input class="loc-search" type="search" placeholder="Search city or area" autocomplete="off" />
+          </div>
+          <p class="loc-hint hidden"></p>
+          <button type="button" class="loc-opt" data-loc="Hyderabad, Telangana">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Hyderabad, Telangana</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Bengaluru, Karnataka">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Bengaluru, Karnataka</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Chennai, Tamil Nadu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Chennai, Tamil Nadu</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+          <button type="button" class="loc-opt" data-loc="Mumbai, Maharashtra">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Mumbai, Maharashtra</span>
+            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
+          </button>
+        </div>
+      </div>
+      <nav class="m-nav">
+        <a href="customer.html#catalogue">Products</a>
+        <a href="customer.html#catalogue">Categories</a>
         <a href="#businesses">For Business</a>
         <a href="#how">How it Works</a>
         <a href="#impact">About</a>
-        <a href="#login" data-auth-open="login" class="pt-2">Login</a>
-        <a href="#signup" data-auth-open="signup" class="rounded-full bg-orange px-5 py-3 text-center text-white">Create Account</a>
+      </nav>
+      <div class="mt-4 flex items-center gap-3">
+        <a href="#login" data-auth-open="login" class="px-3 py-2.5 text-sm font-bold text-coal">Login</a>
+        <a href="#signup" data-auth-open="signup" class="flex-1 rounded-full bg-orange px-5 py-3 text-center text-sm font-extrabold text-white">Create Account</a>
       </div>
     </div>
   </header>
@@ -145,26 +433,26 @@
         <img data-hero="desktop" class="hero-slide absolute inset-0 h-full w-full object-cover object-center" src="assets/home/hero-4.png" alt="KitchenX warehouse fulfilment" />
       </div>
 
-      <div class="page-wrap relative grid items-center py-10 xl:min-h-[640px] xl:grid-cols-[520px_1fr] xl:py-16">
+      <div class="page-wrap relative grid items-center py-7 sm:py-10 xl:min-h-[640px] xl:grid-cols-[520px_1fr] xl:py-16">
         <div class="relative z-10 max-w-[520px]">
           <p class="text-[11px] font-extrabold uppercase tracking-[0.22em] text-orange">Foodservice supply made simple</p>
-          <h1 class="mt-4 text-[40px] font-extrabold leading-[1.05] tracking-tight text-coal sm:text-5xl xl:text-[58px]">
+          <h1 class="mt-3 text-[32px] font-extrabold leading-[1.08] tracking-tight text-coal sm:mt-4 sm:text-5xl xl:text-[58px]">
             Everything your kitchen needs.
             <span class="block text-orange">Delivered reliably.</span>
           </h1>
-          <p class="mt-5 max-w-[440px] text-base font-medium leading-relaxed text-[#475467] sm:text-lg">
+          <p class="mt-4 max-w-[440px] text-[15px] font-medium leading-relaxed text-[#475467] sm:mt-5 sm:text-lg">
             Quality ingredients, packaging and kitchen essentials for restaurants, cafes, hotels, cloud kitchens and caterers.
           </p>
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div class="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <a href="#signup" data-auth-open="signup" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)] hover:brightness-95">
               Create your business account
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
-            <a href="#categories" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal hover:border-orange hover:text-orange">
+            <a href="customer.html#catalogue" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal hover:border-orange hover:text-orange">
               Explore products
             </a>
           </div>
-          <div class="mt-8 flex flex-col gap-3 text-sm font-semibold text-[#475467] sm:flex-row sm:gap-6">
+          <div class="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-[#475467] sm:mt-8 sm:gap-6">
             <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>Better prices</div>
             <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>Trusted quality</div>
             <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-orange"></span>On-time delivery</div>
@@ -183,42 +471,42 @@
       <div id="heroDots" class="relative z-10 flex justify-center gap-2 pb-6 xl:absolute xl:bottom-6 xl:left-1/2 xl:hidden xl:-translate-x-1/2"></div>
     </section>
 
-    <section class="page-wrap py-8 lg:py-10">
-      <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-        <div class="flex items-center gap-4">
-          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+    <section class="page-wrap py-6 sm:py-8 lg:py-10">
+      <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+        <div class="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
           </div>
           <div>
-            <div class="text-2xl font-extrabold tracking-tight">10K+</div>
-            <div class="text-xs font-semibold text-[#667085]">Food businesses trust us</div>
+            <div class="text-xl font-extrabold tracking-tight sm:text-2xl">10K+</div>
+            <div class="text-[11px] font-semibold leading-snug text-[#667085] sm:text-xs">Food businesses trust us</div>
           </div>
         </div>
-        <div class="flex items-center gap-4">
-          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+        <div class="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           </div>
           <div>
-            <div class="text-2xl font-extrabold tracking-tight">500+</div>
-            <div class="text-xs font-semibold text-[#667085]">Quality brands</div>
+            <div class="text-xl font-extrabold tracking-tight sm:text-2xl">500+</div>
+            <div class="text-[11px] font-semibold leading-snug text-[#667085] sm:text-xs">Quality brands</div>
           </div>
         </div>
-        <div class="flex items-center gap-4">
-          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+        <div class="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
           </div>
           <div>
-            <div class="text-2xl font-extrabold tracking-tight">20+</div>
-            <div class="text-xs font-semibold text-[#667085]">Cities (and growing)</div>
+            <div class="text-xl font-extrabold tracking-tight sm:text-2xl">20+</div>
+            <div class="text-[11px] font-semibold leading-snug text-[#667085] sm:text-xs">Cities (and growing)</div>
           </div>
         </div>
-        <div class="flex items-center gap-4">
-          <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange/10 text-orange">
+        <div class="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           </div>
           <div>
-            <div class="text-2xl font-extrabold tracking-tight">99%</div>
-            <div class="text-xs font-semibold text-[#667085]">On-time delivery rate</div>
+            <div class="text-xl font-extrabold tracking-tight sm:text-2xl">99%</div>
+            <div class="text-[11px] font-semibold leading-snug text-[#667085] sm:text-xs">On-time delivery rate</div>
           </div>
         </div>
       </div>
@@ -228,41 +516,41 @@
       <div class="flex items-end justify-between gap-4">
         <div>
           <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Shop by category</p>
-          <h2 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Popular categories</h2>
+          <h2 class="mt-1 text-[26px] font-extrabold tracking-tight sm:text-4xl">Popular categories</h2>
         </div>
         <a href="#grow" class="hidden text-sm font-extrabold text-orange sm:inline-flex">View all categories →</a>
       </div>
       <div class="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/produce.jpg" alt="Fresh produce" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/produce.jpg" alt="Fresh produce" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Fresh Produce</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/dairy.jpg" alt="Dairy and eggs" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/dairy.jpg" alt="Dairy and eggs" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Dairy &amp; Eggs</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/meat.jpg" alt="Meat, poultry and seafood" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/meat.jpg" alt="Meat, poultry and seafood" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Meat, Poultry &amp; Seafood</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/grains.jpg" alt="Staples and grains" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/grains.jpg" alt="Staples and grains" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Staples &amp; Grains</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/packaging.jpg" alt="Packaging" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/packaging.jpg" alt="Packaging" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Packaging</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/beverages.jpg" alt="Beverages" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/beverages.jpg" alt="Beverages" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Beverages</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/appliances.jpg" alt="Kitchen appliances" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/appliances.jpg" alt="Kitchen appliances" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Kitchen Appliances</h3>
         </article>
         <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <img class="h-24 w-full rounded-2xl object-cover" src="assets/home/cats/cleaning.jpg" alt="Cleaning and hygiene" />
+          <img class="h-20 w-full rounded-2xl object-cover sm:h-24" src="assets/home/cats/cleaning.jpg" alt="Cleaning and hygiene" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Cleaning &amp; Hygiene</h3>
         </article>
       </div>
@@ -273,31 +561,31 @@
       <div class="grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-end">
         <div>
           <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">How KitchenX works</p>
-          <h2 class="mt-2 max-w-md text-4xl font-extrabold leading-[1.12] tracking-tight">
+          <h2 class="mt-2 max-w-md text-[28px] font-extrabold leading-[1.15] tracking-tight sm:text-4xl">
             From sourcing to your kitchen.
             <span class="text-orange">In four simple steps.</span>
           </h2>
         </div>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <article>
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">1</div>
-            <h3 class="mt-4 text-lg font-extrabold">Discover</h3>
-            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Find what your kitchen needs from 10,000+ products.</p>
+        <div class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+          <article class="how-step">
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">1</div>
+            <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">Discover</h3>
+            <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Find what your kitchen needs from 10,000+ products.</p>
           </article>
-          <article>
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">2</div>
-            <h3 class="mt-4 text-lg font-extrabold">Order</h3>
-            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Get the best prices and flexible payment options.</p>
+          <article class="how-step">
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">2</div>
+            <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">Order</h3>
+            <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Get the best prices and flexible payment options.</p>
           </article>
-          <article>
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">3</div>
-            <h3 class="mt-4 text-lg font-extrabold">We prepare</h3>
-            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">Quality checks and careful handling.</p>
+          <article class="how-step">
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">3</div>
+            <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">We prepare</h3>
+            <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Quality checks and careful handling.</p>
           </article>
-          <article>
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange">4</div>
-            <h3 class="mt-4 text-lg font-extrabold">We deliver</h3>
-            <p class="mt-2 text-sm font-medium leading-relaxed text-[#667085]">On time, every time.</p>
+          <article class="how-step">
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">4</div>
+            <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">We deliver</h3>
+            <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">On time, every time.</p>
           </article>
         </div>
       </div>
@@ -310,9 +598,9 @@
     <section id="supply" class="page-wrap py-6 lg:py-10">
       <div class="relative overflow-hidden rounded-[32px] bg-coal text-white">
         <img class="pointer-events-none hidden h-full min-h-[440px] w-full object-cover object-center lg:block" src="assets/home/supply.png" alt="Chef plating a dish for service" />
-        <div class="relative z-10 p-8 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[38%] lg:flex-col lg:justify-center lg:bg-transparent lg:p-14">
+        <div class="relative z-10 p-6 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[38%] lg:flex-col lg:justify-center lg:bg-transparent lg:p-14">
           <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-orange">Supplying a stronger food tomorrow</p>
-          <h2 class="mt-5 max-w-md text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">Reliable supply for a growing food industry.</h2>
+          <h2 class="mt-4 max-w-md text-[26px] font-extrabold leading-tight tracking-tight sm:mt-5 sm:text-4xl">Reliable supply for a growing food industry.</h2>
           <p class="mt-5 max-w-md text-base font-medium leading-relaxed text-white/70">
             We work with farmers, manufacturers and trusted partners to make high-quality food more accessible to every food business across India.
           </p>
@@ -325,43 +613,43 @@
     <section id="businesses" class="page-wrap py-10 lg:py-14">
       <div class="text-center">
         <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Built for every food business</p>
-        <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Different kitchens. Same trusted partner.</h2>
+        <h2 class="mt-2 text-[26px] font-extrabold tracking-tight sm:text-4xl">Different kitchens. Same trusted partner.</h2>
       </div>
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+      <div class="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-4 md:grid-cols-3 lg:grid-cols-5">
+        <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4z"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
           </div>
-          <h3 class="mt-5 text-lg font-extrabold">Restaurants</h3>
-          <p class="mt-2 text-sm font-medium text-[#667085]">Consistent supply for daily operations.</p>
+          <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Restaurants</h3>
+          <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Consistent supply for daily operations.</p>
         </article>
-        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+        <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M9 19v-5h6v5"/></svg>
           </div>
-          <h3 class="mt-5 text-lg font-extrabold">Cafes</h3>
-          <p class="mt-2 text-sm font-medium text-[#667085]">Ingredients, beverages and more.</p>
+          <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Cafes</h3>
+          <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Ingredients, beverages and more.</p>
         </article>
-        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+        <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M10 21v-6h4v6"/></svg>
           </div>
-          <h3 class="mt-5 text-lg font-extrabold">Hotels</h3>
-          <p class="mt-2 text-sm font-medium text-[#667085]">Large volumes, reliable sourcing.</p>
+          <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Hotels</h3>
+          <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Large volumes, reliable sourcing.</p>
         </article>
-        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+        <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
           </div>
-          <h3 class="mt-5 text-lg font-extrabold">Cloud Kitchens</h3>
-          <p class="mt-2 text-sm font-medium text-[#667085]">Built for speed, scale and repeat orders.</p>
+          <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Cloud Kitchens</h3>
+          <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Built for speed, scale and repeat orders.</p>
         </article>
-        <article class="rounded-[24px] bg-white p-6 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:col-span-2 lg:col-span-1">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange/10 text-orange">
+        <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6 md:col-span-1 lg:col-span-1">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11a4 4 0 1 1 8 0"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/><path d="M12 11V4"/><path d="M9 7h6"/></svg>
           </div>
-          <h3 class="mt-5 text-lg font-extrabold">Caterers</h3>
-          <p class="mt-2 text-sm font-medium text-[#667085]">Everything for every occasion.</p>
+          <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Caterers</h3>
+          <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Everything for every occasion.</p>
         </article>
       </div>
     </section>
@@ -369,12 +657,12 @@
     <section id="impact" class="page-wrap py-8 lg:py-12">
       <div>
         <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Trusted by food businesses</p>
-        <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Real businesses. Real impact.</h2>
+        <h2 class="mt-2 text-[26px] font-extrabold tracking-tight sm:text-4xl">Real businesses. Real impact.</h2>
       </div>
-      <div class="mt-8 grid gap-4 lg:grid-cols-3">
-        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <p class="text-lg font-bold leading-relaxed text-[#344054]">“KitchenX has simplified our procurement. Great quality and always on time.”</p>
-          <div class="mt-8 flex items-center justify-between gap-3">
+      <div id="impactGrid" class="mt-6 grid gap-4 sm:mt-8 md:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-[24px] bg-white p-6 shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:p-7">
+          <p class="text-base font-bold leading-relaxed text-[#344054] sm:text-lg">“KitchenX has simplified our procurement. Great quality and always on time.”</p>
+          <div class="mt-6 flex items-center justify-between gap-3 sm:mt-8">
             <div class="flex items-center gap-3">
               <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="" />
               <div>
@@ -385,9 +673,9 @@
             <div class="text-right text-xs font-extrabold uppercase tracking-wider text-[#98A2B3]">Cafe<br/>Basil</div>
           </div>
         </article>
-        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <p class="text-lg font-bold leading-relaxed text-[#344054]">“Reliable supply and competitive pricing. It helps us focus on what we do best — food.”</p>
-          <div class="mt-8 flex items-center justify-between gap-3">
+        <article class="quote-2 rounded-[24px] bg-white p-6 shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:p-7">
+          <p class="text-base font-bold leading-relaxed text-[#344054] sm:text-lg">“Reliable supply and competitive pricing. It helps us focus on what we do best — food.”</p>
+          <div class="mt-6 flex items-center justify-between gap-3 sm:mt-8">
             <div class="flex items-center gap-3">
               <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80" alt="" />
               <div>
@@ -398,9 +686,9 @@
             <div class="text-right text-xs font-extrabold uppercase tracking-wider text-[#98A2B3]">Hotel<br/>Crest</div>
           </div>
         </article>
-        <article class="rounded-[24px] bg-white p-7 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
-          <p class="text-lg font-bold leading-relaxed text-[#344054]">“A partner we can count on, especially during peak seasons.”</p>
-          <div class="mt-8 flex items-center justify-between gap-3">
+        <article class="quote-3 rounded-[24px] bg-white p-6 shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:p-7">
+          <p class="text-base font-bold leading-relaxed text-[#344054] sm:text-lg">“A partner we can count on, especially during peak seasons.”</p>
+          <div class="mt-6 flex items-center justify-between gap-3 sm:mt-8">
             <div class="flex items-center gap-3">
               <img class="h-11 w-11 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="" />
               <div>
@@ -412,14 +700,18 @@
           </div>
         </article>
       </div>
+      <button type="button" id="impactMore" class="mt-5 inline-flex items-center gap-1 text-sm font-extrabold text-orange lg:hidden">
+        See more
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </section>
 
     <section id="grow" class="page-wrap pb-16">
       <div class="relative overflow-hidden rounded-[32px] bg-[#FFF4EF]">
         <img class="pointer-events-none hidden min-h-[340px] w-full object-cover object-center lg:block" src="assets/home/cta.png" alt="Packaging and produce for growing food businesses" />
-        <div class="relative z-10 p-8 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[46%] lg:flex-col lg:justify-center lg:p-14">
+        <div class="relative z-10 p-6 sm:p-12 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[46%] lg:flex-col lg:justify-center lg:p-14">
           <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-orange">Let’s build a stronger food ecosystem</p>
-          <h2 class="mt-3 max-w-md text-3xl font-extrabold tracking-tight sm:text-4xl">Ready to grow your food business?</h2>
+          <h2 class="mt-3 max-w-md text-[26px] font-extrabold tracking-tight sm:text-4xl">Ready to grow your food business?</h2>
           <p class="mt-3 max-w-xl text-base font-medium leading-relaxed text-[#475467]">
             Join thousands of restaurants, cafes, hotels and cloud kitchens that trust KitchenX for quality, reliability and better margins.
           </p>
@@ -455,9 +747,9 @@
         <div>
           <h4 class="font-extrabold">Products</h4>
           <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
-            <a class="block hover:text-white" href="#categories">All Products</a>
-            <a class="block hover:text-white" href="#categories">Categories</a>
-            <a class="block hover:text-white" href="#categories">Brands</a>
+            <a class="block hover:text-white" href="customer.html#catalogue">All Products</a>
+            <a class="block hover:text-white" href="customer.html#catalogue">Categories</a>
+            <a class="block hover:text-white" href="customer.html#catalogue">Brands</a>
             <a class="block hover:text-white" href="#grow">Deals</a>
           </div>
         </div>
@@ -509,14 +801,14 @@
     </div>
   </footer>
 
-  <div id="authOverlay" class="fixed inset-0 z-[80] items-start justify-center overflow-y-auto px-4 py-10 sm:items-center">
+  <div id="authOverlay" class="fixed inset-0 z-[80] items-start justify-center overflow-y-auto px-4 py-6 sm:items-center sm:py-10">
     <button type="button" id="authBackdrop" class="absolute inset-0 bg-[#F2F4F7]/55 backdrop-blur-[10px]" aria-label="Close"></button>
-    <div class="relative z-10 mx-auto w-full max-w-[440px]">
-      <button type="button" id="authBack" class="mb-3 grid h-10 w-10 place-items-center rounded-full border border-[#E4E7EC] bg-white/90 text-coal shadow-sm" aria-label="Close">
+    <div class="relative z-10 mx-auto w-full max-w-[480px]">
+      <button type="button" id="authBack" class="mb-3 grid h-10 w-10 place-items-center rounded-full border border-[#E4E7EC] bg-white/90 text-coal shadow-sm" aria-label="Back">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
       </button>
 
-      <div class="rounded-[28px] border border-[#E8ECF1] bg-white p-6 shadow-[0_18px_50px_rgba(20,21,23,0.12)] sm:p-8">
+      <div class="auth-card rounded-[28px] border border-[#E8ECF1] bg-white p-6 shadow-[0_18px_50px_rgba(20,21,23,0.12)] sm:p-8">
         <div id="authLogin">
           <div id="loginMain">
             <h2 class="text-2xl font-extrabold tracking-tight">Login</h2>
@@ -542,6 +834,24 @@
               <p id="formError" class="hidden text-sm font-bold text-orange"></p>
               <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Login</button>
             </form>
+            <div id="customerSocial" class="mt-5 grid gap-3">
+              <p class="or-line">or</p>
+              <div class="social-row">
+                <button type="button" class="social-btn" data-social="login-google">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  Continue with Google
+                </button>
+                <button type="button" class="social-btn" data-social="login-facebook">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.5 0-1.96.93-1.96 1.89v2.26h3.34l-.53 3.49h-2.81V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
+                  Continue with Facebook
+                </button>
+              </div>
+            </div>
             <div id="customerExtras" class="mt-4 flex flex-wrap justify-between gap-2 text-sm font-bold">
               <button type="button" id="forgotUserBtn" class="text-[#667085] hover:text-orange">Forgot username</button>
               <button type="button" id="forgotPassBtn" class="text-[#667085] hover:text-orange">Forgot password</button>
@@ -571,7 +881,25 @@
           <div id="signupStep">
             <h2 class="text-2xl font-extrabold tracking-tight">Create an account</h2>
             <p class="mt-1 text-sm font-medium text-[#667085]">For restaurants, cafes, hotels, cloud kitchens and caterers.</p>
-            <form id="signupForm" class="mt-6 grid gap-4" autocomplete="off">
+            <div class="mt-6 grid gap-3">
+              <div class="social-row">
+                <button type="button" class="social-btn" data-social="signup-google">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  Continue with Google
+                </button>
+                <button type="button" class="social-btn" data-social="signup-facebook">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.5 0-1.96.93-1.96 1.89v2.26h3.34l-.53 3.49h-2.81V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
+                  Continue with Facebook
+                </button>
+              </div>
+              <p class="or-line">or</p>
+            </div>
+            <form id="signupForm" class="mt-1 grid gap-4" autocomplete="off">
               <label class="grid gap-1.5">
                 <span class="text-sm font-bold">Organization name</span>
                 <input id="orgInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter organization name" />
@@ -611,6 +939,114 @@
             <p id="otpTimer" class="mt-4 text-sm font-bold text-[#667085]">Resend OTP in 60s</p>
             <button type="button" id="resendBtn" class="mt-1 hidden text-sm font-extrabold text-orange" disabled>Resend OTP</button>
             <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white">Confirm</button>
+          </div>
+          <div id="setupStep" class="hidden">
+            <div class="mb-5 flex items-center gap-2">
+              <span class="step-dot is-on" data-setup-dot="1">1</span>
+              <span class="h-px flex-1 bg-[#E8ECF1]"></span>
+              <span class="step-dot" data-setup-dot="2">2</span>
+              <span class="h-px flex-1 bg-[#E8ECF1]"></span>
+              <span class="step-dot" data-setup-dot="3">3</span>
+            </div>
+            <div id="setupType">
+              <h2 class="text-2xl font-extrabold tracking-tight">What type of business do you run?</h2>
+              <p class="mt-1 text-sm font-medium text-[#667085]">This helps us show the right products and prices.</p>
+              <div id="typeGrid" class="mt-5 grid grid-cols-2 gap-3">
+                <button type="button" class="choice" data-type="Restaurant">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4z"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                  <span class="text-sm font-extrabold">Restaurant</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">Dine-in kitchen</span>
+                </button>
+                <button type="button" class="choice" data-type="Cafe">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M9 19v-5h6v5"/></svg>
+                  <span class="text-sm font-extrabold">Cafe</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">Cafe / coffee shop</span>
+                </button>
+                <button type="button" class="choice" data-type="Hotel">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M10 21v-6h4v6"/></svg>
+                  <span class="text-sm font-extrabold">Hotel</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">Hotel / resort</span>
+                </button>
+                <button type="button" class="choice" data-type="Cloud Kitchen">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
+                  <span class="text-sm font-extrabold">Cloud Kitchen</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">Delivery-only</span>
+                </button>
+                <button type="button" class="choice" data-type="Caterer">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11a4 4 0 1 1 8 0"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/><path d="M12 11V4"/><path d="M9 7h6"/></svg>
+                  <span class="text-sm font-extrabold">Caterer</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">Events and bulk</span>
+                </button>
+                <button type="button" class="choice" data-type="Other">
+                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                  <span class="text-sm font-extrabold">Other</span>
+                  <span class="text-[11px] font-semibold text-[#667085]">QSR, bakery, canteen</span>
+                </button>
+              </div>
+              <p id="typeError" class="mt-3 hidden text-sm font-bold text-orange">Select a business type to continue.</p>
+              <button type="button" id="typeNext" class="mt-5 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
+            </div>
+            <div id="setupNeeds" class="hidden">
+              <h2 class="text-2xl font-extrabold tracking-tight">What do you need for your business?</h2>
+              <p class="mt-1 text-sm font-medium text-[#667085]">Select all that you usually buy. You can change this later.</p>
+              <div id="needGrid" class="mt-5 grid grid-cols-2 gap-3">
+                <button type="button" class="choice" data-need="Fresh Produce"><span class="text-sm font-extrabold">Fresh Produce</span><span class="text-[11px] font-semibold text-[#667085]">Fruits and vegetables</span></button>
+                <button type="button" class="choice" data-need="Dairy & Eggs"><span class="text-sm font-extrabold">Dairy &amp; Eggs</span><span class="text-[11px] font-semibold text-[#667085]">Milk, butter, cream</span></button>
+                <button type="button" class="choice" data-need="Meat, Poultry & Seafood"><span class="text-sm font-extrabold">Meat &amp; Seafood</span><span class="text-[11px] font-semibold text-[#667085]">Poultry, meat, fish</span></button>
+                <button type="button" class="choice" data-need="Staples & Grains"><span class="text-sm font-extrabold">Staples &amp; Grains</span><span class="text-[11px] font-semibold text-[#667085]">Rice, flour, oil</span></button>
+                <button type="button" class="choice" data-need="Beverages"><span class="text-sm font-extrabold">Beverages</span><span class="text-[11px] font-semibold text-[#667085]">Tea, coffee, drinks</span></button>
+                <button type="button" class="choice" data-need="Packaging"><span class="text-sm font-extrabold">Packaging</span><span class="text-[11px] font-semibold text-[#667085]">Boxes, bags, wraps</span></button>
+                <button type="button" class="choice" data-need="Kitchen Appliances"><span class="text-sm font-extrabold">Kitchen Equipment</span><span class="text-[11px] font-semibold text-[#667085]">Tools and appliances</span></button>
+                <button type="button" class="choice" data-need="Cleaning & Hygiene"><span class="text-sm font-extrabold">Cleaning &amp; Hygiene</span><span class="text-[11px] font-semibold text-[#667085]">Kitchen sanitation</span></button>
+              </div>
+              <p id="needError" class="mt-3 hidden text-sm font-bold text-orange">Select at least one category.</p>
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <button type="button" id="needBack" class="h-12 rounded-full border border-[#E4E7EC] text-sm font-extrabold text-coal">Back</button>
+                <button type="button" id="needNext" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
+              </div>
+            </div>
+            <div id="setupLocation" class="hidden">
+              <h2 class="text-2xl font-extrabold tracking-tight">Where is your business located?</h2>
+              <p class="mt-1 text-sm font-medium text-[#667085]">We use this for delivery slots and serviceable areas.</p>
+              <div class="mt-5 grid gap-4">
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold">City</span>
+                  <select id="cityInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold">
+                    <option value="">Select city</option>
+                    <option>Delhi</option>
+                    <option>Mumbai</option>
+                    <option>Bengaluru</option>
+                    <option>Hyderabad</option>
+                    <option>Chennai</option>
+                    <option>Pune</option>
+                    <option>Kolkata</option>
+                    <option>Jaipur</option>
+                    <option>Ahmedabad</option>
+                  </select>
+                </label>
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold">Area / Pincode</span>
+                  <input id="areaInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Area or pincode" />
+                </label>
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold">Business address</span>
+                  <input id="addrInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Street, building, kitchen name" />
+                </label>
+                <div>
+                  <span class="text-sm font-bold">Number of outlets</span>
+                  <div id="outletGrid" class="mt-2 grid grid-cols-3 gap-2">
+                    <button type="button" class="outlet-chip is-on" data-outlets="1">1</button>
+                    <button type="button" class="outlet-chip" data-outlets="2-5">2–5</button>
+                    <button type="button" class="outlet-chip" data-outlets="6+">6+</button>
+                  </div>
+                </div>
+              </div>
+              <p id="locError" class="mt-3 hidden text-sm font-bold text-orange">Enter city and area or pincode.</p>
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <button type="button" id="locBack" class="h-12 rounded-full border border-[#E4E7EC] text-sm font-extrabold text-coal">Back</button>
+                <button type="button" id="locNext" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Finish setup</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -660,12 +1096,161 @@
       if (e.target.closest('[data-slide]')) restartTimer();
     });
 
+    function setMobileMenuOpen(open) {
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.getElementById('menuBtn');
+      menu.classList.toggle('hidden', !open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      btn.querySelector('.menu-icon-open').classList.toggle('hidden', open);
+      btn.querySelector('.menu-icon-close').classList.toggle('hidden', !open);
+    }
+
     document.getElementById('menuBtn').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
+      const isOpen = !document.getElementById('mobileMenu').classList.contains('hidden');
+      setMobileMenuOpen(!isOpen);
     });
     document.querySelectorAll('#mobileMenu a').forEach((link) => {
-      link.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
+      link.addEventListener('click', () => setMobileMenuOpen(false));
     });
+
+    const impactGrid = document.getElementById('impactGrid');
+    const impactMore = document.getElementById('impactMore');
+    if (impactGrid && impactMore) {
+      impactMore.addEventListener('click', () => {
+        const open = impactGrid.classList.toggle('is-open');
+        impactMore.innerHTML = open
+          ? 'See less <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>'
+          : 'See more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>';
+      });
+    }
+
+    const NAV_CITIES = [
+      { label: 'Hyderabad, Telangana', lat: 17.385, lng: 78.487 },
+      { label: 'Bengaluru, Karnataka', lat: 12.972, lng: 77.595 },
+      { label: 'Chennai, Tamil Nadu', lat: 13.083, lng: 80.271 },
+      { label: 'Mumbai, Maharashtra', lat: 19.076, lng: 72.878 }
+    ];
+    const locMenus = [...document.querySelectorAll('[data-loc-menu]')];
+
+    function closeLocMenus(except) {
+      locMenus.forEach((wrap) => {
+        if (wrap === except) return;
+        wrap.classList.remove('is-open');
+        const btn = wrap.querySelector('.loc-btn');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    function setNavLocation(label) {
+      const next = label || '';
+      if (next) sessionStorage.setItem('kxNavLocation', next);
+      else sessionStorage.removeItem('kxNavLocation');
+      document.querySelectorAll('.loc-label').forEach((el) => {
+        el.textContent = next || 'Select location';
+      });
+      document.querySelectorAll('.loc-btn').forEach((el) => {
+        el.classList.toggle('has-loc', Boolean(next));
+        el.setAttribute('aria-label', next || 'Select location');
+      });
+      document.querySelectorAll('.loc-opt').forEach((el) => {
+        el.classList.toggle('is-on', el.getAttribute('data-loc') === next);
+      });
+    }
+
+    function filterLocOptions(wrap, query) {
+      const q = (query || '').trim().toLowerCase();
+      wrap.querySelectorAll('.loc-opt').forEach((el) => {
+        const text = (el.getAttribute('data-loc') || '').toLowerCase();
+        el.classList.toggle('hidden', Boolean(q) && !text.includes(q));
+      });
+    }
+
+    function nearestCity(lat, lng) {
+      let best = NAV_CITIES[0];
+      let bestDist = Infinity;
+      NAV_CITIES.forEach((city) => {
+        const dLat = city.lat - lat;
+        const dLng = city.lng - lng;
+        const dist = dLat * dLat + dLng * dLng;
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = city;
+        }
+      });
+      return best.label;
+    }
+
+    locMenus.forEach((wrap) => {
+      const btn = wrap.querySelector('.loc-btn');
+      const search = wrap.querySelector('.loc-search');
+      const hint = wrap.querySelector('.loc-hint');
+      const detect = wrap.querySelector('.loc-detect');
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = !wrap.classList.contains('is-open');
+        closeLocMenus(open ? wrap : null);
+        wrap.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open && search) {
+          search.value = '';
+          filterLocOptions(wrap, '');
+          if (hint) hint.classList.add('hidden');
+          search.focus();
+        }
+      });
+
+      wrap.addEventListener('click', (e) => e.stopPropagation());
+
+      if (search) {
+        search.addEventListener('input', () => filterLocOptions(wrap, search.value));
+      }
+
+      wrap.querySelectorAll('.loc-opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          setNavLocation(opt.getAttribute('data-loc'));
+          closeLocMenus();
+        });
+      });
+
+      if (detect) {
+        const detectLabel = detect.querySelector('.loc-detect-label');
+        detect.addEventListener('click', () => {
+          if (!navigator.geolocation) {
+            if (hint) {
+              hint.textContent = 'Location is not available in this browser.';
+              hint.classList.remove('hidden');
+            }
+            return;
+          }
+          if (detectLabel) detectLabel.textContent = 'Detecting...';
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              setNavLocation(nearestCity(pos.coords.latitude, pos.coords.longitude));
+              if (detectLabel) detectLabel.textContent = 'Detect my location';
+              closeLocMenus();
+            },
+            () => {
+              if (detectLabel) detectLabel.textContent = 'Detect my location';
+              if (hint) {
+                hint.textContent = 'Could not detect location. Choose a city.';
+                hint.classList.remove('hidden');
+              }
+            },
+            { enableHighAccuracy: false, timeout: 8000, maximumAge: 0 }
+          );
+        });
+      }
+    });
+
+    document.addEventListener('click', () => closeLocMenus());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLocMenus();
+    });
+
+    const savedNavLoc = sessionStorage.getItem('kxNavLocation') || '';
+    setNavLocation(savedNavLoc);
     document.getElementById('newsletter').addEventListener('submit', (e) => {
       e.preventDefault();
       e.target.reset();
@@ -677,7 +1262,8 @@
     const authLogin = document.getElementById('authLogin');
     const authSignup = document.getElementById('authSignup');
     let loginMode = 'customer';
-    let pending = { org: '', email: '' };
+    let pending = { org: '', email: '', type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
+    let setupIndex = 0;
     let otpSeconds = 60;
     let otpTimer = null;
     const eyeOpen = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -686,14 +1272,16 @@
     function openAuth(kind) {
       overlay.classList.add('is-open');
       document.body.classList.add('auth-open');
-      document.getElementById('mobileMenu').classList.add('hidden');
+      setMobileMenuOpen(false);
       document.getElementById('forgotPanel').classList.add('hidden');
       document.getElementById('loginMain').classList.remove('hidden');
+      setupIndex = 0;
       if (kind === 'signup') {
         authLogin.classList.add('hidden');
         authSignup.classList.remove('hidden');
         document.getElementById('signupStep').classList.remove('hidden');
         document.getElementById('otpStep').classList.add('hidden');
+        document.getElementById('setupStep').classList.add('hidden');
       } else {
         authSignup.classList.add('hidden');
         authLogin.classList.remove('hidden');
@@ -716,6 +1304,7 @@
       document.getElementById('tabCustomer').className = next === 'customer' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
       document.getElementById('tabAdmin').className = next === 'admin' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
       document.getElementById('customerExtras').classList.toggle('hidden', next === 'admin');
+      document.getElementById('customerSocial').classList.toggle('hidden', next === 'admin');
       document.getElementById('createWrap').classList.toggle('hidden', next === 'admin');
       document.getElementById('formError').classList.add('hidden');
       document.getElementById('userInput').value = '';
@@ -729,7 +1318,29 @@
       });
     });
     document.getElementById('authBackdrop').addEventListener('click', closeAuth);
-    document.getElementById('authBack').addEventListener('click', closeAuth);
+    document.getElementById('authBack').addEventListener('click', () => {
+      if (!document.getElementById('setupStep').classList.contains('hidden') && setupIndex > 1) {
+        showSetup(setupIndex - 1);
+        return;
+      }
+      if (!document.getElementById('setupStep').classList.contains('hidden')) {
+        document.getElementById('setupStep').classList.add('hidden');
+        document.getElementById('signupStep').classList.remove('hidden');
+        setupIndex = 0;
+        return;
+      }
+      if (!document.getElementById('otpStep').classList.contains('hidden')) {
+        document.getElementById('otpStep').classList.add('hidden');
+        document.getElementById('signupStep').classList.remove('hidden');
+        clearInterval(otpTimer);
+        return;
+      }
+      if (!document.getElementById('forgotPanel').classList.contains('hidden')) {
+        showLoginMain();
+        return;
+      }
+      closeAuth();
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeAuth();
     });
@@ -859,10 +1470,104 @@
       startOtpTimer();
     });
     document.getElementById('confirmOtp').addEventListener('click', () => {
+      showSetup(1);
+    });
+
+    function finishSetup() {
       sessionStorage.setItem('kxRole', 'customer');
       sessionStorage.setItem('kxUser', pending.email);
       sessionStorage.setItem('kxOrg', pending.org);
+      sessionStorage.setItem('kxBizType', pending.type);
+      sessionStorage.setItem('kxNeeds', pending.needs.join('|'));
+      sessionStorage.setItem('kxCity', pending.city);
+      sessionStorage.setItem('kxArea', pending.area);
+      sessionStorage.setItem('kxAddress', pending.address);
+      sessionStorage.setItem('kxOutlets', pending.outlets);
+      const loc = [pending.address || pending.org, pending.area, pending.city].filter(Boolean).join(', ');
+      sessionStorage.setItem('kxLocation', loc);
       window.location.href = 'customer.html';
+    }
+
+    function showSetup(n) {
+      setupIndex = n;
+      document.getElementById('signupStep').classList.add('hidden');
+      document.getElementById('otpStep').classList.add('hidden');
+      document.getElementById('setupStep').classList.remove('hidden');
+      document.getElementById('setupType').classList.toggle('hidden', n !== 1);
+      document.getElementById('setupNeeds').classList.toggle('hidden', n !== 2);
+      document.getElementById('setupLocation').classList.toggle('hidden', n !== 3);
+      document.querySelectorAll('[data-setup-dot]').forEach((dot) => {
+        const i = Number(dot.getAttribute('data-setup-dot'));
+        dot.classList.toggle('is-on', i === n);
+        dot.classList.toggle('is-done', i < n);
+      });
+    }
+
+    document.querySelectorAll('[data-social]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const kind = btn.getAttribute('data-social');
+        const via = kind.includes('google') ? 'Google' : 'Facebook';
+        if (kind.startsWith('login')) {
+          if (loginMode === 'admin') return;
+          sessionStorage.setItem('kxRole', 'customer');
+          sessionStorage.setItem('kxUser', via + ' account');
+          sessionStorage.setItem('kxOrg', sessionStorage.getItem('kxOrg') || 'Your kitchen');
+          window.location.href = 'customer.html';
+          return;
+        }
+        const org = document.getElementById('orgInput').value.trim() || 'Your kitchen';
+        const email = document.getElementById('emailInput').value.trim() || via.toLowerCase() + '-account';
+        pending = { org, email, type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
+        showSetup(1);
+      });
+    });
+
+    document.getElementById('typeGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-type]');
+      if (!btn) return;
+      document.querySelectorAll('#typeGrid .choice').forEach((el) => el.classList.toggle('is-on', el === btn));
+      pending.type = btn.getAttribute('data-type');
+      document.getElementById('typeError').classList.add('hidden');
+    });
+    document.getElementById('typeNext').addEventListener('click', () => {
+      if (!pending.type) {
+        document.getElementById('typeError').classList.remove('hidden');
+        return;
+      }
+      showSetup(2);
+    });
+    document.getElementById('needGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-need]');
+      if (!btn) return;
+      btn.classList.toggle('is-on');
+      pending.needs = [...document.querySelectorAll('#needGrid .choice.is-on')].map((el) => el.getAttribute('data-need'));
+      document.getElementById('needError').classList.add('hidden');
+    });
+    document.getElementById('needBack').addEventListener('click', () => showSetup(1));
+    document.getElementById('needNext').addEventListener('click', () => {
+      if (!pending.needs.length) {
+        document.getElementById('needError').classList.remove('hidden');
+        return;
+      }
+      showSetup(3);
+    });
+    document.getElementById('outletGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-outlets]');
+      if (!btn) return;
+      document.querySelectorAll('#outletGrid .outlet-chip').forEach((el) => el.classList.toggle('is-on', el === btn));
+      pending.outlets = btn.getAttribute('data-outlets');
+    });
+    document.getElementById('locBack').addEventListener('click', () => showSetup(2));
+    document.getElementById('locNext').addEventListener('click', () => {
+      pending.city = document.getElementById('cityInput').value;
+      pending.area = document.getElementById('areaInput').value.trim();
+      pending.address = document.getElementById('addrInput').value.trim();
+      const locError = document.getElementById('locError');
+      if (!pending.city || !pending.area) {
+        locError.classList.remove('hidden');
+        return;
+      }
+      finishSetup();
     });
 
     if (location.hash === '#login') openAuth('login');
