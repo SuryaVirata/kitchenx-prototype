@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -193,6 +193,83 @@
         padding-right: 40px;
       }
     }
+    #categories,
+    #products {
+      scroll-margin-top: 80px;
+    }
+    @media (min-width: 1200px) {
+      #categories,
+      #products {
+        scroll-margin-top: 88px;
+      }
+    }
+    .pub-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .pub-grid > :nth-child(n+5) { display: none; }
+    @media (min-width: 768px) {
+      .pub-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .pub-grid > :nth-child(n+5) { display: block; }
+      .pub-grid > :nth-child(n+7) { display: none; }
+    }
+    @media (min-width: 1200px) {
+      .pub-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .pub-grid > :nth-child(n+5),
+      .pub-grid > :nth-child(n+7) { display: block; }
+    }
+    .pub-prod {
+      display: block;
+      border-radius: 22px;
+      background: #fff;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(20, 21, 23, 0.05);
+      color: inherit;
+      text-decoration: none;
+    }
+    .pub-card,
+    .pub-prod {
+      position: relative;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .pub-card:hover,
+      .pub-prod:hover {
+        z-index: 2;
+        transform: translateY(-6px);
+        box-shadow: 0 16px 36px rgba(20, 21, 23, 0.12);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pub-card,
+      .pub-prod { transition: none; }
+      .pub-card:hover,
+      .pub-prod:hover { transform: none; }
+    }
+    .pub-prod-art {
+      display: flex;
+      height: 112px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 16px;
+      background: #F7F8FA;
+    }
+    .pub-prod-art img {
+      max-height: 86%;
+      max-width: 86%;
+      object-fit: contain;
+    }
+    @media (min-width: 768px) {
+      .pub-prod-art { height: 96px; }
+    }
     .social-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -342,16 +419,16 @@
       height: 40px;
       padding: 0 22px;
       border-radius: 999px;
-      border: 2px solid #FF4F18;
+      border: 1px solid #E4E7EC;
       background: #fff;
-      color: #FF4F18;
+      color: #141517;
       font-size: 14px;
       font-weight: 800;
       line-height: 1;
       white-space: nowrap;
       flex: 0 0 auto;
     }
-    .btn-login:hover { background: #FFF4F0; }
+    .btn-login:hover { background: #F2F4F7; }
     #mobileMenu .btn-login {
       height: 42px;
       padding: 0 16px;
@@ -559,6 +636,27 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: #FF4F18;
+      width: fit-content;
+      max-width: 100%;
+      background-image: linear-gradient(105deg, #FF4F18 0 46%, #FFD2C4 50%, #FF4F18 54% 100%);
+      background-size: 280% 100%;
+      background-position: 120% 50%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: kx-eyebrow-shine 5s ease-in-out 0s infinite;
+    }
+    @keyframes kx-eyebrow-shine {
+      0% { background-position: 120% 50%; }
+      48% { background-position: -20% 50%; }
+      48.01%, 100% { background-position: 120% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kx-hero-eyebrow {
+        animation: none;
+        background-image: none;
+        -webkit-text-fill-color: #FF4F18;
+      }
     }
     .kx-hero-title {
       margin-top: 12px;
@@ -570,7 +668,7 @@
     }
     .kx-hero-title span {
       display: block;
-      color: #FF4F18;
+      color: #141517;
     }
     .kx-hero-lead {
       margin-top: 14px;
@@ -613,9 +711,9 @@
       width: 40px;
       height: 40px;
       border-radius: 999px;
-      background: #FFF4F0;
-      color: #FF4F18;
-      box-shadow: inset 0 0 0 1.5px rgba(255, 79, 24, 0.22);
+      background: #F2F4F7;
+      color: #141517;
+      box-shadow: none;
     }
     .kx-hero-bdot { display: none; }
     @media (max-width: 767px) {
@@ -692,7 +790,7 @@
         height: 8px;
         flex-shrink: 0;
         border-radius: 999px;
-        background: #FF4F18;
+        background: #141517;
       }
     }
 
@@ -762,8 +860,8 @@
         </div>
       </div>
       <nav class="hidden items-center gap-4 min-[1200px]:flex min-[1440px]:gap-7">
-        <a class="nav-link" href="customer.html#catalogue">Products</a>
-        <a class="nav-link" href="customer.html#catalogue">Categories</a>
+        <a class="nav-link" href="#products" data-home-nav="products">Products</a>
+        <a class="nav-link" href="#categories" data-home-nav="categories">Categories</a>
         <a class="nav-link" href="#businesses">For Business</a>
         <a class="nav-link" href="#how">How it Works</a>
         <a class="nav-link" href="#impact">About</a>
@@ -814,8 +912,8 @@
         <input class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search products, categories..." />
       </label>
       <nav class="m-nav">
-        <a href="customer.html#catalogue">Products</a>
-        <a href="customer.html#catalogue">Categories</a>
+        <a href="#products" data-home-nav="products">Products</a>
+        <a href="#categories" data-home-nav="categories">Categories</a>
         <a href="#businesses">For Business</a>
         <a href="#how">How it Works</a>
         <a href="#impact">About</a>
@@ -852,7 +950,7 @@
                 Create your business account
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
-              <a href="customer.html#catalogue" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal hover:border-orange hover:text-orange">
+              <a href="#products" data-home-nav="products" class="inline-flex items-center justify-center rounded-full border border-[#E4E7EC] bg-white px-6 py-3.5 text-sm font-extrabold text-coal hover:border-[#141517]">
                 Explore products
               </a>
             </div>
@@ -887,7 +985,7 @@
     <section class="page-wrap py-6 md:py-8 min-[1200px]:py-10">
       <div class="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-6 min-[1200px]:grid-cols-4">
         <div class="flex items-start gap-3 sm:items-center sm:gap-4">
-          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
           </div>
           <div>
@@ -896,7 +994,7 @@
           </div>
         </div>
         <div class="flex items-start gap-3 sm:items-center sm:gap-4">
-          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           </div>
           <div>
@@ -905,7 +1003,7 @@
           </div>
         </div>
         <div class="flex items-start gap-3 sm:items-center sm:gap-4">
-          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
           </div>
           <div>
@@ -914,7 +1012,7 @@
           </div>
         </div>
         <div class="flex items-start gap-3 sm:items-center sm:gap-4">
-          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           </div>
           <div>
@@ -931,43 +1029,88 @@
           <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Shop by category</p>
           <h2 class="mt-1 text-[26px] font-extrabold tracking-tight md:text-4xl">Popular categories</h2>
         </div>
-        <a href="customer.html#catalogue" class="hidden text-sm font-extrabold text-orange md:inline-flex">View all categories →</a>
+        <a href="customer.html#catalogue" data-need-login class="hidden text-sm font-extrabold text-coal md:inline-flex">View all categories →</a>
       </div>
       <div class="mt-7 grid grid-cols-2 gap-3 min-[900px]:grid-cols-4 min-[1200px]:grid-cols-8">
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/produce.jpg" alt="Fresh produce" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Fresh Produce</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/dairy.jpg" alt="Dairy and eggs" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Dairy &amp; Eggs</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/meat.jpg" alt="Meat, poultry and seafood" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Meat, Poultry &amp; Seafood</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/grains.jpg" alt="Staples and grains" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Staples &amp; Grains</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/packaging.jpg" alt="Packaging" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Packaging</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/beverages.jpg" alt="Beverages" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Beverages</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/appliances.jpg" alt="Kitchen appliances" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Kitchen Appliances</h3>
         </article>
-        <article class="rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
+        <article class="pub-card rounded-[22px] bg-white p-3 shadow-[0_8px_24px_rgba(20,21,23,0.05)]">
           <img class="h-28 w-full rounded-2xl object-cover md:h-24" src="assets/home/cats/cleaning.jpg" alt="Cleaning and hygiene" />
           <h3 class="mt-3 text-center text-sm font-extrabold">Cleaning &amp; Hygiene</h3>
         </article>
       </div>
-      <a href="customer.html#catalogue" class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-orange md:hidden">View all categories →</a>
+      <a href="customer.html#catalogue" data-need-login class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">View all categories →</a>
+    </section>
+
+    <section id="products" class="page-wrap pb-8 lg:pb-12">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Shop essentials</p>
+          <h2 class="mt-1 text-[26px] font-extrabold tracking-tight md:text-4xl">Popular products</h2>
+        </div>
+        <a href="customer.html#catalogue" data-need-login class="hidden text-sm font-extrabold text-coal md:inline-flex">View all products →</a>
+      </div>
+      <div class="pub-grid mt-7">
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/tomato.png" alt="Tomatoes" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Tomatoes</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/onion.png" alt="Onions" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Onions</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/potato.png" alt="Potatoes" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Potatoes</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/carrot.png" alt="Carrots" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Carrots</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/capsicum.png" alt="Capsicum" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Capsicum</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/cucumber.png" alt="Cucumber" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Cucumber</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/cabbage.png" alt="Cabbage" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Cabbage</h3>
+        </a>
+        <a href="customer.html#catalogue" data-need-login class="pub-prod">
+          <div class="pub-prod-art"><img src="assets/customer/products/lemon.png" alt="Lemon" /></div>
+          <h3 class="mt-3 text-center text-sm font-extrabold">Lemon</h3>
+        </a>
+      </div>
+      <a href="customer.html#catalogue" data-need-login class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">View all products →</a>
     </section>
 
     <section id="how" class="page-wrap py-8 min-[1200px]:py-14">
@@ -976,34 +1119,34 @@
           <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">How KitchenX works</p>
           <h2 class="mt-2 max-w-md text-[28px] font-extrabold leading-[1.15] tracking-tight md:text-4xl">
             From sourcing to your kitchen.
-            <span class="text-orange">In four simple steps.</span>
+            <span>In four simple steps.</span>
           </h2>
         </div>
         <div class="grid grid-cols-2 items-start gap-3 md:gap-6 min-[1200px]:grid-cols-4">
           <article class="how-step">
-            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">1</div>
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-[#F2F4F7] text-sm font-extrabold text-coal sm:h-9 sm:w-9">1</div>
             <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">Discover</h3>
             <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Find what your kitchen needs from 10,000+ products.</p>
           </article>
           <article class="how-step">
-            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">2</div>
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-[#F2F4F7] text-sm font-extrabold text-coal sm:h-9 sm:w-9">2</div>
             <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">Order</h3>
             <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Get the best prices and flexible payment options.</p>
           </article>
           <article class="how-step">
-            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">3</div>
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-[#F2F4F7] text-sm font-extrabold text-coal sm:h-9 sm:w-9">3</div>
             <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">We prepare</h3>
             <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">Quality checks and careful handling.</p>
           </article>
           <article class="how-step">
-            <div class="grid h-8 w-8 place-items-center rounded-full bg-orange/10 text-sm font-extrabold text-orange sm:h-9 sm:w-9">4</div>
+            <div class="grid h-8 w-8 place-items-center rounded-full bg-[#F2F4F7] text-sm font-extrabold text-coal sm:h-9 sm:w-9">4</div>
             <h3 class="mt-3 text-base font-extrabold sm:mt-4 sm:text-lg">We deliver</h3>
             <p class="mt-1.5 text-[13px] font-medium leading-relaxed text-[#667085] sm:mt-2 sm:text-sm">On time, every time.</p>
           </article>
         </div>
       </div>
       <div class="mt-8 flex flex-col gap-3 md:flex-row">
-        <a href="#supply" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)]">See how it works →</a>
+        <a href="#supply" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#E4E7EC] bg-white px-6 py-3.5 text-sm font-extrabold text-coal">See how it works →</a>
         <a href="#supply" class="inline-flex items-center justify-center rounded-full border border-[#D0D5DD] bg-white px-6 py-3.5 text-sm font-extrabold text-coal">Watch our story (1 min)</a>
       </div>
     </section>
@@ -1012,12 +1155,12 @@
       <div class="relative overflow-hidden rounded-[32px] bg-coal text-white">
         <img class="pointer-events-none hidden h-full min-h-[440px] w-full object-cover object-center min-[1200px]:block" src="assets/home/supply.png" alt="Chef plating a dish for service" />
         <div class="relative z-10 p-6 md:p-12 min-[1200px]:absolute min-[1200px]:inset-y-0 min-[1200px]:left-0 min-[1200px]:flex min-[1200px]:w-[38%] min-[1200px]:flex-col min-[1200px]:justify-center min-[1200px]:bg-transparent min-[1200px]:p-14">
-          <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-orange">Supplying a stronger food tomorrow</p>
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/55">Supplying a stronger food tomorrow</p>
           <h2 class="mt-4 max-w-md text-[26px] font-extrabold leading-tight tracking-tight md:mt-5 md:text-4xl">Reliable supply for a growing food industry.</h2>
           <p class="mt-5 max-w-md text-base font-medium leading-relaxed text-white/70">
             We work with farmers, manufacturers and trusted partners to make high-quality food more accessible to every food business across India.
           </p>
-          <a href="#grow" class="mt-8 inline-flex w-max items-center text-sm font-extrabold text-white hover:text-orange">Learn more →</a>
+          <a href="#grow" class="mt-8 inline-flex w-max items-center text-sm font-extrabold text-white hover:text-white/80">Learn more →</a>
         </div>
         <img class="h-64 w-full object-cover object-[72%_center] md:h-80 min-[1200px]:hidden" src="assets/home/supply.png" alt="Chef plating a dish for service" />
       </div>
@@ -1030,35 +1173,35 @@
       </div>
       <div class="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:gap-4 min-[1200px]:grid-cols-5">
         <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
-          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4z"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
           </div>
           <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Restaurants</h3>
           <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Consistent supply for daily operations.</p>
         </article>
         <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
-          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M9 19v-5h6v5"/></svg>
           </div>
           <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Cafes</h3>
           <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Ingredients, beverages and more.</p>
         </article>
         <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
-          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M10 21v-6h4v6"/></svg>
           </div>
           <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Hotels</h3>
           <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Large volumes, reliable sourcing.</p>
         </article>
         <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6">
-          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
           </div>
           <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Cloud Kitchens</h3>
           <p class="mt-1.5 text-[12px] font-medium leading-snug text-[#667085] sm:mt-2 sm:text-sm">Built for speed, scale and repeat orders.</p>
         </article>
         <article class="rounded-[20px] bg-white p-4 text-center shadow-[0_8px_24px_rgba(20,21,23,0.05)] sm:rounded-[24px] sm:p-6 md:col-span-1 lg:col-span-1">
-          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-orange/10 text-orange sm:h-12 sm:w-12">
+          <div class="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-[#F2F4F7] text-coal sm:h-12 sm:w-12">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11a4 4 0 1 1 8 0"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/><path d="M12 11V4"/><path d="M9 7h6"/></svg>
           </div>
           <h3 class="mt-3 text-[15px] font-extrabold sm:mt-5 sm:text-lg">Caterers</h3>
@@ -1113,7 +1256,7 @@
           </div>
         </article>
       </div>
-      <button type="button" id="impactMore" class="mt-5 inline-flex min-h-11 items-center gap-1 text-sm font-extrabold text-orange min-[1200px]:hidden">
+      <button type="button" id="impactMore" class="mt-5 inline-flex min-h-11 items-center gap-1 text-sm font-extrabold text-coal min-[1200px]:hidden">
         See more
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
       </button>
@@ -1123,7 +1266,7 @@
       <div class="relative overflow-hidden rounded-[32px] bg-[#FFF4EF]">
         <img class="pointer-events-none hidden min-h-[340px] w-full object-cover object-center min-[1200px]:block" src="assets/home/cta.png" alt="Packaging and produce for growing food businesses" />
         <div class="relative z-10 p-6 md:p-12 min-[1200px]:absolute min-[1200px]:inset-y-0 min-[1200px]:left-0 min-[1200px]:flex min-[1200px]:w-[46%] min-[1200px]:flex-col min-[1200px]:justify-center min-[1200px]:p-14">
-          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-orange">Let’s build a stronger food ecosystem</p>
+          <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">Let’s build a stronger food ecosystem</p>
           <h2 class="mt-3 max-w-md text-[26px] font-extrabold tracking-tight md:text-4xl">Ready to grow your food business?</h2>
           <p class="mt-3 max-w-xl text-base font-medium leading-relaxed text-[#475467]">
             Join thousands of restaurants, cafes, hotels and cloud kitchens that trust KitchenX for quality, reliability and better margins.
@@ -1160,9 +1303,9 @@
         <div>
           <h4 class="font-extrabold">Products</h4>
           <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
-            <a class="block hover:text-white" href="customer.html#catalogue">All Products</a>
-            <a class="block hover:text-white" href="customer.html#catalogue">Categories</a>
-            <a class="block hover:text-white" href="customer.html#catalogue">Brands</a>
+            <a class="block hover:text-white" href="#products" data-home-nav="products">All Products</a>
+            <a class="block hover:text-white" href="#categories" data-home-nav="categories">Categories</a>
+            <a class="block hover:text-white" href="customer.html#catalogue" data-need-login>Brands</a>
             <a class="block hover:text-white" href="#grow">Deals</a>
           </div>
         </div>
@@ -1541,7 +1684,23 @@
       setMobileMenuOpen(false);
       setHdrSearchOpen(open);
     });
+    function isCustomerLoggedIn() {
+      return sessionStorage.getItem('kxRole') === 'customer' && !!sessionStorage.getItem('kxUser');
+    }
+    function goCatalogue() {
+      location.href = 'customer.html#catalogue';
+    }
+    function goHomeSection(id) {
+      setMobileMenuOpen(false);
+      setHdrSearchOpen(false);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     function goCatalogueSearch(q) {
+      if (!isCustomerLoggedIn()) {
+        openAuth('login');
+        return;
+      }
       const query = (q || '').trim();
       location.href = query ? ('customer.html#catalogue?q=' + encodeURIComponent(query)) : 'customer.html#catalogue';
     }
@@ -1773,6 +1932,23 @@
         openAuth(el.getAttribute('data-auth-open'));
       });
     });
+    document.querySelectorAll('[data-home-nav]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isCustomerLoggedIn()) goCatalogue();
+        else goHomeSection(el.getAttribute('data-home-nav'));
+      });
+    });
+    document.querySelectorAll('[data-need-login]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isCustomerLoggedIn()) goCatalogue();
+        else openAuth('login');
+      });
+    });
+    if (location.hash === '#categories' || location.hash === '#products') {
+      requestAnimationFrame(() => goHomeSection(location.hash.slice(1)));
+    }
     document.getElementById('authBackdrop').addEventListener('click', closeAuth);
     document.getElementById('authBack').addEventListener('click', () => {
       if (!document.getElementById('setupStep').classList.contains('hidden') && setupIndex > 1) {
