@@ -31,6 +31,7 @@
     aside.collapsed .nav-btn { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 8px; margin-right: 8px; width: calc(100% - 16px); }
     aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
     .brand-mark { display: none; }
+    .brand-sub { display: none !important; }
     .collapse-fab {
       position: absolute;
       top: 26px;
@@ -149,15 +150,16 @@
     }
     .prod-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; }
     .prod-media { position: relative; background: #fff; }
-    .prod-body { padding: 12px 14px 14px; display: flex; flex-direction: column; flex: 1; }
+    .prod-body { padding: 14px 18px 16px; display: flex; flex-direction: column; flex: 1; }
     .prod-name { margin: 0; font-size: 14px; font-weight: 800; line-height: 1.3; color: #141517; }
     .prod-brand { margin: 2px 0 0; font-size: 12px; font-weight: 600; color: #98A2B3; }
     .prod-pack { margin: 2px 0 0; font-size: 12px; font-weight: 600; color: #667085; }
-    .prod-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; }
-    .prod-price-col { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 1px; }
+    .prod-deal-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 8px; }
+    .prod-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 6px; }
+    .prod-price-col { min-width: 0; display: flex; align-items: center; }
     .prod-now { margin: 0; font-size: 14px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
     .prod-mrp { margin: 0; font-size: 12px; font-weight: 700; color: #98A2B3; text-decoration: line-through; white-space: nowrap; }
-    .prod-off { margin: 1px 0 0; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .prod-off { margin: 0; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
     .prod-cta {
       position: relative;
       flex: 0 0 auto;
@@ -289,24 +291,44 @@
     }
     .flash-unit b { font-size: 16px; font-weight: 800; color: #FF4F18; line-height: 1; }
     .flash-unit span { font-size: 9px; font-weight: 800; color: #98A2B3; letter-spacing: .04em; text-transform: uppercase; }
-    .flash-art {
-      display: none;
-      height: 88px;
-      justify-content: flex-end;
-      align-items: center;
+    .flash-credit {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 800;
+      color: #344054;
     }
-    .flash-art img { height: 80px; width: auto; object-fit: contain; }
+    .flash-credit b { color: #FF4F18; }
+    .flash-pay { min-width: 0; }
+    .flash-stock {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #344054;
+      line-height: 1.35;
+    }
+    .flash-pay-note {
+      margin: 2px 0 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: #667085;
+      line-height: 1.35;
+    }
+    .flash-clock-compact { display: none; font-variant-numeric: tabular-nums; }
+    .flash-cta-short { display: none; }
     @media (min-width: 640px) {
       .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
+    @media (min-width: 1024px) {
+      .flash-banner {
+        grid-template-columns: auto auto 1fr auto;
+        gap: 16px 18px;
+        padding: 12px 18px;
+        align-items: center;
+      }
+      .flash-credit { justify-self: stretch; }
+    }
     @media (min-width: 1280px) {
       .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-      .flash-banner {
-        grid-template-columns: auto auto 1fr auto auto;
-        gap: 18px;
-        padding: 12px 16px 12px 18px;
-      }
-      .flash-art { display: flex; }
     }
     .prod-img { height: 148px; display: grid; place-items: center; background: #fff; padding: 8px 16px 4px; }
     .prod-img img { max-height: 132px; max-width: 100%; width: auto; height: auto; object-fit: contain; }
@@ -322,6 +344,107 @@
     #toast.show { display: block; }
     .modal-scrim { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; background: rgba(20,21,23,.35); padding: 20px; }
     .modal-scrim.show { display: grid; }
+    .pdp-desk { display: none; }
+    [data-view="catalogue"].is-pdp > :not(#pdpDesk) { display: none !important; }
+    [data-view="catalogue"].is-pdp #pdpDesk { display: block !important; }
+    .pdp-desk-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .pdp-gallery { display: grid; gap: 12px; min-width: 0; }
+    .pdp-desk-art {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      padding: 20px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #EEF0F3;
+    }
+    .pdp-desk-art img {
+      max-height: 220px;
+      max-width: 86%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .pdp-thumbs { display: none; }
+    .pdp-thumbs.has-many {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .pdp-thumbs.has-many::-webkit-scrollbar { display: none; }
+    .pdp-thumb {
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      padding: 6px;
+      border: 1px solid #E4E7EC;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .pdp-thumb img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .pdp-thumb.is-on { border-color: #FF4F18; box-shadow: 0 0 0 2px rgba(255,79,24,0.16); }
+    .pdp-copy { min-width: 0; }
+    .pdp-buy { display: flex; align-items: center; gap: 12px; }
+    .pdp-buy .btn-save { flex: 1 1 auto; }
+    .pdp-similar { margin-top: 24px; }
+    .pdp-similar h2 { margin: 0 0 12px; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; }
+    .pdp-similar-grid { width: 100%; }
+    @media (max-width: 767px) {
+      .pdp-desk { padding-bottom: 12px; }
+      .pdp-desk-layout { gap: 14px; }
+      .pdp-desk-art { min-height: 132px; padding: 8px; }
+      .pdp-desk-art img { max-height: 116px; }
+      .pdp-thumb { flex-basis: 48px; width: 48px; height: 48px; }
+      .pdp-eta { display: none; }
+      .pdp-buy {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .pdp-buy .btn-save { width: 100%; flex: none; height: 44px; }
+      .pdp-similar { margin-top: 18px; }
+      .pdp-similar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .pdp-similar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+    }
+    @media (min-width: 1024px) {
+      .pdp-desk-layout {
+        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+        gap: 28px 40px;
+      }
+      .pdp-gallery {
+        grid-template-columns: 64px minmax(0, 1fr);
+        align-items: start;
+        gap: 12px;
+      }
+      .pdp-desk-art { grid-column: 2; grid-row: 1; min-height: 320px; padding: 24px; }
+      .pdp-desk-art img { max-height: 280px; }
+      .pdp-thumbs.has-many {
+        grid-column: 1;
+        grid-row: 1;
+        flex-direction: column;
+        overflow: visible;
+      }
+      .pdp-buy .btn-save { flex: 0 0 158px; width: 158px; }
+      .pdp-similar-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+    }
     .help-btn { height: 40px; border-radius: 12px; background: #FFF1EC; color: #FF4F18; font-size: 13px; font-weight: 800; }
     .loc-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 280px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
     .loc-wrap.open .loc-menu { display: block; }
@@ -404,7 +527,86 @@
     .hdr-loc-compact { display: none; }
     .hdr-start { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 0 0 auto; }
     .hdr-end { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .hdr-mark { display: none; width: 28px; height: 28px; place-items: center; flex: 0 0 auto; }
+    .hdr-icon {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      color: inherit;
+    }
+    .hdr-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #FF4F18;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 16px;
+      text-align: center;
+    }
+    .bell-dot {
+      position: absolute;
+      top: 6px;
+      right: 7px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #FF4F18;
+      animation: kx-bell-dot 1.6s ease-in-out infinite;
+    }
+    @keyframes kx-bell-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .wish-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 30;
+      width: min(300px, calc(100vw - 24px));
+      max-height: 360px;
+      overflow: auto;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(20,21,23,.12);
+    }
+    .wish-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 4px;
+      border-radius: 12px;
+      text-align: left;
+      background: transparent;
+    }
+    .wish-row:hover { background: #F7F8FA; }
+    .wish-row img { width: 40px; height: 40px; object-fit: contain; }
+    @media (max-width: 1023px) {
+      .hdr-mark { display: grid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bell-dot { animation: none; }
+    }
     .hdr-search { min-width: 0; flex: 1 1 auto; }
+    @media (min-width: 1024px) {
+      header.topbar { flex-wrap: nowrap; }
+      .hdr-search {
+        flex: 0 0 320px;
+        width: 320px;
+        max-width: 320px;
+        margin-left: auto;
+      }
+    }
     #sideClose, .m-profile, .m-logout, .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create, .nav-settings { display: none !important; }
     #catCount { display: none !important; }
     .m-order-shortcuts { display: none !important; }
@@ -487,29 +689,57 @@
       .prod-body {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto auto minmax(0, 1fr);
-        grid-template-areas: "name name" "brand brand" "pack pack" "price plus";
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-areas: "name name" "brand brand" "pack pack" "deal deal" "price plus";
         gap: 2px 8px;
-        padding: 12px 12px 14px;
+        padding: 14px 16px 16px;
         align-items: end;
         flex: 1;
       }
       .prod-name { grid-area: name; font-size: 13px; line-height: 1.25; padding-right: 2px; }
       .prod-brand { grid-area: brand; font-size: 11px; margin: 0; }
       .prod-pack { grid-area: pack; font-size: 11px; margin: 0; }
+      .prod-deal-line { grid-area: deal; margin-top: 4px; align-self: end; }
       .prod-foot { display: contents; }
-      .prod-price-col { grid-area: price; align-self: end; padding-top: 6px; }
-      .prod-cta { grid-area: plus; margin-top: 6px; align-self: end; width: 84px; height: 30px; }
+      .prod-price-col { grid-area: price; align-self: end; padding-top: 4px; }
+      .prod-cta { grid-area: plus; margin-top: 4px; align-self: end; width: 84px; height: 30px; }
       .oos-note, .oos-sub { display: none; }
       .heart { width: 28px; height: 28px; top: 8px; right: 8px; box-shadow: 0 2px 8px rgba(20,21,23,.08); }
       .heart svg { width: 14px; height: 14px; }
       .deal-badge { top: 8px; left: 8px; min-height: 22px; font-size: 10px; }
-      .flash-banner { padding: 12px; border-radius: 18px; gap: 10px; }
-      .flash-banner .btn-save {
-        width: 100%;
-        height: 40px;
+      .flash-banner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 10px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        margin-bottom: 12px;
       }
-      .flash-unit { min-width: 40px; height: 40px; }
+      .flash-sub { display: none; }
+      .flash-ends, .flash-unit { display: none; }
+      .flash-clock-compact {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 800;
+        color: #FF4F18;
+        letter-spacing: 0.02em;
+      }
+      .flash-credit { font-size: 11px; white-space: normal; }
+      .flash-stock { display: none; }
+      .flash-pay-note { font-size: 10px; }
+      .flash-cta-full { display: none; }
+      .flash-cta-short { display: inline; }
+      .flash-banner .flash-cta {
+        width: auto;
+        height: auto;
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        color: #FF4F18;
+        font-size: 13px;
+      }
       .line-table { min-width: 0; }
       .table-desk { display: none !important; }
       .stack-m { display: grid !important; }
@@ -543,7 +773,6 @@
       .acc-m { display: block !important; }
       .m-cat-bar { display: flex !important; align-items: center; gap: 8px; margin-top: 12px; }
       .desk-cat-tools { display: none !important; }
-      #flashDeal { display: none !important; }
       #orderRange, .m-order-shortcuts { display: none !important; }
       #orderTabs {
         display: flex;
@@ -676,14 +905,19 @@
       .m-cat p { font-size: 10px; font-weight: 800; color: #344054; text-align: center; line-height: 1.2; }
       .m-flash {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        justify-content: space-between;
-        gap: 8px;
+        gap: 6px 10px;
         margin-top: 14px;
         padding: 10px 12px;
-        border-radius: 14px;
-        background: #FFF4F0;
+        border-radius: 16px;
+        background: linear-gradient(90deg, #FFF4F0 0%, #FFE8E0 58%, #FFF8F6 100%);
       }
+      .m-flash-main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+      .m-flash-credit { margin: 0; font-size: 12px; font-weight: 800; color: #344054; }
+      .m-flash-credit b { color: #FF4F18; }
+      .m-flash-note { margin: 0; flex: 1 1 160px; font-size: 11px; font-weight: 600; color: #667085; }
+      .m-flash-view { margin-left: auto; background: transparent; color: #FF4F18; font-size: 13px; font-weight: 800; }
       .acc-row {
         display: flex;
         align-items: center;
@@ -751,10 +985,8 @@
         flex: 1 1 0;
         min-width: 160px;
       }
-      .m-hero { min-height: 210px; padding: 26px 24px 36px; }
-      .m-hero h2 { font-size: 1.65rem; max-width: 46%; }
-      .m-hero p { max-width: 42%; }
-      .m-hero-art { width: 56%; object-position: 86% 48%; }
+      .m-hero { display: none; }
+      .m-cats { margin-top: 0; }
       .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px; }
       #freqGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .prod-img { height: 148px; padding: 12px 14px 8px; }
@@ -770,7 +1002,7 @@
 </head>
 <body class="min-h-screen">
   <div class="flex min-h-screen">
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
       <div class="brand-row flex items-center gap-2 px-5 py-5">
         <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
         <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
@@ -852,6 +1084,9 @@
     <div class="flex min-h-screen flex-1 flex-col">
       <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
         <div class="hdr-start">
+        <a href="kitchenx-v2.html" class="hdr-mark" aria-label="KitchenX">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF4F18" d="M3 3h7.2L12 8.2 13.8 3H21l-6.2 9L21 21h-7.2L12 15.8 10.2 21H3l6.2-9L3 3z"/></svg>
+        </a>
         <button id="menuBtn" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
@@ -883,8 +1118,19 @@
           <input id="topSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search products, categories, brands..." />
         </label>
         <div class="hdr-end">
-        <button id="bellBtn" class="hidden h-11 w-11 shrink-0 place-items-center rounded-full border border-[#E4E7EC] bg-white lg:grid" aria-label="Notifications">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <div class="wish-wrap relative">
+          <button id="wishBtn" class="hdr-icon" type="button" aria-label="Wishlist" aria-expanded="false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF4F18" stroke-width="2"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.4 4.4 0 0 1 12 6.2a4.4 4.4 0 0 1 8.8 2.4z"/></svg>
+            <span id="wishCount" class="hdr-count" hidden>0</span>
+          </button>
+          <div id="wishPanel" class="wish-panel" hidden>
+            <p class="text-sm font-extrabold">Wishlist</p>
+            <div id="wishList" class="mt-2"></div>
+          </div>
+        </div>
+        <button id="bellBtn" class="hdr-icon" type="button" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#344054" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="bell-dot" aria-hidden="true"></span>
         </button>
         <div class="user-wrap relative shrink-0">
           <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
@@ -968,9 +1214,14 @@
               <button type="button" class="m-cat" data-gocat="Pantry &amp; Staples"><span>🛒</span><p>Grocery</p></button>
             </div>
             <div class="m-flash">
-              <p class="text-sm font-extrabold text-orange">Flash Deals</p>
-              <p class="flash-mini text-sm font-extrabold tracking-wide">02:15:43</p>
-              <button type="button" id="viewDealsM" class="text-sm font-extrabold text-orange">View All</button>
+              <div class="m-flash-main">
+                <p class="text-sm font-extrabold text-orange">Flash Deals</p>
+                <span class="flash-off">Up to 20% OFF</span>
+                <p class="flash-mini text-sm font-extrabold tracking-wide text-orange">02:15:43</p>
+              </div>
+              <p class="m-flash-credit">Pay later · <b>30-day credit</b></p>
+              <p class="m-flash-note">Stock the kitchen first. Settle when it suits you.</p>
+              <button type="button" id="viewDealsM" class="m-flash-view">View →</button>
             </div>
           </div>
           <div class="mt-8 flex items-center justify-between desk-home">
@@ -981,6 +1232,21 @@
         </section>
 
         <section data-view="catalogue" class="panel hidden">
+          <div id="pdpDesk" class="pdp-desk">
+            <div class="mb-5 flex items-center justify-between gap-3">
+              <button type="button" id="pdpDeskBack" class="btn-ghost h-10 px-4">← Back to catalogue</button>
+              <button class="heart relative static top-0 right-0" id="pdpDeskFav" type="button" aria-label="Save">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.4 4.4 0 0 1 12 6.2a4.4 4.4 0 0 1 8.8 2.4z"/></svg>
+              </button>
+            </div>
+            <div class="card p-4 sm:p-6 lg:p-8">
+              <div id="pdpDeskBody"></div>
+            </div>
+            <section id="pdpSimilar" class="pdp-similar hidden">
+              <h2>Similar Products</h2>
+              <div id="pdpSimilarGrid" class="cat-grid pdp-similar-grid"></div>
+            </section>
+          </div>
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="min-w-0 hidden lg:block">
               <h1 class="text-3xl font-extrabold tracking-tight">Product Catalogue</h1>
@@ -1040,21 +1306,24 @@
                     Flash Deals
                     <span class="flash-off">Up to 20% OFF</span>
                   </p>
-                  <p class="mt-0.5 text-xs font-semibold text-[#667085]">Fresh savings for your kitchen</p>
+                  <p class="flash-sub mt-0.5 text-xs font-semibold text-[#667085]">Fresh savings for your kitchen</p>
                 </div>
                 <div class="flash-timer">
-                  <span class="text-[11px] font-extrabold text-[#667085]">Ends in</span>
+                  <span class="flash-ends text-[11px] font-extrabold text-[#667085]">Ends in</span>
                   <div class="flash-unit"><b id="flashH">02</b><span>Hours</span></div>
                   <div class="flash-unit"><b id="flashM">15</b><span>Minutes</span></div>
                   <div class="flash-unit"><b id="flashS">43</b><span>Seconds</span></div>
+                  <span class="flash-mini flash-clock-compact">02:15:43</span>
                 </div>
-                <p class="hidden text-sm font-bold text-[#344054] xl:block">Up to 20% off on kitchen essentials. Stock up now.</p>
-                <button type="button" id="viewDeals" class="btn-save whitespace-nowrap rounded-full">View All Deals →</button>
-                <div class="flash-art" aria-hidden="true">
-                  <img src="assets/customer/products/tomato.png" alt="" />
-                  <img src="assets/customer/products/carrot.png" alt="" />
-                  <img src="assets/customer/products/cabbage.png" alt="" />
+                <div class="flash-pay">
+                  <p class="flash-stock">Up to 20% off on kitchen essentials. Stock up now.</p>
+                  <p class="flash-credit">Pay later · <b>30-day credit</b></p>
+                  <p class="flash-pay-note">Stock the kitchen first. Settle when it suits you.</p>
                 </div>
+                <button type="button" id="viewDeals" class="btn-save flash-cta whitespace-nowrap rounded-full">
+                  <span class="flash-cta-full">View All Deals →</span>
+                  <span class="flash-cta-short">View →</span>
+                </button>
               </div>
               <div class="desk-cat-tools mb-3 flex items-center justify-end gap-3">
                 <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
@@ -1489,7 +1758,12 @@
         mnavReady = true;
       }
     }
+    function closeDeskPdp() {
+      const cat = document.querySelector('[data-view="catalogue"]');
+      if (cat) cat.classList.remove('is-pdp');
+    }
     function showPanel(id) {
+      closeDeskPdp();
       document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('hidden', el.getAttribute('data-view') !== id));
       document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id));
       const tab = M_TAB[id] || 'dashboard';
@@ -1563,6 +1837,33 @@
       if (go === 'terms') { toast('Terms & policies'); return; }
       openAccForm();
     }));
+    function syncWish() {
+      const saved = PRODUCTS.filter((p) => fav[p.id]);
+      const count = document.getElementById('wishCount');
+      count.hidden = saved.length < 1;
+      count.textContent = String(saved.length);
+      const list = document.getElementById('wishList');
+      list.innerHTML = saved.length
+        ? saved.map((p) => '<button type="button" class="wish-row" data-wish="' + p.id + '">' + pic(p.pic) + '<span class="min-w-0"><span class="block truncate text-sm font-extrabold">' + p.name + '</span><span class="block text-xs font-bold text-orange">' + money(p.price) + '</span></span></button>').join('')
+        : '<p class="py-3 text-sm font-semibold text-[#98A2B3]">No saved products yet.</p>';
+    }
+    document.getElementById('wishBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const panel = document.getElementById('wishPanel');
+      const open = panel.hidden;
+      panel.hidden = !open;
+      document.getElementById('wishBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.getElementById('wishList').addEventListener('click', (e) => {
+      const row = e.target.closest('[data-wish]');
+      if (!row) return;
+      const p = PRODUCTS.find((x) => x.id === row.getAttribute('data-wish'));
+      document.getElementById('wishPanel').hidden = true;
+      if (p) openPdp(p);
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.wish-wrap')) document.getElementById('wishPanel').hidden = true;
+    });
     document.getElementById('bellBtn').addEventListener('click', () => toast('No new notifications'));
     document.getElementById('scanBtn').addEventListener('click', () => toast('Connect a scanner to this workstation'));
     function openDeals() {
@@ -1868,11 +2169,10 @@
             <p class="prod-brand">${p.brand}</p>
             ${pack ? '<p class="prod-pack">' + pack + '</p>' : ''}
             ${stockLine}
+            ${(p.was || off) ? '<div class="prod-deal-line">' + (p.was ? '<span class="prod-mrp">' + money(p.was) + '</span>' : '') + (off ? '<span class="prod-off">' + off + '% OFF</span>' : '') + '</div>' : ''}
             <div class="prod-foot">
               <div class="prod-price-col">
                 <span class="prod-now">${money(p.price)}</span>
-                ${p.was ? '<span class="prod-mrp">' + money(p.was) + '</span>' : ''}
-                ${off ? '<span class="prod-off">' + off + '% OFF</span>' : ''}
               </div>
               ${productCta(p)}
             </div>
@@ -1969,35 +2269,103 @@
     document.getElementById('moreBrands').addEventListener('click', () => {
       document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
     });
-    function openPdp(p) {
+    function shotsOf(p) {
+      const seen = {};
+      const out = [];
+      function add(kind) {
+        if (!kind || seen[kind]) return;
+        seen[kind] = 1;
+        out.push(kind);
+      }
+      add(p.pic);
+      PRODUCTS.forEach((x) => {
+        if (x.brand === p.brand && x.cat === p.cat) add(x.pic);
+      });
+      return out.slice(0, 5);
+    }
+    function similarOf(p) {
+      const name = (p.name || '').toLowerCase();
+      const tags = (p.tags || '').split(/\s+/).filter(Boolean);
+      const related = /butter|cheese|paneer|cream|ghee|curd|milk/;
+      return PRODUCTS.map((x) => {
+        if (x.id === p.id || x.variant) return { x: x, s: -1 };
+        let s = 0;
+        if (x.cat === p.cat) s += 3;
+        if (x.brand === p.brand) s += 2;
+        const xt = (x.tags || '').split(/\s+/);
+        if (xt.some((t) => tags.indexOf(t) >= 0)) s += 2;
+        if (related.test(name) && related.test((x.name || '').toLowerCase())) s += 4;
+        if (p.group === 'veg' && x.group === 'veg') s += 3;
+        return { x: x, s: s };
+      }).filter((r) => r.s > 0)
+        .sort((a, b) => b.s - a.s)
+        .map((r) => r.x)
+        .slice(0, 5);
+    }
+    function galleryHtml(p) {
+      const shots = shotsOf(p);
+      const main = '<div class="pdp-desk-art"><img src="' + picSrc(shots[0]) + '" alt="" /></div>';
+      if (shots.length < 2) return '<div class="pdp-gallery">' + main + '</div>';
+      const thumbs = '<div class="pdp-thumbs has-many">' + shots.map((kind, i) =>
+        '<button type="button" class="pdp-thumb' + (i === 0 ? ' is-on' : '') + '" data-pdp-shot="' + kind + '"><img src="' + picSrc(kind) + '" alt="" /></button>'
+      ).join('') + '</div>';
+      return '<div class="pdp-gallery">' + main + thumbs + '</div>';
+    }
+    function pdpDetailsHtml(p, titleClass) {
       const was = p.was ? '<span class="price-was">' + money(p.was) + '</span>' : '';
       const sizes = ['250 g','500 g','1 kg'];
-      document.getElementById('pdpFav').classList.toggle('is-on', !!fav[p.id]);
-      document.getElementById('pdpFav').setAttribute('data-fav', p.id);
-      document.getElementById('pdpBody').innerHTML =
-        picLg(p.pic) +
-        '<h2 class="mt-3 text-xl font-extrabold">' + p.name + '</h2>' +
+      return (
+        '<h2 class="' + (titleClass || 'mt-3 text-xl font-extrabold') + '">' + p.name + '</h2>' +
         '<p class="mt-1 text-sm font-semibold text-[#98A2B3]">' + p.brand + '</p>' +
         '<p class="mt-1 text-xs font-bold text-[#667085]">★ 4.6 · kitchens reorder this weekly</p>' +
         '<p class="mt-3 text-lg font-extrabold text-orange">' + money(p.price) + was + (p.deal ? ' <span class="deal-badge relative top-0 left-0">' + p.deal.badge + '</span>' : '') + '</p>' +
         (p.stock
-          ? '<p class="mt-2 text-sm font-extrabold text-[#12B76A]">In Stock</p><p class="text-xs font-semibold text-[#98A2B3]">Usually delivered in 1 day</p>'
+          ? '<p class="mt-2 text-sm font-extrabold text-[#12B76A]">In Stock</p><p class="pdp-eta text-xs font-semibold text-[#98A2B3]">Usually delivered in 1 day</p>'
           : '<p class="oos-note mt-2">Out of stock · Highly demanded</p><p class="oos-sub">We are restocking this for kitchens this week</p>') +
-        '<p class="mt-4 text-sm font-extrabold">Select Quantity</p>' +
-        '<div class="mt-2 flex gap-2">' + sizes.map((s, i) => '<button type="button" class="chip' + (i === 2 ? ' is-on' : '') + '">' + s + '</button>').join('') + '</div>' +
+        '<p class="pdp-qty-label mt-4 text-sm font-extrabold"><span class="md:hidden">Select Pack Size</span><span class="hidden md:inline">Select Quantity</span></p>' +
+        '<div class="mt-2 flex flex-wrap gap-2">' + sizes.map((s, i) => '<button type="button" class="chip' + (i === 2 ? ' is-on' : '') + '">' + s + '</button>').join('') + '</div>' +
         (p.stock
-          ? '<div class="mt-4 flex items-center gap-3"><div class="stepper"><button data-q="-">−</button><span>' + Math.max(1, qty[p.id] || 0) + '</span><button data-q="+">+</button></div><button class="btn-save flex-1" data-add="' + p.id + '">Add to Cart</button></div>'
+          ? '<div class="pdp-buy mt-4"><div class="stepper"><button data-q="-">−</button><span>' + Math.max(1, qty[p.id] || 0) + '</span><button data-q="+">+</button></div><button class="btn-save" data-add="' + p.id + '">Add to Cart</button></div>'
           : '<button class="btn-ghost mt-4 w-full" type="button">Notify me when back</button>') +
-        '<p class="mt-4 rounded-2xl bg-[#EAF8F0] px-3 py-3 text-xs font-bold text-[#12B76A]">Free delivery on orders above ₹500</p>';
-      document.getElementById('pdpBody').setAttribute('data-pid', p.id);
-      openModal('pdpModal');
+        '<p class="mt-4 rounded-2xl bg-[#EAF8F0] px-3 py-3 text-xs font-bold text-[#12B76A]">Free delivery on orders above ₹500</p>'
+      );
+    }
+    function openPdp(p) {
+      const cat = document.querySelector('[data-view="catalogue"]');
+      if (cat.classList.contains('hidden')) showPanel('catalogue');
+      closeModal('pdpModal');
+      document.getElementById('pdpDeskFav').classList.toggle('is-on', !!fav[p.id]);
+      document.getElementById('pdpDeskFav').setAttribute('data-fav', p.id);
+      document.getElementById('pdpDeskBody').innerHTML =
+        '<div class="pdp-desk-layout">' + galleryHtml(p) + '<div class="pdp-copy">' +
+        pdpDetailsHtml(p, 'mt-0 text-2xl font-extrabold tracking-tight lg:text-3xl') +
+        '</div></div>';
+      document.getElementById('pdpDeskBody').setAttribute('data-pid', p.id);
+      const related = similarOf(p);
+      const sim = document.getElementById('pdpSimilar');
+      const grid = document.getElementById('pdpSimilarGrid');
+      if (related.length) {
+        grid.innerHTML = related.map(productCard).join('');
+        sim.classList.remove('hidden');
+      } else {
+        grid.innerHTML = '';
+        sim.classList.add('hidden');
+      }
+      cat.classList.add('is-pdp');
+      window.scrollTo(0, 0);
     }
     function onProductCardClick(e) {
       const card = e.target.closest('[data-pid]');
       if (!card) return;
       const id = card.getAttribute('data-pid');
       const p = PRODUCTS.find((x) => x.id === id);
-      if (e.target.closest('[data-fav]')) { fav[id] = !fav[id]; if (card.closest('#catGrid')) renderCat(); else card.querySelector('.heart').classList.toggle('is-on', fav[id]); return; }
+      if (e.target.closest('[data-fav]')) {
+        fav[id] = !fav[id];
+        if (card.closest('#catGrid')) renderCat();
+        else card.querySelectorAll('.heart').forEach((heart) => heart.classList.toggle('is-on', !!fav[id]));
+        syncWish();
+        return;
+      }
       const cta = e.target.closest('.prod-cta');
       if (cta) {
         e.preventDefault();
@@ -2024,12 +2392,20 @@
     document.getElementById('catGrid').addEventListener('click', onProductCardClick);
     document.getElementById('freqGrid').innerHTML = PRODUCTS.filter((p) => p.stock && !p.variant).slice(0, 4).map(productCard).join('');
     document.getElementById('freqGrid').addEventListener('click', onProductCardClick);
-    document.getElementById('pdpBody').addEventListener('click', (e) => {
-      const id = document.getElementById('pdpBody').getAttribute('data-pid');
+    function onPdpInteract(e) {
+      const body = e.currentTarget;
+      const shot = e.target.closest('[data-pdp-shot]');
+      if (shot) {
+        const img = body.querySelector('.pdp-desk-art img');
+        if (img) img.src = picSrc(shot.getAttribute('data-pdp-shot'));
+        body.querySelectorAll('[data-pdp-shot]').forEach((t) => t.classList.toggle('is-on', t === shot));
+        return;
+      }
+      const id = body.getAttribute('data-pid');
       const p = PRODUCTS.find((x) => x.id === id);
       if (!p) return;
       if (e.target.closest('.chip')) {
-        document.querySelectorAll('#pdpBody .chip').forEach((c) => c.classList.toggle('is-on', c === e.target.closest('.chip')));
+        body.querySelectorAll('.chip').forEach((c) => c.classList.toggle('is-on', c === e.target.closest('.chip')));
         return;
       }
       const qbtn = e.target.closest('[data-q]');
@@ -2044,15 +2420,26 @@
         qty[id] = Math.max(1, qty[id] || 1);
         syncCardQty(id);
         toast(p.name + ' added · qty ' + qty[id]);
+        closeDeskPdp();
         closeModal('pdpModal');
       }
-    });
-    document.getElementById('pdpFav').addEventListener('click', () => {
-      const id = document.getElementById('pdpFav').getAttribute('data-fav');
-      if (!id) return;
-      fav[id] = !fav[id];
-      document.getElementById('pdpFav').classList.toggle('is-on', !!fav[id]);
-    });
+    }
+    document.getElementById('pdpBody').addEventListener('click', onPdpInteract);
+    document.getElementById('pdpDeskBody').addEventListener('click', onPdpInteract);
+    document.getElementById('pdpSimilarGrid').addEventListener('click', onProductCardClick);
+    document.getElementById('pdpDeskBack').addEventListener('click', closeDeskPdp);
+    function bindPdpFav(btn) {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-fav');
+        if (!id) return;
+        fav[id] = !fav[id];
+        btn.classList.toggle('is-on', !!fav[id]);
+        document.querySelectorAll('.heart[data-fav="' + id + '"]').forEach((heart) => heart.classList.toggle('is-on', !!fav[id]));
+        syncWish();
+      });
+    }
+    bindPdpFav(document.getElementById('pdpFav'));
+    bindPdpFav(document.getElementById('pdpDeskFav'));
     document.querySelectorAll('[data-gocat]').forEach((btn) => btn.addEventListener('click', () => {
       chip = btn.getAttribute('data-gocat');
       renderCatChips();

@@ -43,6 +43,7 @@
     aside.collapsed .nav-btn.is-active::before { left: -8px; }
     aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
     .brand-mark { display: none; }
+    .brand-sub { display: none !important; }
     .kx-logo { display: block; height: 22px; width: auto; max-width: 148px; object-fit: contain; }
     .collapse-fab {
       position: absolute;
@@ -234,7 +235,7 @@
 </head>
 <body class="min-h-screen">
   <div class="flex min-h-screen">
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
       <div class="brand-row flex items-center gap-2 px-5 py-5">
         <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
         <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
