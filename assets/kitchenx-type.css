@@ -1,0 +1,88 @@
+/* KitchenX brand type — Brand Guidelines
+   Primary  — Gabriel Sans
+   Secondary — Degular Variable
+
+   Put licensed webfonts in assets/fonts/ using the filenames below.
+   GitHub Pages will then serve the exact faces to the client. */
+
+@font-face {
+  font-family: "Gabriel Sans";
+  src: url("fonts/GabrielSans-Normal.woff2") format("woff2"),
+       url("fonts/GabrielSans-Normal.otf") format("opentype"),
+       local("Gabriel Sans"), local("GabrielSans-Normal");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gabriel Sans";
+  src: url("fonts/GabrielSans-Medium.woff2") format("woff2"),
+       url("fonts/GabrielSans-Medium.otf") format("opentype"),
+       local("Gabriel Sans Medium"), local("GabrielSans-Medium");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gabriel Sans";
+  src: url("fonts/GabrielSans-Medium.woff2") format("woff2"),
+       url("fonts/GabrielSans-Medium.otf") format("opentype"),
+       local("Gabriel Sans Medium"), local("GabrielSans-Medium");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gabriel Sans";
+  src: url("fonts/GabrielSans-Bold.woff2") format("woff2"),
+       url("fonts/GabrielSans-Bold.otf") format("opentype"),
+       local("Gabriel Sans Bold"), local("GabrielSans-Bold");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gabriel Sans";
+  src: url("fonts/GabrielSans-Black.woff2") format("woff2"),
+       url("fonts/GabrielSans-Black.otf") format("opentype"),
+       local("Gabriel Sans Black"), local("GabrielSans-Black");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Degular Variable";
+  src: url("fonts/DegularVariable.woff2") format("woff2"),
+       url("fonts/DegularVariable.ttf") format("truetype"),
+       local("Degular Variable"), local("Degular");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-primary: "Gabriel Sans", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-secondary: "Degular Variable", "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+}
+
+html, body,
+h1, h2, h3, h4, h5, h6,
+button, .btn-save, .btn-add, .btn-ghost, .btn-login, .m-signup,
+.nav-btn, .nav-link, .chip, .set-tab, .kx-hero-title, .kx-hero-cta a,
+.prod-name, .font-extrabold, .font-black {
+  font-family: var(--font-primary);
+}
+
+p, li, label, input, textarea, select, td, th,
+.kx-hero-lead, .desk-copy, .qa-sub {
+  font-family: var(--font-secondary);
+}
+
+h1, h2, h3, h4, h5, h6, .prod-name, .font-extrabold, .font-black {
+  font-family: var(--font-primary);
+}

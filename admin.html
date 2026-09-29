@@ -6,20 +6,21 @@
   <title>Admin | KitchenX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/kitchenx-type.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: { fog: '#F2F4F7', coal: '#141517', orange: '#FF4F18' },
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+          fontFamily: { sans: ['"Gabriel Sans"', '"Inter Tight"', 'ui-sans-serif', 'system-ui', 'sans-serif'], body: ['"Degular Variable"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
         }
       }
     }
   </script>
   <style>
-    body { font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif; background: #F7F8FA; color: #141517; }
+    body { font-family: var(--font-primary); background: #F7F8FA; color: #141517; }
     .nav-btn { position: relative; color: #667085; background: transparent; margin: 0 12px 2px; width: calc(100% - 24px); }
     .nav-btn.is-active { color: #FF4F18; background: #FFF4F0; font-weight: 700; }
     .nav-btn.is-active::before {
@@ -42,6 +43,7 @@
     aside.collapsed .nav-btn.is-active::before { left: -8px; }
     aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
     .brand-mark { display: none; }
+    .kx-logo { display: block; height: 22px; width: auto; max-width: 148px; object-fit: contain; }
     .collapse-fab {
       position: absolute;
       top: 26px;
@@ -73,8 +75,9 @@
 
     .dash-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
     .dash-date { text-align: right; flex-shrink: 0; }
-    @media (max-width: 1024px) {
-      .dash-head { flex-wrap: wrap; }
+    @media (max-width: 1023px) {
+      header { justify-content: space-between; }
+      header .user-wrap { margin-left: 0; flex-shrink: 0; }
     }
     @media (max-width: 767px) {
       .qa-grid { grid-template-columns: repeat(2, 1fr); }
@@ -174,15 +177,112 @@
     .set-tab.is-on { color: #FF4F18; border-bottom-color: #FF4F18; }
     .pref-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; }
     .link-act { color: #1570EF; font-weight: 800; font-size: 13px; }
+    #sideClose { display: none; }
+    @media (max-width: 1023px) {
+      #sidebar {
+        right: auto !important;
+        width: min(86vw, 360px) !important;
+        max-width: 360px !important;
+        z-index: 55;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        box-shadow: 8px 0 28px rgba(20, 21, 23, 0.14);
+      }
+      #scrim { z-index: 50; background: rgba(20, 21, 23, 0.4); }
+      #sideClose { display: grid !important; }
+      .set-tabs { scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
+      .set-tabs::-webkit-scrollbar { display: none; height: 0; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #sidebar {
+        width: 400px !important;
+        max-width: 400px !important;
+      }
+    }
+    #mNav {
+      display: none;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: #fff;
+      border-top: 1px solid #EEF0F3;
+      padding: 20px 4px calc(8px + env(safe-area-inset-bottom));
+      overflow: visible;
+    }
+    #mNav .mnav-blob {
+      position: absolute;
+      top: -8px;
+      left: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: #FF4F18;
+      border: 4px solid #F7F8FA;
+      box-shadow: 0 12px 28px rgba(255, 79, 24, 0.38);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.34s cubic-bezier(0.22, 0.81, 0.36, 1);
+    }
+    #mNav button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2px;
+      min-height: 52px;
+      min-width: 0;
+      color: #98A2B3;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      position: relative;
+      z-index: 2;
+      padding-bottom: 2px;
+    }
+    #mNav button.is-on { color: #FF4F18; }
+    #mNav .mnav-ico {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      color: inherit;
+      transition: transform 0.34s cubic-bezier(0.22, 0.81, 0.36, 1), color 0.2s ease;
+    }
+    #mNav button.is-on .mnav-ico {
+      color: #fff;
+      transform: translateY(-22px);
+    }
+    #mNav svg { display: block; }
+    @media (max-width: 1023px) {
+      #mNav { display: grid; }
+      body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+      #toast { bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 60; }
+    }
+    @media (max-width: 767px) {
+      #mNav { padding-left: 2px; padding-right: 2px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #mNav { padding-left: 28px; padding-right: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #mNav .mnav-blob, #mNav .mnav-ico { transition: none; }
+    }
   </style>
 </head>
 <body class="min-h-screen">
   <div class="flex min-h-screen">
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
       <div class="brand-row flex items-center gap-2 px-5 py-5">
-        <a href="kitchenx-v2.html" class="brand-full whitespace-nowrap text-[22px] font-extrabold tracking-tight">Kitchen<span class="text-orange">X</span></a>
+        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
         <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
-        <span class="brand-sub text-sm font-semibold text-[#98A2B3]">Admin</span>
+        <span id="brandSub" class="brand-sub text-sm font-semibold text-[#98A2B3]">Admin</span>
+        <button id="sideClose" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
       </div>
       <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
         <button data-panel="dashboard" data-title="Dashboard" class="nav-btn is-active mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
@@ -190,6 +290,7 @@
           <span class="nav-label">Dashboard</span>
         </button>
 
+        <div data-roles="platform,admin">
         <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Catalogue</p>
         <button data-panel="products" data-title="Products" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
@@ -207,7 +308,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
           <span class="nav-label">Menu Add-ons</span>
         </button>
+        </div>
 
+        <div data-roles="platform,admin">
         <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Procurement</p>
         <button data-panel="suppliers" data-title="Suppliers" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13v13H3z"/><path d="M16 10h5v10h-5"/></svg>
@@ -225,7 +328,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
           <span class="nav-label">Goods Receiving</span>
         </button>
+        </div>
 
+        <div data-roles="platform,admin,rm,finance">
         <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Orders &amp; Fulfilment</p>
         <button data-panel="orders" data-title="Orders" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
@@ -239,12 +344,24 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
           <span class="nav-label">Returns &amp; Complaints</span>
         </button>
+        </div>
 
-        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Business Management</p>
+        <div data-roles="platform,admin,rm,finance">
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Accounts</p>
         <button data-panel="customers" data-title="Customers (B2B)" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
           <span class="nav-label">Customers (B2B)</span>
         </button>
+        <button data-panel="onboarding" data-title="Onboarding" data-roles="platform,admin" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="nav-label">Onboarding</span>
+        </button>
+        <button data-panel="leads" data-title="Consulting leads" data-roles="platform,admin,rm" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21v-8a2 2 0 0 1 2-2h3v10H5a2 2 0 0 1-2-2z"/><path d="M14 21v-4h4v4"/><path d="M9 21V8a2 2 0 0 1 2-2h2"/></svg>
+          <span class="nav-label">Consulting leads</span>
+        </button>
+        </div>
+        <div data-roles="platform,admin">
         <button data-panel="sellers" data-title="Sellers / Partners" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span class="nav-label">Sellers / Partners</span>
@@ -253,6 +370,8 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16v13H4z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
           <span class="nav-label">Price Lists &amp; Offers</span>
         </button>
+        </div>
+        <div data-roles="platform,admin,finance">
         <button data-panel="finance" data-title="Payments & Finance" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
           <span class="nav-label">Payments &amp; Finance</span>
@@ -261,7 +380,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V8"/></svg>
           <span class="nav-label">Reports &amp; Analytics</span>
         </button>
+        </div>
 
+        <div data-roles="platform,admin,technical">
         <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Platform</p>
         <button data-panel="cms" data-title="Content & CMS" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V6l8-3 8 3v13.5"/><path d="M12 3v16"/></svg>
@@ -280,6 +401,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
           <span class="nav-label">Settings</span>
         </button>
+        </div>
       </nav>
       <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
@@ -296,22 +418,22 @@
             <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
             </span>
-            <input id="adminSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-[#F7F8FA] pl-10 pr-4 text-sm font-medium" placeholder="Search for orders, products, suppliers, customers..." />
+            <input id="adminSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-[#F7F8FA] pl-10 pr-4 text-sm font-medium" placeholder="Search for orders, products, suppliers, customers..." data-ph-sm="Search orders..." data-ph-md="Search orders, products..." />
           </label>
         </div>
-        <div class="flex items-center justify-end gap-3">
+        <div class="flex shrink-0 items-center justify-end gap-3">
           <button class="relative grid h-10 w-10 place-items-center rounded-full text-[#667085]" aria-label="Notifications">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#F04438]"></span>
           </button>
-          <div class="user-wrap relative">
+          <div class="user-wrap relative shrink-0">
             <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
-              <div class="grid h-9 w-9 place-items-center rounded-full bg-[#FFE8E0] text-sm font-extrabold text-orange">R</div>
-              <div class="hidden text-left sm:block">
-                <div class="text-sm font-extrabold leading-tight">Rahul Sharma</div>
-                <div class="text-[11px] font-semibold text-[#98A2B3]">Super Admin</div>
+              <div id="userInitial" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-sm font-extrabold text-orange">R</div>
+              <div class="hidden text-left lg:block">
+                <div id="userName" class="text-sm font-extrabold leading-tight">Rahul Sharma</div>
+                <div id="userRole" class="text-[11px] font-semibold text-[#98A2B3]">Platform Admin</div>
               </div>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              <svg class="hidden lg:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div id="userMenu" class="user-menu" role="menu">
               <button id="logoutBtn" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog" role="menuitem">Logout</button>
@@ -324,8 +446,8 @@
         <section id="dashboardView" class="panel">
           <div class="dash-head">
             <div>
-              <h1 class="text-[32px] font-extrabold tracking-tight">Good morning, Rahul!</h1>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Here's what's happening with KitchenX today.</p>
+              <h1 id="dashHello" class="text-[32px] font-extrabold tracking-tight">Good morning, Rahul!</h1>
+              <p id="dashSub" class="mt-1 text-sm font-medium text-[#667085]">Here's what's happening with KitchenX today.</p>
             </div>
             <div class="dash-date">
               <div class="flex items-center justify-end gap-1.5 text-sm font-extrabold text-[#344054]">
@@ -417,7 +539,7 @@
                 </div>
               </div>
             </article>
-            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+            <article id="dashQuick" class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
               <h2 class="text-lg font-extrabold">Quick Actions</h2>
               <div class="qa-grid mt-4">
                 <button data-panel="products" class="js-go qa-btn" style="background:#FFF1EC">
@@ -1669,32 +1791,190 @@
           </div>
         </div>
 
+        <section id="customersView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Customers</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Activated Hyderabad accounts and assigned relationship coverage.</p>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[720px]">
+              <thead><tr><th>Kitchen</th><th>Category</th><th>Outlets</th><th>RM</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">Spice Route</td><td>Restaurant</td><td>2</td><td>Kavya Reddy</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">The Urban Table</td><td>Cafe</td><td>1</td><td>Kavya Reddy</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Hotel Crest</td><td>Hotel</td><td>1</td><td>Kavya Reddy</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Chai Buddy Kukatpally</td><td>Chai Buddy</td><td>6</td><td>Kavya Reddy</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Cloud Bowl</td><td>Cloud kitchen</td><td>3</td><td>Unassigned</td><td><span class="badge badge-open">Review</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section id="onboardingView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Onboarding</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Approve on mobile, name, address and business category. Documents are optional.</p>
+          <div class="mt-5 grid gap-3">
+            <article class="form-card flex flex-wrap items-center justify-between gap-3">
+              <div><p class="font-extrabold">Biryani House · Restaurant</p><p class="text-sm font-semibold text-[#667085]">Jubilee Hills · mobile verified · GST attached</p></div>
+              <div class="flex gap-2"><button type="button" class="btn-ghost js-onb-no">Reject</button><button type="button" class="btn-save js-onb-ok">Approve &amp; assign RM</button></div>
+            </article>
+            <article class="form-card flex flex-wrap items-center justify-between gap-3">
+              <div><p class="font-extrabold">Nizams Sweets · Sweet shop</p><p class="text-sm font-semibold text-[#667085]">Charminar · mobile verified · no documents</p></div>
+              <div class="flex gap-2"><button type="button" class="btn-ghost js-onb-no">Reject</button><button type="button" class="btn-save js-onb-ok">Approve &amp; assign RM</button></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="leadsView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Consulting leads</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Starter Kit and Procurement Audit pipeline. Assign an RM to own the conversation.</p>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[680px]">
+              <thead><tr><th>Lead</th><th>Product</th><th>Area</th><th>RM</th><th>Stage</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">Ayesha Khan</td><td>Starter Kit · bakery</td><td>Gachibowli</td><td>Kavya Reddy</td><td><span class="badge badge-prog">Discovery</span></td></tr>
+                <tr><td class="font-bold">Ravi Teja</td><td>Procurement Audit</td><td>Madhapur</td><td>Unassigned</td><td><span class="badge badge-open">New</span></td></tr>
+                <tr><td class="font-bold">Meenakshi Iyer</td><td>Starter Kit · biryani</td><td>Secunderabad</td><td>Kavya Reddy</td><td><span class="badge badge-done">Proposal</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section id="financeView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Payments &amp; finance</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Prepaid settlements and COD cash for Hyderabad. Credit line stays in the next phase.</p>
+          <div class="mt-5 grid gap-3 sm:grid-cols-3">
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">Razorpay settled</p><p class="mt-1 text-2xl font-extrabold">₹8.4L</p></article>
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">COD collected</p><p class="mt-1 text-2xl font-extrabold">₹1.2L</p></article>
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">Refunds open</p><p class="mt-1 text-2xl font-extrabold">6</p></article>
+          </div>
+          <article class="form-card mt-4 overflow-x-auto">
+            <table class="line-table min-w-[640px]">
+              <thead><tr><th>Ref</th><th>Order</th><th>Mode</th><th>Amount</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">SET-1902</td><td>#ORD-8810</td><td>Prepaid</td><td>₹14,280</td><td><button type="button" class="text-sm font-extrabold text-orange js-fin">Reconcile</button></td></tr>
+                <tr><td class="font-bold">COD-441</td><td>#ORD-8818</td><td>Cash on delivery</td><td>₹3,640</td><td><button type="button" class="text-sm font-extrabold text-orange js-fin">Match cash</button></td></tr>
+                <tr><td class="font-bold">CN-118</td><td>#ORD-8790</td><td>Credit note</td><td>₹820</td><td><button type="button" class="text-sm font-extrabold text-orange js-fin">Approve</button></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section id="usersView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Users &amp; roles</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Internal access for every KitchenX workspace.</p>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[640px]">
+              <thead><tr><th>Name</th><th>Workspace</th><th>Access</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">Rahul Sharma</td><td>Platform Admin</td><td>Full ops</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Meera Iyer</td><td>Finance Admin</td><td>Settlements, refunds</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Arjun Desai</td><td>Technical Admin</td><td>Users, zones, integrations</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Kavya Reddy</td><td>Relationship Manager</td><td>Assigned accounts</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Ananya Menon</td><td>Warehouse Manager</td><td>Hyderabad hub</td><td><span class="badge badge-done">Active</span></td></tr>
+                <tr><td class="font-bold">Suresh Rao</td><td>Warehouse Supervisor</td><td>Floor operations</td><td><span class="badge badge-done">Active</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section id="reportsView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Reports</h1>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2">
+            <article class="form-card"><p class="font-extrabold">Order-to-delivery</p><p class="mt-1 text-sm font-semibold text-[#667085]">94% of yesterday’s orders landed inside the checkout ETA.</p></article>
+            <article class="form-card"><p class="font-extrabold">Inventory match</p><p class="mt-1 text-sm font-semibold text-[#667085]">App stock and physical count agree on 99.8% of SKUs.</p></article>
+          </div>
+        </section>
+
         <section id="pageView" class="panel hidden rounded-[24px] bg-white p-8">
           <h1 id="pageTitle" class="text-2xl font-extrabold">Page</h1>
-          <p class="mt-2 text-sm font-medium text-[#667085]">This section uses the same KitchenX admin shell. Detailed records for this area are not wired yet.</p>
+          <p class="mt-2 text-sm font-medium text-[#667085]">Open a record from the left to continue in this workspace.</p>
         </section>
       </main>
     </div>
   </div>
+  <nav id="mNav" aria-label="Primary">
+    <span class="mnav-blob" id="mNavBlob" aria-hidden="true"></span>
+    <button type="button" data-panel="dashboard" data-title="Dashboard" class="is-on">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>
+      Home
+    </button>
+    <button type="button" data-panel="inventory" data-title="Inventory">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7L12 12l8.7-5M12 12v10"/></svg></span>
+      Stock
+    </button>
+    <button type="button" data-panel="products" data-title="Products">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg></span>
+      Catalog
+    </button>
+    <button type="button" data-panel="orders" data-title="Orders">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-2.4-1.3L13.2 22 12 20.7 10.8 22 8.4 20.7 6 22V2z"/><path d="M9 7h6M9 11h6M9 15h6"/></svg></span>
+      Orders
+    </button>
+    <button type="button" data-panel="customers" data-title="Customers (B2B)">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span>
+      Accounts
+    </button>
+  </nav>
   <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
   <div id="toast" role="status"></div>
 
   <script>
+    const PERSONA = sessionStorage.getItem('kxPersona') || 'platform';
     if (sessionStorage.getItem('kxRole') !== 'admin') {
       window.location.href = 'kitchenx-v2.html#login';
+    }
+    if (PERSONA === 'finance') window.location.href = 'finance.html';
+    else if (PERSONA === 'technical') window.location.href = 'technical.html';
+    else if (PERSONA === 'rm') window.location.href = 'rm.html';
+    else if (String(PERSONA).indexOf('warehouse') === 0) window.location.href = 'warehouse.html';
+    else if (PERSONA !== 'platform' && PERSONA !== 'admin') window.location.href = 'kitchenx-v2.html#login';
+    const PEOPLE = {
+      platform: { name: 'Rahul Sharma', role: 'Platform Admin', initial: 'R', hello: 'Good morning, Rahul!', sub: 'Onboarding, catalogue and Hyderabad exceptions for today.' },
+      admin: { name: 'Rahul Sharma', role: 'Platform Admin', initial: 'R', hello: 'Good morning, Rahul!', sub: 'Onboarding, catalogue and Hyderabad exceptions for today.' },
+      finance: { name: 'Meera Iyer', role: 'Finance Admin', initial: 'M', hello: 'Good morning, Meera!', sub: 'Prepaid settlements, COD cash and open credit notes.' },
+      technical: { name: 'Arjun Desai', role: 'Technical Admin', initial: 'A', hello: 'Good morning, Arjun!', sub: 'Users, delivery zones and courier integration health.' },
+      rm: { name: 'Kavya Reddy', role: 'Relationship Manager', initial: 'K', hello: 'Good morning, Kavya!', sub: 'Your assigned kitchens, open tickets and consulting leads.' }
+    };
+    const who = PEOPLE[PERSONA] || PEOPLE.platform;
+    document.getElementById('brandSub').textContent = who.role;
+    document.getElementById('userInitial').textContent = who.initial;
+    document.getElementById('userName').textContent = who.name;
+    document.getElementById('userRole').textContent = who.role;
+    document.getElementById('dashHello').textContent = who.hello;
+    document.getElementById('dashSub').textContent = who.sub;
+    document.querySelectorAll('[data-roles]').forEach((el) => {
+      const allowed = el.getAttribute('data-roles').split(',').map((s) => s.trim());
+      if (!allowed.includes(PERSONA)) el.style.display = 'none';
+    });
+    if (PERSONA !== 'platform' && PERSONA !== 'admin') {
+      const quick = document.getElementById('dashQuick');
+      if (quick) quick.style.display = 'none';
     }
 
     const sidebar = document.getElementById('sidebar');
     const scrim = document.getElementById('scrim');
-    const FORM_PANELS = ['products', 'categories', 'brands', 'addons', 'suppliers', 'purchase', 'inventory', 'goods', 'orders', 'delivery', 'returns', 'settings'];
+    function closeSide() {
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+    }
     document.getElementById('menuBtn').addEventListener('click', () => {
       sidebar.classList.toggle('-translate-x-full');
       scrim.classList.toggle('hidden');
     });
-    scrim.addEventListener('click', () => {
-      sidebar.classList.add('-translate-x-full');
-      scrim.classList.add('hidden');
-    });
+    const sideClose = document.getElementById('sideClose');
+    if (sideClose) sideClose.addEventListener('click', closeSide);
+    scrim.addEventListener('click', closeSide);
+    function setSearchPh() {
+      const el = document.getElementById('adminSearch');
+      if (!el) return;
+      const w = window.innerWidth;
+      if (!el.getAttribute('data-ph-lg')) el.setAttribute('data-ph-lg', el.getAttribute('placeholder'));
+      if (w < 768 && el.getAttribute('data-ph-sm')) el.placeholder = el.getAttribute('data-ph-sm');
+      else if (w < 1024 && el.getAttribute('data-ph-md')) el.placeholder = el.getAttribute('data-ph-md');
+      else el.placeholder = el.getAttribute('data-ph-lg');
+    }
+    setSearchPh();
+    window.addEventListener('resize', setSearchPh);
+    const FORM_PANELS = ['products', 'categories', 'brands', 'addons', 'suppliers', 'purchase', 'inventory', 'goods', 'orders', 'delivery', 'returns', 'settings', 'customers', 'onboarding', 'leads', 'finance', 'users', 'reports'];
     document.getElementById('collapseBtn').addEventListener('click', () => {
       sidebar.classList.toggle('collapsed');
       document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
@@ -1710,6 +1990,37 @@
       userWrap.classList.remove('open');
       userBtn.setAttribute('aria-expanded', 'false');
     });
+
+    let mnavReady = false;
+    const M_TAB = {
+      dashboard: 'dashboard',
+      products: 'products', categories: 'products', brands: 'products', addons: 'products', offers: 'products', cms: 'products',
+      inventory: 'inventory', goods: 'inventory', suppliers: 'inventory', purchase: 'inventory',
+      orders: 'orders', delivery: 'orders', returns: 'orders',
+      customers: 'customers', onboarding: 'customers', leads: 'customers', sellers: 'customers',
+      finance: 'customers', reports: 'customers', notifications: 'customers', users: 'customers', settings: 'customers'
+    };
+    function placeMNavBlob() {
+      const nav = document.getElementById('mNav');
+      const blob = document.getElementById('mNavBlob');
+      if (!nav || !blob || !nav.offsetWidth) return;
+      const on = nav.querySelector('button.is-on') || nav.querySelector('button');
+      const nr = nav.getBoundingClientRect();
+      const br = on.getBoundingClientRect();
+      const x = br.left - nr.left + (br.width / 2) - (blob.offsetWidth / 2);
+      if (!mnavReady) blob.style.transition = 'none';
+      blob.style.transform = 'translate3d(' + Math.round(x) + 'px, 0, 0)';
+      if (!mnavReady) {
+        blob.offsetWidth;
+        blob.style.transition = '';
+        mnavReady = true;
+      }
+    }
+    function syncMNav(id) {
+      const tab = M_TAB[id] || 'dashboard';
+      document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === tab));
+      placeMNavBlob();
+    }
 
     function showPanel(id, title) {
       const isDash = id === 'dashboard';
@@ -1729,6 +2040,7 @@
       if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
       sidebar.classList.add('-translate-x-full');
       scrim.classList.add('hidden');
+      syncMNav(id);
     }
 
     document.querySelectorAll('[data-panel]').forEach((btn) => {
@@ -1737,6 +2049,7 @@
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
       sessionStorage.removeItem('kxRole');
+      sessionStorage.removeItem('kxPersona');
       sessionStorage.removeItem('kxUser');
       window.location.href = 'kitchenx-v2.html';
     });
@@ -2127,11 +2440,18 @@
       document.getElementById('setThumb').appendChild(thumbHtml(src));
     }));
 
+    document.querySelectorAll('.js-onb-ok').forEach((b) => b.addEventListener('click', () => toast('Account activated. RM assigned.')));
+    document.querySelectorAll('.js-onb-no').forEach((b) => b.addEventListener('click', () => toast('Application returned with a reason.')));
+    document.querySelectorAll('.js-fin').forEach((b) => b.addEventListener('click', () => toast('Finance record updated.')));
+
     const start = (location.hash || '').replace('#', '');
     if (start) {
       const btn = document.querySelector('#sideNav [data-panel="' + start + '"]');
-      showPanel(start, btn ? btn.getAttribute('data-title') : start);
+      const visible = btn && btn.offsetParent !== null;
+      if (visible) showPanel(start, btn.getAttribute('data-title'));
     }
+    window.addEventListener('resize', placeMNavBlob);
+    requestAnimationFrame(placeMNavBlob);
   </script>
 </body>
 </html>

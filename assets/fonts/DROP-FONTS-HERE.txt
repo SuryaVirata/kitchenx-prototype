@@ -1,0 +1,16 @@
+KitchenX brand webfonts — drop licensed files here before GitHub hosting.
+
+Required filenames (woff2 preferred; otf/ttf also work):
+
+  GabrielSans-Normal.woff2     (or .otf)   weight 400
+  GabrielSans-Medium.woff2     (or .otf)   weights 500–600
+  GabrielSans-Bold.woff2       (or .otf)   weight 700
+  GabrielSans-Black.woff2      (or .otf)   weight 800
+  DegularVariable.woff2        (or .ttf)   variable 100–900
+
+Buy a WEB license (not only desktop):
+  Gabriel Sans     — Fontfabric
+  Degular Variable — OH no Type Company
+
+Desktop/trial files from the brand PDF are not enough to host on GitHub.
+Until these files are here, the prototype uses Inter Tight + Source Sans 3.

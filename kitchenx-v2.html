@@ -15,7 +15,8 @@
   <title>KitchenX | B2B Supplies. Bigger Possibilities.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/kitchenx-type.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -28,7 +29,8 @@
             paper: '#FFFFFF'
           },
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+            sans: ['"Gabriel Sans"', '"Inter Tight"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            body: ['"Degular Variable"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif']
           }
         }
       }
@@ -43,11 +45,15 @@
     html { scroll-behavior: smooth; }
     html, body { max-width: 100%; overflow-x: hidden; }
     body {
-      font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+      font-family: var(--font-primary);
       background: var(--fog);
       color: var(--coal);
     }
     img { max-width: 100%; }
+    .kx-logo { display: block; height: 22px; width: auto; max-width: 148px; object-fit: contain; }
+    @media (min-width: 768px) { .kx-logo { height: 24px; } }
+    @media (min-width: 1200px) { .kx-logo { height: 26px; } }
+    footer .kx-logo { height: 28px; max-width: 180px; }
     .hero-slide {
       opacity: 0;
       z-index: 0;
@@ -307,11 +313,6 @@
         -webkit-overflow-scrolling: touch;
       }
     }
-    #mobileMenu .loc-btn {
-      width: 100%;
-      max-width: none;
-      height: 44px;
-    }
     #mobileMenu .m-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -325,6 +326,59 @@
       color: #141517;
       font-size: 14px;
       font-weight: 700;
+    }
+    #mobileMenu .m-auth {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      width: 100%;
+    }
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 2px solid #FF4F18;
+      background: #fff;
+      color: #FF4F18;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+    .btn-login:hover { background: #FFF4F0; }
+    #mobileMenu .btn-login {
+      height: 42px;
+      padding: 0 16px;
+    }
+    #mobileMenu .m-signup {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #FF4F18;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      box-shadow: 0 8px 18px rgba(255, 79, 24, 0.18);
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {
+      #mobileMenu.is-open { padding: 20px 24px 28px; }
+      #mobileMenu .m-auth { gap: 32px; }
+      #mobileMenu .btn-login,
+      #mobileMenu .m-signup {
+        height: 44px;
+        padding: 0 28px;
+      }
     }
     .hdr-actions { display: none; }
     .hdr-icon-btn {
@@ -371,20 +425,71 @@
     }
     .loc-label-short { display: none; }
     @media (max-width: 767px) {
-      .hdr-loc { flex: 1 1 auto; }
+      .hdr-bar {
+        gap: 8px;
+        padding-left: 12px;
+        padding-right: 12px;
+        min-width: 0;
+      }
+      header .kx-logo {
+        height: 20px;
+        max-width: 112px;
+      }
+      .hdr-loc {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: none;
+        margin-left: 0;
+      }
       .hdr-loc .loc-label-full { display: none; }
       .hdr-loc .loc-label-short {
-        display: inline;
+        display: block;
+        flex: 1 1 0;
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
-      .hdr-loc .loc-btn { max-width: 148px; }
+      .hdr-loc .loc-btn {
+        width: auto;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .hdr-actions {
+        position: relative;
+        z-index: 2;
+        gap: 4px;
+        margin-left: 0;
+        flex: 0 0 auto;
+      }
+      .hdr-icon-btn, #menuBtn {
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 12px;
+        background: #F2F4F7;
+        box-shadow: none;
+      }
+      body.menu-open #hdrSearchBtn { display: none; }
+      #hdrSearchPanel .search,
+      #mobileMenu > label .search {
+        border: 0;
+        background: #F2F4F7;
+        box-shadow: none;
+      }
+      #hdrSearchPanel .search:focus,
+      #mobileMenu > label .search:focus {
+        border: 0;
+        box-shadow: 0 0 0 3px rgba(255, 79, 24, 0.14);
+      }
     }
     @media (max-width: 359px) {
-      .hdr-icon-btn, #menuBtn { width: 44px; height: 44px; }
-      .hdr-actions { gap: 6px; }
-      .hdr-loc { margin-left: 6px; }
+      .hdr-icon-btn, #menuBtn { width: 40px; height: 40px; }
+      .hdr-actions { gap: 4px; }
+      .hdr-loc { margin-left: 0; }
       .hdr-loc .loc-chev { display: none; }
+      #hdrSearchBtn { display: none; }
     }
     @media (min-width: 768px) and (max-width: 1199px) {
       .hdr-loc { flex: 0 1 auto; }
@@ -514,6 +619,10 @@
     }
     .kx-hero-bdot { display: none; }
     @media (max-width: 767px) {
+      .kx-hero-cta { gap: 18px; }
+      .kx-hero-cta a:first-child {
+        box-shadow: 0 6px 12px rgba(255, 79, 24, 0.18);
+      }
       .kx-hero-cta a:last-child {
         background: #F2F4F7;
         border-color: #F2F4F7;
@@ -609,9 +718,9 @@
 </head>
 <body>
   <header class="sticky top-0 z-50 border-b border-[#E8ECF1] bg-white/95 backdrop-blur-xl">
-    <div class="page-wrap flex h-16 items-center gap-3 min-[1200px]:h-[72px] min-[1200px]:gap-6">
-      <a href="#top" class="shrink-0 text-[22px] font-extrabold tracking-tight text-coal min-[1200px]:text-[26px]">
-        Kitchen<span class="text-orange">X</span>
+    <div class="page-wrap hdr-bar flex h-16 items-center gap-3 min-[1200px]:h-[72px] min-[1200px]:gap-6">
+      <a href="#top" class="shrink-0" aria-label="KitchenX">
+        <img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" />
       </a>
       <div class="loc-wrap hdr-loc" data-loc-menu>
         <button type="button" class="loc-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Select location">
@@ -667,7 +776,7 @@
           <input class="search h-10 w-52 rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium text-coal placeholder:text-[#98A2B3] min-[1440px]:w-64" placeholder="Search products, categories..." />
         </label>
         <div class="flex items-center gap-3 translate-x-[6px]">
-          <a href="#login" data-auth-open="login" class="whitespace-nowrap px-3 py-2 text-sm font-bold text-coal hover:text-orange">Login</a>
+          <a href="#login" data-auth-open="login" class="btn-login">Login</a>
           <a href="#signup" data-auth-open="signup" class="whitespace-nowrap rounded-full bg-orange px-5 py-2.5 text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)] hover:brightness-95">Create Account</a>
         </div>
       </div>
@@ -704,44 +813,6 @@
         </span>
         <input class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium" placeholder="Search products, categories..." />
       </label>
-      <div class="loc-wrap mb-3" data-loc-menu>
-        <button type="button" class="loc-btn justify-start" aria-haspopup="listbox" aria-expanded="false" aria-label="Select location">
-          <svg class="loc-pin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          <span class="loc-label">Select location</span>
-          <svg class="loc-chev ml-auto" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="loc-drop is-inline" role="listbox">
-          <button type="button" class="loc-detect">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-            <span class="loc-detect-label">Detect my location</span>
-          </button>
-          <div class="loc-search-wrap">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-            <input class="loc-search" type="search" placeholder="Search city or area" autocomplete="off" />
-          </div>
-          <p class="loc-hint hidden"></p>
-          <button type="button" class="loc-opt" data-loc="Hyderabad, Telangana">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <span>Hyderabad, Telangana</span>
-            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
-          </button>
-          <button type="button" class="loc-opt" data-loc="Bengaluru, Karnataka">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <span>Bengaluru, Karnataka</span>
-            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
-          </button>
-          <button type="button" class="loc-opt" data-loc="Chennai, Tamil Nadu">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <span>Chennai, Tamil Nadu</span>
-            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
-          </button>
-          <button type="button" class="loc-opt" data-loc="Mumbai, Maharashtra">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <span>Mumbai, Maharashtra</span>
-            <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4 10-10"/></svg>
-          </button>
-        </div>
-      </div>
       <nav class="m-nav">
         <a href="customer.html#catalogue">Products</a>
         <a href="customer.html#catalogue">Categories</a>
@@ -749,9 +820,9 @@
         <a href="#how">How it Works</a>
         <a href="#impact">About</a>
       </nav>
-      <div class="mt-4 flex items-center gap-3">
-        <a href="#login" data-auth-open="login" class="px-3 py-2.5 text-sm font-bold text-coal">Login</a>
-        <a href="#signup" data-auth-open="signup" class="flex-1 rounded-full bg-orange px-5 py-3 text-center text-sm font-extrabold text-white">Create Account</a>
+      <div class="m-auth">
+        <a href="#login" data-auth-open="login" class="btn-login">Login</a>
+        <a href="#signup" data-auth-open="signup" class="m-signup">Create Account</a>
       </div>
     </div>
   </header>
@@ -768,7 +839,7 @@
       <div class="kx-hero-card">
         <div class="page-wrap">
           <div class="kx-hero-copy">
-            <p class="kx-hero-eyebrow">Foodservice supply made simple</p>
+            <p class="kx-hero-eyebrow">Smarter Procurement. Instant Credit.</p>
             <h1 class="kx-hero-title">
               Everything your kitchen needs.
               <span>Delivered reliably.</span>
@@ -1070,7 +1141,7 @@
   <footer class="bg-coal text-white">
     <div class="page-wrap grid gap-10 py-14 min-[1200px]:grid-cols-[1.15fr_2fr_1.05fr]">
       <div>
-        <div class="text-3xl font-extrabold">Kitchen<span class="text-orange">X</span></div>
+        <img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" />
         <p class="mt-2 text-sm font-semibold text-white/70">For every food business.</p>
         <p class="mt-3 max-w-xs text-sm font-medium leading-relaxed text-white/55">Quality supply. Stronger kitchens. A better food tomorrow.</p>
         <div class="mt-5 flex gap-3">
@@ -1635,8 +1706,14 @@
       e.target.reset();
     });
 
-    const ADMIN_USER = 'Admin';
-    const ADMIN_PASS = 'Admin@123';
+    const STAFF = {
+      admin: { user: 'Admin', pass: 'Admin@123', role: 'admin', persona: 'platform', href: 'admin.html' },
+      finance: { user: 'FinanceAdmin', pass: 'FinanceAdmin@123', role: 'admin', persona: 'finance', href: 'finance.html' },
+      technical: { user: 'TechnicalAdmin', pass: 'TechnicalAdmin@123', role: 'admin', persona: 'technical', href: 'technical.html' },
+      rm: { user: 'RM', pass: 'RM@123', role: 'admin', persona: 'rm', href: 'rm.html', alts: [{ user: 'RelationshipManager', pass: 'RelationshipManager@123' }] },
+      supervisor: { user: 'Supervisor', pass: 'Supervisor@123', role: 'warehouse', persona: 'warehouse_supervisor', href: 'warehouse.html' },
+      manager: { user: 'Manager', pass: 'Manager@123', role: 'warehouse', persona: 'warehouse_manager', href: 'warehouse.html' }
+    };
     const overlay = document.getElementById('authOverlay');
     const authLogin = document.getElementById('authLogin');
     const authSignup = document.getElementById('authSignup');
@@ -1748,13 +1825,19 @@
         return;
       }
       if (loginMode === 'admin') {
-        if (user === ADMIN_USER && pass === ADMIN_PASS) {
-          sessionStorage.setItem('kxRole', 'admin');
-          sessionStorage.setItem('kxUser', user);
-          window.location.href = 'admin.html';
+        const key = user.toLowerCase();
+        const staff = Object.values(STAFF).find((s) => {
+          if (s.user.toLowerCase() === key && s.pass === pass) return true;
+          return (s.alts || []).some((a) => a.user.toLowerCase() === key && a.pass === pass);
+        });
+        if (staff) {
+          sessionStorage.setItem('kxRole', staff.role);
+          sessionStorage.setItem('kxPersona', staff.persona);
+          sessionStorage.setItem('kxUser', staff.user);
+          window.location.href = staff.href;
           return;
         }
-        formError.textContent = 'Admin username or password is incorrect.';
+        formError.textContent = 'Username or password is incorrect.';
         formError.classList.remove('hidden');
         return;
       }

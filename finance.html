@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Admin | KitchenX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/kitchenx-type.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { fog: '#F2F4F7', coal: '#141517', orange: '#FF4F18' },
+          fontFamily: { sans: ['"Gabriel Sans"', '"Inter Tight"', 'ui-sans-serif', 'system-ui', 'sans-serif'], body: ['"Degular Variable"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: var(--font-primary); background: #F7F8FA; color: #141517; }
+    .nav-btn { position: relative; color: #667085; background: transparent; margin: 0 12px 2px; width: calc(100% - 24px); }
+    .nav-btn.is-active { color: #FF4F18; background: #FFF4F0; font-weight: 700; }
+    .nav-btn.is-active::before {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: #FF4F18;
+      border-radius: 0 2px 2px 0;
+    }
+    .search:focus { outline: none; border-color: rgba(255, 79, 24, 0.7); box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12); }
+    aside.collapsed { width: 76px; }
+    aside.collapsed .nav-label, aside.collapsed .nav-group, aside.collapsed .brand-sub, aside.collapsed .brand-full, aside.collapsed .help-box { display: none; }
+    aside.collapsed .brand-mark { display: inline; }
+    aside.collapsed .brand-row { justify-content: center; padding-left: 8px; padding-right: 8px; }
+    aside.collapsed .nav-btn { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 8px; margin-right: 8px; width: calc(100% - 16px); }
+    aside.collapsed .nav-btn.is-active::before { left: -8px; }
+    aside.collapsed .collapse-fab svg { transform: rotate(180deg); }
+    .brand-mark { display: none; }
+    .kx-logo { display: block; height: 22px; width: auto; max-width: 148px; object-fit: contain; }
+    .collapse-fab {
+      position: absolute;
+      top: 26px;
+      right: -12px;
+      z-index: 45;
+      display: none;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid #EEF0F3;
+      background: #fff;
+      color: #667085;
+      box-shadow: 0 2px 8px rgba(20,21,23,.08);
+    }
+    .collapse-fab svg { display: block; }
+    @media (min-width: 1024px) { .collapse-fab { display: grid; } }
+    .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; width: 200px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
+    .user-wrap.open .user-menu { display: block; }
+    .kpi-card { display: flex; align-items: center; gap: 14px; border-radius: 22px; padding: 16px 18px; min-height: 96px; }
+    .kpi-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: #fff; flex-shrink: 0; }
+    .kpi-body { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0,1fr) auto; column-gap: 10px; align-items: end; }
+    .kpi-label { grid-column: 1; grid-row: 1; margin: 0; font-size: 13px; font-weight: 600; color: #667085; white-space: nowrap; }
+    .kpi-value { grid-column: 1; grid-row: 2; margin: 2px 0 0; font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+    .kpi-delta { grid-column: 2; grid-row: 1; margin: 0; font-size: 12px; font-weight: 700; color: #12B76A; text-align: right; white-space: nowrap; }
+    .kpi-delta.is-muted { color: #667085; }
+    .kpi-vs { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; font-weight: 600; color: #98A2B3; text-align: right; white-space: nowrap; }
+    .dash-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+    .dash-date { text-align: right; flex-shrink: 0; }
+    @media (max-width: 1024px) { .dash-head { flex-wrap: wrap; } }
+    @media (max-width: 1023px) {
+      header { justify-content: space-between; }
+    }
+    @media (max-width: 767px) {
+      .qa-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-value { font-size: 22px; }
+      .dash-date { text-align: left; }
+      #toast { left: 16px; right: 16px; bottom: 16px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) { .qa-grid { grid-template-columns: repeat(3, 1fr); } }
+    .ot-chart { display: grid; grid-template-columns: 36px 1fr; gap: 8px; align-items: start; }
+    .ot-y { position: relative; height: 176px; }
+    .ot-y span { position: absolute; right: 0; font-size: 11px; font-weight: 600; color: #98A2B3; line-height: 1; transform: translateY(-50%); }
+    .ot-y span:nth-child(1) { top: 0; transform: none; }
+    .ot-y span:nth-child(2) { top: 25%; }
+    .ot-y span:nth-child(3) { top: 50%; }
+    .ot-y span:nth-child(4) { top: 75%; }
+    .ot-plot { position: relative; min-width: 0; }
+    .ot-plot svg { display: block; width: calc(100% - 52px); height: 176px; }
+    .ot-x { display: flex; justify-content: space-between; margin-top: 6px; margin-right: 52px; font-size: 11px; font-weight: 600; color: #98A2B3; }
+    .ot-tip { position: absolute; right: 0; top: 6px; border-radius: 8px; background: #FFF1EC; padding: 4px 8px; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .qa-btn { border-radius: 18px; padding: 18px 8px 14px; text-align: center; }
+    .qa-icon { display: grid; place-items: center; width: 40px; height: 40px; margin: 0 auto; border-radius: 12px; background: #fff; }
+    .qa-label { margin-top: 8px; font-size: 11px; font-weight: 700; line-height: 1.25; color: #141517; }
+    .crumb { font-size: 13px; font-weight: 700; color: #98A2B3; }
+    .crumb button { color: #98A2B3; font-weight: 700; }
+    .crumb button:hover { color: #FF4F18; }
+    .crumb .here { color: #FF4F18; }
+    .form-card { background: #fff; border-radius: 24px; padding: 22px 24px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
+    .form-title { margin: 0 0 16px; font-size: 16px; font-weight: 800; }
+    .lbl { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #344054; }
+    .field { width: 100%; height: 44px; border: 1px solid #E4E7EC; border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 500; background: #fff; color: #141517; }
+    select.field { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .field::placeholder { color: #98A2B3; }
+    .field:focus { outline: none; border-color: #FF4F18; box-shadow: 0 0 0 4px rgba(255,79,24,0.12); }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; }
+    .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-ui { position: relative; width: 44px; height: 24px; border-radius: 999px; background: #E4E7EC; flex-shrink: 0; }
+    .toggle-ui::after { content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(20,21,23,0.15); transition: left .18s ease; }
+    .toggle input:checked + .toggle-ui { background: #FF4F18; }
+    .toggle input:checked + .toggle-ui::after { left: 22px; }
+    .btn-ghost { height: 44px; padding: 0 20px; border-radius: 12px; border: 1px solid #E4E7EC; background: #fff; font-size: 14px; font-weight: 800; color: #344054; }
+    .btn-save { height: 44px; padding: 0 20px; border-radius: 12px; border: 0; background: #FF4F18; font-size: 14px; font-weight: 800; color: #fff; }
+    .btn-save:hover { filter: brightness(0.96); }
+    #toast { position: fixed; right: 24px; bottom: 24px; z-index: 50; display: none; border-radius: 14px; background: #141517; color: #fff; padding: 12px 16px; font-size: 13px; font-weight: 700; box-shadow: 0 12px 30px rgba(20,21,23,0.18); }
+    #toast.show { display: block; }
+    .inv-kpi { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); min-height: 92px; }
+    .inv-kpi .ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px; flex-shrink: 0; }
+    .badge { display: inline-flex; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; }
+    .line-table { width: 100%; text-align: left; font-size: 14px; font-weight: 600; }
+    .line-table th { padding: 10px 8px; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #98A2B3; }
+    .line-table td { padding: 12px 8px; border-top: 1px solid #F2F4F7; vertical-align: middle; }
+    .badge-done { background: #EAF8F0; color: #12B76A; }
+    .badge-open { background: #FFF8E8; color: #DC6803; }
+    .badge-prog { background: #EEF4FF; color: #1570EF; }
+    .badge-proc { background: #FFF1EC; color: #FF4F18; }
+    .badge-refund { background: #F3EEFF; color: #7A5AF8; }
+    .set-tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #EEF0F3; }
+    .set-tab { display: inline-flex; align-items: center; gap: 8px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: #667085; white-space: nowrap; border-bottom: 2px solid transparent; }
+    .set-tab.is-on { color: #FF4F18; border-bottom-color: #FF4F18; }
+    .pref-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; }
+    #sideClose { display: none; }
+    @media (max-width: 1023px) {
+      #sidebar {
+        right: auto !important;
+        width: min(86vw, 360px) !important;
+        max-width: 360px !important;
+        z-index: 55;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        box-shadow: 8px 0 28px rgba(20, 21, 23, 0.14);
+      }
+      #scrim { z-index: 50; background: rgba(20, 21, 23, 0.4); }
+      #sideClose { display: grid !important; }
+      .set-tabs { scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
+      .set-tabs::-webkit-scrollbar { display: none; height: 0; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #sidebar {
+        width: 400px !important;
+        max-width: 400px !important;
+      }
+    }
+    #mNav {
+      display: none;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: #fff;
+      border-top: 1px solid #EEF0F3;
+      padding: 20px 4px calc(8px + env(safe-area-inset-bottom));
+      overflow: visible;
+    }
+    #mNav .mnav-blob {
+      position: absolute;
+      top: -8px;
+      left: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: #FF4F18;
+      border: 4px solid #F7F8FA;
+      box-shadow: 0 12px 28px rgba(255, 79, 24, 0.38);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.34s cubic-bezier(0.22, 0.81, 0.36, 1);
+    }
+    #mNav button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2px;
+      min-height: 52px;
+      min-width: 0;
+      color: #98A2B3;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      position: relative;
+      z-index: 2;
+      padding-bottom: 2px;
+    }
+    #mNav button.is-on { color: #FF4F18; }
+    #mNav .mnav-ico {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      color: inherit;
+      transition: transform 0.34s cubic-bezier(0.22, 0.81, 0.36, 1), color 0.2s ease;
+    }
+    #mNav button.is-on .mnav-ico {
+      color: #fff;
+      transform: translateY(-22px);
+    }
+    #mNav svg { display: block; }
+    @media (max-width: 1023px) {
+      #mNav { display: grid; }
+      body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+      #toast { bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 60; }
+    }
+    @media (max-width: 767px) {
+      #mNav { padding-left: 2px; padding-right: 2px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #mNav { padding-left: 28px; padding-right: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #mNav .mnav-blob, #mNav .mnav-ico { transition: none; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:relative lg:translate-x-0">
+      <div class="brand-row flex items-center gap-2 px-5 py-5">
+        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
+        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
+        <span id="brandSub" class="brand-sub text-sm font-semibold text-[#98A2B3]">Finance Admin</span>
+        <button id="sideClose" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
+        <button data-panel="dashboard" data-title="Dashboard" class="nav-btn is-active mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l8-7 8 7v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Orders &amp; Fulfilment</p>
+        <button data-panel="orders" data-title="Orders" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span class="nav-label">Orders</span>
+        </button>
+        <button data-panel="returns" data-title="Returns &amp; Complaints" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          <span class="nav-label">Returns &amp; Complaints</span>
+        </button>
+        <p class="nav-group px-6 pb-2 pt-2 text-[11px] font-semibold text-[#98A2B3]">Accounts</p>
+        <button data-panel="customers" data-title="Customers (B2B)" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span class="nav-label">Customers (B2B)</span>
+        </button>
+        <button data-panel="finance" data-title="Payments &amp; Finance" class="nav-btn mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span class="nav-label">Payments &amp; Finance</span>
+        </button>
+        <button data-panel="reports" data-title="Reports &amp; Analytics" class="nav-btn mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V8"/></svg>
+          <span class="nav-label">Reports &amp; Analytics</span>
+        </button>
+      </nav>
+      <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <header class="flex items-center justify-between gap-4 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
+        <div class="flex min-w-0 flex-1 items-center gap-3">
+          <button id="menuBtn" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <label class="relative w-full max-w-[480px]">
+            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            </span>
+            <input id="adminSearch" class="search h-11 w-full rounded-full border border-[#E4E7EC] bg-[#F7F8FA] pl-10 pr-4 text-sm font-medium" placeholder="Search settlements, orders, customers..." data-ph-sm="Search settlements..." data-ph-md="Search settlements, orders..." />
+          </label>
+        </div>
+        <div class="flex shrink-0 items-center justify-end gap-3">
+          <button class="relative grid h-10 w-10 place-items-center rounded-full text-[#667085]" aria-label="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#F04438]"></span>
+          </button>
+          <div class="user-wrap relative shrink-0">
+            <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
+              <div id="userInitial" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-sm font-extrabold text-orange">M</div>
+              <div class="hidden text-left lg:block">
+                <div id="userName" class="text-sm font-extrabold leading-tight">Meera Iyer</div>
+                <div id="userRole" class="text-[11px] font-semibold text-[#98A2B3]">Finance Admin</div>
+              </div>
+              <svg class="hidden lg:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div id="userMenu" class="user-menu" role="menu">
+              <button id="logoutBtn" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog" role="menuitem">Logout</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 p-4 lg:p-6">
+        <section id="dashboardView" class="panel">
+          <div class="dash-head">
+            <div>
+              <h1 id="dashHello" class="text-[32px] font-extrabold tracking-tight">Good morning, Meera!</h1>
+              <p id="dashSub" class="mt-1 text-sm font-medium text-[#667085]">Prepaid settlements, COD cash and open credit notes.</p>
+            </div>
+            <div class="dash-date">
+              <div class="flex items-center justify-end gap-1.5 text-sm font-extrabold text-[#344054]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+                Tue, 24 Jun 2025
+              </div>
+              <select class="mt-1 bg-transparent text-xs font-semibold text-[#667085]">
+                <option>Hyderabad</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="kpi-card" style="background:#FFF1EC">
+              <div class="kpi-icon text-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+              <div class="kpi-body">
+                <p class="kpi-label">Razorpay settled</p>
+                <p class="kpi-delta">↑ 9%</p>
+                <p class="kpi-value">₹8.4L</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#EAF8F0">
+              <div class="kpi-icon text-emerald-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/></svg></div>
+              <div class="kpi-body">
+                <p class="kpi-label">COD collected</p>
+                <p class="kpi-delta">↑ 4%</p>
+                <p class="kpi-value">₹1.2L</p>
+                <p class="kpi-vs">vs last week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#FFF8E8">
+              <div class="kpi-icon text-amber-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+              <div class="kpi-body">
+                <p class="kpi-label">Refunds open</p>
+                <p class="kpi-delta is-muted">6 open</p>
+                <p class="kpi-value">6</p>
+                <p class="kpi-vs">this week</p>
+              </div>
+            </article>
+            <article class="kpi-card" style="background:#EEF4FF">
+              <div class="kpi-icon text-sky-600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16h16V8z"/><path d="M14 2v6h6"/></svg></div>
+              <div class="kpi-body">
+                <p class="kpi-label">Credit notes</p>
+                <p class="kpi-delta">↑ 2</p>
+                <p class="kpi-value">3</p>
+                <p class="kpi-vs">awaiting you</p>
+              </div>
+            </article>
+          </div>
+          <div class="mt-4 grid gap-4 xl:grid-cols-[1.4fr_0.8fr]">
+            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h2 class="text-lg font-extrabold">Settlement trend</h2>
+                  <p class="text-sm font-medium text-[#667085]">Prepaid collections in the last 30 days</p>
+                </div>
+                <button class="rounded-full border border-[#E4E7EC] px-3 py-1.5 text-xs font-bold text-[#667085]">Last 30 days</button>
+              </div>
+              <div class="relative mt-4">
+                <div class="ot-chart">
+                  <div class="ot-y"><span>400</span><span>300</span><span>200</span><span>100</span></div>
+                  <div class="ot-plot">
+                    <div class="ot-tip">₹8.4L settled</div>
+                    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#FF4F18" stop-opacity="0.18"/>
+                          <stop offset="100%" stop-color="#FF4F18" stop-opacity="0"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M0 200 L0 170 L50 148 L100 120 L150 108 L200 105 L250 118 L300 110 L350 90 L400 88 L450 62 L500 68 L550 72 L600 29 L600 200 Z" fill="url(#area)"/>
+                      <path d="M0 170 L50 148 L100 120 L150 108 L200 105 L250 118 L300 110 L350 90 L400 88 L450 62 L500 68 L550 72 L600 29" fill="none" stroke="#FF4F18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="600" cy="29" r="5" fill="#FF4F18"/>
+                    </svg>
+                    <div class="ot-x">
+                      <span>25 May</span><span>30 May</span><span>4 Jun</span><span>9 Jun</span><span>14 Jun</span><span>19 Jun</span><span>24 Jun</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)]">
+              <h2 class="text-lg font-extrabold">Quick Actions</h2>
+              <div class="qa-grid mt-4">
+                <button data-panel="finance" class="qa-btn" style="background:#FFF1EC">
+                  <div class="qa-icon"><span class="text-orange text-lg font-extrabold">₹</span></div>
+                  <div class="qa-label">Reconcile</div>
+                </button>
+                <button data-panel="finance" class="qa-btn" style="background:#EAF8F0">
+                  <div class="qa-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600"><path d="M9 11l3 3L22 4"/></svg></div>
+                  <div class="qa-label">Match COD</div>
+                </button>
+                <button data-panel="returns" class="qa-btn" style="background:#F3EEFF">
+                  <div class="qa-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-violet-600"><path d="M3 12a9 9 0 1 0 3-6.7"/></svg></div>
+                  <div class="qa-label">Approve refund</div>
+                </button>
+                <button data-panel="reports" class="qa-btn" style="background:#EEF4FF">
+                  <div class="qa-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-sky-600"><path d="M4 19V9M10 19V5M16 19v-7"/></svg></div>
+                  <div class="qa-label">Export report</div>
+                </button>
+                <button data-panel="orders" class="qa-btn" style="background:#F3F4F6">
+                  <div class="qa-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/></svg></div>
+                  <div class="qa-label">Order value</div>
+                </button>
+                <button data-panel="customers" class="qa-btn" style="background:#FFF8E8">
+                  <div class="qa-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-amber-600"><circle cx="9" cy="7" r="4"/></svg></div>
+                  <div class="qa-label">Account ledger</div>
+                </button>
+              </div>
+            </article>
+          </div>
+          <article class="overflow-hidden rounded-[24px] bg-white p-5 shadow-[0_8px_24px_rgba(20,21,23,0.04)] mt-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-extrabold">Recent settlements</h2>
+              <button data-panel="finance" class="text-sm font-extrabold text-orange">View all →</button>
+            </div>
+            <div class="mt-3 overflow-x-auto">
+              <table class="w-full min-w-[640px] text-left text-sm">
+                <thead class="text-xs font-bold uppercase tracking-wide text-[#98A2B3]"><tr><th class="py-2">Ref</th><th>Order</th><th>Mode</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody class="font-semibold">
+                  <tr class="border-t border-[#F2F4F7]"><td class="py-3 text-[#667085]">SET-1902</td><td>#ORD-8810</td><td>Prepaid</td><td class="text-sky-600">₹14,280</td><td><span class="badge badge-done">Settled</span></td></tr>
+                  <tr class="border-t border-[#F2F4F7]"><td class="py-3 text-[#667085]">COD-441</td><td>#ORD-8818</td><td>Cash on delivery</td><td class="text-sky-600">₹3,640</td><td><span class="badge badge-open">Match cash</span></td></tr>
+                  <tr class="border-t border-[#F2F4F7]"><td class="py-3 text-[#667085]">CN-118</td><td>#ORD-8790</td><td>Credit note</td><td class="text-sky-600">₹820</td><td><span class="badge badge-prog">Review</span></td></tr>
+                  <tr class="border-t border-[#F2F4F7]"><td class="py-3 text-[#667085]">SET-1901</td><td>#ORD-8804</td><td>Prepaid</td><td class="text-sky-600">₹9,110</td><td><span class="badge badge-done">Settled</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+        </section>
+
+        <section id="financeView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="finance">Payments &amp; Finance</button> <span class="mx-1">›</span> <span class="here">Hyderabad</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Payments &amp; finance</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Prepaid settlements and COD cash for Hyderabad. Credit line stays in the next phase.</p>
+          <div class="mt-5 grid gap-3 sm:grid-cols-3">
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">Razorpay settled</p><p class="mt-1 text-2xl font-extrabold">₹8.4L</p></article>
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">COD collected</p><p class="mt-1 text-2xl font-extrabold">₹1.2L</p></article>
+            <article class="form-card"><p class="text-xs font-semibold text-[#667085]">Refunds open</p><p class="mt-1 text-2xl font-extrabold">6</p></article>
+          </div>
+          <article class="form-card mt-4 overflow-x-auto">
+            <table class="line-table min-w-[640px]">
+              <thead><tr><th>Ref</th><th>Order</th><th>Mode</th><th>Amount</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">SET-1902</td><td>#ORD-8810</td><td>Prepaid</td><td>₹14,280</td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Settlement reconciled">Reconcile</button></td></tr>
+                <tr><td class="font-bold">COD-441</td><td>#ORD-8818</td><td>Cash on delivery</td><td>₹3,640</td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="COD cash matched">Match cash</button></td></tr>
+                <tr><td class="font-bold">CN-118</td><td>#ORD-8790</td><td>Credit note</td><td>₹820</td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Credit note approved">Approve</button></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+        <section id="ordersView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="orders">Orders</button> <span class="mx-1">›</span> <span class="here">Value</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Orders</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Order values for settlement and refund decisions.</p>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[720px]">
+              <thead><tr><th>Order</th><th>Kitchen</th><th>Amount</th><th>Mode</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">#ORD-8810</td><td>Cloud Bowl</td><td>₹14,280</td><td>Prepaid</td><td><span class="badge badge-done">Delivered</span></td></tr>
+                <tr><td class="font-bold">#ORD-8818</td><td>Chai Buddy Kukatpally</td><td>₹3,640</td><td>COD</td><td><span class="badge badge-proc">Out for delivery</span></td></tr>
+                <tr><td class="font-bold">#ORD-8790</td><td>Spice Route</td><td>₹820</td><td>Credit note</td><td><span class="badge badge-refund">Refund review</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+        <section id="returnsView" class="panel hidden">
+          <p class="crumb"><button type="button" data-panel="returns">Returns</button> <span class="mx-1">›</span> <span class="here">Refunds</span></p>
+          <h1 class="mt-2 text-[32px] font-extrabold tracking-tight">Returns &amp; refunds</h1>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[720px]">
+              <thead><tr><th>Request</th><th>Order</th><th>Kitchen</th><th>Amount</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">RET-204</td><td>#ORD-8790</td><td>Spice Route</td><td>₹820</td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Refund released">Release refund</button></td></tr>
+                <tr><td class="font-bold">RET-211</td><td>#ORD-8762</td><td>The Urban Table</td><td>₹1,140</td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Refund held">Hold</button></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+        <section id="customersView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Customer ledgers</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Prepaid wallets and COD exposure for Hyderabad kitchens.</p>
+          <article class="form-card mt-5 overflow-x-auto">
+            <table class="line-table min-w-[720px]">
+              <thead><tr><th>Kitchen</th><th>Prepaid</th><th>COD due</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td class="font-bold">Spice Route</td><td>₹42,100</td><td>—</td><td><span class="badge badge-done">Clear</span></td></tr>
+                <tr><td class="font-bold">Hotel Crest</td><td>₹18,400</td><td>₹6,200</td><td><span class="badge badge-open">COD open</span></td></tr>
+                <tr><td class="font-bold">Cloud Bowl</td><td>₹9,800</td><td>—</td><td><span class="badge badge-done">Clear</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+        <section id="reportsView" class="panel hidden">
+          <h1 class="text-[32px] font-extrabold tracking-tight">Finance reports</h1>
+          <div class="mt-5 grid gap-3 sm:grid-cols-2">
+            <article class="form-card"><p class="font-extrabold">Settlement vs payout</p><p class="mt-1 text-sm font-semibold text-[#667085]">Razorpay payouts match KitchenX ledger on 99.6% of lines.</p><button type="button" class="js-act btn-ghost mt-4" data-toast="Report exported">Export</button></article>
+            <article class="form-card"><p class="font-extrabold">COD cash cycle</p><p class="mt-1 text-sm font-semibold text-[#667085]">Yesterday’s cash bag from Route 3 is still unmatched.</p><button type="button" class="js-act btn-ghost mt-4" data-toast="Report exported">Export</button></article>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+  <nav id="mNav" aria-label="Primary">
+    <span class="mnav-blob" id="mNavBlob" aria-hidden="true"></span>
+    <button type="button" data-panel="dashboard" class="is-on">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>
+      Home
+    </button>
+    <button type="button" data-panel="orders">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-2.4-1.3L13.2 22 12 20.7 10.8 22 8.4 20.7 6 22V2z"/><path d="M9 7h6M9 11h6M9 15h6"/></svg></span>
+      Orders
+    </button>
+    <button type="button" data-panel="finance">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+      Finance
+    </button>
+    <button type="button" data-panel="reports">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V8"/></svg></span>
+      Reports
+    </button>
+    <button type="button" data-panel="customers">
+      <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span>
+      Accounts
+    </button>
+  </nav>
+  <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
+  <div id="toast" role="status"></div>
+  <script>
+    const NEED = 'finance';
+    if (sessionStorage.getItem('kxRole') !== 'admin' || sessionStorage.getItem('kxPersona') !== NEED) {
+      window.location.href = 'kitchenx-v2.html#login';
+    }
+    const sidebar = document.getElementById('sidebar');
+    const scrim = document.getElementById('scrim');
+    function closeSide() {
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+    }
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      scrim.classList.toggle('hidden');
+    });
+    const sideClose = document.getElementById('sideClose');
+    if (sideClose) sideClose.addEventListener('click', closeSide);
+    scrim.addEventListener('click', closeSide);
+    function setSearchPh() {
+      const el = document.getElementById('adminSearch');
+      if (!el) return;
+      const w = window.innerWidth;
+      if (!el.getAttribute('data-ph-lg')) el.setAttribute('data-ph-lg', el.getAttribute('placeholder'));
+      if (w < 768 && el.getAttribute('data-ph-sm')) el.placeholder = el.getAttribute('data-ph-sm');
+      else if (w < 1024 && el.getAttribute('data-ph-md')) el.placeholder = el.getAttribute('data-ph-md');
+      else el.placeholder = el.getAttribute('data-ph-lg');
+    }
+    setSearchPh();
+    window.addEventListener('resize', setSearchPh);
+    document.getElementById('collapseBtn').addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
+    });
+    const userWrap = document.querySelector('.user-wrap');
+    const userBtn = document.getElementById('userBtn');
+    userBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userWrap.classList.toggle('open');
+      userBtn.setAttribute('aria-expanded', userWrap.classList.contains('open') ? 'true' : 'false');
+    });
+    document.addEventListener('click', () => {
+      userWrap.classList.remove('open');
+      userBtn.setAttribute('aria-expanded', 'false');
+    });
+    let mnavReady = false;
+    const M_TAB = { dashboard: 'dashboard', orders: 'orders', returns: 'orders', finance: 'finance', reports: 'reports', customers: 'customers' };
+    function placeMNavBlob() {
+      const nav = document.getElementById('mNav');
+      const blob = document.getElementById('mNavBlob');
+      if (!nav || !blob || !nav.offsetWidth) return;
+      const on = nav.querySelector('button.is-on') || nav.querySelector('button');
+      const nr = nav.getBoundingClientRect();
+      const br = on.getBoundingClientRect();
+      const x = br.left - nr.left + (br.width / 2) - (blob.offsetWidth / 2);
+      if (!mnavReady) blob.style.transition = 'none';
+      blob.style.transform = 'translate3d(' + Math.round(x) + 'px, 0, 0)';
+      if (!mnavReady) {
+        blob.offsetWidth;
+        blob.style.transition = '';
+        mnavReady = true;
+      }
+    }
+    function syncMNav(id) {
+      const tab = M_TAB[id] || 'dashboard';
+      document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === tab));
+      placeMNavBlob();
+    }
+    function showPanel(id) {
+      document.querySelectorAll('main .panel').forEach((el) => el.classList.add('hidden'));
+      const view = document.getElementById(id + 'View');
+      if (view) view.classList.remove('hidden');
+      document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id);
+      });
+      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      sidebar.classList.add('-translate-x-full');
+      scrim.classList.add('hidden');
+      syncMNav(id);
+    }
+    document.querySelectorAll('[data-panel]').forEach((btn) => {
+      btn.addEventListener('click', () => showPanel(btn.getAttribute('data-panel')));
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('kxRole');
+      sessionStorage.removeItem('kxPersona');
+      sessionStorage.removeItem('kxUser');
+      window.location.href = 'kitchenx-v2.html';
+    });
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    document.querySelectorAll('.js-act').forEach((b) => b.addEventListener('click', () => toast(b.getAttribute('data-toast') || 'Saved')));
+    const start = (location.hash || '#dashboard').slice(1);
+    if (document.getElementById(start + 'View')) showPanel(start);
+    window.addEventListener('resize', placeMNavBlob);
+    requestAnimationFrame(placeMNavBlob);
+    
+  </script>
+</body>
+</html>
