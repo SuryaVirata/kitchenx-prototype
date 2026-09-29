@@ -321,10 +321,13 @@
     @media (min-width: 1024px) {
       .flash-banner {
         grid-template-columns: auto auto 1fr auto;
+        grid-template-areas: none;
         gap: 16px 18px;
         padding: 12px 18px;
         align-items: center;
       }
+      .flash-copy, .flash-timer, .flash-pay, .flash-banner .flash-cta { grid-area: auto; }
+      .flash-banner .flash-cta { justify-self: end; }
       .flash-credit { justify-self: stretch; }
     }
     @media (min-width: 1280px) {
@@ -405,20 +408,49 @@
     .pdp-similar { margin-top: 24px; }
     .pdp-similar h2 { margin: 0 0 12px; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; }
     .pdp-similar-grid { width: 100%; }
-    @media (max-width: 767px) {
-      .pdp-desk { padding-bottom: 12px; }
-      .pdp-desk-layout { gap: 14px; }
-      .pdp-desk-art { min-height: 132px; padding: 8px; }
-      .pdp-desk-art img { max-height: 116px; }
-      .pdp-thumb { flex-basis: 48px; width: 48px; height: 48px; }
-      .pdp-eta { display: none; }
-      .pdp-buy {
+    @media (max-width: 1023px) {
+      #pdpDesk > .pdp-top { margin-bottom: 8px; }
+      #pdpDeskBack {
+        height: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+        color: #344054;
+      }
+      #pdpDesk .card { position: relative; padding: 12px; }
+      .pdp-desk-layout { gap: 10px; }
+      .pdp-desk-art { position: relative; min-height: 0; padding: 8px; }
+      .pdp-desk-art img { max-height: 168px; max-width: 70%; }
+      .pdp-desk-art .heart { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; }
+      .pdp-desk-art .heart svg { width: 18px; height: 18px; }
+      .pdp-copy {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 12px;
+        align-items: center;
+      }
+      .pdp-copy > * { grid-column: 1; }
+      .pdp-copy .pdp-buy {
+        grid-column: 2;
+        grid-row: 1 / span 6;
+        align-self: center;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        width: 132px;
+        margin-top: 0;
+        gap: 8px;
       }
-      .pdp-buy .btn-save { width: 100%; flex: none; height: 44px; }
-      .pdp-similar { margin-top: 18px; }
+      .pdp-copy .pdp-buy .btn-save { width: 100%; flex: none; height: 40px; padding: 0 10px; }
+      .pdp-copy .pdp-packs, .pdp-copy .pdp-qty-label, .pdp-copy .pdp-note { grid-column: 1 / -1; }
+      .pdp-eta { display: none; }
+      .pdp-similar { margin-top: 14px; }
+    }
+    @media (max-width: 767px) {
+      .pdp-desk { padding-bottom: 8px; }
+      .pdp-desk-art img { max-height: 132px; }
+      .pdp-thumb { flex-basis: 48px; width: 48px; height: 48px; }
       .pdp-similar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
     }
     @media (min-width: 768px) and (max-width: 1023px) {
@@ -435,6 +467,7 @@
         gap: 12px;
       }
       .pdp-desk-art { grid-column: 2; grid-row: 1; min-height: 320px; padding: 24px; }
+      #pdpDesk .pdp-top #pdpDeskFav { position: static; width: 40px; height: 40px; }
       .pdp-desk-art img { max-height: 280px; }
       .pdp-thumbs.has-many {
         grid-column: 1;
@@ -527,7 +560,44 @@
     .hdr-loc-compact { display: none; }
     .hdr-start { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 0 0 auto; }
     .hdr-end { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-    .hdr-mark { display: none; width: 28px; height: 28px; place-items: center; flex: 0 0 auto; }
+    .hdr-mark { display: none; height: 28px; width: auto; place-items: center; flex: 0 0 auto; }
+    .hdr-mark img { display: block; height: 26px; width: auto; }
+    .credit-banner { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; padding: 22px 24px; border-radius: 22px; background: linear-gradient(120deg, #FFF4F0 0%, #fff 58%); border: 1px solid #FFE0D4; }
+    .credit-x { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 999px; background: #fff; color: #667085; font-size: 18px; line-height: 1; display: grid; place-items: center; }
+    .credit-kicker { font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #FF4F18; }
+    .credit-banner h2 { margin-top: 4px; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; }
+    .credit-banner p { margin-top: 4px; max-width: 36ch; font-size: 14px; font-weight: 600; color: #667085; }
+    .credit-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; min-width: min(100%, 320px); margin: 0; padding: 0; list-style: none; }
+    .credit-trust li { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; font-weight: 700; color: #344054; }
+    .credit-trust svg { flex: 0 0 auto; margin-top: 1px; color: #12B76A; }
+    .credit-layout { display: grid; gap: 16px; }
+    .credit-rail { background: #fff; border-radius: 22px; padding: 12px; box-shadow: 0 8px 24px rgba(20,21,23,0.04); }
+    .credit-rail button { display: flex; width: 100%; gap: 10px; align-items: center; text-align: left; padding: 10px 8px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #98A2B3; background: transparent; }
+    .credit-rail button.is-on { color: #141517; background: #FFF4F0; }
+    .credit-rail button.is-done { color: #12B76A; }
+    .credit-num { width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: #F2F4F7; flex: 0 0 auto; }
+    .credit-rail button.is-on .credit-num { background: #FF4F18; color: #fff; }
+    .credit-rail button.is-done .credit-num { background: #EAF8F0; color: #12B76A; }
+    .credit-now { display: none; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: #667085; }
+    .credit-doc { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid #EEF0F3; border-radius: 16px; background: #fff; }
+    .credit-doc.is-up { border-color: #ABEFC6; background: #F6FEF9; }
+    .credit-time { display: flex; flex-wrap: wrap; gap: 8px; }
+    .credit-slot { height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #E4E7EC; font-size: 13px; font-weight: 700; background: #fff; color: #344054; }
+    .credit-slot.is-on { border-color: #FF4F18; background: #FFF4F0; color: #FF4F18; }
+    .credit-tl { display: flex; gap: 10px; align-items: flex-start; }
+    .credit-dot { width: 10px; height: 10px; margin-top: 5px; border-radius: 999px; background: #E4E7EC; flex: 0 0 auto; }
+    .credit-tl.is-done .credit-dot { background: #12B76A; }
+    .credit-tl.is-now .credit-dot { background: #FF4F18; }
+    @media (min-width: 1024px) {
+      .credit-layout { grid-template-columns: 240px minmax(0, 1fr); align-items: start; }
+    }
+    @media (max-width: 1023px) {
+      .credit-rail { display: none; }
+      .credit-now { display: block; }
+      .credit-trust { display: none; }
+      .credit-banner { padding: 16px; }
+      .credit-banner h2 { font-size: 20px; }
+    }
     .hdr-icon {
       position: relative;
       display: grid;
@@ -592,7 +662,7 @@
     .wish-row:hover { background: #F7F8FA; }
     .wish-row img { width: 40px; height: 40px; object-fit: contain; }
     @media (max-width: 1023px) {
-      .hdr-mark { display: grid; }
+      .hdr-mark { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       .bell-dot { animation: none; }
@@ -708,14 +778,22 @@
       .heart svg { width: 14px; height: 14px; }
       .deal-badge { top: 8px; left: 8px; min-height: 22px; font-size: 10px; }
       .flash-banner {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(0, 1fr);
+        grid-template-areas:
+          "title clock view"
+          "pay pay view";
         align-items: center;
-        gap: 8px 10px;
+        column-gap: 10px;
+        row-gap: 4px;
         padding: 10px 12px;
         border-radius: 16px;
         margin-bottom: 12px;
       }
+      .flash-copy { grid-area: title; min-width: 0; }
+      .flash-timer { grid-area: clock; }
+      .flash-pay { grid-area: pay; min-width: 0; }
+      .flash-banner .flash-cta { grid-area: view; justify-self: end; align-self: center; }
       .flash-sub { display: none; }
       .flash-ends, .flash-unit { display: none; }
       .flash-clock-compact {
@@ -904,20 +982,22 @@
       }
       .m-cat p { font-size: 10px; font-weight: 800; color: #344054; text-align: center; line-height: 1.2; }
       .m-flash {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "main view" "credit view" "note view";
         align-items: center;
-        gap: 6px 10px;
+        column-gap: 10px;
+        row-gap: 2px;
         margin-top: 14px;
         padding: 10px 12px;
         border-radius: 16px;
         background: linear-gradient(90deg, #FFF4F0 0%, #FFE8E0 58%, #FFF8F6 100%);
       }
-      .m-flash-main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
-      .m-flash-credit { margin: 0; font-size: 12px; font-weight: 800; color: #344054; }
+      .m-flash-main { grid-area: main; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+      .m-flash-credit { grid-area: credit; margin: 0; font-size: 12px; font-weight: 800; color: #344054; }
       .m-flash-credit b { color: #FF4F18; }
-      .m-flash-note { margin: 0; flex: 1 1 160px; font-size: 11px; font-weight: 600; color: #667085; }
-      .m-flash-view { margin-left: auto; background: transparent; color: #FF4F18; font-size: 13px; font-weight: 800; }
+      .m-flash-note { grid-area: note; margin: 0; font-size: 11px; font-weight: 600; color: #667085; }
+      .m-flash-view { grid-area: view; justify-self: end; align-self: center; margin-left: 0; background: transparent; color: #FF4F18; font-size: 13px; font-weight: 800; }
       .acc-row {
         display: flex;
         align-items: center;
@@ -1043,6 +1123,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
           <span class="nav-label">Invoices &amp; Payments</span>
         </button>
+        <button data-panel="credit" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span class="nav-label">Credit Line</span>
+        </button>
         <button data-panel="deliveries" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
           <span class="nav-label">Deliveries</span>
@@ -1085,7 +1169,7 @@
       <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
         <div class="hdr-start">
         <a href="kitchenx-v2.html" class="hdr-mark" aria-label="KitchenX">
-          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF4F18" d="M3 3h7.2L12 8.2 13.8 3H21l-6.2 9L21 21h-7.2L12 15.8 10.2 21H3l6.2-9L3 3z"/></svg>
+          <img src="assets/home/kitchenx-mark.png" alt="" />
         </a>
         <button id="menuBtn" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1233,7 +1317,7 @@
 
         <section data-view="catalogue" class="panel hidden">
           <div id="pdpDesk" class="pdp-desk">
-            <div class="mb-5 flex items-center justify-between gap-3">
+            <div class="pdp-top mb-5 flex items-center justify-between gap-3">
               <button type="button" id="pdpDeskBack" class="btn-ghost h-10 px-4">← Back to catalogue</button>
               <button class="heart relative static top-0 right-0" id="pdpDeskFav" type="button" aria-label="Save">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.4 4.4 0 0 1 12 6.2a4.4 4.4 0 0 1 8.8 2.4z"/></svg>
@@ -1299,6 +1383,21 @@
               <label class="mt-2 flex items-center gap-2 text-sm font-semibold"><input id="stockOnly" type="checkbox" checked class="accent-[#FF4F18]" /> In Stock Only</label>
             </aside>
             <div class="min-w-0">
+              <article class="credit-banner" id="creditBanner">
+                <button type="button" id="creditClose" class="credit-x" aria-label="Close credit offer">×</button>
+                <div class="min-w-0">
+                  <p class="credit-kicker">Buy now, pay later</p>
+                  <h2>Up to ₹50,000</h2>
+                  <p>Stock the kitchen today. Settle at the end of the month.</p>
+                  <button type="button" id="creditApply" data-panel="credit" class="btn-save mt-4">Apply for Credit</button>
+                </div>
+                <ul class="credit-trust">
+                  <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>30-day credit cycle</li>
+                  <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Manage it from your account</li>
+                  <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Fast approval for kitchens</li>
+                  <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>For verified businesses</li>
+                </ul>
+              </article>
               <div id="flashDeal" class="flash-banner">
                 <div class="flash-copy">
                   <p class="flex flex-wrap items-center gap-2 text-base font-extrabold text-orange">
@@ -1341,6 +1440,79 @@
               <div id="catGrid" class="cat-grid min-w-0"></div>
             </div>
           </div>
+        </section>
+
+        <section data-view="credit" class="panel hidden">
+          <div class="mb-4">
+            <h1 class="text-3xl font-extrabold tracking-tight">Credit Line</h1>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Buy now. Pay at the end of the month. Up to ₹50,000 for verified kitchens.</p>
+          </div>
+          <p id="creditStepLabel" class="credit-now">Step 1 of 4 · Business Details</p>
+          <div class="credit-layout">
+            <aside class="credit-rail" aria-label="Application steps">
+              <button type="button" data-crail="1"><span class="credit-num">1</span>Business Details</button>
+              <button type="button" data-crail="2"><span class="credit-num">2</span>Upload Documents</button>
+              <button type="button" data-crail="3"><span class="credit-num">3</span>Verification</button>
+              <button type="button" data-crail="4"><span class="credit-num">4</span>Review</button>
+            </aside>
+            <div class="card p-5 sm:p-6">
+              <div data-cstep="1">
+                <h2 class="text-lg font-extrabold">Business Details</h2>
+                <p class="mt-1 text-sm font-semibold text-[#667085]">We use this to open a 30-day line in your kitchen’s name.</p>
+                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                  <label class="block text-sm font-bold sm:col-span-2">Business name<input id="crOrg" class="field mt-1" required /></label>
+                  <label class="block text-sm font-bold">Business type<input id="crType" class="field mt-1" /></label>
+                  <label class="block text-sm font-bold">Contact name<input id="crContact" class="field mt-1" /></label>
+                  <label class="block text-sm font-bold">Mobile<input id="crPhone" class="field mt-1" inputmode="tel" placeholder="10-digit mobile" /></label>
+                  <label class="block text-sm font-bold">GSTIN<input id="crGst" class="field mt-1" placeholder="22AAAAA0000A1Z5" /></label>
+                  <label class="block text-sm font-bold sm:col-span-2">Business address<textarea id="crAddr" class="field mt-1"></textarea></label>
+                </div>
+                <div class="mt-5 flex justify-end"><button type="button" id="crNext1" class="btn-save">Continue</button></div>
+              </div>
+              <div data-cstep="2" class="hidden">
+                <h2 class="text-lg font-extrabold">Upload Documents</h2>
+                <p class="mt-1 text-sm font-semibold text-[#667085]">GST and PAN are required. The rest can follow before the visit.</p>
+                <div class="mt-4 grid gap-3">
+                  <div class="credit-doc" data-doc="gst"><div><p class="text-sm font-extrabold">GST certificate</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Required</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="gst" /></label></div>
+                  <div class="credit-doc" data-doc="fssai"><div><p class="text-sm font-extrabold">FSSAI licence</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Pending</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="fssai" /></label></div>
+                  <div class="credit-doc" data-doc="pan"><div><p class="text-sm font-extrabold">PAN</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Required</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="pan" /></label></div>
+                  <div class="credit-doc" data-doc="bank"><div><p class="text-sm font-extrabold">Bank statements</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Pending</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="bank" /></label></div>
+                  <div class="credit-doc" data-doc="it"><div><p class="text-sm font-extrabold">IT returns</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Pending</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="it" /></label></div>
+                  <div class="credit-doc" data-doc="address"><div><p class="text-sm font-extrabold">Business address proof</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Pending</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="address" /></label></div>
+                </div>
+                <div class="mt-5 flex justify-between gap-2"><button type="button" class="btn-ghost" data-crback="1">Back</button><button type="button" id="crNext2" class="btn-save">Continue</button></div>
+              </div>
+              <div data-cstep="3" class="hidden">
+                <h2 class="text-lg font-extrabold">Verification</h2>
+                <p class="mt-1 text-sm font-semibold text-[#667085]">Pick a slot for a short visit at the kitchen.</p>
+                <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Date</p>
+                <div id="crDates" class="credit-time mt-2"></div>
+                <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Time</p>
+                <div id="crTimes" class="credit-time mt-2"></div>
+                <label class="mt-4 block text-sm font-bold">Visit address<input id="crVisit" class="field mt-1" /></label>
+                <div class="mt-5 flex justify-between gap-2"><button type="button" class="btn-ghost" data-crback="2">Back</button><button type="button" id="crNext3" class="btn-save">Continue</button></div>
+              </div>
+              <div data-cstep="4" class="hidden">
+                <h2 class="text-lg font-extrabold">Review</h2>
+                <p class="mt-1 text-sm font-semibold text-[#667085]">Your application is with the KitchenX platform team.</p>
+                <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Application ID</p>
+                <p id="crAppId" class="mt-1 text-xl font-extrabold tracking-tight">—</p>
+                <ol id="crTimeline" class="mt-5 grid gap-3"></ol>
+                <div class="mt-5 flex flex-wrap justify-between gap-2">
+                  <button type="button" class="btn-ghost" data-crback="3" id="crBackReview">Back</button>
+                  <button type="button" id="crSupport" class="btn-save">Contact Support</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-view="checkout" class="panel hidden">
+          <button type="button" id="checkoutBack" class="btn-ghost h-10 px-4">← Back to product</button>
+          <h1 class="mt-4 text-3xl font-extrabold tracking-tight">Checkout</h1>
+          <p class="mt-1 text-sm font-medium text-[#667085]">This is what you added. The product page stays behind this step.</p>
+          <div id="checkoutLines" class="mt-5 grid gap-3"></div>
+          <div id="checkoutPay" class="card mt-4 p-5"></div>
         </section>
 
         <section data-view="orders" class="panel hidden">
@@ -1738,8 +1910,8 @@
       document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
     });
 
-    const PANELS = ['dashboard','catalogue','orders','repeat','lists','invoices','deliveries','returns','account','support'];
-    const M_TAB = { dashboard: 'dashboard', catalogue: 'catalogue', orders: 'orders', repeat: 'orders', lists: 'lists', invoices: 'account', deliveries: 'orders', returns: 'account', support: 'account', account: 'account' };
+    const PANELS = ['dashboard','catalogue','orders','repeat','lists','invoices','credit','checkout','deliveries','returns','account','support'];
+    const M_TAB = { dashboard: 'dashboard', catalogue: 'catalogue', orders: 'orders', repeat: 'orders', lists: 'lists', invoices: 'account', credit: 'account', checkout: 'catalogue', deliveries: 'orders', returns: 'account', support: 'account', account: 'account' };
     let mnavReady = false;
     function placeMNavBlob() {
       const nav = document.getElementById('mNav');
@@ -1775,9 +1947,315 @@
       closeFilters();
       window.scrollTo(0, 0);
       if (id === 'catalogue') renderCat();
+      if (id === 'credit') openCredit();
+      if (id === 'checkout') renderCheckout();
       if (typeof renderCatChips === 'function') requestAnimationFrame(() => requestAnimationFrame(renderCatChips));
     }
     document.querySelectorAll('[data-panel]').forEach((btn) => btn.addEventListener('click', () => showPanel(btn.getAttribute('data-panel'))));
+
+    const CREDIT_DOCS = [
+      { key: 'gst', label: 'GST certificate' },
+      { key: 'fssai', label: 'FSSAI licence' },
+      { key: 'pan', label: 'PAN' },
+      { key: 'bank', label: 'Bank statements' },
+      { key: 'it', label: 'IT returns' },
+      { key: 'address', label: 'Business address proof' }
+    ];
+    const CREDIT_TIMES = ['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM'];
+    const CREDIT_NAMES = ['', 'Business Details', 'Upload Documents', 'Verification', 'Review'];
+    let creditStep = 1;
+    let creditDraft = { docs: {}, visitDate: '', visitTime: '' };
+    function creditApps() {
+      try { return JSON.parse(localStorage.getItem('kxCreditApps') || '[]'); }
+      catch (e) { return []; }
+    }
+    function myCredit() {
+      return creditApps().find((a) => a.kitchen === org || a.org === org) || null;
+    }
+    function creditAddr() {
+      const city = sessionStorage.getItem('kxCity') || '';
+      const area = sessionStorage.getItem('kxArea') || '';
+      return [savedAddr, area, city].filter(Boolean).join(', ') || savedLoc || 'Main Kitchen, Connaught Place, Delhi';
+    }
+    function paintCredit() {
+      document.querySelectorAll('[data-cstep]').forEach((el) => {
+        el.classList.toggle('hidden', Number(el.getAttribute('data-cstep')) !== creditStep);
+      });
+      document.querySelectorAll('[data-crail]').forEach((el) => {
+        const n = Number(el.getAttribute('data-crail'));
+        el.classList.toggle('is-on', n === creditStep);
+        el.classList.toggle('is-done', n < creditStep);
+      });
+      const label = document.getElementById('creditStepLabel');
+      if (label) label.textContent = 'Step ' + creditStep + ' of 4 · ' + CREDIT_NAMES[creditStep];
+      const cta = document.getElementById('creditApply');
+      const appNow = myCredit();
+      const bannerTitle = document.querySelector('.credit-banner h2');
+      const bannerCopy = document.querySelector('.credit-banner p');
+      if (cta) cta.textContent = appNow ? (appNow.stage === 'approved' ? 'View credit line' : 'View application') : 'Apply for Credit';
+      if (bannerTitle && bannerCopy) {
+        if (appNow && appNow.stage === 'approved') {
+          const spare = Math.max(0, Number(appNow.limit || 0) - Number(appNow.used || 0));
+          bannerTitle.textContent = money(spare) + ' spare';
+          bannerCopy.textContent = 'Approved line ' + money(appNow.limit) + '. Checkout draws on this until the spare is gone.';
+        } else {
+          bannerTitle.textContent = 'Up to ₹50,000';
+          bannerCopy.textContent = 'Stock the kitchen today. Settle at the end of the month.';
+        }
+      }
+      const back = document.getElementById('crBackReview');
+      if (back) back.classList.toggle('hidden', !!myCredit());
+    }
+    function fillCreditForm() {
+      const app = myCredit();
+      document.getElementById('crOrg').value = (app && app.org) || org;
+      document.getElementById('crType').value = (app && app.bizType) || bizType;
+      document.getElementById('crContact').value = (app && app.contact) || (user && !user.includes('@') ? user : org);
+      document.getElementById('crPhone').value = (app && app.phone) || '';
+      document.getElementById('crGst').value = (app && app.gstin) || '';
+      document.getElementById('crAddr').value = (app && app.address) || creditAddr();
+      document.getElementById('crVisit').value = (app && app.visitAddress) || creditAddr();
+      CREDIT_DOCS.forEach((d) => {
+        const row = document.querySelector('.credit-doc[data-doc="' + d.key + '"]');
+        if (!row) return;
+        const name = (app && app.docs && app.docs[d.key]) || creditDraft.docs[d.key] || '';
+        row.classList.toggle('is-up', !!name);
+        const file = row.querySelector('.credit-file');
+        if (file) file.textContent = name || (d.key === 'gst' || d.key === 'pan' ? 'Required' : 'Pending');
+      });
+    }
+    function buildSlots() {
+      const dates = document.getElementById('crDates');
+      const times = document.getElementById('crTimes');
+      if (!dates || dates.childElementCount) return;
+      const app = myCredit();
+      const start = new Date();
+      start.setDate(start.getDate() + 1);
+      for (let i = 0; i < 8 && dates.childElementCount < 5; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        if (d.getDay() === 0) continue;
+        const iso = d.toISOString().slice(0, 10);
+        const label = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'credit-slot';
+        btn.textContent = label;
+        btn.dataset.date = iso;
+        if ((app && app.visitDate === iso) || (!app && !creditDraft.visitDate && dates.childElementCount === 0)) {
+          btn.classList.add('is-on');
+          creditDraft.visitDate = iso;
+        }
+        dates.appendChild(btn);
+      }
+      CREDIT_TIMES.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'credit-slot';
+        btn.textContent = t;
+        btn.dataset.time = t;
+        if ((app && app.visitTime === t) || (!app && i === 0)) {
+          btn.classList.add('is-on');
+          if (!app) creditDraft.visitTime = t;
+        }
+        times.appendChild(btn);
+      });
+      dates.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-date]');
+        if (!b || myCredit()) return;
+        dates.querySelectorAll('.credit-slot').forEach((x) => x.classList.remove('is-on'));
+        b.classList.add('is-on');
+        creditDraft.visitDate = b.dataset.date;
+      });
+      times.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-time]');
+        if (!b || myCredit()) return;
+        times.querySelectorAll('.credit-slot').forEach((x) => x.classList.remove('is-on'));
+        b.classList.add('is-on');
+        creditDraft.visitTime = b.dataset.time;
+      });
+    }
+    function paintTimeline(app) {
+      const ol = document.getElementById('crTimeline');
+      const idEl = document.getElementById('crAppId');
+      if (!ol || !app) return;
+      if (idEl) idEl.textContent = app.id;
+      const visit = app.visitStatus || 'requested';
+      const stage = app.stage || 'review';
+      const visitDone = visit === 'registered' || visit === 'not_required';
+      const withFinance = stage === 'with_finance' || stage === 'approved';
+      const approved = stage === 'approved';
+      const spare = Math.max(0, Number(app.limit || 0) - Number(app.used || 0));
+      const slot = (app.visitDate ? new Date(app.visitDate + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) : '') + ' · ' + (app.visitTime || '');
+      const visitDetail = visit === 'registered'
+        ? 'Visit registered · ' + slot + ' · ' + (app.visitAddress || '')
+        : visit === 'not_required'
+          ? 'No visit required for this kitchen'
+          : 'Requested slot, not registered yet · ' + slot;
+      const rows = [
+        { t: 'Application submitted', d: 'Received ' + new Date(app.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }), state: 'is-done' },
+        { t: 'Documents under review', d: 'GST, PAN and the files you attached', state: visitDone || withFinance ? 'is-done' : 'is-now' },
+        { t: visit === 'not_required' ? 'Visit not required' : 'Physical verification', d: visitDetail, state: visitDone ? 'is-done' : '' },
+        { t: approved ? 'Credit line approved' : (stage === 'with_finance' ? 'With finance' : 'Credit decision pending'), d: approved ? ('Limit ' + money(app.limit) + ' · spare ' + money(spare)) : (stage === 'with_finance' ? 'Finance is setting the limit for this kitchen' : 'The platform confirms the visit, then finance sets the limit'), state: approved ? 'is-done' : (stage === 'with_finance' ? 'is-now' : '') }
+      ];
+      const esc = (s) => String(s || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+      ol.innerHTML = rows.map((r) => '<li class="credit-tl ' + r.state + '"><span class="credit-dot"></span><div><p class="text-sm font-extrabold">' + esc(r.t) + '</p><p class="text-xs font-semibold text-[#667085]">' + esc(r.d) + '</p></div></li>').join('');
+    }
+    function openCredit() {
+      const app = myCredit();
+      buildSlots();
+      fillCreditForm();
+      creditStep = app ? 4 : (creditStep || 1);
+      if (app) paintTimeline(app);
+      paintCredit();
+    }
+    function goCredit(n) {
+      if (myCredit() && n < 4) return;
+      creditStep = n;
+      paintCredit();
+    }
+    document.querySelectorAll('[data-crail]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const n = Number(btn.getAttribute('data-crail'));
+        if (myCredit()) { creditStep = 4; paintCredit(); return; }
+        if (n < creditStep) goCredit(n);
+      });
+    });
+    document.querySelectorAll('[data-crback]').forEach((btn) => {
+      btn.addEventListener('click', () => goCredit(Number(btn.getAttribute('data-crback'))));
+    });
+    document.querySelectorAll('[data-file]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        if (!file || myCredit()) return;
+        creditDraft.docs[input.getAttribute('data-file')] = file.name;
+        fillCreditForm();
+      });
+    });
+    document.getElementById('crNext1').addEventListener('click', () => {
+      const name = document.getElementById('crOrg').value.trim();
+      const addr = document.getElementById('crAddr').value.trim();
+      const phone = document.getElementById('crPhone').value.trim();
+      if (!name || !addr) { toast('Add the business name and address.'); return; }
+      if (phone && phone.replace(/\D/g, '').length < 10) { toast('Enter a 10-digit mobile, or leave it blank.'); return; }
+      goCredit(2);
+    });
+    document.getElementById('crNext2').addEventListener('click', () => {
+      if (!creditDraft.docs.gst || !creditDraft.docs.pan) { toast('Upload the GST certificate and PAN to continue.'); return; }
+      goCredit(3);
+    });
+    document.getElementById('crNext3').addEventListener('click', () => {
+      if (!creditDraft.visitDate || !creditDraft.visitTime) { toast('Pick a date and a time for the visit.'); return; }
+      const list = creditApps().filter((a) => a.kitchen !== org && a.org !== org);
+      const stamp = new Date();
+      const id = 'KX-' + stamp.getFullYear() + String(stamp.getMonth() + 1).padStart(2, '0') + String(stamp.getDate()).padStart(2, '0') + '-' + String(123 + list.length).padStart(5, '0');
+      const app = {
+        id: id,
+        kitchen: org,
+        org: document.getElementById('crOrg').value.trim(),
+        bizType: document.getElementById('crType').value.trim(),
+        contact: document.getElementById('crContact').value.trim(),
+        phone: document.getElementById('crPhone').value.trim(),
+        gstin: document.getElementById('crGst').value.trim(),
+        address: document.getElementById('crAddr').value.trim(),
+        docs: Object.assign({}, creditDraft.docs),
+        visitDate: creditDraft.visitDate,
+        visitTime: creditDraft.visitTime,
+        visitAddress: document.getElementById('crVisit').value.trim(),
+        visitStatus: 'requested',
+        stage: 'review',
+        limit: 0,
+        used: 0,
+        submittedAt: stamp.toISOString()
+      };
+      list.push(app);
+      localStorage.setItem('kxCreditApps', JSON.stringify(list));
+      paintTimeline(app);
+      creditStep = 4;
+      paintCredit();
+      toast('Application ' + id + ' sent to the platform team.');
+    });
+    document.getElementById('crSupport').addEventListener('click', () => showPanel('support'));
+
+    function cartLines() {
+      return PRODUCTS.filter((p) => (qty[p.id] || 0) > 0 && !p.variant);
+    }
+    function saveCreditApps(list) {
+      localStorage.setItem('kxCreditApps', JSON.stringify(list));
+    }
+    function renderCheckout() {
+      const lines = document.getElementById('checkoutLines');
+      const pay = document.getElementById('checkoutPay');
+      if (!lines || !pay) return;
+      const items = cartLines();
+      if (!items.length) {
+        lines.innerHTML = '<article class="card p-5"><p class="font-extrabold">Nothing added yet</p><p class="mt-1 text-sm font-semibold text-[#667085]">Add a product from its page, then come back here.</p></article>';
+        pay.innerHTML = '<button type="button" class="btn-ghost" data-shop="1">Browse catalogue</button>';
+        return;
+      }
+      const total = items.reduce((sum, p) => sum + p.price * qty[p.id], 0);
+      lines.innerHTML = items.map((p) => (
+        '<article class="card flex items-center justify-between gap-3 p-4">' +
+          '<div class="min-w-0"><p class="font-extrabold">' + p.name + '</p><p class="text-sm font-semibold text-[#667085]">' + (packOf(p) || p.brand) + ' · qty ' + qty[p.id] + '</p></div>' +
+          '<p class="font-extrabold">' + money(p.price * qty[p.id]) + '</p>' +
+        '</article>'
+      )).join('');
+      const app = myCredit();
+      const spare = app && app.stage === 'approved' ? Math.max(0, Number(app.limit || 0) - Number(app.used || 0)) : 0;
+      const canLater = spare + 0.001 >= total;
+      pay.innerHTML =
+        '<div class="flex flex-wrap items-end justify-between gap-3">' +
+          '<div><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">To pay</p><p class="text-2xl font-extrabold">' + money(total) + '</p>' +
+          (app && app.stage === 'approved' ? '<p class="mt-1 text-sm font-semibold text-[#667085]">Spare credit ' + money(spare) + '</p>' : '<p class="mt-1 text-sm font-semibold text-[#667085]">Pay now. A pay-later line appears here after finance approves it.</p>') +
+          '</div><div class="flex flex-wrap gap-2">' +
+          (canLater ? '<button type="button" class="btn-save" data-pay="later">Pay later</button>' : '') +
+          '<button type="button" class="btn-ghost" data-pay="now">Pay now</button>' +
+          '</div></div>';
+    }
+    function placeCheckout(mode) {
+      const items = cartLines();
+      if (!items.length) return;
+      const total = items.reduce((sum, p) => sum + p.price * qty[p.id], 0);
+      if (mode === 'later') {
+        const list = creditApps();
+        const app = list.find((a) => a.kitchen === org || a.org === org);
+        const spare = app && app.stage === 'approved' ? Math.max(0, Number(app.limit || 0) - Number(app.used || 0)) : 0;
+        if (!app || spare + 0.001 < total) { toast('The spare credit does not cover this order.'); return; }
+        app.used = Number(app.used || 0) + total;
+        saveCreditApps(list);
+        paintCredit();
+      }
+      items.forEach((p) => { qty[p.id] = 0; });
+      renderCat();
+      const left = mode === 'later' ? myCredit() : null;
+      const spareLeft = left ? Math.max(0, Number(left.limit || 0) - Number(left.used || 0)) : 0;
+      document.getElementById('checkoutLines').innerHTML = '<article class="card p-5"><p class="font-extrabold">Order placed</p><p class="mt-1 text-sm font-semibold text-[#667085]">' + (mode === 'later' ? ('Charged to the credit line. Spare left ' + money(spareLeft) + '.') : 'Paid now. The credit line was not used.') + '</p></article>';
+      document.getElementById('checkoutPay').innerHTML = '<button type="button" class="btn-save" data-shop="1">Back to catalogue</button>';
+      toast(mode === 'later' ? 'Order placed on the credit line' : 'Order placed');
+    }
+    document.getElementById('checkoutPay').addEventListener('click', (e) => {
+      if (e.target.closest('[data-shop]')) { showPanel('catalogue'); return; }
+      const btn = e.target.closest('[data-pay]');
+      if (btn) placeCheckout(btn.getAttribute('data-pay'));
+    });
+    document.getElementById('checkoutLines').addEventListener('click', (e) => {
+      if (e.target.closest('[data-shop]')) showPanel('catalogue');
+    });
+    document.getElementById('checkoutBack').addEventListener('click', () => {
+      const p = PRODUCTS.find((x) => x.id === lastPdpId);
+      if (p) openPdp(p);
+      else showPanel('catalogue');
+    });
+    paintCredit();
+    const creditBanner = document.getElementById('creditBanner');
+    if (creditBanner && localStorage.getItem('kxCreditHide') === '1') creditBanner.hidden = true;
+    const creditClose = document.getElementById('creditClose');
+    if (creditClose && creditBanner) {
+      creditClose.addEventListener('click', () => {
+        localStorage.setItem('kxCreditHide', '1');
+        creditBanner.hidden = true;
+      });
+    }
     let bootPanel = (location.hash || '#dashboard').slice(1);
 
     function toast(msg) {
@@ -1927,11 +2405,20 @@
       { id: 'p16', name: 'Green Chillies (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 18, was: 20, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chilli', stock: true, group: 'veg', tags: 'chilli vegetable spice' },
       { id: 'p17', name: 'Garlic (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'garlic', stock: true, group: 'veg', tags: 'garlic vegetable spice' },
       { id: 'p18', name: 'Lemon (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 70, was: 76, deal: { badge: 'Save 8%', kind: 'save' }, pic: 'lemon', stock: true, group: 'veg', tags: 'lemon vegetable citrus' },
-      { id: 'p21', name: 'Amul Toned Milk (1 L)', brand: 'Amul', cat: 'Dairy', price: 58, was: 64, deal: { badge: '10% OFF', kind: 'off' }, pic: 'cream', stock: true, tags: 'milk dairy' },
+      { id: 'p21', name: 'Amul Toned Milk (1 L)', brand: 'Amul', cat: 'Dairy', price: 58, was: 64, deal: { badge: '10% OFF', kind: 'off' }, pic: 'milk', stock: true, tags: 'milk dairy' },
       { id: 'p22', name: 'Amul Fresh Curd (1 kg)', brand: 'Amul', cat: 'Dairy', price: 75, pic: 'cream', stock: true, tags: 'curd dahi dairy yogurt' },
       { id: 'p23', name: 'Amul Paneer (200 g)', brand: 'Amul', cat: 'Dairy', price: 95, pic: 'butter', stock: true, tags: 'paneer dairy' },
       { id: 'p24', name: 'Amul Cow Ghee (1 L)', brand: 'Amul', cat: 'Dairy', price: 620, pic: 'butter', stock: true, tags: 'ghee dairy' },
-      { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'chicken', stock: true, tags: 'eggs chicken' },
+      { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'eggs', stock: true, tags: 'eggs chicken' },
+      { id: 'p40', name: 'Ginger (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 35, pic: 'ginger', stock: true, group: 'veg', tags: 'ginger vegetable spice' },
+      { id: 'p41', name: 'Spinach (1 bunch)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 22, pic: 'spinach', stock: true, group: 'veg', tags: 'spinach vegetable greens' },
+      { id: 'p42', name: 'Cauliflower (1 pc)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'cauli', stock: true, group: 'veg', tags: 'cauliflower vegetable' },
+      { id: 'p43', name: 'Almonds (500 g)', brand: 'Nutty', cat: 'Pantry & Staples', price: 420, was: 480, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almond', stock: true, tags: 'almond nut pantry' },
+      { id: 'p47', name: 'Almond Butter (500 g)', brand: 'Nutty', cat: 'Pantry & Staples', price: 449, was: 520, deal: { badge: '14% OFF', kind: 'off' }, pic: 'almondbutter', stock: true, tags: 'almond butter nut pantry' },
+      { id: 'p48', name: 'Almond Milk (1 L)', brand: 'Nutty', cat: 'Dairy', price: 145, was: 165, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almondmilk', stock: true, tags: 'almond milk dairy' },
+      { id: 'p44', name: 'Bakery Seed Bread', brand: 'Kitchen Loaf', cat: 'Bakery', price: 55, pic: 'bread', stock: true, tags: 'bread bakery loaf' },
+      { id: 'p45', name: 'Oven Loaf', brand: 'Kitchen Loaf', cat: 'Bakery', price: 40, pic: 'bun', stock: true, tags: 'loaf bread bakery' },
+      { id: 'p46', name: 'Butter Croissant', brand: 'Kitchen Loaf', cat: 'Bakery', price: 60, pic: 'croissant', stock: true, tags: 'croissant bakery bread' },
       { id: 'p26', name: 'Rohu Fish (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 280, pic: 'chicken', stock: true, tags: 'fish seafood meat' },
       { id: 'p27', name: 'Prawns (500 g)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 320, was: 360, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chicken', stock: true, tags: 'prawns seafood meat' },
       { id: 'p28', name: 'Mutton Curry Cut (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 720, pic: 'chicken', stock: true, tags: 'mutton meat' },
@@ -1943,7 +2430,7 @@
       { id: 'p33', name: 'Amul Lassi (1 L)', brand: 'Amul', cat: 'Dairy', price: 80, pic: 'cream', stock: false, demand: true, tags: 'lassi dairy beverage drink' },
       { id: 'p34', name: 'Tropicana Orange (1 L)', brand: 'Tropicana', cat: 'Beverages', price: 125, pic: 'lemon', stock: false, demand: true, tags: 'orange juice beverage drink' }
     ];
-    const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Pantry & Staples','Beverages'];
+    const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Bakery','Pantry & Staples','Beverages'];
     const BRANDS = ['Amul','Nestlé','Tata','Fortune','Aashirvaad','India Gate'];
     const qty = {};
     const fav = {};
@@ -2269,19 +2756,17 @@
     document.getElementById('moreBrands').addEventListener('click', () => {
       document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
     });
+    const SHOTS = {
+      tomato: ['tomato', 'tomato-2', 'tomato-3', 'tomato-4'],
+      eggs: ['eggs', 'eggs-2', 'eggs-3', 'eggs-4'],
+      milk: ['milk', 'milk-3', 'milk-4'],
+      bread: ['bread', 'bread-2', 'bread-3', 'bread-4'],
+      almondbutter: ['almondbutter', 'almondbutter-2', 'almondbutter-3'],
+      almondmilk: ['almondmilk', 'almondmilk-3', 'almondmilk-4']
+    };
     function shotsOf(p) {
-      const seen = {};
-      const out = [];
-      function add(kind) {
-        if (!kind || seen[kind]) return;
-        seen[kind] = 1;
-        out.push(kind);
-      }
-      add(p.pic);
-      PRODUCTS.forEach((x) => {
-        if (x.brand === p.brand && x.cat === p.cat) add(x.pic);
-      });
-      return out.slice(0, 5);
+      const list = SHOTS[p.pic] || (p.pic ? [p.pic] : []);
+      return list.slice(0, 4);
     }
     function similarOf(p) {
       const name = (p.name || '').toLowerCase();
@@ -2323,14 +2808,23 @@
           ? '<p class="mt-2 text-sm font-extrabold text-[#12B76A]">In Stock</p><p class="pdp-eta text-xs font-semibold text-[#98A2B3]">Usually delivered in 1 day</p>'
           : '<p class="oos-note mt-2">Out of stock · Highly demanded</p><p class="oos-sub">We are restocking this for kitchens this week</p>') +
         '<p class="pdp-qty-label mt-4 text-sm font-extrabold"><span class="md:hidden">Select Pack Size</span><span class="hidden md:inline">Select Quantity</span></p>' +
-        '<div class="mt-2 flex flex-wrap gap-2">' + sizes.map((s, i) => '<button type="button" class="chip' + (i === 2 ? ' is-on' : '') + '">' + s + '</button>').join('') + '</div>' +
-        (p.stock
-          ? '<div class="pdp-buy mt-4"><div class="stepper"><button data-q="-">−</button><span>' + Math.max(1, qty[p.id] || 0) + '</span><button data-q="+">+</button></div><button class="btn-save" data-add="' + p.id + '">Add to Cart</button></div>'
-          : '<button class="btn-ghost mt-4 w-full" type="button">Notify me when back</button>') +
-        '<p class="mt-4 rounded-2xl bg-[#EAF8F0] px-3 py-3 text-xs font-bold text-[#12B76A]">Free delivery on orders above ₹500</p>'
+        '<div class="pdp-packs mt-2 flex flex-wrap gap-2">' + sizes.map((s, i) => '<button type="button" class="chip' + (i === 2 ? ' is-on' : '') + '">' + s + '</button>').join('') + '</div>' +
+        pdpBuyHtml(p) +
+        '<p class="pdp-note mt-4 rounded-2xl bg-[#EAF8F0] px-3 py-3 text-xs font-bold text-[#12B76A]">Free delivery on orders above ₹500</p>'
       );
     }
+    function pdpBuyHtml(p) {
+      if (!p.stock) return '<button class="btn-ghost mt-4 w-full" type="button">Notify me when back</button>';
+      const n = qty[p.id] || 0;
+      if (n < 1) return '<div class="pdp-buy mt-4"><button type="button" class="btn-save" data-add="' + p.id + '">Add to Cart</button></div>';
+      return '<div class="pdp-buy mt-4"><div class="stepper"><button type="button" data-q="-" aria-label="Decrease">−</button><span>' + n + '</span><button type="button" data-q="+" aria-label="Increase">+</button></div><button type="button" class="btn-save" data-checkout="1">Checkout</button></div>';
+    }
+    let lastPdpId = '';
     function openPdp(p) {
+      const parked = document.getElementById('pdpDeskFav');
+      const parkTop = document.querySelector('#pdpDesk .pdp-top');
+      if (parked && parkTop && !parkTop.contains(parked)) parkTop.appendChild(parked);
+      lastPdpId = p.id;
       const cat = document.querySelector('[data-view="catalogue"]');
       if (cat.classList.contains('hidden')) showPanel('catalogue');
       closeModal('pdpModal');
@@ -2352,8 +2846,20 @@
         sim.classList.add('hidden');
       }
       cat.classList.add('is-pdp');
+      placePdpFav();
       window.scrollTo(0, 0);
     }
+    function placePdpFav() {
+      const fav = document.getElementById('pdpDeskFav');
+      const art = document.querySelector('#pdpDeskBody .pdp-desk-art');
+      const top = document.querySelector('#pdpDesk .pdp-top');
+      if (!fav || !top) return;
+      if (window.matchMedia('(max-width: 1023px)').matches && art) art.appendChild(fav);
+      else top.appendChild(fav);
+    }
+    window.addEventListener('resize', () => {
+      if (document.querySelector('[data-view="catalogue"].is-pdp')) placePdpFav();
+    });
     function onProductCardClick(e) {
       const card = e.target.closest('[data-pid]');
       if (!card) return;
@@ -2410,18 +2916,25 @@
       }
       const qbtn = e.target.closest('[data-q]');
       if (qbtn) {
-        const shown = Math.max(1, qty[id] || 0);
-        qty[id] = Math.max(1, shown + (qbtn.getAttribute('data-q') === '+' ? 1 : -1));
-        openPdp(p);
+        const next = Math.max(0, (qty[id] || 0) + (qbtn.getAttribute('data-q') === '+' ? 1 : -1));
+        qty[id] = next;
+        syncCardQty(id);
+        const buy = body.querySelector('.pdp-buy');
+        if (buy) buy.outerHTML = pdpBuyHtml(p);
+        if (next < 1) toast(p.name + ' removed');
         return;
       }
       if (e.target.closest('[data-add]')) {
         if (!p.stock) { toast(p.name + ' is out of stock · highly demanded'); return; }
-        qty[id] = Math.max(1, qty[id] || 1);
+        qty[id] = 1;
         syncCardQty(id);
-        toast(p.name + ' added · qty ' + qty[id]);
-        closeDeskPdp();
-        closeModal('pdpModal');
+        const buy = body.querySelector('.pdp-buy');
+        if (buy) buy.outerHTML = pdpBuyHtml(p);
+        toast(p.name + ' added · qty 1');
+        return;
+      }
+      if (e.target.closest('[data-checkout]')) {
+        showPanel('checkout');
       }
     }
     document.getElementById('pdpBody').addEventListener('click', onPdpInteract);
