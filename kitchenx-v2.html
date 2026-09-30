@@ -1497,6 +1497,7 @@
             <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white">Confirm</button>
           </div>
           <div id="setupStep" class="hidden">
+            <p id="socialNote" class="mb-4 hidden rounded-2xl bg-[#FFF4F0] px-3 py-2 text-sm font-bold text-[#344054]"></p>
             <div class="mb-5 flex items-center gap-2">
               <span class="step-dot is-on" data-setup-dot="1">1</span>
               <span class="h-px flex-1 bg-[#E8ECF1]"></span>
@@ -2108,6 +2109,7 @@
       startOtpTimer();
     });
     document.getElementById('confirmOtp').addEventListener('click', () => {
+      document.getElementById('socialNote').classList.add('hidden');
       showSetup(1);
     });
 
@@ -2141,21 +2143,28 @@
       });
     }
 
+    const SOCIAL = {
+      google: { name: 'Surya Virata', email: 'surya.virata@gmail.com', via: 'Google' },
+      facebook: { name: 'Surya Virata', email: 'surya.virata@facebook.test', via: 'Facebook' }
+    };
     document.querySelectorAll('[data-social]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const kind = btn.getAttribute('data-social');
-        const via = kind.includes('google') ? 'Google' : 'Facebook';
-        if (kind.startsWith('login')) {
-          if (loginMode === 'admin') return;
+        if (kind.startsWith('login') && loginMode === 'admin') return;
+        const provider = kind.includes('google') ? SOCIAL.google : SOCIAL.facebook;
+        if (kind.startsWith('login') && sessionStorage.getItem('kxBizType')) {
           sessionStorage.setItem('kxRole', 'customer');
-          sessionStorage.setItem('kxUser', via + ' account');
-          sessionStorage.setItem('kxOrg', sessionStorage.getItem('kxOrg') || 'Your kitchen');
+          sessionStorage.setItem('kxUser', sessionStorage.getItem('kxUser') || provider.email);
           window.location.href = 'customer.html';
           return;
         }
-        const org = document.getElementById('orgInput').value.trim() || 'Your kitchen';
-        const email = document.getElementById('emailInput').value.trim() || via.toLowerCase() + '-account';
-        pending = { org, email, type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
+        pending = { org: provider.name, email: provider.email, type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
+        document.querySelectorAll('#typeGrid .choice, #needGrid .choice').forEach((el) => el.classList.remove('is-on'));
+        const note = document.getElementById('socialNote');
+        note.textContent = 'Signed in with ' + provider.via + ' as ' + provider.name + ' · ' + provider.email;
+        note.classList.remove('hidden');
+        authLogin.classList.add('hidden');
+        authSignup.classList.remove('hidden');
         showSetup(1);
       });
     });

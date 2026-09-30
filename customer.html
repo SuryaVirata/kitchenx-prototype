@@ -466,7 +466,8 @@
         align-items: start;
         gap: 12px;
       }
-      .pdp-desk-art { grid-column: 2; grid-row: 1; min-height: 320px; padding: 24px; }
+      .pdp-desk-art { position: relative; grid-column: 2; grid-row: 1; min-height: 320px; padding: 24px; overflow: visible; }
+      #pdpDesk .card, .pdp-desk-layout, .pdp-gallery { overflow: visible; }
       #pdpDesk .pdp-top #pdpDeskFav { position: static; width: 40px; height: 40px; }
       .pdp-desk-art img { max-height: 280px; }
       .pdp-thumbs.has-many {
@@ -477,6 +478,39 @@
       }
       .pdp-buy .btn-save { flex: 0 0 158px; width: 158px; }
       .pdp-similar-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+    }
+    .pdp-lens, .pdp-zoom { display: none; }
+    @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+      .pdp-lens {
+        display: block;
+        position: absolute;
+        z-index: 4;
+        border: 1.5px dashed #fff;
+        pointer-events: none;
+        background: rgba(255,255,255,.08);
+      }
+      .pdp-zoom {
+        display: block;
+        position: absolute;
+        z-index: 7;
+        border: 2px solid #fff;
+        border-radius: 8px;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        box-shadow: 0 12px 28px rgba(20,21,23,.14);
+      }
+      .pdp-zoom::before {
+        content: "";
+        position: absolute;
+        left: -14px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 10px 14px 10px 0;
+        border-style: solid;
+        border-color: transparent #FFE4DC transparent transparent;
+      }
+      .pdp-lens[hidden], .pdp-zoom[hidden] { display: none !important; }
     }
     .help-btn { height: 40px; border-radius: 12px; background: #FFF1EC; color: #FF4F18; font-size: 13px; font-weight: 800; }
     .loc-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 280px; background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(20,21,23,.12); padding: 8px; }
@@ -2789,7 +2823,7 @@
     }
     function galleryHtml(p) {
       const shots = shotsOf(p);
-      const main = '<div class="pdp-desk-art"><img src="' + picSrc(shots[0]) + '" alt="" /></div>';
+      const main = '<div class="pdp-desk-art"><img src="' + picSrc(shots[0]) + '" alt="" /><span class="pdp-lens" hidden></span><span class="pdp-zoom" hidden></span></div>';
       if (shots.length < 2) return '<div class="pdp-gallery">' + main + '</div>';
       const thumbs = '<div class="pdp-thumbs has-many">' + shots.map((kind, i) =>
         '<button type="button" class="pdp-thumb' + (i === 0 ? ' is-on' : '') + '" data-pdp-shot="' + kind + '"><img src="' + picSrc(kind) + '" alt="" /></button>'
@@ -2898,6 +2932,52 @@
     document.getElementById('catGrid').addEventListener('click', onProductCardClick);
     document.getElementById('freqGrid').innerHTML = PRODUCTS.filter((p) => p.stock && !p.variant).slice(0, 4).map(productCard).join('');
     document.getElementById('freqGrid').addEventListener('click', onProductCardClick);
+    function hideZoom(root) {
+      (root || document).querySelectorAll('.pdp-lens, .pdp-zoom').forEach((el) => { el.hidden = true; });
+    }
+    function paintZoom(art, e) {
+      if (!window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)').matches) return;
+      const img = art.querySelector('img');
+      const lens = art.querySelector('.pdp-lens');
+      const zoom = art.querySelector('.pdp-zoom');
+      if (!img || !lens || !zoom || !img.naturalWidth) return;
+      const rect = img.getBoundingClientRect();
+      const artRect = art.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+        lens.hidden = true;
+        zoom.hidden = true;
+        return;
+      }
+      const lensSize = Math.max(52, Math.round(Math.min(rect.width, rect.height) * 0.2));
+      const pane = 220;
+      const lx = Math.max(0, Math.min(rect.width - lensSize, x - lensSize / 2));
+      const ly = Math.max(0, Math.min(rect.height - lensSize, y - lensSize / 2));
+      const imgLeft = rect.left - artRect.left;
+      const imgTop = rect.top - artRect.top;
+      const scale = pane / lensSize;
+      lens.hidden = false;
+      zoom.hidden = false;
+      lens.style.width = lensSize + 'px';
+      lens.style.height = lensSize + 'px';
+      lens.style.left = (imgLeft + lx) + 'px';
+      lens.style.top = (imgTop + ly) + 'px';
+      zoom.style.width = pane + 'px';
+      zoom.style.height = pane + 'px';
+      zoom.style.left = (imgLeft + lx + lensSize + 16) + 'px';
+      zoom.style.top = (imgTop + ly + (lensSize - pane) / 2) + 'px';
+      zoom.style.backgroundImage = 'url("' + img.currentSrc + '")';
+      zoom.style.backgroundSize = (rect.width * scale) + 'px ' + (rect.height * scale) + 'px';
+      zoom.style.backgroundPosition = (-lx * scale) + 'px ' + (-ly * scale) + 'px';
+    }
+    const deskBody = document.getElementById('pdpDeskBody');
+    deskBody.addEventListener('mousemove', (e) => {
+      const art = e.target.closest('.pdp-desk-art');
+      if (!art) { hideZoom(deskBody); return; }
+      paintZoom(art, e);
+    });
+    deskBody.addEventListener('mouseleave', () => hideZoom(deskBody));
     function onPdpInteract(e) {
       const body = e.currentTarget;
       const shot = e.target.closest('[data-pdp-shot]');
