@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -75,7 +75,144 @@
       background: var(--orange);
     }
     .nav-link { color: #344054; font-size: 14px; font-weight: 600; white-space: nowrap; }
-    .nav-link:hover { color: var(--orange); }
+    .nav-link:hover, .nav-link.is-on { color: var(--orange); }
+    #mobileMenu .m-nav a.is-on { color: var(--orange); }
+    body.is-blog #top { display: none; }
+    #blogApp { display: none; background: #F7F8FA; }
+    body.is-blog #blogApp { display: block; }
+    .blog-page { padding-top: 20px; padding-bottom: 56px; }
+    @media (min-width: 768px) { .blog-page { padding-top: 28px; padding-bottom: 72px; } }
+    .blog-kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #667085; }
+    .blog-banner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 340px;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+    .blog-banner-art { position: absolute; inset: 0; z-index: 0; }
+    .blog-banner-art .hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .blog-banner-copy { position: relative; z-index: 2; max-width: 440px; padding: 28px 24px; }
+    .blog-banner .blog-kicker { color: #FF4F18; }
+    .blog-banner h1 { margin-top: 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: #141517; }
+    .blog-banner p { margin-top: 12px; font-size: 15px; font-weight: 500; line-height: 1.55; color: #475467; }
+    @media (min-width: 768px) {
+      .blog-banner { min-height: 380px; border-radius: 24px; }
+      .blog-banner-copy { max-width: 480px; padding: 0 48px; }
+      .blog-banner h1 { font-size: 42px; }
+    }
+    @media (min-width: 1200px) {
+      .blog-banner { min-height: 440px; border-radius: 28px; }
+      .blog-banner-copy { max-width: 560px; padding: 0 64px; }
+      .blog-banner h1 { font-size: 52px; }
+    }
+    .blog-tools { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
+    .blog-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+    .blog-filters::-webkit-scrollbar { display: none; }
+    .blog-chip {
+      flex: 0 0 auto;
+      min-height: 38px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #344054;
+      cursor: pointer;
+    }
+    .blog-chip.is-on { border-color: #141517; background: #141517; color: #fff; }
+    .blog-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      padding: 0 14px;
+      color: #98A2B3;
+    }
+    .blog-search input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #141517;
+      outline: none;
+    }
+    @media (min-width: 1100px) {
+      .blog-tools { flex-direction: row; align-items: center; }
+      .blog-filters { flex: 1; min-width: 0; }
+      .blog-search { width: 230px; flex-shrink: 0; }
+    }
+    .blog-latest-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 36px; }
+    .blog-latest-head h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    @media (min-width: 768px) { .blog-latest-head h2 { font-size: 28px; } }
+    .blog-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    @media (min-width: 768px) { .blog-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
+    @media (min-width: 1200px) { .blog-grid { grid-template-columns: 1fr 1fr 1fr; gap: 20px; } }
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(20, 21, 23, 0.05);
+      color: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .blog-card img { display: block; width: 100%; height: 176px; object-fit: cover; background: #fff; }
+    @media (min-width: 768px) { .blog-card img { height: 188px; } }
+    .blog-card-body { display: flex; flex: 1; flex-direction: column; padding: 16px 16px 18px; }
+    .blog-meta { font-size: 12px; font-weight: 700; color: #98A2B3; }
+    .blog-cat { color: #FF4F18; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+    .blog-card h3 { margin-top: 8px; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+    .blog-card p { margin-top: 8px; font-size: 14px; font-weight: 500; line-height: 1.5; color: #667085; }
+    .blog-read { margin-top: auto; padding-top: 14px; font-size: 14px; font-weight: 800; color: #FF4F18; }
+    @media (hover: hover) and (pointer: fine) {
+      .blog-card:hover {
+        z-index: 2;
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba(20, 21, 23, 0.12);
+      }
+      .blog-card:hover h3 { color: #FF4F18; }
+    }
+    .blog-card:focus-visible { outline: 2px solid #FF4F18; outline-offset: 3px; }
+    .blog-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #141517;
+      cursor: pointer;
+    }
+    .blog-back:hover { color: #FF4F18; }
+    .blog-hero {
+      display: block;
+      width: 100%;
+      height: 220px;
+      margin-top: 16px;
+      border-radius: 24px;
+      object-fit: cover;
+      background: #fff;
+    }
+    @media (min-width: 768px) { .blog-hero { height: 360px; border-radius: 28px; } }
+    @media (min-width: 1200px) { .blog-hero { height: 440px; } }
+    .blog-prose { max-width: 740px; }
+    .blog-prose p { margin-top: 16px; font-size: 16px; font-weight: 500; line-height: 1.7; color: #344054; }
+    .blog-prose p.lead { font-size: 18px; color: #141517; }
+    @media (prefers-reduced-motion: reduce) {
+      .blog-card { transition: none; }
+      .blog-card:hover { transform: none; }
+    }
     .loc-wrap { position: relative; flex-shrink: 0; }
     .loc-btn {
       display: flex;
@@ -863,7 +1000,7 @@
         <a class="nav-link" href="#products" data-home-nav="products">Products</a>
         <a class="nav-link" href="#categories" data-home-nav="categories">Categories</a>
         <a class="nav-link" href="#businesses">For Business</a>
-        <a class="nav-link" href="#how">How it Works</a>
+        <a class="nav-link" href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a class="nav-link" href="#impact">About</a>
       </nav>
       <div class="ml-auto hidden items-center gap-3 min-[1200px]:flex">
@@ -915,7 +1052,7 @@
         <a href="#products" data-home-nav="products">Products</a>
         <a href="#categories" data-home-nav="categories">Categories</a>
         <a href="#businesses">For Business</a>
-        <a href="#how">How it Works</a>
+        <a href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a href="#impact">About</a>
       </nav>
       <div class="m-auth">
@@ -1113,6 +1250,18 @@
       <a href="customer.html#catalogue" data-need-login class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">View all products →</a>
     </section>
 
+    <section id="blogPreview" class="page-wrap py-8 min-[1200px]:py-14">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="blog-kicker">Blog</p>
+          <h2 class="mt-2 max-w-xl text-[28px] font-extrabold leading-[1.15] tracking-tight md:text-4xl">Notes from the kitchen floor.</h2>
+        </div>
+        <a href="#blog" data-blog="index" class="hidden shrink-0 text-sm font-extrabold text-coal hover:text-orange md:inline-flex">All posts →</a>
+      </div>
+      <div id="homeBlogGrid" class="blog-grid mt-8"></div>
+      <a href="#blog" data-blog="index" class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">All posts →</a>
+    </section>
+
     <section id="how" class="page-wrap py-8 min-[1200px]:py-14">
       <div class="grid gap-8 min-[1200px]:grid-cols-[0.9fr_1.4fr] min-[1200px]:items-end min-[1200px]:gap-10">
         <div>
@@ -1281,6 +1430,40 @@
     </section>
   </main>
 
+  <div id="blogApp">
+    <div id="blogIndex">
+      <div class="page-wrap blog-page">
+        <section class="blog-banner">
+          <div class="blog-banner-art">
+            <img class="hero-slide is-active" src="assets/blog/order-1.png" alt="" />
+            <img class="hero-slide" src="assets/blog/order-2.png" alt="" />
+            <img class="hero-slide" src="assets/blog/order-3.png" alt="" />
+            <img class="hero-slide" src="assets/blog/order-4.png" alt="" />
+            <img class="hero-slide" src="assets/blog/order-5.png" alt="" />
+          </div>
+          <div class="blog-banner-copy">
+            <p class="blog-kicker">KitchenX Blog</p>
+            <h1>Notes from the kitchen floor.</h1>
+            <p>Practical insights, buying guides, and real stories for restaurants, cafes, hotels, and canteens who keep the kitchen fed.</p>
+          </div>
+        </section>
+        <div class="blog-tools">
+          <div id="blogFilters" class="blog-filters"></div>
+          <label class="blog-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            <input id="blogSearch" type="search" placeholder="Search blog posts..." />
+          </label>
+        </div>
+        <div id="blogFeature"></div>
+        <div id="blogLatestHead" class="blog-latest-head">
+          <h2>Latest articles</h2>
+        </div>
+        <div id="blogGrid" class="blog-grid"></div>
+      </div>
+    </div>
+    <article id="blogPost" class="page-wrap py-6 min-[1200px]:py-12" hidden></article>
+  </div>
+
   <footer class="bg-coal text-white">
     <div class="page-wrap grid gap-10 py-14 min-[1200px]:grid-cols-[1.15fr_2fr_1.05fr]">
       <div>
@@ -1326,7 +1509,7 @@
             <a class="block hover:text-white" href="#how">Careers</a>
             <a class="block hover:text-white" href="#impact">Press</a>
             <a class="block hover:text-white" href="#supply">Sustainability</a>
-            <a class="block hover:text-white" href="#impact">Blog</a>
+            <a class="block hover:text-white" href="#blog" data-blog="index" data-blog-nav>Blog</a>
           </div>
         </div>
         <div>
@@ -1651,6 +1834,15 @@
       if (e.target.closest('[data-slide]')) restartTimer();
     });
 
+    const blogHeroSlides = [...document.querySelectorAll('.blog-banner-art .hero-slide')];
+    if (blogHeroSlides.length) {
+      let blogHeroIndex = 0;
+      setInterval(() => {
+        blogHeroIndex = (blogHeroIndex + 1) % blogHeroSlides.length;
+        blogHeroSlides.forEach((el, i) => el.classList.toggle('is-active', i === blogHeroIndex));
+      }, HOLD_MS);
+    }
+
     function setMobileMenuOpen(open) {
       const menu = document.getElementById('mobileMenu');
       const btn = document.getElementById('menuBtn');
@@ -1694,9 +1886,497 @@
     function goHomeSection(id) {
       setMobileMenuOpen(false);
       setHdrSearchOpen(false);
+      if (document.body.classList.contains('is-blog')) {
+        history.pushState(null, '', location.pathname + location.search);
+        closeBlog();
+      }
       const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
+    const BLOGS = [
+      {
+        id: 'bakery-orders-first',
+        cat: 'Bakery',
+        date: '18 Sep 2026',
+        read: '4 min',
+        title: 'What a bakery orders first',
+        excerpt: 'Eggs, wheat flour, oil, and bread. A bakery, QSR, or canteen signup puts those ahead of the rest of the shop.',
+        img: 'assets/customer/products/eggs.png',
+        alt: 'Brown eggs in a glass bowl',
+        body: [
+          'A bakery does not open the catalogue the way a hotel does. The first trays out of the oven need eggs, wheat flour, cooking oil, and bread. Those are the lines that run out on a Saturday morning.',
+          'On KitchenX, choosing Bakery, QSR, or canteen during signup tells the shop to lead with those categories. About two of every three products at the top of the list match that kitchen. The rest of the catalogue stays available, further down.',
+          'Wheat flour opens with four photos of the same flour: a pile, a bowl, a scoop, and an open sack. Eggs, milk, and bread do the same. You are looking at the ingredient, not a stand-in from another aisle.',
+          'If the counter also serves tea, black tea leaves, sugar, and milk sit with the bakery staples. The list is the week’s buy, not a random grid.'
+        ]
+      },
+      {
+        id: 'restaurant-produce-week',
+        cat: 'Restaurants',
+        date: '11 Sep 2026',
+        read: '4 min',
+        title: 'Produce for a restaurant week',
+        excerpt: 'Tomatoes, onions, and the daily vegetables sit with meat, dairy, and pantry when the business is a restaurant.',
+        img: 'assets/customer/products/tomato.png',
+        alt: 'Two fresh tomatoes',
+        body: [
+          'A restaurant week is mostly the same crates: tomatoes for the gravy, onions, potatoes, and whatever the specials need on top. The buy is repetitive on purpose. The kitchen already knows the dish.',
+          'Signup as a restaurant and the shop leads with fruits and vegetables, meat and seafood, dairy, and pantry staples. Tomatoes carry four photos of tomatoes. The product page stays on that ingredient when you move through the shots.',
+          'On a desktop, the cursor magnifies the spot under it. The stroke on the lens and the zoom box is white, so it sits on the photo instead of framing it in black.',
+          'Pack sizes stay on the product. A 1 kg buy and a 25 kg bag are the same tomato, written as the size the kitchen actually takes.'
+        ]
+      },
+      {
+        id: 'three-signup-questions',
+        cat: 'Buying',
+        date: '4 Sep 2026',
+        read: '3 min',
+        title: 'Why signup asks three questions',
+        excerpt: 'Business type, what you buy, and where you are. The shop then leads with the matching categories.',
+        img: 'assets/home/hero-1.png',
+        alt: 'A crate of fresh produce',
+        body: [
+          'The account is created first. Google or Facebook sign-in does that and then asks the same three questions as an email signup. It does not skip them.',
+          'The first question is the business: restaurant, cafe, hotel, cloud kitchen, caterer, or other. Other covers a bakery, a QSR, and a canteen. The second is what you buy: produce, dairy and eggs, meat, staples, beverages. The third is where the kitchen is.',
+          'Those answers change the order of the catalogue. They do not hide the rest of the shop. A cafe still sees vegetables. They just are not the first row.',
+          'The point is the Monday order. The person placing it should see their usual crates before they see everything else KitchenX carries.'
+        ]
+      },
+      {
+        id: 'canteen-staples',
+        cat: 'Canteens',
+        date: '28 Aug 2026',
+        read: '5 min',
+        title: 'What a canteen actually stocks',
+        excerpt: 'Rice, wheat, dal, oil, sugar, and tea. The canteen list is the lunch tray, not a bakery display.',
+        img: 'assets/customer/products/rice.png',
+        alt: 'A 5 kg bag of basmati rice',
+        body: [
+          'A canteen feeds the same lunch most days. The store room is rice, wheat atta, yellow dal, cooking oil, white sugar, and tea. Eggs and milk cover breakfast. Onions, potatoes, and tomatoes cover the gravy.',
+          'KitchenX treats a canteen like the Other signup: bakery and QSR sit in that same choice, and the shop still leads with pantry staples, eggs, dairy, and tea. Rice opens on the 5 kg bag, then two close-ups of the raw grain. Wheat flour has four shots. Dal, oil, sugar, and tea each open on a photo of that food.',
+          'Names match the picture. The rice bag says basmati rice. The atta bag does not carry another brand’s name, so the product does not either. Tea is loose black leaf, because that is what the photo shows.',
+          'If a photo was a cooked dish, a different grain, or a label from another product, it did not go in. A canteen buyer should recognise the sack before they add it.'
+        ]
+      },
+      {
+        id: 'cafe-counter',
+        cat: 'Dairy',
+        date: '21 Aug 2026',
+        read: '3 min',
+        title: 'Milk, eggs, and the cafe counter',
+        excerpt: 'A cafe signup leads with dairy, bakery, drinks, and eggs. The counter restock is the top of the list.',
+        img: 'assets/customer/products/milk.png',
+        alt: 'A bottle of milk',
+        body: [
+          'The cafe order is smaller and more often. Milk for the steamer, eggs for the breakfast plate, bread and pastry for the case, and a drink line that does not run out at 4 pm.',
+          'Choosing Cafe puts dairy, bakery, beverages, and eggs first. Almond milk sits with dairy when that is what the counter pours. Butter and cream stay in the same group.',
+          'The photos follow the product. Milk has more than one shot of milk. Bread has more than one shot of bread. Opening the page and moving across the thumbnails does not jump to another food.',
+          'Search still finds the rest of the catalogue. The default list is just the counter’s usual week.'
+        ]
+      },
+      {
+        id: 'hotel-volume',
+        cat: 'Hotels',
+        date: '14 Aug 2026',
+        read: '4 min',
+        title: 'How a hotel kitchen buys in volume',
+        excerpt: 'Produce, dairy, meat, pantry, and bakery, in the order a hotel banquet line actually uses them.',
+        img: 'assets/home/hero-4.png',
+        alt: 'KitchenX warehouse fulfilment',
+        body: [
+          'A hotel buy is the same ingredients as a restaurant, in larger packs, for more than one outlet. Banquet produce, dairy for breakfast, meat for the grill, pantry for the staff kitchen, and bakery for the coffee shop.',
+          'The hotel signup leads with fruits and vegetables, dairy, meat and seafood, pantry staples, and bakery. Credit stays on the account so the kitchen can take the week’s delivery and settle on the cycle, not at the dock.',
+          'Volume does not change the photo rule. A 5 kg rice bag is still rice. A tray of eggs is still eggs. The product page shows that item, then the next photo of the same item.',
+          'Delivery addresses stay on the account: the main kitchen and the prep hub are separate stops. The blog note is only the buying list. The address is chosen at checkout.'
+        ]
+      },
+      {
+        id: 'bakery-loaf',
+        cat: 'Bakery',
+        date: '7 Aug 2026',
+        read: '3 min',
+        title: 'The loaf a bakery reorders',
+        excerpt: 'Seeded bread and the plain loaf. A bakery signup keeps both near the top, next to flour and eggs.',
+        img: 'assets/customer/products/bread.png',
+        alt: 'Seeded loaves of bread',
+        body: [
+          'The case needs more than one loaf. A seeded bread for the counter, a plain loaf for toast and sandwiches, and flour behind both so the oven can keep going.',
+          'On KitchenX the bread product opens on the loaf itself, then more photos of bread. It does not jump to another aisle when you move through the shots.',
+          'A bakery, QSR, or canteen signup already leads with bakery. The loaf sits with eggs, wheat, and oil, which is the order the morning shift actually writes down.'
+        ]
+      },
+      {
+        id: 'cafe-pastry',
+        cat: 'Cafes',
+        date: '2 Aug 2026',
+        read: '3 min',
+        title: 'Pastry for the cafe case',
+        excerpt: 'Croissant, loaf, and milk. A cafe signup puts the case and the steamer ahead of the rest of the shop.',
+        img: 'assets/customer/products/croissant.png',
+        alt: 'A butter croissant',
+        body: [
+          'The cafe case is a small list that sells out. Croissant in the morning, bread through lunch, milk for every cup. When one of those runs out, the counter feels it before the store room does.',
+          'Choosing Cafe leads with dairy, bakery, drinks, and eggs. The pastry photo is a croissant. The milk photo is milk. The page stays on that item.',
+          'The rest of the catalogue is still there for a one-off. The default row is the case you refill every day.'
+        ]
+      },
+      {
+        id: 'cooking-oil',
+        cat: 'Pantry',
+        date: '26 Jul 2026',
+        read: '4 min',
+        title: 'Cooking oil for the hot line',
+        excerpt: 'A litre for the saute pan, and another bottle when the canteen fryer is running.',
+        img: 'assets/customer/products/oil.png',
+        alt: 'A bottle of sunflower cooking oil',
+        body: [
+          'Oil is the quiet line on every kitchen order. Restaurants use it in the gravy pan. Canteens use it for the fryer. Bakeries use it in dough. It rarely gets a special, and it always gets reordered.',
+          'The product opens on a sunflower-oil bottle, then a second photo of sunflower oil. The name says cooking oil, because that is what the bottle is.',
+          'Pantry staples sit high for a restaurant, a hotel, a caterer, and a canteen. Oil is in that group with rice, atta, and dal.'
+        ]
+      },
+      {
+        id: 'wheat-flour-shots',
+        cat: 'Pantry',
+        date: '19 Jul 2026',
+        read: '4 min',
+        title: 'Wheat flour, seen four ways',
+        excerpt: 'A pile, a bowl, a scoop, and an open sack. Same flour. The cursor zooms whichever shot is open.',
+        img: 'assets/customer/products/wheat.png',
+        alt: 'A pile of wheat flour',
+        body: [
+          'Wheat flour is the bakery buy and the canteen buy. Roti, bread, batter, and the morning loaf all start in the same sack.',
+          'The product page has four photos, and all four are flour. Move to the bowl, the scoop, or the open sack and the big photo changes with you.',
+          'On a desktop, the cursor magnifies the spot under it. The stroke stays white. A phone shows the same photos, stacked, without the zoom box.'
+        ]
+      },
+      {
+        id: 'yellow-dal',
+        cat: 'Canteens',
+        date: '12 Jul 2026',
+        read: '3 min',
+        title: 'Yellow dal for the daily tray',
+        excerpt: 'Split yellow lentils for the canteen lunch. Two close-ups, both of the same dal.',
+        img: 'assets/customer/products/dal.png',
+        alt: 'A close-up of yellow split dal',
+        body: [
+          'The canteen tray repeats. Dal is on it most days, next to rice and a vegetable. The store room buys it by the kilo, not by the bowl.',
+          'The photos are the lentils themselves: one tight crop of yellow split dal, and a second of the same pulse. The name says yellow dal, which is what is in the picture.',
+          'A canteen signup leads with pantry staples. Dal, rice, oil, sugar, and tea are in that lead, with eggs and milk beside them.'
+        ]
+      },
+      {
+        id: 'black-tea',
+        cat: 'Cafes',
+        date: '5 Jul 2026',
+        read: '3 min',
+        title: 'Black tea for the urn',
+        excerpt: 'Loose black leaf, not a carton of something else. Three photos of dry tea.',
+        img: 'assets/customer/products/tea.png',
+        alt: 'A pile of dry black tea leaves',
+        body: [
+          'Canteens and cafes both run a tea line. The buy is leaf, sugar, and milk. When the leaf photo is actually leaf, the person ordering does not have to guess.',
+          'Black tea opens on a pile of dry leaves, then two more close-ups of dry leaf. The product is named for the leaf, because that is the picture.',
+          'Sugar sits in the same pantry group. The canteen list keeps tea and sugar near the rice and the dal, which is how the urn and the lunch tray get bought together.'
+        ]
+      },
+      {
+        id: 'produce-crate',
+        cat: 'Produce',
+        date: '28 Jun 2026',
+        read: '4 min',
+        title: 'What goes in the produce crate',
+        excerpt: 'Tomatoes, onions, potatoes, capsicum, and greens. A restaurant week starts in this crate.',
+        img: 'assets/customer/products/capsicum.png',
+        alt: 'Fresh capsicum',
+        body: [
+          'The produce crate is the part of the order that changes with the menu and still repeats. Tomatoes for gravy, onions, potatoes, capsicum, chillies, and a bunch of greens.',
+          'A restaurant signup leads with fruits and vegetables. Each of those lines opens on a photo of that vegetable. Tomato has four tomato shots. The others stay on their own picture.',
+          'Hotels and caterers pull the same crate in larger bags. The photo does not change with the pack size. A bigger bag is still the same tomato.'
+        ]
+      },
+      {
+        id: 'white-sugar',
+        cat: 'Canteens',
+        date: '20 Jun 2026',
+        read: '3 min',
+        title: 'Sugar next to the tea',
+        excerpt: 'White crystals for the urn. The photo is sugar, shown in two lights.',
+        img: 'assets/customer/products/sugar.png',
+        alt: 'White sugar crystals',
+        body: [
+          'Sugar is a canteen staple because tea is. It also goes into bakery batter. It is a small line on the invoice and a daily one.',
+          'The photos are white sugar crystals. There are two, so the page can show the grain up close without borrowing a picture from another product.',
+          'On a canteen signup, sugar is scored with tea, rice, dal, and oil. It shows up with the staples, not at the bottom of a general grocery list.'
+        ]
+      },
+      {
+        id: 'onion-week',
+        cat: 'Produce',
+        date: '14 Jun 2026',
+        read: '3 min',
+        title: 'Onions for the gravy base',
+        excerpt: 'A restaurant week starts with onions. The photo is the onion, not a mixed crate.',
+        img: 'assets/customer/products/onion.png',
+        alt: 'Red onions',
+        body: [
+          'Almost every gravy on a restaurant menu starts with onion. The buy is repetitive, and the kitchen already knows the kilo it needs.',
+          'The product opens on onions. A restaurant signup puts fruits and vegetables first, so this line sits near tomatoes and potatoes.',
+          'Hotels and caterers take the same onion in a larger bag. The picture does not change with the pack size.'
+        ]
+      },
+      {
+        id: 'potato-fry',
+        cat: 'Produce',
+        date: '8 Jun 2026',
+        read: '3 min',
+        title: 'Potatoes for the fryer and the curry',
+        excerpt: 'One vegetable, two stations. Canteens and restaurants both reorder potatoes every week.',
+        img: 'assets/customer/products/potato.png',
+        alt: 'Potatoes',
+        body: [
+          'Potatoes go to the fryer and into the curry. A canteen and a restaurant both write them on the Monday list.',
+          'The card shows potatoes. The product page stays on that vegetable when you open it.',
+          'They sit with onions and tomatoes in the produce lead for a restaurant, and with the daily tray for a canteen.'
+        ]
+      },
+      {
+        id: 'carrot-crate',
+        cat: 'Produce',
+        date: '2 Jun 2026',
+        read: '3 min',
+        title: 'Carrots in the salad and the stock',
+        excerpt: 'A bright crate for the salad station, and the same carrot for the stock pot.',
+        img: 'assets/customer/products/carrot.png',
+        alt: 'Carrots',
+        body: [
+          'Carrots are a small line that still shows up every week: salad, stock, and the occasional side.',
+          'The photo is the carrot itself. It does not stand in for another vegetable on the card or on the product page.',
+          'A restaurant or hotel that leads with produce will see carrots with the rest of the crate, not buried under pantry.'
+        ]
+      },
+      {
+        id: 'spinach-bunch',
+        cat: 'Produce',
+        date: '27 May 2026',
+        read: '3 min',
+        title: 'Greens that sell out by lunch',
+        excerpt: 'Spinach is a short-life buy. The bunch on the card is the bunch the kitchen receives.',
+        img: 'assets/customer/products/spinach.png',
+        alt: 'A bunch of spinach',
+        body: [
+          'Leafy greens do not sit in the store room. They are ordered for the day, or for the next morning at the latest.',
+          'The picture is spinach. Opening the product does not swap in cabbage or another green.',
+          'Cafes use a smaller bunch for the menu. Hotels take more of the same leaf for banquet salads.'
+        ]
+      },
+      {
+        id: 'lemon-service',
+        cat: 'Produce',
+        date: '20 May 2026',
+        read: '2 min',
+        title: 'Lemons for service',
+        excerpt: 'Wedges for the pass, juice for the drinks. A small produce line that runs out mid-service.',
+        img: 'assets/customer/products/lemon.png',
+        alt: 'Lemons',
+        body: [
+          'Lemons leave the kitchen faster than the crate suggests. The pass wants wedges. The bar wants juice.',
+          'The card is lemons. That is also what the product page shows.',
+          'They stay in produce, next to the other fruit and vegetables a restaurant signup sees first.'
+        ]
+      },
+      {
+        id: 'garlic-ginger',
+        cat: 'Produce',
+        date: '14 May 2026',
+        read: '3 min',
+        title: 'Garlic for the tadka',
+        excerpt: 'A 250 g buy that every gravy uses. The photo is garlic, kept separate from ginger.',
+        img: 'assets/customer/products/garlic.png',
+        alt: 'Garlic bulbs',
+        body: [
+          'Garlic is on the list even when the menu changes. The tadka does not work without it, and the pack is small enough to miss until the pan is hot.',
+          'This card is garlic. Ginger is its own product, with its own photo, so the two are not mixed on one page.',
+          'Both sit in produce. A restaurant sees them with onions and tomatoes, which is the order the prep list is written in.'
+        ]
+      },
+      {
+        id: 'atta-bag',
+        cat: 'Pantry',
+        date: '7 May 2026',
+        read: '4 min',
+        title: 'The 5 kg atta bag',
+        excerpt: 'Wheat atta for roti and for the canteen. The sack in the photo is a 5 kg bag.',
+        img: 'assets/customer/products/atta.png',
+        alt: 'A 5 kg bag of wheat atta',
+        body: [
+          'Atta is the canteen staple and the bakery staple. Roti, dough, and the morning loaf all start from the same kind of bag.',
+          'The picture is a 5 kg sack. The product is named wheat atta, because the bag does not carry another brand on the front.',
+          'A canteen signup scores atta with rice, dal, oil, and wheat flour, so the bag shows up with the rest of the store room.'
+        ]
+      },
+      {
+        id: 'almond-tin',
+        cat: 'Pantry',
+        date: '1 May 2026',
+        read: '3 min',
+        title: 'Almonds for the cafe counter',
+        excerpt: 'A tin for the garnish and the snack plate. The photo is almonds, not a mixed nut tray.',
+        img: 'assets/customer/products/almond.png',
+        alt: 'Almonds',
+        body: [
+          'Cafes use almonds as a garnish and as a small snack. Hotels use them on the breakfast buffet. The buy is steady, not a one-off.',
+          'The card shows almonds. Almond butter and almond milk are separate products, each with its own photos.',
+          'They live in pantry. Search still finds them when the default list is leading with something else.'
+        ]
+      },
+      {
+        id: 'almond-milk-pour',
+        cat: 'Dairy',
+        date: '24 Apr 2026',
+        read: '3 min',
+        title: 'Almond milk next to the dairy',
+        excerpt: 'A cafe that pours it keeps the carton with milk, not hidden in grocery.',
+        img: 'assets/customer/products/almondmilk.png',
+        alt: 'A carton of almond milk',
+        body: [
+          'Some counters pour dairy milk. Some pour almond milk. The signup for a cafe leads with dairy, and this carton sits in that group.',
+          'The photo is the almond milk carton. It is not a photo of cow’s milk with a different name.',
+          'Butter, cream, and toned milk stay as their own lines. Opening this one does not jump to those.'
+        ]
+      }
+    ];
+    let blogCat = 'All';
+    let blogQuery = '';
+    function blogMeta(post) {
+      return '<span class="blog-cat">' + post.cat + '</span> <span class="blog-meta">' + post.date + ' · ' + post.read + ' read</span>';
+    }
+    function blogTile(post) {
+      return '<a class="blog-card" href="#blog/' + post.id + '" data-blog="' + post.id + '">' +
+        '<img src="' + post.img + '" alt="' + post.alt + '" />' +
+        '<div class="blog-card-body">' +
+          '<div>' + blogMeta(post) + '</div>' +
+          '<h3>' + post.title + '</h3>' +
+          '<p>' + post.excerpt + '</p>' +
+          '<span class="blog-read">Read post →</span>' +
+        '</div></a>';
+    }
+    function visiblePosts() {
+      const q = blogQuery;
+      return BLOGS.filter((p) => {
+        if (blogCat !== 'All' && p.cat !== blogCat) return false;
+        if (!q) return true;
+        return (p.title + ' ' + p.excerpt + ' ' + p.cat).toLowerCase().indexOf(q) >= 0;
+      });
+    }
+    function renderBlogFilters() {
+      const order = ['All', 'Bakery', 'Restaurants', 'Buying', 'Canteens', 'Cafes', 'Hotels', 'Dairy', 'Pantry', 'Produce'];
+      const present = {};
+      BLOGS.forEach((p) => { present[p.cat] = 1; });
+      const cats = order.filter((c) => c === 'All' || present[c]);
+      document.getElementById('blogFilters').innerHTML = cats.map((c) =>
+        '<button type="button" class="blog-chip' + (c === blogCat ? ' is-on' : '') + '" data-blog-cat="' + c + '">' + c + '</button>'
+      ).join('');
+    }
+    function renderBlogIndex() {
+      const list = visiblePosts();
+      const feature = document.getElementById('blogFeature');
+      const head = document.getElementById('blogLatestHead');
+      const grid = document.getElementById('blogGrid');
+      feature.innerHTML = '';
+      if (!list.length) {
+        head.hidden = true;
+        grid.innerHTML = '<p class="mt-6 text-sm font-semibold text-[#667085]">No posts match that search.</p>';
+        return;
+      }
+      head.hidden = false;
+      grid.innerHTML = list.map(blogTile).join('');
+    }
+    function renderHomeBlog() {
+      const grid = document.getElementById('homeBlogGrid');
+      if (grid) grid.innerHTML = BLOGS.slice(0, 3).map(blogTile).join('');
+    }
+    function renderBlogPost(post) {
+      const picks = BLOGS.filter((p) => p.id !== post.id).slice(0, 2);
+      document.getElementById('blogPost').innerHTML =
+        '<a class="blog-back" href="#blog" data-blog="index">← All posts</a>' +
+        '<p class="blog-kicker mt-6">' + post.cat + '</p>' +
+        '<h1 class="mt-2 max-w-3xl text-[30px] font-extrabold leading-[1.15] tracking-tight md:text-5xl">' + post.title + '</h1>' +
+        '<p class="mt-3 text-sm font-bold text-[#98A2B3]">KitchenX Desk · ' + post.date + ' · ' + post.read + ' read</p>' +
+        '<img class="blog-hero" src="' + post.img + '" alt="' + post.alt + '" />' +
+        '<div class="blog-prose mt-6">' +
+          post.body.map((para, i) => '<p class="' + (i === 0 ? 'lead' : '') + '">' + para + '</p>').join('') +
+        '</div>' +
+        '<h2 class="mt-12 text-xl font-extrabold">More from the desk</h2>' +
+        '<div class="blog-grid">' + picks.map(blogTile).join('') + '</div>';
+    }
+    function markBlogNav(on) {
+      document.querySelectorAll('[data-blog-nav]').forEach((el) => el.classList.toggle('is-on', on));
+    }
+    function showBlog(slug) {
+      setMobileMenuOpen(false);
+      setHdrSearchOpen(false);
+      const post = slug ? BLOGS.find((p) => p.id === slug) : null;
+      document.body.classList.add('is-blog');
+      markBlogNav(true);
+      document.getElementById('blogIndex').hidden = !!post;
+      const article = document.getElementById('blogPost');
+      article.hidden = !post;
+      if (post) renderBlogPost(post);
+      else renderBlogIndex();
+      window.scrollTo(0, 0);
+    }
+    function closeBlog() {
+      document.body.classList.remove('is-blog');
+      markBlogNav(false);
+      document.getElementById('blogIndex').hidden = false;
+      document.getElementById('blogPost').hidden = true;
+    }
+    function syncBlogFromHash() {
+      const h = location.hash;
+      if (h === '#blog') showBlog(null);
+      else if (h.indexOf('#blog/') === 0) showBlog(decodeURIComponent(h.slice(6)));
+      else if (document.body.classList.contains('is-blog')) closeBlog();
+    }
+    renderHomeBlog();
+    renderBlogFilters();
+    renderBlogIndex();
+    document.getElementById('blogSearch').addEventListener('input', (e) => {
+      blogQuery = (e.target.value || '').trim().toLowerCase();
+      renderBlogIndex();
+    });
+    document.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-blog-cat]');
+      if (chip) {
+        blogCat = chip.getAttribute('data-blog-cat');
+        renderBlogFilters();
+        renderBlogIndex();
+        return;
+      }
+      const opener = e.target.closest('[data-blog]');
+      if (opener) {
+        e.preventDefault();
+        const id = opener.getAttribute('data-blog');
+        const next = id === 'index' ? '#blog' : '#blog/' + id;
+        if (location.hash !== next) location.hash = next;
+        else syncBlogFromHash();
+        return;
+      }
+      if (!document.body.classList.contains('is-blog')) return;
+      const link = e.target.closest('a[href^="#"]');
+      if (!link || link.hasAttribute('data-auth-open') || link.hasAttribute('data-blog') || link.hasAttribute('data-home-nav')) return;
+      const id = (link.getAttribute('href') || '').replace('#', '');
+      if (!id || id.indexOf('blog') === 0) return;
+      e.preventDefault();
+      history.pushState(null, '', location.pathname + location.search);
+      closeBlog();
+      if (id !== 'top') {
+        const el = document.getElementById(id);
+        if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      } else window.scrollTo(0, 0);
+    });
+    window.addEventListener('hashchange', syncBlogFromHash);
+    syncBlogFromHash();
     function goCatalogueSearch(q) {
       if (!isCustomerLoggedIn()) {
         openAuth('login');
