@@ -92,7 +92,7 @@
       border-radius: 20px;
     }
     .blog-banner-art { position: absolute; inset: 0; z-index: 0; }
-    .blog-banner-art .hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .blog-banner-art .hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; }
     .blog-banner-copy { position: relative; z-index: 2; max-width: 440px; padding: 28px 24px; }
     .blog-banner .blog-kicker { color: #FF4F18; }
     .blog-banner h1 { margin-top: 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: #141517; }
@@ -214,44 +214,66 @@
       cursor: pointer;
     }
     .blog-back:hover { color: #FF4F18; }
-    .blog-post-sub { margin-top: 12px; max-width: 640px; font-size: 16px; font-weight: 500; line-height: 1.6; color: #475467; }
-    .blog-byline { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 13px; font-weight: 800; color: #667085; }
-    .blog-byline-mark { display: grid; flex-shrink: 0; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: #FF4F18; color: #fff; font-size: 13px; font-weight: 800; }
-    .blog-post-layout { display: grid; grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
-    @media (min-width: 1024px) { .blog-post-layout { grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; } }
+    .blog-post-card { background: #fff; border-radius: 24px; padding: 20px; box-shadow: 0 8px 24px rgba(20,21,23,0.05); }
+    @media (min-width: 768px) { .blog-post-card { border-radius: 28px; padding: 32px; } }
+    @media (min-width: 1200px) { .blog-post-card { padding: 40px; } }
+    .blog-post-head { display: flex; flex-direction: column; gap: 14px; }
+    .blog-post-head .blog-back { order: 1; }
+    .blog-post-head h1 { order: 2; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.12; color: #141517; }
+    .blog-post-head .blog-share { order: 3; }
+    @media (min-width: 768px) {
+      .blog-post-head { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 10px; align-items: center; }
+      .blog-post-head .blog-back { grid-column: 1; grid-row: 1; order: initial; }
+      .blog-post-head .blog-share { grid-column: 2; grid-row: 1; order: initial; }
+      .blog-post-head h1 { grid-column: 1 / -1; grid-row: 2; order: initial; font-size: 34px; }
+    }
+    @media (min-width: 1200px) { .blog-post-head h1 { font-size: 40px; } }
+    .blog-share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .blog-share > span { margin-right: 2px; font-size: 13px; font-weight: 800; color: #667085; }
+    .blog-share-btn { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; color: #344054; cursor: pointer; }
+    .blog-share-btn:hover { border-color: #141517; }
+    .blog-post-layout { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px; }
+    @media (min-width: 768px) { .blog-post-layout { grid-template-columns: 1fr 1fr; gap: 28px; } }
+    @media (min-width: 1200px) { .blog-post-layout { gap: 44px; } }
     .blog-post-media { position: relative; }
-    @media (min-width: 1024px) { .blog-post-media { position: sticky; top: 88px; } }
     .blog-hero {
       display: block;
       width: 100%;
       height: 260px;
-      border-radius: 24px;
+      border-radius: 20px;
       object-fit: cover;
       background: #fff;
     }
-    @media (min-width: 768px) { .blog-hero { height: 340px; border-radius: 28px; } }
+    @media (min-width: 768px) { .blog-hero { height: 300px; border-radius: 24px; } }
+    @media (min-width: 1200px) { .blog-hero { height: 360px; } }
     .blog-thumbs { display: flex; gap: 10px; margin-top: 12px; }
     .blog-thumb { flex: 1; min-width: 0; overflow: hidden; border-radius: 14px; border: 2px solid transparent; padding: 0; cursor: pointer; background: #fff; }
     .blog-thumb img { display: block; width: 100%; height: 64px; object-fit: cover; }
-    @media (min-width: 768px) { .blog-thumb img { height: 76px; } }
+    @media (min-width: 768px) { .blog-thumb img { height: 72px; } }
     .blog-thumb.is-on { border-color: #FF4F18; }
-    .blog-post-content h3 { margin-top: 28px; font-size: 19px; font-weight: 800; letter-spacing: -0.01em; color: #141517; }
-    .blog-post-content h3:first-child { margin-top: 0; }
-    .blog-post-content p { margin-top: 12px; font-size: 16px; font-weight: 500; line-height: 1.7; color: #344054; }
+    .blog-cat-tag { font-size: 12px; font-weight: 800; color: #FF4F18; text-transform: uppercase; letter-spacing: 0.06em; }
+    .blog-byline { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 13px; font-weight: 800; color: #667085; }
+    .blog-byline-mark { display: grid; flex-shrink: 0; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: #FF4F18; color: #fff; font-size: 12px; font-weight: 800; }
+    .blog-post-content p { margin-top: 14px; font-size: 16px; font-weight: 500; line-height: 1.7; color: #344054; }
+    .blog-post-content p:first-of-type { margin-top: 16px; }
     .blog-tip { display: flex; gap: 12px; margin-top: 20px; border-radius: 16px; background: #FFF4EF; padding: 16px 18px; }
     .blog-tip-icon { font-size: 20px; line-height: 1; }
     .blog-tip strong { font-size: 12px; font-weight: 800; color: #FF4F18; text-transform: uppercase; letter-spacing: 0.04em; }
     .blog-tip p { margin-top: 4px; font-size: 14px; font-weight: 500; line-height: 1.55; color: #475467; }
-    .blog-steps { counter-reset: blog-step; list-style: none; margin-top: 14px; padding-left: 0; display: flex; flex-direction: column; gap: 12px; }
-    .blog-steps li { position: relative; padding-left: 36px; font-size: 15px; font-weight: 500; line-height: 1.55; color: #344054; counter-increment: blog-step; }
-    .blog-steps li::before { content: counter(blog-step); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 999px; background: #FF4F18; color: #fff; font-size: 12px; font-weight: 800; }
-    .blog-quote { margin-top: 40px; border-radius: 24px; background: #F7F8FA; padding: 28px; }
-    .blog-quote p { font-size: 20px; font-weight: 700; line-height: 1.4; color: #141517; }
-    .blog-quote cite { display: block; margin-top: 14px; font-size: 13px; font-weight: 800; color: #667085; font-style: normal; }
-    .blog-share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 28px; }
-    .blog-share > span { margin-right: 4px; font-size: 13px; font-weight: 800; color: #667085; }
-    .blog-share-btn { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; color: #344054; cursor: pointer; }
-    .blog-share-btn:hover { border-color: #141517; }
+    .blog-readmore-wrap { display: flex; justify-content: flex-end; margin-top: 20px; }
+    .blog-readmore {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 42px;
+      border-radius: 999px;
+      background: #FF4F18;
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+    }
     @media (prefers-reduced-motion: reduce) {
       .blog-card { transition: none; }
       .blog-card:hover { transform: none; }
@@ -1513,8 +1535,6 @@
             <img class="hero-slide is-active" src="assets/blog/order-1.png" alt="" />
             <img class="hero-slide" src="assets/blog/order-2.png" alt="" />
             <img class="hero-slide" src="assets/blog/order-3.png" alt="" />
-            <img class="hero-slide" src="assets/blog/order-4.png" alt="" />
-            <img class="hero-slide" src="assets/blog/order-5.png" alt="" />
           </div>
           <div class="blog-banner-copy">
             <p class="blog-kicker">KitchenX Blog</p>
@@ -2472,21 +2492,6 @@
       const grid = document.getElementById('homeBlogGrid');
       if (grid) grid.innerHTML = BLOGS.slice(0, 3).map(blogTile).join('');
     }
-    const BLOG_STEPS = [
-      'Plan your week — note what the menu or counter needs before opening the catalogue.',
-      'Check what is already in stock — avoid reordering a sack that is still half full.',
-      'Order by category — pantry, produce, dairy, and bakery restock at different rates.',
-      'Review the quantity — pack sizes range from a 250 g spice pack to a 25 kg bag.',
-      'Choose a delivery slot — pick a window the kitchen can actually receive.',
-      'Confirm and track — the order status updates from cart to delivery.'
-    ];
-    const BLOG_QUOTES = [
-      { text: 'The photo on the card is the ingredient that arrives. That rule does not change by business type.', by: 'KitchenX Team' },
-      { text: 'A kitchen’s weekly order should look like last week’s order, not a new guess every Monday.', by: 'KitchenX Team' },
-      { text: 'Credit, delivery slots, and the catalogue order all follow the same signup — nothing is configured twice.', by: 'KitchenX Team' },
-      { text: 'Pack sizes exist because a 250 g spice buy and a 25 kg flour buy are not the same decision.', by: 'KitchenX Team' },
-      { text: 'The catalogue leads with what a kitchen actually reorders, not with what sells best overall.', by: 'KitchenX Team' }
-    ];
     function blogShareLinks(post) {
       const url = encodeURIComponent(location.href);
       const text = encodeURIComponent(post.title);
@@ -2507,36 +2512,36 @@
     }
     function renderBlogPost(post) {
       const picks = BLOGS.filter((p) => p.id !== post.id).slice(0, 3);
-      const idx = BLOGS.findIndex((p) => p.id === post.id);
-      const quote = BLOG_QUOTES[idx % BLOG_QUOTES.length];
-      const h = post.headings || [];
       const links = blogShareLinks(post);
+      const shownBody = post.body.slice(0, 2);
+      const restBody = post.body.slice(2);
       document.getElementById('blogPost').innerHTML =
-        '<a class="blog-back" href="#blog" data-blog="index">← Blog / ' + post.cat + '</a>' +
-        '<p class="blog-kicker mt-6">' + post.cat + '</p>' +
-        '<h1 class="mt-2 max-w-3xl text-[30px] font-extrabold leading-[1.15] tracking-tight md:text-5xl">' + post.title + '</h1>' +
-        '<p class="blog-post-sub">' + post.excerpt + '</p>' +
-        '<div class="blog-byline"><span class="blog-byline-mark">X</span>KitchenX Desk · ' + post.date + ' · ' + post.read + ' read</div>' +
-        '<div class="blog-post-layout">' +
-          '<div class="blog-post-media">' + blogMediaHtml(post) + '</div>' +
-          '<div class="blog-post-content">' +
-            (h[0] ? '<h3>' + h[0] + '</h3>' : '') + '<p>' + post.body[0] + '</p>' +
-            '<div class="blog-tip"><span class="blog-tip-icon">💡</span><div><strong>KitchenX Tip</strong><p>' + (post.tip || '') + '</p></div></div>' +
-            (h[1] ? '<h3>' + h[1] + '</h3>' : '') + '<p>' + post.body[1] + '</p>' +
-            '<h3>A simple weekly ordering checklist</h3>' +
-            '<ol class="blog-steps">' + BLOG_STEPS.map((s) => '<li>' + s + '</li>').join('') + '</ol>' +
-            (h[2] ? '<h3>' + h[2] + '</h3>' : '') +
-            post.body.slice(2).map((para) => '<p>' + para + '</p>').join('') +
+        '<div class="blog-post-card">' +
+          '<div class="blog-post-head">' +
+            '<a class="blog-back" href="#blog" data-blog="index">← Blog / ' + post.cat + '</a>' +
+            '<h1>' + post.title + '</h1>' +
+            '<div class="blog-share">' +
+              '<span>Share this article</span>' +
+              '<button type="button" class="blog-share-btn" data-share-copy aria-label="Copy link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H7a5 5 0 010-10h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg></button>' +
+              '<a class="blog-share-btn" href="' + links.linkedin + '" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 9H3.7v11.3h2.8V9zM5.1 3.7A1.64 1.64 0 1 0 5.1 7a1.64 1.64 0 0 0 0-3.3zM20.3 13.4c0-3.2-1.7-4.7-4-4.7-1.8 0-2.6 1-3.1 1.7V9H10.4c0 1.9 0 11.3 0 11.3h2.8v-6.3c0-.3 0-.7.1-1 .3-.7.9-1.4 2-1.4 1.4 0 2 1.1 2 2.7v6H20.3v-6.3z"/></svg></a>' +
+              '<a class="blog-share-btn" href="' + links.facebook + '" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg></a>' +
+              '<a class="blog-share-btn" href="' + links.x + '" target="_blank" rel="noopener" aria-label="Share on X"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 3h3.3l-7.2 8.2L23.3 21h-6.6l-5.2-6.2L5.3 21H2l7.7-8.8L1.7 3h6.8l4.7 5.6L18.9 3zm-1.2 16.2h1.8L7.4 4.7H5.5l12.2 14.5z"/></svg></a>' +
+              '<a class="blog-share-btn" href="' + links.whatsapp + '" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.4A10 10 0 1012 2zm5.6 14.2c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-3.5-.8-3-1.1-4.9-4.1-5-4.3-.2-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .5.5.2.5.8 1.8.8 2 .1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.3-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.6.8 1.9.9.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>' +
+            '</div>' +
           '</div>' +
-        '</div>' +
-        '<blockquote class="blog-quote"><p>“' + quote.text + '”</p><cite>' + quote.by + '</cite></blockquote>' +
-        '<div class="blog-share">' +
-          '<span>Share this article</span>' +
-          '<button type="button" class="blog-share-btn" data-share-copy aria-label="Copy link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H7a5 5 0 010-10h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg></button>' +
-          '<a class="blog-share-btn" href="' + links.linkedin + '" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 9H3.7v11.3h2.8V9zM5.1 3.7A1.64 1.64 0 1 0 5.1 7a1.64 1.64 0 0 0 0-3.3zM20.3 13.4c0-3.2-1.7-4.7-4-4.7-1.8 0-2.6 1-3.1 1.7V9H10.4c0 1.9 0 11.3 0 11.3h2.8v-6.3c0-.3 0-.7.1-1 .3-.7.9-1.4 2-1.4 1.4 0 2 1.1 2 2.7v6H20.3v-6.3z"/></svg></a>' +
-          '<a class="blog-share-btn" href="' + links.facebook + '" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg></a>' +
-          '<a class="blog-share-btn" href="' + links.x + '" target="_blank" rel="noopener" aria-label="Share on X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 3h3.3l-7.2 8.2L23.3 21h-6.6l-5.2-6.2L5.3 21H2l7.7-8.8L1.7 3h6.8l4.7 5.6L18.9 3zm-1.2 16.2h1.8L7.4 4.7H5.5l12.2 14.5z"/></svg></a>' +
-          '<a class="blog-share-btn" href="' + links.whatsapp + '" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.4A10 10 0 1012 2zm5.6 14.2c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-3.5-.8-3-1.1-4.9-4.1-5-4.3-.2-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .5.5.2.5.8 1.8.8 2 .1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.3-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.6.8 1.9.9.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>' +
+          '<div class="blog-post-layout">' +
+            '<div class="blog-post-media">' + blogMediaHtml(post) + '</div>' +
+            '<div class="blog-post-content">' +
+              '<p class="blog-cat-tag">' + post.cat + '</p>' +
+              '<div class="blog-byline"><span class="blog-byline-mark">X</span>KitchenX Desk · ' + post.date + ' · ' + post.read + ' read</div>' +
+              shownBody.map((para) => '<p>' + para + '</p>').join('') +
+              '<div class="blog-tip"><span class="blog-tip-icon">💡</span><div><strong>KitchenX Tip</strong><p>' + (post.tip || '') + '</p></div></div>' +
+              (restBody.length ?
+                '<div id="blogMoreText" hidden>' + restBody.map((para) => '<p>' + para + '</p>').join('') + '</div>' +
+                '<div class="blog-readmore-wrap"><button type="button" id="blogReadMoreBtn" class="blog-readmore">Read more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>'
+                : '') +
+            '</div>' +
+          '</div>' +
         '</div>' +
         '<div class="mt-12 flex items-end justify-between gap-4"><h2 class="text-xl font-extrabold">More from the desk</h2><a href="#blog" data-blog="index" class="hidden shrink-0 text-sm font-extrabold text-coal hover:text-orange md:inline-flex">View all articles →</a></div>' +
         '<div class="blog-grid mt-6">' + picks.map(blogTile).join('') + '</div>';
@@ -2552,6 +2557,13 @@
           navigator.clipboard.writeText(location.href).then(() => {
             copyBtn.setAttribute('aria-label', 'Link copied');
           }).catch(() => {});
+        });
+      }
+      const readMoreBtn = document.getElementById('blogReadMoreBtn');
+      if (readMoreBtn) {
+        readMoreBtn.addEventListener('click', () => {
+          document.getElementById('blogMoreText').hidden = false;
+          readMoreBtn.closest('.blog-readmore-wrap').remove();
         });
       }
     }
