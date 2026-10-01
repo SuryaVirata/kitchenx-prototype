@@ -1112,6 +1112,53 @@
       .stack-m { display: none !important; }
       .table-desk { display: block; }
     }
+    .order-steps { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+    .order-steps::-webkit-scrollbar { display: none; }
+    .order-step {
+      flex: 0 0 auto;
+      min-height: 32px;
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #98A2B3;
+      line-height: 32px;
+    }
+    .order-step.is-on { background: #141517; color: #fff; }
+    .order-step.is-done { color: #12B76A; }
+    .order-layout { display: grid; gap: 16px; }
+    @media (min-width: 1024px) {
+      .order-layout { grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr); align-items: start; }
+      .order-side { position: sticky; top: 16px; }
+    }
+    .slot-opt, .pay-opt {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 10px;
+      border-radius: 16px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .slot-opt.is-on, .pay-opt.is-on { border-color: #FF4F18; background: #FFF4EF; }
+    .route-bar { height: 8px; border-radius: 999px; background: linear-gradient(90deg, #12B76A 0 42%, #FF4F18 42% 68%, #E4E7EC 68% 100%); }
+    .cart-step { display: inline-flex; align-items: center; height: 32px; border-radius: 10px; background: #FF4F18; color: #fff; overflow: hidden; }
+    .cart-step button { width: 28px; height: 32px; font-size: 16px; font-weight: 800; color: #fff; }
+    .cart-step span { min-width: 18px; text-align: center; font-size: 13px; font-weight: 800; }
+      display: grid;
+      width: 72px;
+      height: 72px;
+      place-items: center;
+      border-radius: 999px;
+      background: #EAF8F0;
+      color: #12B76A;
+      font-size: 34px;
+      font-weight: 800;
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -1199,7 +1246,7 @@
       </button>
     </aside>
 
-    <div class="flex min-h-screen flex-1 flex-col">
+    <div class="flex min-h-screen min-w-0 flex-1 flex-col">
       <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
         <div class="hdr-start">
         <a href="kitchenx-v2.html" class="hdr-mark" aria-label="KitchenX">
@@ -1246,18 +1293,23 @@
             <div id="wishList" class="mt-2"></div>
           </div>
         </div>
+        <button id="cartBtn" class="hdr-icon" type="button" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#344054" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span id="cartCount" class="hdr-count" hidden>0</span>
+        </button>
         <button id="bellBtn" class="hdr-icon" type="button" aria-label="Notifications">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#344054" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
           <span class="bell-dot" aria-hidden="true"></span>
         </button>
+        </button>
         <div class="user-wrap relative shrink-0">
           <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
             <span id="avatar" class="grid h-10 w-10 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">RC</span>
-            <div class="hidden text-left lg:block">
+            <div class="hidden text-left xl:block">
               <p id="orgName" class="text-sm font-extrabold leading-tight">The Urban Table</p>
               <p id="orgType" class="text-[11px] font-semibold text-[#98A2B3]">Restaurant</p>
             </div>
-            <svg class="hidden lg:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            <svg class="hidden xl:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="userMenu" class="user-menu" role="menu">
             <button data-panel="account" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog">My Account</button>
@@ -1382,6 +1434,7 @@
             <div id="catChips" class="flex min-w-0 max-w-full gap-2"></div>
             <div id="catMoreMenu" class="cat-more-menu hidden" role="menu" hidden></div>
           </div>
+          <p id="recoNote" class="mt-3 hidden text-sm font-semibold text-[#667085]"></p>
           <div class="m-cat-bar">
             <button id="filterToggle" type="button">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
@@ -1542,11 +1595,7 @@
         </section>
 
         <section data-view="checkout" class="panel hidden">
-          <button type="button" id="checkoutBack" class="btn-ghost h-10 px-4">← Back to product</button>
-          <h1 class="mt-4 text-3xl font-extrabold tracking-tight">Checkout</h1>
-          <p class="mt-1 text-sm font-medium text-[#667085]">This is what you added. The product page stays behind this step.</p>
-          <div id="checkoutLines" class="mt-5 grid gap-3"></div>
-          <div id="checkoutPay" class="card mt-4 p-5"></div>
+          <div id="orderFlow"></div>
         </section>
 
         <section data-view="orders" class="panel hidden">
@@ -2217,68 +2266,191 @@
     function saveCreditApps(list) {
       localStorage.setItem('kxCreditApps', JSON.stringify(list));
     }
+    let orderStep = 'cart';
+    let orderSlot = 'Tomorrow, 10:00 AM – 12:00 PM';
+    let orderPay = 'upi';
+    let liveOrder = null;
+    const SLOTS = ['Today, 4:00 PM – 6:00 PM', 'Tomorrow, 10:00 AM – 12:00 PM', 'Tomorrow, 2:00 PM – 4:00 PM'];
+    function cartTotal() {
+      return cartLines().reduce((sum, p) => sum + p.price * qty[p.id], 0);
+    }
+    function deliveryFee(total) { return total >= 500 || total === 0 ? 0 : 40; }
+    function stepPills(current) {
+      const steps = [['cart', 'Cart'], ['pay', 'Checkout'], ['done', 'Confirmed'], ['track', 'Tracking']];
+      const at = steps.findIndex((s) => s[0] === current);
+      return '<div class="order-steps">' + steps.map((s, i) =>
+        '<span class="order-step' + (i === at ? ' is-on' : i < at ? ' is-done' : '') + '">' + (i + 1) + ' ' + s[1] + '</span>'
+      ).join('') + '</div>';
+    }
+    function lineRow(p) {
+      return '<article class="card flex items-center gap-3 p-3">' +
+        pic(p.pic) +
+        '<div class="min-w-0 flex-1"><p class="truncate font-extrabold">' + p.name + '</p><p class="text-xs font-semibold text-[#667085]">' + (packOf(p) || p.brand) + '</p></div>' +
+        '<div class="cart-step" role="group"><button type="button" data-cq="-" data-id="' + p.id + '" aria-label="Decrease">−</button><span>' + qty[p.id] + '</span><button type="button" data-cq="+" data-id="' + p.id + '" aria-label="Increase">+</button></div>' +
+        '<p class="w-20 text-right text-sm font-extrabold">' + money(p.price * qty[p.id]) + '</p></article>';
+    }
+    function summaryCard(total, action) {
+      const fee = deliveryFee(total);
+      return '<aside class="order-side card p-5">' +
+        '<p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Bill summary</p>' +
+        '<div class="mt-3 grid gap-2 text-sm font-bold"><div class="flex justify-between"><span class="text-[#667085]">Items</span><span>' + money(total) + '</span></div>' +
+        '<div class="flex justify-between"><span class="text-[#667085]">Delivery</span><span>' + (fee ? money(fee) : 'Free') + '</span></div>' +
+        '<div class="flex justify-between border-t border-[#EEF0F3] pt-2 text-base"><span>Total</span><span>' + money(total + fee) + '</span></div></div>' +
+        '<p class="mt-2 text-xs font-semibold text-[#98A2B3]">Free delivery on orders above ₹500</p>' +
+        action + '</aside>';
+    }
     function renderCheckout() {
-      const lines = document.getElementById('checkoutLines');
-      const pay = document.getElementById('checkoutPay');
-      if (!lines || !pay) return;
+      const root = document.getElementById('orderFlow');
+      if (!root) return;
+      if (orderStep === 'done' && liveOrder) { root.innerHTML = doneHtml(liveOrder); return; }
+      if (orderStep === 'track' && liveOrder) { root.innerHTML = trackHtml(liveOrder); return; }
       const items = cartLines();
       if (!items.length) {
-        lines.innerHTML = '<article class="card p-5"><p class="font-extrabold">Nothing added yet</p><p class="mt-1 text-sm font-semibold text-[#667085]">Add a product from its page, then come back here.</p></article>';
-        pay.innerHTML = '<button type="button" class="btn-ghost" data-shop="1">Browse catalogue</button>';
+        root.innerHTML = '<h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><article class="card mt-4 p-5"><p class="font-extrabold">Nothing added yet</p><p class="mt-1 text-sm font-semibold text-[#667085]">Add a product, then come back here.</p><button type="button" class="btn-save mt-4" data-shop="1">Browse catalogue</button></article>';
         return;
       }
-      const total = items.reduce((sum, p) => sum + p.price * qty[p.id], 0);
-      lines.innerHTML = items.map((p) => (
-        '<article class="card flex items-center justify-between gap-3 p-4">' +
-          '<div class="min-w-0"><p class="font-extrabold">' + p.name + '</p><p class="text-sm font-semibold text-[#667085]">' + (packOf(p) || p.brand) + ' · qty ' + qty[p.id] + '</p></div>' +
-          '<p class="font-extrabold">' + money(p.price * qty[p.id]) + '</p>' +
-        '</article>'
-      )).join('');
+      const total = cartTotal();
+      if (orderStep === 'pay') { root.innerHTML = payHtml(items, total); return; }
+      root.innerHTML =
+        stepPills('cart') +
+        '<div class="mt-4 flex flex-wrap items-end justify-between gap-3"><div><h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><p class="mt-1 text-sm font-medium text-[#667085]">' + items.length + ' products for this kitchen.</p></div>' +
+        '<button type="button" class="btn-ghost h-10 px-4" data-shop="1">Continue shopping</button></div>' +
+        '<div class="order-layout mt-4"><div class="grid gap-3">' + items.map(lineRow).join('') + '</div>' +
+        summaryCard(total, '<button type="button" class="btn-save mt-4 w-full" data-go="pay">Proceed to checkout</button>') +
+        '</div>';
+    }
+    function payHtml(items, total) {
+      const addr = (document.getElementById('locLabel') && document.getElementById('locLabel').textContent) || 'Main Kitchen, Connaught Place, Delhi';
       const app = myCredit();
       const spare = app && app.stage === 'approved' ? Math.max(0, Number(app.limit || 0) - Number(app.used || 0)) : 0;
-      const canLater = spare + 0.001 >= total;
-      pay.innerHTML =
-        '<div class="flex flex-wrap items-end justify-between gap-3">' +
-          '<div><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">To pay</p><p class="text-2xl font-extrabold">' + money(total) + '</p>' +
-          (app && app.stage === 'approved' ? '<p class="mt-1 text-sm font-semibold text-[#667085]">Spare credit ' + money(spare) + '</p>' : '<p class="mt-1 text-sm font-semibold text-[#667085]">Pay now. A pay-later line appears here after finance approves it.</p>') +
-          '</div><div class="flex flex-wrap gap-2">' +
-          (canLater ? '<button type="button" class="btn-save" data-pay="later">Pay later</button>' : '') +
-          '<button type="button" class="btn-ghost" data-pay="now">Pay now</button>' +
-          '</div></div>';
+      const due = total + deliveryFee(total);
+      const canLater = spare + 0.001 >= due;
+      const pays = [
+        ['upi', 'UPI', 'Pay from the kitchen’s UPI app'],
+        ['card', 'Card / Net banking', 'Debit, credit, or net banking'],
+        ['cod', 'Cash on delivery', 'Pay when the crate arrives']
+      ];
+      if (canLater) pays.push(['later', 'Pay later', 'Spare credit ' + money(spare)]);
+      return stepPills('pay') +
+        '<button type="button" class="btn-ghost mt-4 h-10 px-4" data-go="cart">← Back to cart</button>' +
+        '<h1 class="mt-4 text-3xl font-extrabold tracking-tight">Checkout</h1>' +
+        '<p class="mt-1 text-sm font-medium text-[#667085]">Address, delivery time, and how this kitchen pays.</p>' +
+        '<div class="order-layout mt-4"><div class="grid gap-3">' +
+        '<article class="card p-4"><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Deliver to</p><p class="mt-1 font-extrabold">' + addr + '</p></article>' +
+        '<article class="card p-4"><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Delivery time</p><div class="mt-3 grid gap-2">' +
+        SLOTS.map((s) => '<button type="button" class="slot-opt' + (s === orderSlot ? ' is-on' : '') + '" data-slot="' + s + '"><span class="font-extrabold">' + s + '</span></button>').join('') +
+        '</div></article>' +
+        '<article class="card p-4"><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Payment</p><div class="mt-3 grid gap-2">' +
+        pays.map((p) => '<button type="button" class="pay-opt' + (p[0] === orderPay ? ' is-on' : '') + '" data-method="' + p[0] + '"><span><span class="block font-extrabold">' + p[1] + '</span><span class="block text-xs font-semibold text-[#667085]">' + p[2] + '</span></span></button>').join('') +
+        '</div></article></div>' +
+        summaryCard(total, '<button type="button" class="btn-save mt-4 w-full" data-place="1">Place order</button>') +
+        '</div>';
     }
-    function placeCheckout(mode) {
+    function doneHtml(o) {
+      return stepPills('done') +
+        '<article class="card mx-auto mt-6 max-w-xl p-6 text-center sm:p-8">' +
+        '<div class="ok-mark mx-auto">✓</div>' +
+        '<h1 class="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Order placed</h1>' +
+        '<p class="mt-2 text-sm font-semibold text-[#667085]">' + o.id + ' is confirmed for ' + (o.addr || 'your kitchen') + '.</p>' +
+        '<p class="mt-3 text-sm font-extrabold">Arriving ' + (o.slot || 'the next delivery window') + '</p>' +
+        '<p class="mt-1 text-sm font-semibold text-[#667085]">' + o.items + '</p>' +
+        '<div class="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">' +
+        '<button type="button" class="btn-save" data-go="track">Track order</button>' +
+        '<button type="button" class="btn-ghost" data-shop="1">Continue shopping</button></div></article>';
+    }
+    function trackHtml(o) {
+      const done = o.status === 'Delivered';
+      const addr = o.addr || 'Main Kitchen, Connaught Place, Delhi';
+      const slot = o.slot || 'Tomorrow, 10:00 AM – 12:00 PM';
+      const steps = ['Confirmed', 'Packed', 'Out for delivery', 'Delivered'];
+      const at = done ? 4 : 2;
+      return stepPills('track') +
+        '<button type="button" class="btn-ghost mt-4 h-10 px-4" data-orders="1">← My orders</button>' +
+        (done
+          ? '<article class="card mx-auto mt-4 max-w-xl p-6 text-center"><div class="ok-mark mx-auto">✓</div><h1 class="mt-4 text-2xl font-extrabold">Delivered</h1><p class="mt-2 text-sm font-semibold text-[#667085]">' + o.id + ' reached ' + addr + '.</p>' +
+            '<div class="mt-5 grid gap-2 sm:grid-cols-3"><button type="button" class="btn-ghost" data-invoice="1">View invoice</button><button type="button" class="btn-ghost" data-buy="' + o.id + '">Reorder</button><button type="button" class="btn-ghost" data-rate="1">Rate delivery</button></div></article>'
+          : '<div class="order-layout mt-4"><article class="card p-5"><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">' + o.id + '</p><h1 class="mt-1 text-2xl font-extrabold tracking-tight">Out for delivery</h1><p class="mt-1 text-sm font-semibold text-[#667085]">Arriving ' + slot + '</p>' +
+            '<div class="route-bar mt-5"></div><div class="mt-2 flex justify-between text-[11px] font-extrabold text-[#667085]"><span>KitchenX hub</span><span class="text-orange">On the way</span><span>' + addr.split(',')[0] + '</span></div>' +
+            '<ol class="mt-5 grid gap-3 text-sm">' + steps.map((label, i) => '<li class="font-extrabold ' + (i < at ? 'text-[#12B76A]' : i === at ? 'text-orange' : 'text-[#98A2B3]') + '">' + (i < at ? '✓ ' : i === at ? '● ' : '○ ') + label + '</li>').join('') + '</ol></article>' +
+            '<aside class="order-side card p-5"><p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Delivery partner</p><p class="mt-2 font-extrabold">Amit Singh</p><p class="text-sm font-semibold text-[#667085]">+91 98765 43210</p><p class="mt-3 text-sm font-semibold text-[#667085]">' + o.items + '</p>' +
+            '<button type="button" class="btn-save mt-4 w-full" data-received="1">I have received this order</button>' +
+            '<button type="button" class="btn-ghost mt-2 w-full" data-help="1">Need help</button></aside></div>');
+    }
+    function placeCheckout() {
       const items = cartLines();
       if (!items.length) return;
-      const total = items.reduce((sum, p) => sum + p.price * qty[p.id], 0);
-      if (mode === 'later') {
+      const total = cartTotal();
+      const due = total + deliveryFee(total);
+      if (orderPay === 'later') {
         const list = creditApps();
         const app = list.find((a) => a.kitchen === org || a.org === org);
         const spare = app && app.stage === 'approved' ? Math.max(0, Number(app.limit || 0) - Number(app.used || 0)) : 0;
-        if (!app || spare + 0.001 < total) { toast('The spare credit does not cover this order.'); return; }
-        app.used = Number(app.used || 0) + total;
+        if (!app || spare + 0.001 < due) { toast('The spare credit does not cover this order.'); orderPay = 'upi'; renderCheckout(); return; }
+        app.used = Number(app.used || 0) + due;
         saveCreditApps(list);
         paintCredit();
       }
+      const stamp = new Date();
+      const id = '#KX' + String(stamp.getTime()).slice(-8);
+      const pics = items.slice(0, 3).map((p) => p.pic);
+      const order = {
+        id: id,
+        date: stamp.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }),
+        status: 'Out for Delivery',
+        extra: Math.max(0, items.reduce((n, p) => n + qty[p.id], 0) - pics.length),
+        pics: pics.length ? pics : ['tomato'],
+        track: true,
+        items: items.length + ' products · ' + money(due),
+        addr: (document.getElementById('locLabel') && document.getElementById('locLabel').textContent) || 'Main Kitchen',
+        slot: orderSlot,
+        pay: orderPay
+      };
+      ORDERS.unshift(order);
+      liveOrder = order;
       items.forEach((p) => { qty[p.id] = 0; });
       renderCat();
-      const left = mode === 'later' ? myCredit() : null;
-      const spareLeft = left ? Math.max(0, Number(left.limit || 0) - Number(left.used || 0)) : 0;
-      document.getElementById('checkoutLines').innerHTML = '<article class="card p-5"><p class="font-extrabold">Order placed</p><p class="mt-1 text-sm font-semibold text-[#667085]">' + (mode === 'later' ? ('Charged to the credit line. Spare left ' + money(spareLeft) + '.') : 'Paid now. The credit line was not used.') + '</p></article>';
-      document.getElementById('checkoutPay').innerHTML = '<button type="button" class="btn-save" data-shop="1">Back to catalogue</button>';
-      toast(mode === 'later' ? 'Order placed on the credit line' : 'Order placed');
+      syncCartCount();
+      orderStep = 'done';
+      renderCheckout();
+      renderOrders();
+      toast('Order ' + id + ' placed');
     }
-    document.getElementById('checkoutPay').addEventListener('click', (e) => {
-      if (e.target.closest('[data-shop]')) { showPanel('catalogue'); return; }
-      const btn = e.target.closest('[data-pay]');
-      if (btn) placeCheckout(btn.getAttribute('data-pay'));
+    document.getElementById('orderFlow').addEventListener('click', (e) => {
+      const cq = e.target.closest('[data-cq]');
+      if (cq) {
+        const id = cq.getAttribute('data-id');
+        qty[id] = Math.max(0, (qty[id] || 0) + (cq.getAttribute('data-cq') === '+' ? 1 : -1));
+        syncCardQty(id);
+        renderCheckout();
+        return;
+      }
+      if (e.target.closest('[data-shop]')) { orderStep = 'cart'; showPanel('catalogue'); return; }
+      if (e.target.closest('[data-orders]')) { showPanel('orders'); return; }
+      if (e.target.closest('[data-help]')) { showPanel('support'); return; }
+      const go = e.target.closest('[data-go]');
+      if (go) { orderStep = go.getAttribute('data-go'); renderCheckout(); window.scrollTo(0, 0); return; }
+      const slot = e.target.closest('[data-slot]');
+      if (slot) { orderSlot = slot.getAttribute('data-slot'); renderCheckout(); return; }
+      const method = e.target.closest('[data-method]');
+      if (method) { orderPay = method.getAttribute('data-method'); renderCheckout(); return; }
+      if (e.target.closest('[data-place]')) { placeCheckout(); window.scrollTo(0, 0); return; }
+      if (e.target.closest('[data-received]') && liveOrder) {
+        liveOrder.status = 'Delivered';
+        liveOrder.track = false;
+        liveOrder.buy = true;
+        renderOrders();
+        renderCheckout();
+        toast(liveOrder.id + ' marked delivered');
+        return;
+      }
+      if (e.target.closest('[data-invoice]')) { toast('Invoice is ready under Invoices & Payments'); return; }
+      if (e.target.closest('[data-rate]')) { toast('Thanks. The kitchen rating is saved.'); return; }
+      const buy = e.target.closest('[data-buy]');
+      if (buy) { toast(buy.getAttribute('data-buy') + ' added to your next order'); showPanel('catalogue'); }
     });
-    document.getElementById('checkoutLines').addEventListener('click', (e) => {
-      if (e.target.closest('[data-shop]')) showPanel('catalogue');
-    });
-    document.getElementById('checkoutBack').addEventListener('click', () => {
-      const p = PRODUCTS.find((x) => x.id === lastPdpId);
-      if (p) openPdp(p);
-      else showPanel('catalogue');
+    document.getElementById('cartBtn').addEventListener('click', () => {
+      orderStep = 'cart';
+      showPanel('checkout');
     });
     paintCredit();
     const creditBanner = document.getElementById('creditBanner');
@@ -2426,11 +2598,11 @@
       { id: 'p1', name: 'Amul Butter (500 g)', brand: 'Amul', cat: 'Dairy', price: 305.55, was: 360, deal: { badge: '15% OFF', kind: 'off' }, pic: 'butter', stock: true, tags: 'butter dairy' },
       { id: 'p2', name: 'Fresh Tomatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 48, was: 60, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', tags: 'tomato vegetable salad gravy' },
       { id: 'p3', name: 'Chicken Breast (1 kg)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 220, pic: 'chicken', stock: true, tags: 'chicken meat' },
-      { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Fortune', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true, tags: 'oil pantry' },
+      { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true, tags: 'oil pantry bakery canteen' },
       { id: 'p5', name: 'Amul Fresh Cream (1 L)', brand: 'Amul', cat: 'Dairy', price: 247, pic: 'cream', stock: true, tags: 'cream dairy' },
-      { id: 'p6', name: 'Aashirvaad Atta (5 kg)', brand: 'Aashirvaad', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true, tags: 'atta flour' },
+      { id: 'p6', name: 'Wheat atta (5 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true, tags: 'atta flour wheat pantry bakery canteen' },
       { id: 'p7', name: 'Onions (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 32, was: 36, deal: { badge: '10% OFF', kind: 'off' }, pic: 'onion', stock: true, group: 'veg', tags: 'onion vegetable gravy' },
-      { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'India Gate', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true, tags: 'rice grain' },
+      { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true, tags: 'rice grain pantry canteen' },
       { id: 'p11', name: 'Potatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 28, was: 34, deal: { badge: 'Flash Sale', kind: 'flash' }, pic: 'potato', stock: true, group: 'veg', tags: 'potato vegetable' },
       { id: 'p12', name: 'Carrots (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 44, was: 50, deal: { badge: '12% OFF', kind: 'off' }, pic: 'carrot', stock: true, group: 'veg', tags: 'carrot vegetable salad' },
       { id: 'p13', name: 'Capsicum Mix (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 80, deal: { badge: 'Best Seller', kind: 'seller' }, pic: 'capsicum', stock: true, group: 'veg', tags: 'capsicum pepper vegetable salad' },
@@ -2443,7 +2615,10 @@
       { id: 'p22', name: 'Amul Fresh Curd (1 kg)', brand: 'Amul', cat: 'Dairy', price: 75, pic: 'cream', stock: true, tags: 'curd dahi dairy yogurt' },
       { id: 'p23', name: 'Amul Paneer (200 g)', brand: 'Amul', cat: 'Dairy', price: 95, pic: 'butter', stock: true, tags: 'paneer dairy' },
       { id: 'p24', name: 'Amul Cow Ghee (1 L)', brand: 'Amul', cat: 'Dairy', price: 620, pic: 'butter', stock: true, tags: 'ghee dairy' },
-      { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'eggs', stock: true, tags: 'eggs chicken' },
+      { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'eggs', stock: true, tags: 'eggs bakery dairy' },
+      { id: 'p49', name: 'Wheat flour (1 kg)', brand: 'Kitchen Loaf', cat: 'Pantry & Staples', price: 54, pic: 'wheat', stock: true, tags: 'wheat flour maida pantry bakery canteen' },
+      { id: 'p50', name: 'White sugar (1 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 48, pic: 'sugar', stock: true, tags: 'sugar pantry canteen tea' },
+      { id: 'p51', name: 'Yellow dal (1 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 120, pic: 'dal', stock: true, tags: 'dal toor lentil pantry canteen' },
       { id: 'p40', name: 'Ginger (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 35, pic: 'ginger', stock: true, group: 'veg', tags: 'ginger vegetable spice' },
       { id: 'p41', name: 'Spinach (1 bunch)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 22, pic: 'spinach', stock: true, group: 'veg', tags: 'spinach vegetable greens' },
       { id: 'p42', name: 'Cauliflower (1 pc)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'cauli', stock: true, group: 'veg', tags: 'cauliflower vegetable' },
@@ -2458,14 +2633,14 @@
       { id: 'p28', name: 'Mutton Curry Cut (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 720, pic: 'chicken', stock: true, tags: 'mutton meat' },
       { id: 'p19', name: 'Fresh Tomatoes (5 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 220, was: 275, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk' },
       { id: 'p20', name: 'Fresh Tomatoes (25 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 950, was: 1200, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk kitchen' },
-      { id: 'p30', name: 'Tata Tea Gold (1 kg)', brand: 'Tata', cat: 'Beverages', price: 520, pic: 'atta', stock: false, demand: true, tags: 'tea beverage drink' },
+      { id: 'p30', name: 'Black tea leaves (250 g)', brand: 'Kitchen Staples', cat: 'Beverages', price: 160, pic: 'tea', stock: true, tags: 'tea beverage drink canteen' },
       { id: 'p31', name: 'Nescafé Classic (200 g)', brand: 'Nestlé', cat: 'Beverages', price: 340, pic: 'cream', stock: false, demand: true, tags: 'coffee beverage drink' },
       { id: 'p32', name: 'Real Mixed Fruit (1 L)', brand: 'Dabur', cat: 'Beverages', price: 110, pic: 'lemon', stock: false, demand: true, tags: 'juice beverage drink' },
       { id: 'p33', name: 'Amul Lassi (1 L)', brand: 'Amul', cat: 'Dairy', price: 80, pic: 'cream', stock: false, demand: true, tags: 'lassi dairy beverage drink' },
       { id: 'p34', name: 'Tropicana Orange (1 L)', brand: 'Tropicana', cat: 'Beverages', price: 125, pic: 'lemon', stock: false, demand: true, tags: 'orange juice beverage drink' }
     ];
     const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Bakery','Pantry & Staples','Beverages'];
-    const BRANDS = ['Amul','Nestlé','Tata','Fortune','Aashirvaad','India Gate'];
+    const BRANDS = ['Amul','Kitchen Staples','Kitchen Loaf','Fresh Produce','Nutty'];
     const qty = {};
     const fav = {};
     PRODUCTS.forEach((p) => { qty[p.id] = 0; });
@@ -2547,7 +2722,7 @@
     setSearchPh();
     window.addEventListener('resize', () => { setSearchPh(); renderCatChips(); });
 
-    const CAT_SHORT = { 'All Categories': 'All', 'Fruits & Vegetables': 'Fruits', 'Dairy': 'Dairy', 'Chicken & Eggs': 'Chicken', 'Meat & Seafood': 'Meat', 'Pantry & Staples': 'Pantry', 'Beverages': 'Drinks' };
+    const CAT_SHORT = { 'All Categories': 'All', 'Fruits & Vegetables': 'Fruits', 'Dairy': 'Dairy', 'Chicken & Eggs': 'Eggs', 'Meat & Seafood': 'Meat', 'Pantry & Staples': 'Pantry', 'Beverages': 'Drinks', 'Bakery': 'Bakery' };
     function catLabel(name) {
       return window.innerWidth < 768 ? (CAT_SHORT[name] || name) : name;
     }
@@ -2565,11 +2740,11 @@
       closeCatMore();
       if (desk) {
         wrap.classList.remove('is-fit');
-        wrap.innerHTML = CATS.map((c) => '<button type="button" data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + c + '</button>').join('');
+      wrap.innerHTML = orderedCats().map((c) => '<button type="button" data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + c + '</button>').join('');
         return;
       }
       wrap.classList.add('is-fit');
-      wrap.innerHTML = CATS.map((c) => '<button type="button" data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + catLabel(c) + '</button>').join('') +
+      wrap.innerHTML = orderedCats().map((c) => '<button type="button" data-chip="' + c + '" class="chip' + (c === chip ? ' is-on' : '') + '">' + catLabel(c) + '</button>').join('') +
         '<button type="button" class="chip chip-more" id="catMoreBtn" aria-expanded="false">More</button>';
       const more = document.getElementById('catMoreBtn');
       const budget = wrap.clientWidth;
@@ -2613,7 +2788,7 @@
 
     renderCatChips();
     document.getElementById('catChecks').innerHTML = CATS.slice(1, 5).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreCats">+ Show more</button>';
-    document.getElementById('brandChecks').innerHTML = ['Amul','Nestlé','Tata','Fortune'].map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreBrands">+ Show more</button>';
+    document.getElementById('brandChecks').innerHTML = ['Amul','Kitchen Staples','Kitchen Loaf','Fresh Produce'].map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreBrands">+ Show more</button>';
 
     function activeChecks(sel) { return Array.from(document.querySelectorAll(sel)).filter((i) => i.checked).map((i) => i.value); }
     function productHay(p) { return (p.name + ' ' + p.brand + ' ' + p.cat + ' ' + (p.tags || '')).toLowerCase(); }
@@ -2667,6 +2842,14 @@
         if (cta && !cta.classList.contains('is-oos')) cta.setAttribute('data-state', n < 1 ? 'add' : 'qty');
         if (num) num.textContent = String(Math.max(1, n));
       });
+      syncCartCount();
+    }
+    function syncCartCount() {
+      const n = Object.keys(qty).reduce((sum, id) => sum + (qty[id] || 0), 0);
+      const el = document.getElementById('cartCount');
+      if (!el) return;
+      el.hidden = n < 1;
+      el.textContent = String(n);
     }
     function productCard(p) {
       const deal = p.deal;
@@ -2700,6 +2883,80 @@
           </div>
         </article>`;
     }
+    function leadCats() {
+      const type = sessionStorage.getItem('kxBizType') || '';
+      const needs = (sessionStorage.getItem('kxNeeds') || '').split('|').filter(Boolean);
+      const byType = {
+        Restaurant: ['Fruits & Vegetables', 'Meat & Seafood', 'Dairy', 'Pantry & Staples'],
+        Cafe: ['Dairy', 'Bakery', 'Beverages', 'Chicken & Eggs'],
+        Hotel: ['Fruits & Vegetables', 'Dairy', 'Meat & Seafood', 'Pantry & Staples', 'Bakery'],
+        'Cloud Kitchen': ['Fruits & Vegetables', 'Meat & Seafood', 'Pantry & Staples', 'Dairy'],
+        Caterer: ['Fruits & Vegetables', 'Pantry & Staples', 'Meat & Seafood', 'Dairy'],
+        Other: ['Bakery', 'Chicken & Eggs', 'Pantry & Staples', 'Dairy', 'Beverages']
+      };
+      const byNeed = {
+        'Fresh Produce': ['Fruits & Vegetables'],
+        'Dairy & Eggs': ['Dairy', 'Chicken & Eggs'],
+        'Meat, Poultry & Seafood': ['Meat & Seafood'],
+        'Staples & Grains': ['Pantry & Staples'],
+        Beverages: ['Beverages'],
+        Packaging: [],
+        'Kitchen Appliances': [],
+        'Cleaning & Hygiene': []
+      };
+      const set = new Set(byType[type] || []);
+      needs.forEach((n) => (byNeed[n] || []).forEach((c) => set.add(c)));
+      return set;
+    }
+    function orderedCats() {
+      const lead = [...leadCats()];
+      const rest = CATS.slice(1).filter((c) => lead.indexOf(c) < 0);
+      return ['All Categories'].concat(lead, rest);
+    }
+    const WRONG_PIC = { p22: 1, p23: 1, p24: 1, p26: 1, p27: 1, p28: 1, p31: 1, p32: 1, p33: 1, p34: 1 };
+    function mixRecommend(list) {
+      const cats = leadCats();
+      if (!cats.size || chip !== 'All Categories') return mixByCategory(list);
+      const lead = [];
+      const rest = [];
+      list.forEach((p) => {
+        if (!p.variant && !WRONG_PIC[p.id] && cats.has(p.cat)) lead.push(p);
+        else rest.push(p);
+      });
+      const type = sessionStorage.getItem('kxBizType') || '';
+      const needs = (sessionStorage.getItem('kxNeeds') || '').split('|');
+      const rank = {
+        Restaurant: ['Fruits & Vegetables', 'Meat & Seafood', 'Dairy', 'Pantry & Staples'],
+        Cafe: ['Dairy', 'Bakery', 'Beverages', 'Chicken & Eggs'],
+        Hotel: ['Fruits & Vegetables', 'Dairy', 'Meat & Seafood', 'Pantry & Staples', 'Bakery'],
+        'Cloud Kitchen': ['Fruits & Vegetables', 'Meat & Seafood', 'Pantry & Staples', 'Dairy'],
+        Caterer: ['Fruits & Vegetables', 'Pantry & Staples', 'Meat & Seafood', 'Dairy'],
+        Other: ['Bakery', 'Chicken & Eggs', 'Pantry & Staples', 'Dairy', 'Beverages']
+      }[type] || [];
+      function score(p) {
+        const words = ((p.tags || '') + ' ' + p.name).toLowerCase();
+        let s = 0;
+        const at = rank.indexOf(p.cat);
+        if (at >= 0) s += Math.max(1, 6 - at);
+        if (type === 'Other' && /bakery|eggs|flour|wheat|maida|atta|oil|rice|dal|sugar|tea|bread|loaf|croissant/.test(words)) s += 6;
+        if (needs.indexOf('Dairy & Eggs') >= 0 && /dairy|eggs|milk|butter|cream/.test(words)) s += 2;
+        if (needs.indexOf('Staples & Grains') >= 0 && /flour|wheat|maida|oil|rice|atta|dal|sugar|pantry/.test(words)) s += 2;
+        if (needs.indexOf('Fresh Produce') >= 0 && p.cat === 'Fruits & Vegetables') s += 2;
+        if (needs.indexOf('Meat, Poultry & Seafood') >= 0 && (p.cat === 'Meat & Seafood' || /chicken/.test(words))) s += 2;
+        if (needs.indexOf('Beverages') >= 0 && p.cat === 'Beverages') s += 2;
+        return s;
+      }
+      lead.sort((a, b) => score(b) - score(a));
+      const out = [];
+      let i = 0;
+      let j = 0;
+      while (i < lead.length || j < rest.length) {
+        if (i < lead.length) out.push(lead[i++]);
+        if (i < lead.length) out.push(lead[i++]);
+        if (j < rest.length) out.push(rest[j++]);
+      }
+      return out;
+    }
     function mixByCategory(list) {
       const buckets = {};
       list.forEach((p) => {
@@ -2729,7 +2986,22 @@
       if (!list.length) {
         list = PRODUCTS.filter((p) => !p.stock && (chip === 'All Categories' || p.cat === chip) && (!q || productHay(p).includes(q)));
       }
-      list = (!q && sort.includes('Relevance')) ? mixByCategory(list) : sortList(list, sort);
+      list = (!q && sort.includes('Relevance')) ? mixRecommend(list) : sortList(list, sort);
+      const note = document.getElementById('recoNote');
+      if (note) {
+        const show = !q && chip === 'All Categories' && sort.includes('Relevance') && leadCats().size;
+        const type = sessionStorage.getItem('kxBizType') || '';
+        const who = {
+          Restaurant: 'a restaurant',
+          Cafe: 'a cafe',
+          Hotel: 'a hotel',
+          'Cloud Kitchen': 'a cloud kitchen',
+          Caterer: 'a caterer',
+          Other: 'a bakery, QSR, or canteen'
+        }[type];
+        note.textContent = who ? ('Listed first for ' + who + '.') : '';
+        note.classList.toggle('hidden', !show || !who);
+      }
       const alsoBlock = document.getElementById('alsoBlock');
       const vegHit = q && list.some((p) => p.group === 'veg');
       let related = [];
@@ -2796,7 +3068,13 @@
       milk: ['milk', 'milk-3', 'milk-4'],
       bread: ['bread', 'bread-2', 'bread-3', 'bread-4'],
       almondbutter: ['almondbutter', 'almondbutter-2', 'almondbutter-3'],
-      almondmilk: ['almondmilk', 'almondmilk-3', 'almondmilk-4']
+      almondmilk: ['almondmilk', 'almondmilk-3', 'almondmilk-4'],
+      wheat: ['wheat', 'wheat-2', 'wheat-3', 'wheat-4'],
+      rice: ['rice', 'rice-2', 'rice-3'],
+      sugar: ['sugar', 'sugar-3'],
+      dal: ['dal', 'dal-2'],
+      tea: ['tea', 'tea-2', 'tea-3'],
+      oil: ['oil', 'oil-2']
     };
     function shotsOf(p) {
       const list = SHOTS[p.pic] || (p.pic ? [p.pic] : []);
@@ -2985,6 +3263,7 @@
         const img = body.querySelector('.pdp-desk-art img');
         if (img) img.src = picSrc(shot.getAttribute('data-pdp-shot'));
         body.querySelectorAll('[data-pdp-shot]').forEach((t) => t.classList.toggle('is-on', t === shot));
+        hideZoom(body);
         return;
       }
       const id = body.getAttribute('data-pid');
@@ -3014,6 +3293,7 @@
         return;
       }
       if (e.target.closest('[data-checkout]')) {
+        orderStep = 'cart';
         showPanel('checkout');
       }
     }
@@ -3033,11 +3313,33 @@
     }
     bindPdpFav(document.getElementById('pdpFav'));
     bindPdpFav(document.getElementById('pdpDeskFav'));
-    document.querySelectorAll('[data-gocat]').forEach((btn) => btn.addEventListener('click', () => {
+    document.querySelector('.m-cats').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-gocat]');
+      if (!btn) return;
       chip = btn.getAttribute('data-gocat');
       renderCatChips();
       showPanel('catalogue');
-    }));
+    });
+    (function paintHomeCats() {
+      const box = document.querySelector('.m-cats');
+      if (!box) return;
+      const icons = {
+        'Fruits & Vegetables': ['🥦', 'Fruits & Vegetables'],
+        Dairy: ['🥛', 'Dairy'],
+        'Meat & Seafood': ['🥩', 'Meat & Seafood'],
+        'Pantry & Staples': ['🛒', 'Grocery'],
+        Bakery: ['🍞', 'Bakery'],
+        'Chicken & Eggs': ['🥚', 'Eggs'],
+        Beverages: ['☕', 'Drinks']
+      };
+      const fallback = ['Fruits & Vegetables', 'Dairy', 'Meat & Seafood', 'Pantry & Staples'];
+      const cats = [...leadCats()];
+      fallback.forEach((c) => { if (cats.length < 4 && cats.indexOf(c) < 0) cats.push(c); });
+      box.innerHTML = cats.slice(0, 4).map((c) => {
+        const row = icons[c] || ['•', c];
+        return '<button type="button" class="m-cat" data-gocat="' + c.replace(/&/g, '&amp;') + '"><span>' + row[0] + '</span><p>' + row[1].replace(/&/g, '&amp;') + '</p></button>';
+      }).join('');
+    })();
     document.getElementById('mSortBtn').addEventListener('click', () => {
       const sel = document.getElementById('catSort');
       sel.selectedIndex = (sel.selectedIndex + 1) % sel.options.length;
@@ -3121,9 +3423,8 @@
         openModal('orderModal');
       }
       if (t) {
-        document.getElementById('omTitle').textContent = 'Track ' + t.getAttribute('data-track');
-        document.getElementById('omBody').innerHTML = '<ol class="grid gap-3 text-sm font-bold"><li class="text-[#12B76A]">Placed · 24 Jun, 10:24 AM</li><li class="text-[#12B76A]">Packed · 24 Jun, 11:40 AM</li><li class="text-orange">Out for delivery · today</li><li class="text-[#98A2B3]">Arriving at Main Kitchen</li></ol>';
-        openModal('orderModal');
+        const o = ORDERS.find((x) => x.id === t.getAttribute('data-track')) || liveOrder;
+        if (o) { liveOrder = o; orderStep = 'track'; closeModal('orderModal'); showPanel('checkout'); }
       }
       if (b) toast(b.getAttribute('data-buy') + ' added to your next order');
     });
@@ -3132,8 +3433,8 @@
       const t = e.target.closest('[data-track]');
       if (b) { toast(b.getAttribute('data-buy') + ' added to your next order'); closeModal('orderModal'); }
       if (t) {
-        document.getElementById('omTitle').textContent = 'Track ' + t.getAttribute('data-track');
-        document.getElementById('omBody').innerHTML = '<ol class="tl text-sm"><li><span class="dot">✓</span><div><p class="font-extrabold">Placed</p><p class="text-xs font-semibold text-[#98A2B3]">24 Jun, 10:24 AM</p></div></li><li><span class="dot">✓</span><div><p class="font-extrabold">Packed</p><p class="text-xs font-semibold text-[#98A2B3]">24 Jun, 11:40 AM</p></div></li><li><span class="dot is-now"></span><div><p class="font-extrabold">Out for delivery</p><p class="text-xs font-semibold text-[#98A2B3]">Today</p></div></li><li><span class="dot is-wait"></span><div><p class="font-extrabold">Arriving at kitchen</p></div></li></ol>';
+        const o = ORDERS.find((x) => x.id === t.getAttribute('data-track'));
+        if (o) { liveOrder = o; orderStep = 'track'; closeModal('orderModal'); showPanel('checkout'); }
       }
     });
     renderOrders();
