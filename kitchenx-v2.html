@@ -214,57 +214,55 @@
       cursor: pointer;
     }
     .blog-back:hover { color: #FF4F18; }
-    .blog-post-card { background: #fff; border-radius: 24px; padding: 20px; box-shadow: 0 8px 24px rgba(20,21,23,0.05); }
-    @media (min-width: 768px) { .blog-post-card { border-radius: 28px; padding: 32px; } }
-    @media (min-width: 1200px) { .blog-post-card { padding: 40px; } }
-    .blog-post-head { display: flex; flex-direction: column; gap: 14px; }
+    .blog-post-card { background: #fff; border-radius: 24px; padding: 18px; box-shadow: 0 8px 24px rgba(20,21,23,0.05); }
+    @media (min-width: 768px) { .blog-post-card { border-radius: 28px; padding: 24px; } }
+    @media (min-width: 1200px) { .blog-post-card { padding: 28px 32px; } }
+    .blog-post-head { display: flex; flex-direction: column; gap: 8px; }
     .blog-post-head .blog-back { order: 1; }
-    .blog-post-head h1 { order: 2; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.12; color: #141517; }
+    .blog-post-head h1 { order: 2; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: #141517; }
     .blog-post-head .blog-share { order: 3; }
     @media (min-width: 768px) {
-      .blog-post-head { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 10px; align-items: center; }
+      .blog-post-head { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 6px; align-items: center; }
       .blog-post-head .blog-back { grid-column: 1; grid-row: 1; order: initial; }
       .blog-post-head .blog-share { grid-column: 2; grid-row: 1; order: initial; }
-      .blog-post-head h1 { grid-column: 1 / -1; grid-row: 2; order: initial; font-size: 34px; }
+      .blog-post-head h1 { grid-column: 1 / -1; grid-row: 2; order: initial; font-size: 30px; }
     }
-    @media (min-width: 1200px) { .blog-post-head h1 { font-size: 40px; } }
+    @media (min-width: 1200px) { .blog-post-head h1 { font-size: 34px; } }
     .blog-share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
     .blog-share > span { margin-right: 2px; font-size: 13px; font-weight: 800; color: #667085; }
-    .blog-share-btn { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; color: #344054; cursor: pointer; }
+    .blog-share-btn { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; border: 1px solid #E4E7EC; background: #fff; color: #344054; cursor: pointer; }
     .blog-share-btn:hover { border-color: #141517; }
-    .blog-share-btn.is-linkedin { background: #0A66C2; border-color: #0A66C2; color: #fff; }
     .blog-share-btn.is-x { background: #000; border-color: #000; color: #fff; }
     .blog-share-btn.is-whatsapp { background: #25D366; border-color: #25D366; color: #fff; }
-    .blog-share-btn.is-facebook { background: #1877F2; border-color: #1877F2; color: #fff; }
-    .blog-post-layout { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px; }
-    @media (min-width: 768px) { .blog-post-layout { grid-template-columns: 1fr 1fr; gap: 28px; } }
-    @media (min-width: 1200px) { .blog-post-layout { gap: 44px; } }
+    .blog-post-layout { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 16px; }
+    @media (min-width: 768px) { .blog-post-layout { grid-template-columns: 1fr 1fr; gap: 24px; } }
+    @media (min-width: 1200px) { .blog-post-layout { gap: 36px; } }
     .blog-post-media { position: relative; }
     .blog-hero {
       display: block;
       width: 100%;
-      height: 260px;
-      border-radius: 20px;
+      height: 200px;
+      border-radius: 18px;
       object-fit: cover;
       background: #fff;
     }
-    @media (min-width: 768px) { .blog-hero { height: 300px; border-radius: 24px; } }
-    @media (min-width: 1200px) { .blog-hero { height: 360px; } }
-    .blog-thumbs { display: flex; gap: 10px; margin-top: 12px; }
-    .blog-thumb { flex: 1; min-width: 0; overflow: hidden; border-radius: 14px; border: 2px solid transparent; padding: 0; cursor: pointer; background: #fff; }
-    .blog-thumb img { display: block; width: 100%; height: 64px; object-fit: cover; }
-    @media (min-width: 768px) { .blog-thumb img { height: 72px; } }
+    @media (min-width: 768px) { .blog-hero { height: 240px; border-radius: 22px; } }
+    @media (min-width: 1200px) { .blog-hero { height: 280px; } }
+    .blog-thumbs { display: flex; gap: 8px; margin-top: 8px; }
+    .blog-thumb { flex: 1; min-width: 0; overflow: hidden; border-radius: 12px; border: 2px solid transparent; padding: 0; cursor: pointer; background: #fff; }
+    .blog-thumb img { display: block; width: 100%; height: 48px; object-fit: cover; }
+    @media (min-width: 768px) { .blog-thumb img { height: 54px; } }
     .blog-thumb.is-on { border-color: #FF4F18; }
     .blog-cat-tag { font-size: 12px; font-weight: 800; color: #FF4F18; text-transform: uppercase; letter-spacing: 0.06em; }
-    .blog-byline { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 13px; font-weight: 800; color: #667085; }
-    .blog-byline-mark { display: grid; flex-shrink: 0; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: #FF4F18; color: #fff; font-size: 12px; font-weight: 800; }
-    .blog-post-content p { margin-top: 14px; font-size: 16px; font-weight: 500; line-height: 1.7; color: #344054; }
-    .blog-post-content p:first-of-type { margin-top: 16px; }
-    .blog-tip { display: flex; gap: 12px; margin-top: 20px; border-radius: 16px; background: #FFF4EF; padding: 16px 18px; }
-    .blog-tip-icon { font-size: 20px; line-height: 1; }
-    .blog-tip strong { font-size: 12px; font-weight: 800; color: #FF4F18; text-transform: uppercase; letter-spacing: 0.04em; }
-    .blog-tip p { margin-top: 4px; font-size: 14px; font-weight: 500; line-height: 1.55; color: #475467; }
-    .blog-readmore-wrap { display: flex; justify-content: flex-end; margin-top: 20px; }
+    .blog-byline { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 13px; font-weight: 800; color: #667085; }
+    .blog-byline-mark { display: grid; flex-shrink: 0; place-items: center; width: 28px; height: 28px; border-radius: 999px; background: #FF4F18; color: #fff; font-size: 12px; font-weight: 800; }
+    .blog-post-content p { margin-top: 10px; font-size: 15px; font-weight: 500; line-height: 1.6; color: #344054; }
+    .blog-post-content p:first-of-type { margin-top: 12px; }
+    .blog-tip { display: flex; gap: 10px; margin-top: 14px; border-radius: 14px; background: #FFF4EF; padding: 12px 14px; }
+    .blog-tip-icon { font-size: 18px; line-height: 1; }
+    .blog-tip strong { font-size: 11px; font-weight: 800; color: #FF4F18; text-transform: uppercase; letter-spacing: 0.04em; }
+    .blog-tip p { margin-top: 3px; font-size: 13px; font-weight: 500; line-height: 1.5; color: #475467; }
+    .blog-readmore-wrap { display: flex; justify-content: flex-end; margin-top: 14px; }
     .blog-readmore {
       display: inline-flex;
       align-items: center;
@@ -2500,8 +2498,6 @@
       const url = encodeURIComponent(location.href);
       const text = encodeURIComponent(post.title);
       return {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + url,
         x: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + text,
         whatsapp: 'https://wa.me/?text=' + text + '%20' + url
       };
@@ -2527,10 +2523,8 @@
             '<div class="blog-share">' +
               '<span>Share this article</span>' +
               '<button type="button" class="blog-share-btn" data-share-copy aria-label="Copy link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H7a5 5 0 010-10h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg></button>' +
-              '<a class="blog-share-btn is-linkedin" href="' + links.linkedin + '" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 9H3.7v11.3h2.8V9zM5.1 3.7A1.64 1.64 0 1 0 5.1 7a1.64 1.64 0 0 0 0-3.3zM20.3 13.4c0-3.2-1.7-4.7-4-4.7-1.8 0-2.6 1-3.1 1.7V9H10.4c0 1.9 0 11.3 0 11.3h2.8v-6.3c0-.3 0-.7.1-1 .3-.7.9-1.4 2-1.4 1.4 0 2 1.1 2 2.7v6H20.3v-6.3z"/></svg></a>' +
               '<a class="blog-share-btn is-x" href="' + links.x + '" target="_blank" rel="noopener" aria-label="Share on X"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 3h3.3l-7.2 8.2L23.3 21h-6.6l-5.2-6.2L5.3 21H2l7.7-8.8L1.7 3h6.8l4.7 5.6L18.9 3zm-1.2 16.2h1.8L7.4 4.7H5.5l12.2 14.5z"/></svg></a>' +
               '<a class="blog-share-btn is-whatsapp" href="' + links.whatsapp + '" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.4A10 10 0 1012 2zm5.6 14.2c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-3.5-.8-3-1.1-4.9-4.1-5-4.3-.2-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .5.5.2.5.8 1.8.8 2 .1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.3-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.6.8 1.9.9.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>' +
-              '<a class="blog-share-btn is-facebook" href="' + links.facebook + '" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg></a>' +
             '</div>' +
           '</div>' +
           '<div class="blog-post-layout">' +
@@ -2547,8 +2541,8 @@
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="mt-12 flex items-end justify-between gap-4"><h2 class="text-xl font-extrabold">More from the desk</h2><a href="#blog" data-blog="index" class="hidden shrink-0 text-sm font-extrabold text-coal hover:text-orange md:inline-flex">View all articles →</a></div>' +
-        '<div class="blog-grid mt-6">' + picks.map(blogTile).join('') + '</div>';
+        '<div class="mt-6 flex items-end justify-between gap-4"><h2 class="text-xl font-extrabold">More from the desk</h2><a href="#blog" data-blog="index" class="hidden shrink-0 text-sm font-extrabold text-coal hover:text-orange md:inline-flex">View all articles →</a></div>' +
+        '<div class="blog-grid mt-4">' + picks.map(blogTile).join('') + '</div>';
       document.querySelectorAll('.blog-thumb').forEach((btn) => {
         btn.addEventListener('click', () => {
           document.getElementById('blogHeroImg').src = btn.getAttribute('data-thumb');
