@@ -850,7 +850,7 @@
     }
     @media (max-width: 767px) {
       .kx-hero-art .hero-s1 { object-position: 92% 40%; }
-      .kx-hero-art .hero-s2 { object-position: 80% 52%; }
+      .kx-hero-art .hero-s2 { object-position: 100% 52%; }
       .kx-hero-art .hero-s3 { object-position: 90% 50%; }
       .kx-hero-art .hero-s4 { object-position: 82% 32%; }
     }
@@ -1048,6 +1048,209 @@
       .kx-hero-lead { font-size: 18px; }
       .kx-hero-cta { margin-top: 32px; }
     }
+
+    /* Tablet: the 2.67:1 banners can't fit their KitchenX crate beside the copy at
+       this width, so stack the art above the copy card as on mobile. */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .kx-hero-art {
+        position: relative;
+        inset: auto;
+        height: clamp(300px, 40vw, 400px);
+      }
+      .kx-hero-art .hero-s1,
+      .kx-hero-art .hero-s2,
+      .kx-hero-art .hero-s3 { object-position: 100% 50%; }
+      .kx-hero-card {
+        display: block;
+        min-height: 0;
+        margin-top: -32px;
+        padding: 0;
+        background: #fff;
+        border-radius: 28px 28px 0 0;
+        box-shadow: 0 -10px 28px rgba(16, 24, 40, 0.08);
+      }
+      .kx-hero-copy {
+        max-width: 640px;
+        padding: 32px 4px 28px;
+      }
+    }
+
+    /* Desktop: the crates in hero-1/2/3 sit near the image's right edge, so shift
+       the crop right and wash the left side to keep the copy readable. */
+    @media (min-width: 1024px) {
+      .kx-hero-art .hero-s1 { object-position: 78% 50%; }
+      .kx-hero-art .hero-s3 { object-position: 85% 50%; }
+      .kx-hero-art .hero-s2 { object-position: 100% 50%; }
+      .kx-hero-art::before,
+      .kx-hero-art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 600ms ease-in-out;
+      }
+      .kx-hero-art::before {
+        background: linear-gradient(90deg, rgba(250, 248, 245, 0.92) 0%, rgba(250, 248, 245, 0.8) 32%, rgba(250, 248, 245, 0) 52%);
+      }
+      .kx-hero-art::after {
+        background: linear-gradient(90deg, rgba(246, 227, 209, 0.95) 0%, rgba(246, 227, 209, 0.88) 34%, rgba(246, 227, 209, 0) 54%);
+      }
+      .kx-hero-art:has(.hero-s1.is-active)::before,
+      .kx-hero-art:has(.hero-s3.is-active)::before,
+      .kx-hero-art:has(.hero-s2.is-active)::after { opacity: 1; }
+    }
+    /* hero-1's handwritten note lands behind the headline until ~1366px. hero-1 and
+       hero-3 share ::before, so both use this wash to avoid a jump between slides. */
+    @media (min-width: 1024px) and (max-width: 1365px) {
+      .kx-hero-art::before {
+        background: linear-gradient(90deg, rgba(250, 248, 245, 0.94) 0%, rgba(250, 248, 245, 0.9) 38%, rgba(250, 248, 245, 0) 56%);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kx-hero-art::before,
+      .kx-hero-art::after { transition: none; }
+    }
+
+    /* Supply network */
+    .kxn-stage {
+      --kxn-green: #12B76A;
+      --kxn-amber: #F5A524;
+      --kxn-blue: #3E8BFF;
+      position: relative; max-width: 1240px; margin: 0 auto;
+      display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 72px; justify-items: center;
+      padding: 28px 12px 32px; border-radius: 28px;
+      background-color: #fff;
+      background-image: radial-gradient(rgba(20, 21, 23, .07) 1.2px, transparent 1.2px);
+      background-size: 18px 18px;
+      box-shadow: 0 18px 50px rgba(20, 21, 23, .06);
+    }
+    .kxn-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .kxn-col { position: relative; z-index: 1; width: 100%; display: grid; gap: 8px; }
+    .kxn-src { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .kxn-dst { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .kxn-label {
+      grid-column: 1 / -1; justify-self: center;
+      font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #667085;
+    }
+    .kxn-dst .kxn-label { order: 99; margin-top: 4px; }
+
+    .kxn-node {
+      position: relative; min-width: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 12px 6px 10px; border-radius: 18px;
+      border: 1px solid #E4E7EC; background: #fff;
+      font: inherit; color: inherit; text-align: center; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(20, 21, 23, .05);
+      transition: transform .25s ease, opacity .25s ease, box-shadow .25s ease, border-color .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kxn-node:focus-visible { outline: 2px solid #FF4F18; outline-offset: 3px; }
+    .kxn-node b { display: block; font-size: 12px; font-weight: 800; line-height: 1.2; color: #141517; }
+    .kxn-node small { display: none; font-family: var(--font-secondary); font-size: 13px; color: #667085; }
+    .kxn-txt { min-width: 0; }
+    .kxn-art { display: flex; justify-content: center; height: 36px; }
+    .kxn-art img {
+      width: 36px; height: 36px; object-fit: contain; margin: 0 -7px;
+      filter: drop-shadow(0 4px 4px rgba(20, 21, 23, .14));
+      transition: transform .3s ease;
+    }
+    .kxn-art img:nth-child(2) { position: relative; z-index: 1; transform: translateY(-3px) scale(1.12); }
+    .kxn-node:hover .kxn-art img:nth-child(1), .kxn-node.on .kxn-art img:nth-child(1) { transform: translateX(-3px) rotate(-6deg); }
+    .kxn-node:hover .kxn-art img:nth-child(3), .kxn-node.on .kxn-art img:nth-child(3) { transform: translateX(3px) rotate(6deg); }
+    .kxn-icon {
+      display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px;
+      background: rgba(255, 79, 24, .1); color: #FF4F18;
+    }
+    .kxn-icon svg { width: 20px; height: 20px; }
+    .kxn-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--tone); }
+    .kxn-stage [data-tone="green"] { --tone: var(--kxn-green); }
+    .kxn-stage [data-tone="amber"] { --tone: var(--kxn-amber); }
+    .kxn-stage [data-tone="blue"] { --tone: var(--kxn-blue); }
+    .kxn-node.ping { border-color: #FF4F18; box-shadow: 0 0 0 4px rgba(255, 79, 24, .14); }
+    .kxn-stage.has-focus .kxn-node:not(.on) { opacity: .45; }
+    .kxn-node.on { border-color: #FF4F18; transform: translateY(-2px); }
+
+    .kxn-hubcol { display: grid; place-items: center; }
+    .kxn-hub {
+      position: relative; display: grid; justify-items: center; gap: 4px;
+      width: 150px; padding: 18px 12px 16px; border-radius: 26px;
+      background: #141517; color: #fff;
+      box-shadow: 0 18px 40px rgba(20, 21, 23, .22);
+      transition: transform .2s ease;
+    }
+    .kxn-hub img { width: 40px; height: 40px; object-fit: contain; }
+    .kxn-hub b { font-size: 16px; font-weight: 800; letter-spacing: -.01em; color: #FF4F18; }
+    .kxn-hub small { font-family: var(--font-secondary); font-size: 12px; font-weight: 600; opacity: .65; }
+    .kxn-ring { position: absolute; inset: -10px; border-radius: 34px; border: 1.5px dashed rgba(255, 79, 24, .45); pointer-events: none; }
+    .kxn-ring.r2 { inset: -22px; border-radius: 44px; border-style: solid; border-color: rgba(255, 79, 24, .12); }
+    .kxn-hub.pulse { transform: scale(1.04); }
+    .kxn-hub.pulse .kxn-ring { animation: kxn-ring .6s ease-out; }
+    @keyframes kxn-ring { from { border-color: rgba(255, 79, 24, .9); } }
+    .kxn-checks { display: flex; gap: 4px; margin-top: 6px; }
+    .kxn-checks span {
+      padding: 3px 7px; border-radius: 999px; font-size: 10px; font-weight: 800; white-space: nowrap;
+      background: rgba(255, 79, 24, .16); color: #FF4F18;
+    }
+
+    .kxn-route { transition: opacity .25s ease; }
+    .kxn-base { fill: none; stroke: rgba(20, 21, 23, .14); stroke-width: 2; stroke-linecap: round; }
+    .kxn-flow { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 3 13; animation: kxn-flow 1s linear infinite; opacity: .9; }
+    .kxn-route[data-dir="in"] .kxn-flow { stroke: var(--tone); }
+    .kxn-route[data-dir="out"] .kxn-flow { stroke: #FF4F18; }
+    @keyframes kxn-flow { to { stroke-dashoffset: -16; } }
+    .kxn-route.on .kxn-flow { stroke-width: 3.5; }
+    .kxn-parcel { stroke: #fff; stroke-width: 2; }
+    .kxn-parcel.in { fill: var(--tone); }
+    .kxn-parcel.out { fill: #FF4F18; }
+
+    .kxn-caption {
+      min-height: 48px; margin: 18px auto 0; max-width: 620px; text-align: center;
+      font-size: 15px; line-height: 1.5; color: #667085;
+    }
+    .kxn-caption b { font-family: var(--font-primary); color: #141517; }
+
+    .kxn-node, .kxn-hub { opacity: 0; transform: translateY(10px); }
+    .kxn-live .kxn-node, .kxn-live .kxn-hub { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 70ms); }
+    .kxn-live .kxn-node.on { transform: translateY(-2px); }
+    .kxn-route { opacity: 0; }
+    .kxn-live .kxn-route { opacity: 1; transition: opacity .6s ease .35s; }
+    .kxn-live.has-focus .kxn-route:not(.on) { opacity: .18; transition-delay: 0s; }
+
+    @media (min-width: 640px) {
+      .kxn-stage { padding: 36px 28px 40px; row-gap: 88px; }
+      .kxn-col { gap: 14px; }
+      .kxn-node { padding: 16px 10px 14px; }
+      .kxn-node b { font-size: 14px; }
+      .kxn-art, .kxn-art img { height: 46px; }
+      .kxn-art img { width: 46px; }
+      .kxn-hub { width: 180px; }
+    }
+    @media (min-width: 960px) {
+      .kxn-stage {
+        grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(220px, 260px);
+        align-items: center; column-gap: 0; row-gap: 0; padding: 44px 40px;
+      }
+      .kxn-src, .kxn-dst { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+      .kxn-dst .kxn-label { order: 0; margin-top: 0; }
+      .kxn-label { justify-self: start; margin-bottom: 2px; }
+      .kxn-node { flex-direction: row; justify-content: flex-start; gap: 14px; padding: 14px 16px; text-align: left; }
+      .kxn-node small { display: block; margin-top: 2px; }
+      .kxn-node b { font-size: 15px; }
+      .kxn-src .kxn-art { width: 92px; flex: none; }
+      .kxn-art, .kxn-art img { height: 48px; }
+      .kxn-art img { width: 48px; margin: 0 -9px; }
+      .kxn-icon { width: 46px; height: 46px; border-radius: 14px; flex: none; }
+      .kxn-icon svg { width: 22px; height: 22px; }
+      .kxn-hub { width: 210px; padding: 24px 16px 20px; }
+      .kxn-hub img { width: 52px; height: 52px; }
+      .kxn-hub b { font-size: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kxn-flow { animation: none; }
+      .kxn-node, .kxn-hub, .kxn-route { opacity: 1; transform: none; transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -1165,8 +1368,8 @@
     <section class="kx-hero">
       <div class="kx-hero-art">
         <img class="hero-slide hero-s1 is-active" src="assets/home/hero-1.png" alt="KitchenX fresh produce crate" />
-        <img class="hero-slide hero-s2" src="assets/home/hero-2.png" alt="Chef plating with fresh ingredients" />
-        <img class="hero-slide hero-s3" src="assets/home/hero-3.png" alt="Fresh vegetables for kitchens" />
+        <img class="hero-slide hero-s2" src="assets/home/hero-2.png?v=2" alt="KitchenX crate with fresh produce, spices, dairy and meat" />
+        <img class="hero-slide hero-s3" src="assets/home/hero-3.png?v=2" alt="KitchenX crate with fresh bread, pastries, dairy and cheese" />
         <img class="hero-slide hero-s4" src="assets/home/hero-4.png" alt="KitchenX warehouse fulfilment" />
         <div id="heroDots" class="kx-hero-dots"></div>
       </div>
@@ -1412,6 +1615,70 @@
         </div>
         <img class="h-64 w-full object-cover object-[72%_center] md:h-80 min-[1200px]:hidden" src="assets/home/supply.png" alt="Chef plating a dish for service" />
       </div>
+    </section>
+
+    <section id="network" class="page-wrap py-10 lg:py-14" aria-labelledby="networkTitle">
+      <div class="mx-auto mb-8 max-w-2xl text-center md:mb-10">
+        <p class="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#667085]">The KitchenX supply network</p>
+        <h2 id="networkTitle" class="mt-2 text-[26px] font-extrabold leading-tight tracking-tight md:text-4xl">From where food is grown <span class="text-orange">to where it's cooked.</span></h2>
+        <p class="mt-3 text-base font-medium leading-relaxed text-[#667085]">Farms, mills and dairies send their best to KitchenX. We check every batch, then route it to the kitchens that feed your city.</p>
+      </div>
+
+      <div class="kxn-stage" id="kxnStage">
+        <svg class="kxn-svg" id="kxnSvg" aria-hidden="true"><g id="kxnParcels"></g></svg>
+
+        <div class="kxn-col kxn-src">
+          <span class="kxn-label">We source from</span>
+          <button type="button" class="kxn-node" data-id="farms" data-dir="in" data-tone="green" style="--i:0">
+            <span class="kxn-dot"></span>
+            <span class="kxn-art"><img src="assets/customer/products/carrot.png" alt="" /><img src="assets/customer/products/tomato.png" alt="" /><img src="assets/customer/products/cabbage.png" alt="" /></span>
+            <span class="kxn-txt"><b>Farms</b><small>Fresh vegetables &amp; fruit</small></span>
+          </button>
+          <button type="button" class="kxn-node" data-id="mills" data-dir="in" data-tone="amber" style="--i:1">
+            <span class="kxn-dot"></span>
+            <span class="kxn-art"><img src="assets/customer/products/atta.png" alt="" /><img src="assets/customer/products/rice.png" alt="" /><img src="assets/customer/products/oil.png" alt="" /></span>
+            <span class="kxn-txt"><b>Mills &amp; brands</b><small>Rice, atta, dal &amp; oils</small></span>
+          </button>
+          <button type="button" class="kxn-node" data-id="dairy" data-dir="in" data-tone="blue" style="--i:2">
+            <span class="kxn-dot"></span>
+            <span class="kxn-art"><img src="assets/customer/products/butter.png" alt="" /><img src="assets/customer/products/cream.png" alt="" /><img src="assets/customer/products/chicken.png" alt="" /></span>
+            <span class="kxn-txt"><b>Dairy &amp; cold chain</b><small>Butter, cream &amp; chicken</small></span>
+          </button>
+        </div>
+
+        <div class="kxn-col kxn-hubcol">
+          <div class="kxn-hub" id="kxnHub" style="--i:3">
+            <span class="kxn-ring" aria-hidden="true"></span>
+            <span class="kxn-ring r2" aria-hidden="true"></span>
+            <img src="assets/home/kitchenx-mark.png" alt="" />
+            <b>KitchenX</b>
+            <small>Sort · check · pack</small>
+            <div class="kxn-checks"><span>QC</span><span>Fresh</span><span>On time</span></div>
+          </div>
+        </div>
+
+        <div class="kxn-col kxn-dst">
+          <span class="kxn-label">We deliver to</span>
+          <button type="button" class="kxn-node" data-id="restaurants" data-dir="out" style="--i:4">
+            <span class="kxn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v18M4.5 3v5a2.5 2.5 0 0 0 5 0V3M17 21V3c-2 0-3.5 2.5-3.5 6s1.5 4 3.5 4"/></svg></span>
+            <span class="kxn-txt"><b>Restaurants</b><small>Daily restocks</small></span>
+          </button>
+          <button type="button" class="kxn-node" data-id="cloud" data-dir="out" style="--i:5">
+            <span class="kxn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 11 3.5 3.5 0 0 0 7 18z"/></svg></span>
+            <span class="kxn-txt"><b>Cloud kitchens</b><small>High-volume staples</small></span>
+          </button>
+          <button type="button" class="kxn-node" data-id="hotels" data-dir="out" style="--i:6">
+            <span class="kxn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M2 21h20M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-4h4v4"/></svg></span>
+            <span class="kxn-txt"><b>Hotels &amp; caterers</b><small>Bulk &amp; event orders</small></span>
+          </button>
+          <button type="button" class="kxn-node" data-id="cafes" data-dir="out" style="--i:7">
+            <span class="kxn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v2M12 3v2"/></svg></span>
+            <span class="kxn-txt"><b>Cafés &amp; bakeries</b><small>Dairy, flour &amp; more</small></span>
+          </button>
+        </div>
+      </div>
+
+      <p class="kxn-caption" id="kxnCaption" aria-live="polite">Tap any source or kitchen to trace its route through KitchenX.</p>
     </section>
 
     <section id="businesses" class="page-wrap py-10 lg:py-14">
@@ -3165,6 +3432,179 @@
     if (location.hash === '#login') openAuth('login');
     else if (location.hash === '#signup') openAuth('signup');
     else window.scrollTo(0, 0);
+  </script>
+  <script>
+    (() => {
+      const stage = document.getElementById('kxnStage');
+      if (!stage) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const svg = document.getElementById('kxnSvg');
+      const layer = document.getElementById('kxnParcels');
+      const hub = document.getElementById('kxnHub');
+      const caption = document.getElementById('kxnCaption');
+      const nodes = [...stage.querySelectorAll('.kxn-node')];
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const desktop = matchMedia('(min-width: 960px)');
+      const defaultCaption = caption.innerHTML;
+      const captions = {
+        farms: '<b>Farms → KitchenX.</b> Vegetables and fruit picked fresh, then sorted and quality-checked before dispatch.',
+        mills: '<b>Mills &amp; brands → KitchenX.</b> Rice, atta, dal and oils from 500+ trusted brands, stocked in bulk.',
+        dairy: '<b>Dairy &amp; cold chain → KitchenX.</b> Butter, cream and chicken kept cold from source to your door.',
+        restaurants: '<b>KitchenX → Restaurants.</b> Daily restocks planned around your service hours.',
+        cloud: '<b>KitchenX → Cloud kitchens.</b> High-volume staples on a fixed, predictable schedule.',
+        hotels: '<b>KitchenX → Hotels &amp; caterers.</b> Bulk and event orders with flexible payment options.',
+        cafes: '<b>KitchenX → Cafés &amp; bakeries.</b> Dairy, flour and bakery essentials, delivered on time.'
+      };
+
+      let routes = {};
+      let focusId = null;
+
+      const box = (el) => {
+        const s = stage.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return { l: r.left - s.left, r: r.right - s.left, t: r.top - s.top, b: r.bottom - s.top,
+                 cx: (r.left + r.right) / 2 - s.left, cy: (r.top + r.bottom) / 2 - s.top };
+      };
+
+      function draw() {
+        const s = stage.getBoundingClientRect();
+        svg.setAttribute('viewBox', `0 0 ${s.width} ${s.height}`);
+        svg.querySelectorAll('.kxn-route').forEach((g) => g.remove());
+        routes = {};
+        const horizontal = desktop.matches;
+        const h = box(hub);
+        ['in', 'out'].forEach((dir) => {
+          const list = nodes.filter((n) => n.dataset.dir === dir);
+          list.forEach((n, i) => {
+            const a = box(n);
+            const spread = (i - (list.length - 1) / 2) * (horizontal ? 14 : 18);
+            let x1, y1, x2, y2, d;
+            if (horizontal) {
+              [x1, y1, x2, y2] = dir === 'in' ? [a.r, a.cy, h.l, h.cy + spread] : [h.r, h.cy + spread, a.l, a.cy];
+              const mx = (x1 + x2) / 2;
+              d = `M${x1} ${y1} C${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+            } else {
+              [x1, y1, x2, y2] = dir === 'in' ? [a.cx, a.b, h.cx + spread, h.t] : [h.cx + spread, h.b, a.cx, a.t];
+              const my = (y1 + y2) / 2;
+              d = `M${x1} ${y1} C${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
+            }
+            const g = document.createElementNS(NS, 'g');
+            g.setAttribute('class', 'kxn-route' + (n.dataset.id === focusId ? ' on' : ''));
+            g.dataset.dir = dir;
+            if (n.dataset.tone) g.dataset.tone = n.dataset.tone;
+            const base = document.createElementNS(NS, 'path');
+            base.setAttribute('class', 'kxn-base');
+            base.setAttribute('d', d);
+            const flow = document.createElementNS(NS, 'path');
+            flow.setAttribute('class', 'kxn-flow');
+            flow.setAttribute('d', d);
+            g.append(base, flow);
+            svg.insertBefore(g, layer);
+            routes[n.dataset.id] = { path: flow, len: flow.getTotalLength(), dir, tone: n.dataset.tone, g };
+          });
+        });
+      }
+
+      function setFocus(id) {
+        focusId = focusId === id ? null : id;
+        stage.classList.toggle('has-focus', !!focusId);
+        nodes.forEach((n) => {
+          n.classList.toggle('on', n.dataset.id === focusId);
+          n.setAttribute('aria-pressed', String(n.dataset.id === focusId));
+        });
+        Object.entries(routes).forEach(([rid, r]) => r.g.classList.toggle('on', rid === focusId));
+        caption.innerHTML = focusId ? captions[focusId] : defaultCaption;
+      }
+      nodes.forEach((n) => {
+        n.setAttribute('aria-pressed', 'false');
+        n.addEventListener('click', () => setFocus(n.dataset.id));
+      });
+
+      const idsFor = (dir) => nodes.filter((n) => n.dataset.dir === dir).map((n) => n.dataset.id);
+      const inIds = idsFor('in');
+      const outIds = idsFor('out');
+      const pick = (list, dir) => {
+        if (focusId && routes[focusId] && routes[focusId].dir === dir) return focusId;
+        return list[Math.floor(Math.random() * list.length)];
+      };
+      const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+      const parcels = [];
+      let last = 0;
+      let spawnIn = 0;
+      let raf = 0;
+
+      function spawn(dir, id) {
+        const r = routes[id];
+        if (!r) return;
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('r', dir === 'in' ? 5 : 5.5);
+        c.setAttribute('class', 'kxn-parcel ' + dir);
+        if (r.tone) c.setAttribute('data-tone', r.tone);
+        c.style.opacity = 0;
+        layer.appendChild(c);
+        parcels.push({ c, id, dir, t: 0, dur: 2000 + Math.random() * 700 });
+      }
+
+      function flash(el, cls, ms) {
+        el.classList.add(cls);
+        clearTimeout(el._kxnT);
+        el._kxnT = setTimeout(() => el.classList.remove(cls), ms);
+      }
+
+      function tick(now) {
+        const dt = last ? Math.min(64, now - last) : 16;
+        last = now;
+        spawnIn -= dt;
+        if (spawnIn <= 0) {
+          spawnIn = 850 + Math.random() * 450;
+          spawn('in', pick(inIds, 'in'));
+        }
+        for (let i = parcels.length - 1; i >= 0; i--) {
+          const p = parcels[i];
+          const r = routes[p.id];
+          p.t += dt / p.dur;
+          if (!r || p.t >= 1) {
+            p.c.remove();
+            parcels.splice(i, 1);
+            if (r && p.dir === 'in') {
+              flash(hub, 'pulse', 260);
+              setTimeout(() => spawn('out', pick(outIds, 'out')), 180);
+            } else if (r) {
+              const target = nodes.find((n) => n.dataset.id === p.id);
+              if (target) flash(target, 'ping', 500);
+            }
+            continue;
+          }
+          const pt = r.path.getPointAtLength(ease(p.t) * r.len);
+          p.c.setAttribute('cx', pt.x.toFixed(1));
+          p.c.setAttribute('cy', pt.y.toFixed(1));
+          p.c.style.opacity = p.t < 0.08 ? p.t / 0.08 : p.t > 0.94 ? (1 - p.t) / 0.06 : 1;
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      const start = () => { if (!raf && !reduceMotion) { last = 0; raf = requestAnimationFrame(tick); } };
+      const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+
+      new ResizeObserver(draw).observe(stage);
+      desktop.addEventListener('change', draw);
+      window.addEventListener('load', draw);
+      draw();
+
+      let visible = false;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => {
+          visible = entry.isIntersecting;
+          if (visible) { stage.classList.add('kxn-live'); start(); } else stop();
+        }, { threshold: 0.2 }).observe(stage);
+      } else {
+        visible = true;
+        stage.classList.add('kxn-live');
+        start();
+      }
+      document.addEventListener('visibilitychange', () => (document.hidden ? stop() : visible && start()));
+    })();
   </script>
 </body>
 </html>
