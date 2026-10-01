@@ -154,6 +154,25 @@
     .blog-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
     @media (min-width: 768px) { .blog-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
     @media (min-width: 1200px) { .blog-grid { grid-template-columns: 1fr 1fr 1fr; gap: 20px; } }
+    .blog-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 32px; }
+    .blog-page-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      min-height: 38px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #344054;
+      cursor: pointer;
+    }
+    .blog-page-btn.is-on { border-color: #141517; background: #141517; color: #fff; }
+    .blog-page-btn.blog-page-nav { font-size: 18px; font-weight: 700; }
+    .blog-page-btn:disabled { opacity: 0.4; cursor: default; }
     .blog-card {
       display: flex;
       flex-direction: column;
@@ -1491,6 +1510,7 @@
           <h2>Latest articles</h2>
         </div>
         <div id="blogGrid" class="blog-grid"></div>
+        <div id="blogPagination" class="blog-pagination"></div>
       </div>
     </div>
     <article id="blogPost" class="page-wrap py-6 min-[1200px]:py-12" hidden></article>
@@ -1559,8 +1579,10 @@
         <h4 class="font-extrabold">Stay updated</h4>
         <p class="mt-2 text-sm font-medium text-white/55">Get updates from KitchenX.</p>
         <form id="newsletter" class="mt-4 flex rounded-2xl bg-white p-1">
-          <input class="field min-w-0 flex-1 rounded-xl px-4 text-sm font-semibold text-coal outline-none" placeholder="Enter your email" type="email" required />
-          <button class="rounded-xl bg-orange px-4 py-3 text-sm font-extrabold text-white" type="submit">→</button>
+          <input class="field min-w-0 flex-1 rounded-xl px-4 py-3 text-sm font-semibold text-coal outline-none" placeholder="Enter your email" type="email" required />
+          <button class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-orange text-white" type="submit" aria-label="Subscribe">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </form>
       </div>
     </div>
@@ -2280,6 +2302,8 @@
     ];
     let blogCat = 'All';
     let blogQuery = '';
+    let blogPage = 1;
+    const BLOG_PAGE_SIZE = 9;
     function blogMeta(post) {
       return '<span class="blog-cat">' + post.cat + '</span> <span class="blog-meta">' + post.date + ' · ' + post.read + ' read</span>';
     }
@@ -2310,19 +2334,35 @@
         '<button type="button" class="blog-chip' + (c === blogCat ? ' is-on' : '') + '" data-blog-cat="' + c + '">' + c + '</button>'
       ).join('');
     }
+    function renderBlogPagination(totalPages) {
+      const wrap = document.getElementById('blogPagination');
+      if (totalPages <= 1) { wrap.innerHTML = ''; return; }
+      let html = '<button type="button" class="blog-page-btn blog-page-nav" data-blog-page="' + (blogPage - 1) + '"' + (blogPage === 1 ? ' disabled' : '') + ' aria-label="Previous page">‹</button>';
+      for (let i = 1; i <= totalPages; i++) {
+        html += '<button type="button" class="blog-page-btn' + (i === blogPage ? ' is-on' : '') + '" data-blog-page="' + i + '">' + i + '</button>';
+      }
+      html += '<button type="button" class="blog-page-btn blog-page-nav" data-blog-page="' + (blogPage + 1) + '"' + (blogPage === totalPages ? ' disabled' : '') + ' aria-label="Next page">›</button>';
+      wrap.innerHTML = html;
+    }
     function renderBlogIndex() {
       const list = visiblePosts();
       const feature = document.getElementById('blogFeature');
       const head = document.getElementById('blogLatestHead');
       const grid = document.getElementById('blogGrid');
+      const pagination = document.getElementById('blogPagination');
       feature.innerHTML = '';
       if (!list.length) {
         head.hidden = true;
         grid.innerHTML = '<p class="mt-6 text-sm font-semibold text-[#667085]">No posts match that search.</p>';
+        pagination.innerHTML = '';
         return;
       }
       head.hidden = false;
-      grid.innerHTML = list.map(blogTile).join('');
+      const totalPages = Math.max(1, Math.ceil(list.length / BLOG_PAGE_SIZE));
+      if (blogPage > totalPages) blogPage = totalPages;
+      const start = (blogPage - 1) * BLOG_PAGE_SIZE;
+      grid.innerHTML = list.slice(start, start + BLOG_PAGE_SIZE).map(blogTile).join('');
+      renderBlogPagination(totalPages);
     }
     function renderHomeBlog() {
       const grid = document.getElementById('homeBlogGrid');
@@ -2375,12 +2415,22 @@
     renderBlogIndex();
     document.getElementById('blogSearch').addEventListener('input', (e) => {
       blogQuery = (e.target.value || '').trim().toLowerCase();
+      blogPage = 1;
       renderBlogIndex();
     });
     document.addEventListener('click', (e) => {
+      const pageBtn = e.target.closest('[data-blog-page]');
+      if (pageBtn) {
+        if (pageBtn.disabled) return;
+        blogPage = Number(pageBtn.getAttribute('data-blog-page'));
+        renderBlogIndex();
+        document.getElementById('blogLatestHead').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
       const chip = e.target.closest('[data-blog-cat]');
       if (chip) {
         blogCat = chip.getAttribute('data-blog-cat');
+        blogPage = 1;
         renderBlogFilters();
         renderBlogIndex();
         return;
