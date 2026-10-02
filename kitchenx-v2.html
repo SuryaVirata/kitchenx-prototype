@@ -641,7 +641,16 @@
         pointer-events: none;
       }
     }
-    .how-step { position: relative; z-index: 1; text-align: center; }
+    .how-step {
+      position: relative; z-index: 1; text-align: center;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .5s ease, transform .5s ease;
+      transition-delay: calc(var(--i, 0) * 120ms);
+    }
+    .how-rail.how-live .how-step { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .how-step { opacity: 1; transform: none; transition: none; }
+    }
     .how-shot {
       position: relative;
       width: 132px;
@@ -1677,7 +1686,7 @@
         <h2 class="how-title">From sourcing to your kitchen. <span>In four simple steps.</span></h2>
         <p class="how-lead">Quality ingredients, smart procurement and reliable delivery for your food business.</p>
         <div class="how-rail">
-          <article class="how-step">
+          <article class="how-step" style="--i:0">
             <div class="how-shot">
               <img class="how-photo" src="assets/home/how-discover.jpg" alt="Hands holding a tablet showing fresh produce" />
               <div class="how-num">1</div>
@@ -1685,7 +1694,7 @@
             <h3>Discover</h3>
             <p>Find what your kitchen needs from 10,000+ products.</p>
           </article>
-          <article class="how-step">
+          <article class="how-step" style="--i:1">
             <div class="how-shot">
               <img class="how-photo" src="assets/home/how-order.jpg" alt="KitchenX box filled with vegetables" />
               <div class="how-num">2</div>
@@ -1693,7 +1702,7 @@
             <h3>Order</h3>
             <p>Get the best prices and flexible payment options.</p>
           </article>
-          <article class="how-step">
+          <article class="how-step" style="--i:2">
             <div class="how-shot">
               <img class="how-photo" src="assets/home/how-prepare.jpg" alt="A packer placing greens into a KitchenX box" />
               <div class="how-num">3</div>
@@ -1701,7 +1710,7 @@
             <h3>We prepare</h3>
             <p>Quality checks and careful handling.</p>
           </article>
-          <article class="how-step">
+          <article class="how-step" style="--i:3">
             <div class="how-shot">
               <img class="how-photo" src="assets/home/how-deliver.jpg" alt="A white KitchenX delivery truck" />
               <div class="how-num">4</div>
@@ -3534,6 +3543,20 @@
     if (location.hash === '#login') openAuth('login');
     else if (location.hash === '#signup') openAuth('signup');
     else window.scrollTo(0, 0);
+
+    const howRail = document.querySelector('.how-rail');
+    if (howRail) {
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([entry], obs) => {
+          if (entry.isIntersecting) {
+            howRail.classList.add('how-live');
+            obs.disconnect();
+          }
+        }, { threshold: 0.25 }).observe(howRail);
+      } else {
+        howRail.classList.add('how-live');
+      }
+    }
   </script>
 </body>
 </html>
