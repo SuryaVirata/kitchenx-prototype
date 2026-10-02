@@ -2595,11 +2595,11 @@
     }
 
     const PRODUCTS = [
-      { id: 'p1', name: 'Amul Butter (500 g)', brand: 'Amul', cat: 'Dairy', price: 305.55, was: 360, deal: { badge: '15% OFF', kind: 'off' }, pic: 'butter', stock: true, tags: 'butter dairy' },
+      { id: 'p1', name: 'Salted butter (500 g)', brand: 'Kitchen Staples', cat: 'Dairy', price: 305.55, was: 360, deal: { badge: '15% OFF', kind: 'off' }, pic: 'butter', stock: true, tags: 'butter dairy bakery cafe' },
       { id: 'p2', name: 'Fresh Tomatoes (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 48, was: 60, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', tags: 'tomato vegetable salad gravy' },
       { id: 'p3', name: 'Chicken Breast (1 kg)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 220, pic: 'chicken', stock: true, tags: 'chicken meat' },
       { id: 'p4', name: 'Cooking Oil (1 L)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 110, pic: 'oil', stock: true, tags: 'oil pantry bakery canteen' },
-      { id: 'p5', name: 'Amul Fresh Cream (1 L)', brand: 'Amul', cat: 'Dairy', price: 247, pic: 'cream', stock: true, tags: 'cream dairy' },
+      { id: 'p5', name: 'Fresh cream (1 L)', brand: 'Kitchen Staples', cat: 'Dairy', price: 247, pic: 'cream', stock: true, tags: 'cream dairy bakery cafe' },
       { id: 'p6', name: 'Wheat atta (5 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 241.5, pic: 'atta', stock: true, tags: 'atta flour wheat pantry bakery canteen' },
       { id: 'p7', name: 'Onions (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 32, was: 36, deal: { badge: '10% OFF', kind: 'off' }, pic: 'onion', stock: true, group: 'veg', tags: 'onion vegetable gravy' },
       { id: 'p8', name: 'Basmati Rice (5 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 650, pic: 'rice', stock: true, tags: 'rice grain pantry canteen' },
@@ -2611,10 +2611,10 @@
       { id: 'p16', name: 'Green Chillies (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 18, was: 20, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chilli', stock: true, group: 'veg', tags: 'chilli vegetable spice' },
       { id: 'p17', name: 'Garlic (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'garlic', stock: true, group: 'veg', tags: 'garlic vegetable spice' },
       { id: 'p18', name: 'Lemon (1 kg)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 70, was: 76, deal: { badge: 'Save 8%', kind: 'save' }, pic: 'lemon', stock: true, group: 'veg', tags: 'lemon vegetable citrus' },
-      { id: 'p21', name: 'Amul Toned Milk (1 L)', brand: 'Amul', cat: 'Dairy', price: 58, was: 64, deal: { badge: '10% OFF', kind: 'off' }, pic: 'milk', stock: true, tags: 'milk dairy' },
-      { id: 'p22', name: 'Amul Fresh Curd (1 kg)', brand: 'Amul', cat: 'Dairy', price: 75, pic: 'cream', stock: true, tags: 'curd dahi dairy yogurt' },
-      { id: 'p23', name: 'Amul Paneer (200 g)', brand: 'Amul', cat: 'Dairy', price: 95, pic: 'butter', stock: true, tags: 'paneer dairy' },
-      { id: 'p24', name: 'Amul Cow Ghee (1 L)', brand: 'Amul', cat: 'Dairy', price: 620, pic: 'butter', stock: true, tags: 'ghee dairy' },
+      { id: 'p21', name: 'Fresh milk (1 L)', brand: 'Kitchen Staples', cat: 'Dairy', price: 58, was: 64, deal: { badge: '10% OFF', kind: 'off' }, pic: 'milk', stock: true, tags: 'milk dairy cafe canteen' },
+      { id: 'p22', name: 'Amul Fresh Curd (1 kg)', brand: 'Amul', cat: 'Dairy', price: 75, pic: 'cream', stock: false, tags: 'curd dahi dairy yogurt' },
+      { id: 'p23', name: 'Amul Paneer (200 g)', brand: 'Amul', cat: 'Dairy', price: 95, pic: 'butter', stock: false, tags: 'paneer dairy' },
+      { id: 'p24', name: 'Amul Cow Ghee (1 L)', brand: 'Amul', cat: 'Dairy', price: 620, pic: 'butter', stock: false, tags: 'ghee dairy' },
       { id: 'p25', name: 'Farm Eggs (30 pcs)', brand: 'Fresh Produce', cat: 'Chicken & Eggs', price: 180, pic: 'eggs', stock: true, tags: 'eggs bakery dairy' },
       { id: 'p49', name: 'Wheat flour (1 kg)', brand: 'Kitchen Loaf', cat: 'Pantry & Staples', price: 54, pic: 'wheat', stock: true, tags: 'wheat flour maida pantry bakery canteen' },
       { id: 'p50', name: 'White sugar (1 kg)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 48, pic: 'sugar', stock: true, tags: 'sugar pantry canteen tea' },
@@ -2622,15 +2622,15 @@
       { id: 'p40', name: 'Ginger (250 g)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 35, pic: 'ginger', stock: true, group: 'veg', tags: 'ginger vegetable spice' },
       { id: 'p41', name: 'Spinach (1 bunch)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 22, pic: 'spinach', stock: true, group: 'veg', tags: 'spinach vegetable greens' },
       { id: 'p42', name: 'Cauliflower (1 pc)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 40, pic: 'cauli', stock: true, group: 'veg', tags: 'cauliflower vegetable' },
-      { id: 'p43', name: 'Almonds (500 g)', brand: 'Nutty', cat: 'Pantry & Staples', price: 420, was: 480, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almond', stock: true, tags: 'almond nut pantry' },
-      { id: 'p47', name: 'Almond Butter (500 g)', brand: 'Nutty', cat: 'Pantry & Staples', price: 449, was: 520, deal: { badge: '14% OFF', kind: 'off' }, pic: 'almondbutter', stock: true, tags: 'almond butter nut pantry' },
-      { id: 'p48', name: 'Almond Milk (1 L)', brand: 'Nutty', cat: 'Dairy', price: 145, was: 165, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almondmilk', stock: true, tags: 'almond milk dairy' },
+      { id: 'p43', name: 'Almonds (500 g)', brand: 'Kitchen Staples', cat: 'Pantry & Staples', price: 420, was: 480, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almond', stock: true, tags: 'almond nut pantry cafe' },
+      { id: 'p47', name: 'Almond butter (284 g)', brand: 'Barney Butter', cat: 'Pantry & Staples', price: 449, was: 520, deal: { badge: '14% OFF', kind: 'off' }, pic: 'almondbutter', stock: true, tags: 'almond butter nut pantry cafe' },
+      { id: 'p48', name: 'Almond milk (1 L)', brand: 'Kitchen Staples', cat: 'Dairy', price: 145, was: 165, deal: { badge: '12% OFF', kind: 'off' }, pic: 'almondmilk', stock: true, tags: 'almond milk dairy cafe' },
       { id: 'p44', name: 'Bakery Seed Bread', brand: 'Kitchen Loaf', cat: 'Bakery', price: 55, pic: 'bread', stock: true, tags: 'bread bakery loaf' },
       { id: 'p45', name: 'Oven Loaf', brand: 'Kitchen Loaf', cat: 'Bakery', price: 40, pic: 'bun', stock: true, tags: 'loaf bread bakery' },
       { id: 'p46', name: 'Butter Croissant', brand: 'Kitchen Loaf', cat: 'Bakery', price: 60, pic: 'croissant', stock: true, tags: 'croissant bakery bread' },
-      { id: 'p26', name: 'Rohu Fish (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 280, pic: 'chicken', stock: true, tags: 'fish seafood meat' },
-      { id: 'p27', name: 'Prawns (500 g)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 320, was: 360, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chicken', stock: true, tags: 'prawns seafood meat' },
-      { id: 'p28', name: 'Mutton Curry Cut (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 720, pic: 'chicken', stock: true, tags: 'mutton meat' },
+      { id: 'p26', name: 'Rohu Fish (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 280, pic: 'chicken', stock: false, tags: 'fish seafood meat' },
+      { id: 'p27', name: 'Prawns (500 g)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 320, was: 360, deal: { badge: '10% OFF', kind: 'off' }, pic: 'chicken', stock: false, tags: 'prawns seafood meat' },
+      { id: 'p28', name: 'Mutton Curry Cut (1 kg)', brand: 'Fresh Produce', cat: 'Meat & Seafood', price: 720, pic: 'chicken', stock: false, tags: 'mutton meat' },
       { id: 'p19', name: 'Fresh Tomatoes (5 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 220, was: 275, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk' },
       { id: 'p20', name: 'Fresh Tomatoes (25 kg bag)', brand: 'Fresh Produce', cat: 'Fruits & Vegetables', price: 950, was: 1200, deal: { badge: '20% OFF', kind: 'off' }, pic: 'tomato', stock: true, group: 'veg', variant: true, tags: 'tomato vegetable bag bulk kitchen' },
       { id: 'p30', name: 'Black tea leaves (250 g)', brand: 'Kitchen Staples', cat: 'Beverages', price: 160, pic: 'tea', stock: true, tags: 'tea beverage drink canteen' },
@@ -2640,7 +2640,7 @@
       { id: 'p34', name: 'Tropicana Orange (1 L)', brand: 'Tropicana', cat: 'Beverages', price: 125, pic: 'lemon', stock: false, demand: true, tags: 'orange juice beverage drink' }
     ];
     const CATS = ['All Categories','Fruits & Vegetables','Dairy','Chicken & Eggs','Meat & Seafood','Bakery','Pantry & Staples','Beverages'];
-    const BRANDS = ['Amul','Kitchen Staples','Kitchen Loaf','Fresh Produce','Nutty'];
+    const BRANDS = ['Kitchen Staples','Kitchen Loaf','Fresh Produce','Barney Butter'];
     const qty = {};
     const fav = {};
     PRODUCTS.forEach((p) => { qty[p.id] = 0; });
@@ -2788,7 +2788,7 @@
 
     renderCatChips();
     document.getElementById('catChecks').innerHTML = CATS.slice(1, 5).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreCats">+ Show more</button>';
-    document.getElementById('brandChecks').innerHTML = ['Amul','Kitchen Staples','Kitchen Loaf','Fresh Produce'].map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('') + '<button class="mt-1 text-left text-xs font-extrabold text-orange" id="moreBrands">+ Show more</button>';
+    document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
 
     function activeChecks(sel) { return Array.from(document.querySelectorAll(sel)).filter((i) => i.checked).map((i) => i.value); }
     function productHay(p) { return (p.name + ' ' + p.brand + ' ' + p.cat + ' ' + (p.tags || '')).toLowerCase(); }
@@ -2798,6 +2798,7 @@
       const min = Number(document.getElementById('minPrice').value) || 0;
       const max = Number(document.getElementById('maxPrice').value) || Infinity;
       const stockOnly = document.getElementById('stockOnly').checked;
+      if (WRONG_PIC[p.id]) return false;
       if (chip !== 'All Categories' && p.cat !== chip) return false;
       if (cats.length && !cats.includes(p.cat)) return false;
       if (brands.length && !brands.includes(p.brand)) return false;
@@ -2917,12 +2918,6 @@
     function mixRecommend(list) {
       const cats = leadCats();
       if (!cats.size || chip !== 'All Categories') return mixByCategory(list);
-      const lead = [];
-      const rest = [];
-      list.forEach((p) => {
-        if (!p.variant && !WRONG_PIC[p.id] && cats.has(p.cat)) lead.push(p);
-        else rest.push(p);
-      });
       const type = sessionStorage.getItem('kxBizType') || '';
       const needs = (sessionStorage.getItem('kxNeeds') || '').split('|');
       const rank = {
@@ -2933,19 +2928,33 @@
         Caterer: ['Fruits & Vegetables', 'Pantry & Staples', 'Meat & Seafood', 'Dairy'],
         Other: ['Bakery', 'Chicken & Eggs', 'Pantry & Staples', 'Dairy', 'Beverages']
       }[type] || [];
+      const domain = {
+        Restaurant: /tomato|onion|potato|capsicum|carrot|cabbage|cucumber|chilli|garlic|ginger|spinach|cauli|lemon|chicken|rice|oil|atta|dal|milk|butter|cream|vegetable/,
+        Cafe: /milk|butter|cream|almond|bakery|bread|eggs|tea|croissant|loaf|sugar/,
+        Hotel: /tomato|onion|potato|vegetable|milk|butter|cream|chicken|rice|oil|atta|dal|bread|bakery/,
+        'Cloud Kitchen': /tomato|onion|potato|chicken|oil|rice|vegetable|milk|butter|garlic|ginger/,
+        Caterer: /tomato|onion|potato|vegetable|rice|dal|oil|atta|chicken|bread/,
+        Other: /bakery|eggs|flour|wheat|maida|atta|oil|rice|dal|sugar|tea|bread|loaf|croissant|milk/
+      }[type];
       function score(p) {
-        const words = ((p.tags || '') + ' ' + p.name).toLowerCase();
+        const words = ((p.tags || '') + ' ' + p.name + ' ' + p.cat).toLowerCase();
         let s = 0;
         const at = rank.indexOf(p.cat);
         if (at >= 0) s += Math.max(1, 6 - at);
-        if (type === 'Other' && /bakery|eggs|flour|wheat|maida|atta|oil|rice|dal|sugar|tea|bread|loaf|croissant/.test(words)) s += 6;
+        if (domain && domain.test(words)) s += 8;
         if (needs.indexOf('Dairy & Eggs') >= 0 && /dairy|eggs|milk|butter|cream/.test(words)) s += 2;
         if (needs.indexOf('Staples & Grains') >= 0 && /flour|wheat|maida|oil|rice|atta|dal|sugar|pantry/.test(words)) s += 2;
         if (needs.indexOf('Fresh Produce') >= 0 && p.cat === 'Fruits & Vegetables') s += 2;
-        if (needs.indexOf('Meat, Poultry & Seafood') >= 0 && (p.cat === 'Meat & Seafood' || /chicken/.test(words))) s += 2;
-        if (needs.indexOf('Beverages') >= 0 && p.cat === 'Beverages') s += 2;
+        if (needs.indexOf('Meat, Poultry & Seafood') >= 0 && /chicken/.test(words)) s += 2;
+        if (needs.indexOf('Beverages') >= 0 && /tea|beverage/.test(words)) s += 2;
         return s;
       }
+      const lead = [];
+      const rest = [];
+      list.forEach((p) => {
+        if (!p.variant && !WRONG_PIC[p.id] && score(p) >= 8) lead.push(p);
+        else rest.push(p);
+      });
       lead.sort((a, b) => score(b) - score(a));
       const out = [];
       let i = 0;
@@ -3059,9 +3068,6 @@
     document.getElementById('moreCats').addEventListener('click', () => {
       document.getElementById('catChecks').innerHTML = CATS.slice(1).map((c) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-cat accent-[#FF4F18]" value="' + c + '" /> ' + c + '</label>').join('');
     });
-    document.getElementById('moreBrands').addEventListener('click', () => {
-      document.getElementById('brandChecks').innerHTML = BRANDS.map((b) => '<label class="flex items-center gap-2"><input type="checkbox" class="f-brand accent-[#FF4F18]" value="' + b + '" /> ' + b + '</label>').join('');
-    });
     const SHOTS = {
       tomato: ['tomato', 'tomato-2', 'tomato-3', 'tomato-4'],
       eggs: ['eggs', 'eggs-2', 'eggs-3', 'eggs-4'],
@@ -3085,7 +3091,7 @@
       const tags = (p.tags || '').split(/\s+/).filter(Boolean);
       const related = /butter|cheese|paneer|cream|ghee|curd|milk/;
       return PRODUCTS.map((x) => {
-        if (x.id === p.id || x.variant) return { x: x, s: -1 };
+        if (x.id === p.id || x.variant || WRONG_PIC[x.id]) return { x: x, s: -1 };
         let s = 0;
         if (x.cat === p.cat) s += 3;
         if (x.brand === p.brand) s += 2;
