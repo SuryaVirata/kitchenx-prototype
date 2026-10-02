@@ -666,6 +666,11 @@
       object-fit: cover;
       background: #fff;
       box-shadow: 0 10px 24px rgba(20, 21, 23, 0.1);
+      transition: transform .4s ease, box-shadow .4s ease;
+    }
+    .how-shot:hover .how-photo {
+      transform: scale(1.08);
+      box-shadow: 0 16px 32px rgba(20, 21, 23, 0.18);
     }
     .how-num {
       position: absolute;
@@ -684,6 +689,12 @@
       font-weight: 800;
       line-height: 1;
       transform: translate(-50%, 50%);
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .how-shot:hover .how-num { opacity: 0; transform: translate(-50%, 50%) scale(0.4); }
+    @media (prefers-reduced-motion: reduce) {
+      .how-photo, .how-num { transition: none; }
+      .how-shot:hover .how-photo { transform: none; }
     }
     .how-step h3 { margin-top: 4px; font-size: 16px; font-weight: 800; }
     .how-step p { margin: 6px auto 0; max-width: 200px; font-size: 13px; font-weight: 500; line-height: 1.45; color: #667085; }
