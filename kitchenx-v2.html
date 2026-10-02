@@ -636,10 +636,19 @@
         top: 78px;
         left: 12%;
         right: 12%;
-        border-top: 2px dashed #FFC7B3;
+        height: 2px;
         z-index: 0;
         pointer-events: none;
+        background-image: repeating-linear-gradient(90deg, rgba(255, 79, 24, 0.55) 0 10px, transparent 10px 20px);
+        background-size: 20px 2px;
+        animation: how-flow 1.4s linear infinite;
       }
+    }
+    @keyframes how-flow {
+      to { background-position: 20px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .how-rail::before { animation: none; }
     }
     .how-step {
       position: relative; z-index: 1; text-align: center;
