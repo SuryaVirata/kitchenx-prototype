@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -1387,6 +1387,86 @@
       .kx-hero-art::before,
       .kx-hero-art::after { transition: none; }
     }
+    #faq { scroll-margin-top: 80px; }
+    @media (min-width: 1200px) { #faq { scroll-margin-top: 88px; } }
+    .faq-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
+    .faq-kicker { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; color: #FF4F18; }
+    .faq-title { margin-top: 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+    @media (min-width: 768px) { .faq-title { font-size: 40px; } }
+    .faq-lead { margin-top: 8px; font-size: 15px; font-weight: 600; color: #667085; }
+    .faq-reveal { opacity: 0; transform: translateY(12px); }
+    .faq-sec.is-shown .faq-reveal { animation: faq-rise 0.55s ease forwards; }
+    .faq-sec.is-shown .faq-search { animation-delay: 0.08s; }
+    .faq-sec.is-shown .faq-cats { animation-delay: 0.16s; }
+    .faq-sec.is-shown .faq-bar { animation-delay: 0.24s; }
+    .faq-sec.is-shown .faq-list { animation-delay: 0.3s; }
+    .faq-search { display: flex; flex-direction: column; gap: 8px; max-width: 720px; margin: 28px auto 0; }
+    @media (min-width: 640px) { .faq-search { flex-direction: row; align-items: center; } }
+    .faq-field { position: relative; flex: 1; min-width: 0; }
+    .faq-field svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #98A2B3; pointer-events: none; }
+    .faq-field input {
+      width: 100%; height: 44px; padding: 0 16px 0 42px; border-radius: 999px;
+      border: 1px solid #EEF0F3; background: #fff; font-size: 14px; font-weight: 500; color: #141517;
+      box-shadow: none;
+    }
+    .faq-field input::placeholder { color: #98A2B3; font-weight: 500; }
+    .faq-go {
+      height: 44px; border: 0; border-radius: 999px; background: #FF4F18; color: #fff;
+      font-size: 14px; font-weight: 800; padding: 0 20px; flex: 0 0 auto;
+      box-shadow: 0 6px 14px rgba(255, 79, 24, 0.16);
+      transition: filter 0.2s ease;
+    }
+    .faq-go:hover { filter: brightness(0.96); }
+    @media (max-width: 639px) { .faq-go { width: 100%; } }
+    .faq-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+    .faq-cats > :last-child { grid-column: 1 / -1; }
+    @media (min-width: 700px) {
+      .faq-cats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .faq-cats > :last-child { grid-column: auto; }
+    }
+    @media (min-width: 1024px) {
+      .faq-cats { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+    }
+    .faq-cat {
+      min-width: 0; padding: 16px 12px 14px; border-radius: 18px; border: 1.5px solid #EEF0F3; background: #fff;
+      text-align: center; box-shadow: 0 8px 20px rgba(20, 21, 23, 0.04);
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+    }
+    .faq-cat:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(20, 21, 23, 0.07); }
+    .faq-cat.is-on { border-color: #FF4F18; background: #FFF6F3; box-shadow: 0 10px 24px rgba(255, 79, 24, 0.1); }
+    .faq-ico { width: 42px; height: 42px; margin: 0 auto 10px; border-radius: 999px; display: grid; place-items: center; background: #FFF1EC; color: #FF4F18; }
+    .faq-cat b { display: block; font-size: 14px; font-weight: 800; color: #141517; }
+    .faq-cat small { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; line-height: 1.35; color: #667085; }
+    .faq-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 28px; }
+    .faq-bar h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+    .faq-all { font-size: 14px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .faq-all:hover { filter: brightness(0.92); }
+    .faq-list { display: grid; gap: 10px; margin-top: 14px; }
+    .faq-list.is-in .faq-item { animation: faq-rise 0.42s ease both; animation-delay: calc(var(--i) * 45ms); }
+    .faq-item { border-radius: 16px; border: 1px solid #EEF0F3; background: #fff; box-shadow: 0 8px 18px rgba(20, 21, 23, 0.04); overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
+    .faq-item:hover { border-color: #FFD7CB; box-shadow: 0 10px 22px rgba(255, 79, 24, 0.08); }
+    .faq-q button {
+      display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px;
+      min-height: 58px; padding: 14px 18px; text-align: left; font-size: 15px; font-weight: 800; color: #141517;
+    }
+    .faq-chev { flex: 0 0 auto; color: #FF4F18; transition: transform 0.32s ease; }
+    .faq-item.is-open .faq-chev { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.35s ease, opacity 0.28s ease; }
+    .faq-item.is-open .faq-a { max-height: 280px; opacity: 1; }
+    .faq-a p { margin: 0 18px 16px; font-size: 15px; font-weight: 600; line-height: 1.55; color: #475467; }
+    .faq-empty { padding: 22px 18px; border-radius: 16px; border: 1px dashed #E4E7EC; background: #fff; font-size: 14px; font-weight: 700; color: #667085; text-align: center; }
+    .faq-cat:focus-visible, .faq-q button:focus-visible, .faq-go:focus-visible, .faq-all:focus-visible, .faq-field input:focus-visible {
+      outline: 2px solid #FF4F18; outline-offset: 2px;
+    }
+    @keyframes faq-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .faq-reveal, .faq-list.is-in .faq-item { opacity: 1; transform: none; animation: none; }
+      .faq-cat, .faq-item, .faq-a, .faq-chev, .faq-go { transition: none; }
+      .faq-cat:hover, .faq-go:hover { transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -1598,6 +1678,95 @@
       </div>
     </section>
 
+    <section id="how" class="page-wrap py-10 min-[1200px]:py-16">
+      <div class="how-block">
+        <p class="how-kicker">How KitchenX works</p>
+        <h2 class="how-title">From sourcing to your kitchen. <span>In four simple steps.</span></h2>
+        <p class="how-lead">Quality ingredients, smart procurement and reliable delivery for your food business.</p>
+        <div class="how-rail">
+          <article class="how-step" style="--i:0">
+            <div class="how-shot">
+              <img class="how-photo" src="assets/home/how-discover.jpg" alt="Hands holding a tablet showing fresh produce" />
+              <div class="how-num">1</div>
+            </div>
+            <h3>Discover</h3>
+            <p>Find what your kitchen needs from 10,000+ products.</p>
+          </article>
+          <article class="how-step" style="--i:1">
+            <div class="how-shot">
+              <img class="how-photo" src="assets/home/how-order.jpg" alt="KitchenX box filled with vegetables" />
+              <div class="how-num">2</div>
+            </div>
+            <h3>Order</h3>
+            <p>Get the best prices and flexible payment options.</p>
+          </article>
+          <article class="how-step" style="--i:2">
+            <div class="how-shot">
+              <img class="how-photo" src="assets/home/how-prepare.jpg" alt="A packer placing greens into a KitchenX box" />
+              <div class="how-num">3</div>
+            </div>
+            <h3>We prepare</h3>
+            <p>Quality checks and careful handling.</p>
+          </article>
+          <article class="how-step" style="--i:3">
+            <div class="how-shot">
+              <img class="how-photo" src="assets/home/how-deliver.jpg" alt="A white KitchenX delivery truck" />
+              <div class="how-num">4</div>
+            </div>
+            <h3>We deliver</h3>
+            <p>On time, every time.</p>
+          </article>
+        </div>
+        <div class="how-actions">
+          <a href="#how" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)] hover:brightness-95">See how it works →</a>
+          <a href="#how" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#E4E7EC] bg-white px-6 py-3.5 text-sm font-extrabold text-coal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z"/></svg>
+            Watch our story (1 min)
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="businesses" class="page-wrap py-10 lg:py-14">
+      <div class="text-center">
+        <p class="biz-kicker">Built for every food business</p>
+        <h2 class="biz-title">Different kitchens. Same trusted partner.</h2>
+        <div class="biz-rule"></div>
+      </div>
+      <div class="biz-grid">
+        <article class="biz-card">
+          <img src="assets/home/biz-restaurant.jpg" alt="A plated restaurant dish" />
+          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v2a8 8 0 0 1-16 0v-2z"/><path d="M12 4v3"/></svg></div>
+          <h3>Restaurants</h3>
+          <p>Consistent supply for daily operations.</p>
+        </article>
+        <article class="biz-card">
+          <img src="assets/home/biz-cafe.jpg" alt="A cafe latte" />
+          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg></div>
+          <h3>Cafes</h3>
+          <p>Ingredients, beverages and more.</p>
+        </article>
+        <article class="biz-card">
+          <img src="assets/home/biz-hotel.jpg" alt="A hotel serving cloche" />
+          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
+          <h3>Hotels</h3>
+          <p>Large volumes, reliable sourcing.</p>
+        </article>
+        <article class="biz-card">
+          <img src="assets/home/biz-cloud.jpg" alt="Cloud kitchen takeaway boxes" />
+          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.6 1.5A3.5 3.5 0 0 1 18 14"/><path d="M8 18h8M12 14v6"/></svg></div>
+          <h3>Cloud Kitchens</h3>
+          <p>Built for speed, scale and repeat orders.</p>
+        </article>
+        <article class="biz-card">
+          <img src="assets/home/biz-caterer.jpg" alt="A catering chafing dish" />
+          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3 19a5 5 0 0 1 8-4 4 4 0 0 1 7 3"/></svg></div>
+          <h3>Caterers</h3>
+          <p>Everything for every occasion.</p>
+        </article>
+      </div>
+    </section>
+
     <section id="categories" class="page-wrap py-8 lg:py-12">
       <div class="flex items-end justify-between gap-4">
         <div>
@@ -1688,110 +1857,6 @@
       <a href="customer.html#catalogue" data-need-login class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">View all products →</a>
     </section>
 
-    <section id="how" class="page-wrap py-10 min-[1200px]:py-16">
-      <div class="how-block">
-        <p class="how-kicker">How KitchenX works</p>
-        <h2 class="how-title">From sourcing to your kitchen. <span>In four simple steps.</span></h2>
-        <p class="how-lead">Quality ingredients, smart procurement and reliable delivery for your food business.</p>
-        <div class="how-rail">
-          <article class="how-step" style="--i:0">
-            <div class="how-shot">
-              <img class="how-photo" src="assets/home/how-discover.jpg" alt="Hands holding a tablet showing fresh produce" />
-              <div class="how-num">1</div>
-            </div>
-            <h3>Discover</h3>
-            <p>Find what your kitchen needs from 10,000+ products.</p>
-          </article>
-          <article class="how-step" style="--i:1">
-            <div class="how-shot">
-              <img class="how-photo" src="assets/home/how-order.jpg" alt="KitchenX box filled with vegetables" />
-              <div class="how-num">2</div>
-            </div>
-            <h3>Order</h3>
-            <p>Get the best prices and flexible payment options.</p>
-          </article>
-          <article class="how-step" style="--i:2">
-            <div class="how-shot">
-              <img class="how-photo" src="assets/home/how-prepare.jpg" alt="A packer placing greens into a KitchenX box" />
-              <div class="how-num">3</div>
-            </div>
-            <h3>We prepare</h3>
-            <p>Quality checks and careful handling.</p>
-          </article>
-          <article class="how-step" style="--i:3">
-            <div class="how-shot">
-              <img class="how-photo" src="assets/home/how-deliver.jpg" alt="A white KitchenX delivery truck" />
-              <div class="how-num">4</div>
-            </div>
-            <h3>We deliver</h3>
-            <p>On time, every time.</p>
-          </article>
-        </div>
-        <div class="how-actions">
-          <a href="#supply" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_20px_rgba(255,79,24,0.22)] hover:brightness-95">See how it works →</a>
-          <a href="#supply" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#E4E7EC] bg-white px-6 py-3.5 text-sm font-extrabold text-coal">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z"/></svg>
-            Watch our story (1 min)
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="supply" class="page-wrap py-6 lg:py-10">
-      <div class="relative overflow-hidden rounded-[32px] bg-coal text-white">
-        <img class="pointer-events-none hidden h-full min-h-[440px] w-full object-cover object-center min-[1200px]:block" src="assets/home/supply.png" alt="Chef plating a dish for service" />
-        <div class="relative z-10 p-6 md:p-12 min-[1200px]:absolute min-[1200px]:inset-y-0 min-[1200px]:left-0 min-[1200px]:flex min-[1200px]:w-[38%] min-[1200px]:flex-col min-[1200px]:justify-center min-[1200px]:bg-transparent min-[1200px]:p-14">
-          <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/55">Supplying a stronger food tomorrow</p>
-          <h2 class="mt-4 max-w-md text-[26px] font-extrabold leading-tight tracking-tight md:mt-5 md:text-4xl">Reliable supply for a growing food industry.</h2>
-          <p class="mt-5 max-w-md text-base font-medium leading-relaxed text-white/70">
-            We work with farmers, manufacturers and trusted partners to make high-quality food more accessible to every food business across India.
-          </p>
-          <a href="#grow" class="mt-8 inline-flex w-max items-center text-sm font-extrabold text-orange hover:brightness-95">Learn more →</a>
-        </div>
-        <img class="h-64 w-full object-cover object-[72%_center] md:h-80 min-[1200px]:hidden" src="assets/home/supply.png" alt="Chef plating a dish for service" />
-      </div>
-    </section>
-
-    <section id="businesses" class="page-wrap py-10 lg:py-14">
-      <div class="text-center">
-        <p class="biz-kicker">Built for every food business</p>
-        <h2 class="biz-title">Different kitchens. Same trusted partner.</h2>
-        <div class="biz-rule"></div>
-      </div>
-      <div class="biz-grid">
-        <article class="biz-card">
-          <img src="assets/home/biz-restaurant.jpg" alt="A plated restaurant dish" />
-          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v2a8 8 0 0 1-16 0v-2z"/><path d="M12 4v3"/></svg></div>
-          <h3>Restaurants</h3>
-          <p>Consistent supply for daily operations.</p>
-        </article>
-        <article class="biz-card">
-          <img src="assets/home/biz-cafe.jpg" alt="A cafe latte" />
-          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg></div>
-          <h3>Cafes</h3>
-          <p>Ingredients, beverages and more.</p>
-        </article>
-        <article class="biz-card">
-          <img src="assets/home/biz-hotel.jpg" alt="A hotel serving cloche" />
-          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
-          <h3>Hotels</h3>
-          <p>Large volumes, reliable sourcing.</p>
-        </article>
-        <article class="biz-card">
-          <img src="assets/home/biz-cloud.jpg" alt="Cloud kitchen takeaway boxes" />
-          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.6 1.5A3.5 3.5 0 0 1 18 14"/><path d="M8 18h8M12 14v6"/></svg></div>
-          <h3>Cloud Kitchens</h3>
-          <p>Built for speed, scale and repeat orders.</p>
-        </article>
-        <article class="biz-card">
-          <img src="assets/home/biz-caterer.jpg" alt="A catering chafing dish" />
-          <div class="biz-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3 19a5 5 0 0 1 8-4 4 4 0 0 1 7 3"/></svg></div>
-          <h3>Caterers</h3>
-          <p>Everything for every occasion.</p>
-        </article>
-      </div>
-    </section>
-
     <section id="blogPreview" class="page-wrap py-8 min-[1200px]:py-14">
       <div class="flex items-end justify-between gap-4">
         <div>
@@ -1829,6 +1894,51 @@
           </a>
         </div>
         <img class="h-52 w-full object-cover object-right md:h-64 min-[1200px]:hidden" src="assets/home/cta.png" alt="Packaging and produce for growing food businesses" />
+      </div>
+    </section>
+
+    <section id="faq" class="faq-sec page-wrap py-12 lg:py-16" aria-labelledby="faqTitle">
+      <div class="faq-inner text-center">
+        <div class="faq-reveal">
+          <p class="faq-kicker">FAQs</p>
+          <h2 id="faqTitle" class="faq-title">Frequently asked <span class="text-orange">questions</span></h2>
+          <p class="faq-lead">Search for answers or browse by category.</p>
+        </div>
+        <form id="faqSearchForm" class="faq-search faq-reveal" role="search">
+          <div class="faq-field">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            <label class="sr-only" for="faqQuery">Search for a question</label>
+            <input id="faqQuery" type="search" placeholder="Search for a question..." autocomplete="off" />
+          </div>
+          <button class="faq-go" type="submit">Search</button>
+        </form>
+        <div class="faq-cats faq-reveal" role="tablist" aria-label="FAQ categories">
+          <button type="button" class="faq-cat is-on" role="tab" id="faq-tab-general" data-faq-cat="general" aria-selected="true" aria-controls="faqList">
+            <span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg></span>
+            <b>General</b><small>Account, onboarding, about KitchenX</small>
+          </button>
+          <button type="button" class="faq-cat" role="tab" id="faq-tab-orders" data-faq-cat="orders" aria-selected="false" aria-controls="faqList">
+            <span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6 5 3H2"/></svg></span>
+            <b>Orders</b><small>Placing orders, minimum quantity</small>
+          </button>
+          <button type="button" class="faq-cat" role="tab" id="faq-tab-payments" data-faq-cat="payments" aria-selected="false" aria-controls="faqList">
+            <span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+            <b>Payments</b><small>Payment methods, invoices &amp; GST</small>
+          </button>
+          <button type="button" class="faq-cat" role="tab" id="faq-tab-delivery" data-faq-cat="delivery" aria-selected="false" aria-controls="faqList">
+            <span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="13" height="8" rx="1.5"/><path d="M14 10h4l3 3v2h-7"/><circle cx="6" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg></span>
+            <b>Delivery</b><small>Tracking, timelines, serviceable cities</small>
+          </button>
+          <button type="button" class="faq-cat" role="tab" id="faq-tab-account" data-faq-cat="account" aria-selected="false" aria-controls="faqList">
+            <span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 19a7 7 0 0 1 14 0"/></svg></span>
+            <b>Account</b><small>Profile, team access, settings</small>
+          </button>
+        </div>
+        <div class="faq-bar faq-reveal">
+          <h3 id="faqListTitle">Popular questions</h3>
+          <a href="#faq" id="faqViewAll" class="faq-all">View all →</a>
+        </div>
+        <div id="faqList" class="faq-list faq-reveal" role="tabpanel" aria-labelledby="faq-tab-general" aria-live="polite"></div>
       </div>
     </section>
   </main>
@@ -1910,14 +2020,14 @@
             <a class="block hover:text-white" href="#impact">About Us</a>
             <a class="block hover:text-white" href="#how">Careers</a>
             <a class="block hover:text-white" href="#impact">Press</a>
-            <a class="block hover:text-white" href="#supply">Sustainability</a>
+            <a class="block hover:text-white" href="#grow">Sustainability</a>
             <a class="block hover:text-white" href="#blog" data-blog="index" data-blog-nav>Blog</a>
           </div>
         </div>
         <div>
           <h4 class="font-extrabold">Support</h4>
           <div class="mt-3 space-y-2 text-sm font-medium text-white/60">
-            <a class="block hover:text-white" href="#grow">Help Center</a>
+            <a class="block hover:text-white" href="#faq">Help Center</a>
             <a class="block hover:text-white" href="#grow">Contact Us</a>
             <a class="block hover:text-white" href="#grow">Terms of Use</a>
             <a class="block hover:text-white" href="#grow">Privacy Policy</a>
@@ -3560,9 +3670,165 @@
       finishSetup();
     });
 
+    (function initFaq() {
+      const CATS = {
+        general: 'General',
+        orders: 'Orders',
+        payments: 'Payments',
+        delivery: 'Delivery',
+        account: 'Account'
+      };
+      const FAQS = [
+        { id: 'what', cat: 'general', q: 'What is KitchenX?', a: 'KitchenX is a buying site for restaurants, cafes, hotels, cloud kitchens, and caterers. The catalogue covers produce, dairy, staples, and other kitchen supplies, and the shop leads with the categories you pick at signup.' },
+        { id: 'create', cat: 'general', q: 'How do I create a business account?', a: 'Choose Create Account, then add your organisation name, email, and password. Confirm the 6-digit code for that email, and the kitchen profile opens.' },
+        { id: 'onboard', cat: 'general', q: 'What does onboarding ask?', a: 'Three things: the type of business you run, what you usually buy, and where the kitchen is. That city, area, and address are used for delivery slots and serviceable areas. You can set the outlet count as 1, 2–5, or 6+.' },
+        { id: 'types', cat: 'general', q: 'Which businesses can sign up?', a: 'Restaurant, cafe, hotel, cloud kitchen, caterer, and other food businesses such as a QSR, bakery, or canteen.' },
+        { id: 'bulk', cat: 'orders', popular: true, q: 'How do I place a bulk order?', a: 'Open the catalogue, set the quantity on each product, and check out from the cart. Hotels and caterers use the same cart. The pack size is shown on the product.' },
+        { id: 'min', cat: 'orders', q: 'Is there a minimum order quantity?', a: 'You order by the pack shown on each product. The cart does not add a second minimum-quantity rule. Delivery is free when the order is ₹500 or more. Under that, the cart adds a ₹40 delivery fee.' },
+        { id: 'reorder', cat: 'orders', popular: true, q: 'Can I reorder previous purchases?', a: 'Yes. My Orders has Reorder on a past order, and Repeat Orders can put a regular list back in the cart in one step.' },
+        { id: 'lists', cat: 'orders', q: 'Can I save items I buy often?', a: 'Yes. My Lists keeps frequent items, including a Favorites tab, so the next order does not start from a blank catalogue.' },
+        { id: 'pay', cat: 'payments', popular: true, q: 'Which payment options are available?', a: 'At checkout you can pay by UPI, card or net banking, or cash on delivery. If a credit line on the account is approved and the spare balance covers the order, Pay later is also offered.' },
+        { id: 'invoice', cat: 'payments', q: 'Where do I find invoices?', a: 'Invoices & Payments in the account lists invoices, payments, and credit. From a delivered order you can open the invoice for that order.' },
+        { id: 'gst', cat: 'payments', q: 'How is GST handled?', a: 'Your GSTIN is saved on the business profile. A credit application also asks for the GST certificate and PAN. Invoices are available from Invoices & Payments.' },
+        { id: 'credit', cat: 'payments', q: 'How does pay later work?', a: 'Apply for credit from the catalogue. After the platform team approves it, Pay later appears at checkout only when the spare credit covers that order. The limit shown on the account is the one that applies.' },
+        { id: 'track', cat: 'delivery', popular: true, q: 'How can I track my delivery?', a: 'After you place an order, choose Track order. Deliveries also lists incoming shipments. Status moves through Confirmed, Packed, Out for delivery, and Delivered, with the slot you picked at checkout.' },
+        { id: 'slots', cat: 'delivery', q: 'What delivery times can I choose?', a: 'Checkout offers Today, 4:00 PM – 6:00 PM, Tomorrow, 10:00 AM – 12:00 PM, and Tomorrow, 2:00 PM – 4:00 PM.' },
+        { id: 'cities', cat: 'delivery', q: 'Which cities can I order from?', a: 'Signup lists Delhi, Mumbai, Bengaluru, Hyderabad, Chennai, Pune, Kolkata, Jaipur, and Ahmedabad. The address you save is what checkout delivers to.' },
+        { id: 'fee', cat: 'delivery', q: 'When is delivery free?', a: 'Delivery is free on orders of ₹500 and above. Below that, the cart adds ₹40.' },
+        { id: 'profile', cat: 'account', q: 'How do I update my kitchen profile?', a: 'My Account holds the business name, email, phone, business type, and GSTIN. Save Changes stores the profile edits.' },
+        { id: 'address', cat: 'account', q: 'How do I manage delivery addresses?', a: 'Delivery addresses are on My Account, and checkout uses the kitchen address selected for the order. A second address, such as a prep hub, can sit on the same account.' },
+        { id: 'team', cat: 'account', q: 'Who can use this account?', a: 'The login belongs to the business. Profile, addresses, and order preferences are managed in My Account. Outlet count is set during signup. There is no separate screen for inviting extra staff logins.' },
+        { id: 'settings', cat: 'account', q: 'Where are account settings?', a: 'Order Preferences on My Account has toggles for order emails, low stock reminders, cash on delivery, and marketing emails. Logout is on the same account screen.' }
+      ];
+      const listEl = document.getElementById('faqList');
+      const titleEl = document.getElementById('faqListTitle');
+      const viewAll = document.getElementById('faqViewAll');
+      const queryEl = document.getElementById('faqQuery');
+      let cat = 'general';
+      let mode = 'popular';
+      let query = '';
+      let openId = '';
+
+      function rows() {
+        const q = query.trim().toLowerCase();
+        if (q) {
+          return FAQS.filter((item) => {
+            const blob = (item.q + ' ' + item.a + ' ' + CATS[item.cat]).toLowerCase();
+            return blob.indexOf(q) !== -1;
+          });
+        }
+        if (mode === 'popular') return FAQS.filter((item) => item.popular);
+        if (mode === 'all') return FAQS;
+        return FAQS.filter((item) => item.cat === cat);
+      }
+
+      function paint() {
+        const items = rows();
+        const q = query.trim();
+        if (q) titleEl.textContent = items.length ? 'Search results' : 'No matches';
+        else if (mode === 'popular') titleEl.textContent = 'Popular questions';
+        else if (mode === 'all') titleEl.textContent = 'All questions';
+        else titleEl.textContent = CATS[cat];
+        viewAll.textContent = mode === 'all' && !q ? 'Popular →' : 'View all →';
+        viewAll.hidden = false;
+        if (!items.length) {
+          listEl.innerHTML = '<p class="faq-empty">No questions match that search. Try a category, or clear the search.</p>';
+          return;
+        }
+        listEl.innerHTML = items.map((item, i) =>
+          '<article class="faq-item' + (item.id === openId ? ' is-open' : '') + '" style="--i:' + i + '">' +
+            '<h3 class="faq-q"><button type="button" aria-expanded="' + (item.id === openId ? 'true' : 'false') + '" aria-controls="faq-a-' + item.id + '" id="faq-q-' + item.id + '">' +
+              '<span>' + item.q + '</span>' +
+              '<svg class="faq-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>' +
+            '</button></h3>' +
+            '<div class="faq-a" id="faq-a-' + item.id + '" role="region" aria-labelledby="faq-q-' + item.id + '"><div><p>' + item.a + '</p></div></div>' +
+          '</article>'
+        ).join('');
+        listEl.classList.remove('is-in');
+        void listEl.offsetWidth;
+        listEl.classList.add('is-in');
+      }
+
+      document.querySelectorAll('[data-faq-cat]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          cat = btn.getAttribute('data-faq-cat');
+          mode = 'cat';
+          query = '';
+          queryEl.value = '';
+          openId = '';
+          document.querySelectorAll('[data-faq-cat]').forEach((el) => {
+            const on = el === btn;
+            el.classList.toggle('is-on', on);
+            el.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          listEl.setAttribute('aria-labelledby', btn.id);
+          paint();
+        });
+      });
+      listEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.faq-q button');
+        if (!btn) return;
+        const item = btn.closest('.faq-item');
+        const id = btn.id.replace('faq-q-', '');
+        const willOpen = !item.classList.contains('is-open');
+        listEl.querySelectorAll('.faq-item').forEach((el) => {
+          el.classList.remove('is-open');
+          el.querySelector('button').setAttribute('aria-expanded', 'false');
+        });
+        if (willOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          openId = id;
+        } else openId = '';
+      });
+      document.getElementById('faqSearchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        query = queryEl.value || '';
+        openId = '';
+        paint();
+        listEl.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+      });
+      queryEl.addEventListener('input', () => {
+        query = queryEl.value || '';
+        openId = '';
+        paint();
+      });
+      viewAll.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (mode === 'all' && !query.trim()) {
+          mode = 'popular';
+          cat = 'general';
+          document.querySelectorAll('[data-faq-cat]').forEach((el) => {
+            const on = el.getAttribute('data-faq-cat') === 'general';
+            el.classList.toggle('is-on', on);
+            el.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          listEl.setAttribute('aria-labelledby', 'faq-tab-general');
+        } else {
+          mode = 'all';
+          query = '';
+          queryEl.value = '';
+        }
+        openId = '';
+        paint();
+      });
+      paint();
+      const sec = document.getElementById('faq');
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([entry], obs) => {
+          if (!entry.isIntersecting) return;
+          sec.classList.add('is-shown');
+          obs.disconnect();
+        }, { threshold: 0.12 }).observe(sec);
+      } else sec.classList.add('is-shown');
+    })();
+
     if (location.hash === '#login') openAuth('login');
     else if (location.hash === '#signup') openAuth('signup');
-    else window.scrollTo(0, 0);
+    else if (location.hash === '#faq') {
+      const faq = document.getElementById('faq');
+      if (faq) faq.scrollIntoView();
+    } else window.scrollTo(0, 0);
 
     const howRail = document.querySelector('.how-rail');
     if (howRail) {
