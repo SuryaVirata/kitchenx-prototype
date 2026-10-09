@@ -609,10 +609,25 @@
     .credit-rail button { display: flex; width: 100%; gap: 10px; align-items: center; text-align: left; padding: 10px 8px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #98A2B3; background: transparent; }
     .credit-rail button.is-on { color: #141517; background: #FFF4F0; }
     .credit-rail button.is-done { color: #12B76A; }
+    .credit-rail button.is-locked { cursor: not-allowed; }
     .credit-num { width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: #F2F4F7; flex: 0 0 auto; }
     .credit-rail button.is-on .credit-num { background: #FF4F18; color: #fff; }
     .credit-rail button.is-done .credit-num { background: #EAF8F0; color: #12B76A; }
     .credit-now { display: none; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: #667085; }
+    .credit-locked-note { display: none; margin-top: 6px; font-size: 12px; font-weight: 700; color: #667085; }
+    [data-view="credit"].is-locked .credit-locked-note { display: block; }
+    [data-view="credit"].is-locked [data-cstep="1"] input,
+    [data-view="credit"].is-locked [data-cstep="1"] textarea,
+    [data-view="credit"].is-locked [data-cstep="3"] input {
+      background: #F9FAFB;
+      color: #344054;
+      cursor: default;
+    }
+    [data-view="credit"].is-locked #crNext1,
+    [data-view="credit"].is-locked #crNext2,
+    [data-view="credit"].is-locked #crNext3 { display: none; }
+    [data-view="credit"].is-locked .credit-doc label { pointer-events: none; opacity: .45; }
+    [data-view="credit"].is-locked .credit-slot { pointer-events: none; }
     .credit-doc { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid #EEF0F3; border-radius: 16px; background: #fff; }
     .credit-doc.is-up { border-color: #ABEFC6; background: #F6FEF9; }
     .credit-time { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -626,11 +641,31 @@
       .credit-layout { grid-template-columns: 240px minmax(0, 1fr); align-items: start; }
     }
     @media (max-width: 1023px) {
-      .credit-rail { display: none; }
-      .credit-now { display: block; }
+      .credit-rail {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        padding: 8px;
+        border-radius: 18px;
+      }
+      .credit-rail button {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 6px;
+        min-height: 72px;
+        padding: 10px 4px 8px;
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.25;
+        font-weight: 800;
+      }
+      .credit-now { display: none; }
       .credit-trust { display: none; }
       .credit-banner { padding: 16px; }
       .credit-banner h2 { font-size: 20px; }
+    }
+    @media (max-width: 430px) {
+      .credit-rail button { font-size: 10px; min-height: 68px; padding: 8px 2px; }
     }
     .hdr-icon {
       position: relative;
@@ -1546,6 +1581,7 @@
               <div data-cstep="1">
                 <h2 class="text-lg font-extrabold">Business Details</h2>
                 <p class="mt-1 text-sm font-semibold text-[#667085]">We use this to open a 30-day line in your kitchen’s name.</p>
+                <p class="credit-locked-note">Submitted with your application. You can review these details here.</p>
                 <div class="mt-4 grid gap-3 sm:grid-cols-2">
                   <label class="block text-sm font-bold sm:col-span-2">Business name<input id="crOrg" class="field mt-1" required /></label>
                   <label class="block text-sm font-bold">Business type<input id="crType" class="field mt-1" /></label>
@@ -1559,6 +1595,7 @@
               <div data-cstep="2" class="hidden">
                 <h2 class="text-lg font-extrabold">Upload Documents</h2>
                 <p class="mt-1 text-sm font-semibold text-[#667085]">GST and PAN are required. The rest can follow before the visit.</p>
+                <p class="credit-locked-note">Submitted with your application. Files already attached stay on file.</p>
                 <div class="mt-4 grid gap-3">
                   <div class="credit-doc" data-doc="gst"><div><p class="text-sm font-extrabold">GST certificate</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Required</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="gst" /></label></div>
                   <div class="credit-doc" data-doc="fssai"><div><p class="text-sm font-extrabold">FSSAI licence</p><p class="credit-file text-xs font-semibold text-[#98A2B3]">Pending</p></div><label class="btn-ghost h-9 cursor-pointer px-3">Upload<input class="sr-only" type="file" accept=".pdf,.png,.jpg,.jpeg" data-file="fssai" /></label></div>
@@ -1572,6 +1609,7 @@
               <div data-cstep="3" class="hidden">
                 <h2 class="text-lg font-extrabold">Verification</h2>
                 <p class="mt-1 text-sm font-semibold text-[#667085]">Pick a slot for a short visit at the kitchen.</p>
+                <p class="credit-locked-note">Submitted with your application. The requested visit slot is below.</p>
                 <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Date</p>
                 <div id="crDates" class="credit-time mt-2"></div>
                 <p class="mt-4 text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Time</p>
@@ -2061,18 +2099,28 @@
       return [savedAddr, area, city].filter(Boolean).join(', ') || savedLoc || 'Main Kitchen, Connaught Place, Delhi';
     }
     function paintCredit() {
+      const appNow = myCredit();
+      const panel = document.querySelector('[data-view="credit"]');
+      if (panel) panel.classList.toggle('is-locked', !!appNow);
       document.querySelectorAll('[data-cstep]').forEach((el) => {
         el.classList.toggle('hidden', Number(el.getAttribute('data-cstep')) !== creditStep);
       });
       document.querySelectorAll('[data-crail]').forEach((el) => {
         const n = Number(el.getAttribute('data-crail'));
+        const reachable = !!appNow || n <= creditStep;
         el.classList.toggle('is-on', n === creditStep);
-        el.classList.toggle('is-done', n < creditStep);
+        el.classList.toggle('is-done', appNow ? n !== creditStep : n < creditStep);
+        el.classList.toggle('is-locked', !reachable);
+        el.setAttribute('aria-current', n === creditStep ? 'step' : 'false');
+        el.setAttribute('aria-disabled', reachable ? 'false' : 'true');
+      });
+      ['crOrg', 'crType', 'crContact', 'crPhone', 'crGst', 'crAddr', 'crVisit'].forEach((id) => {
+        const field = document.getElementById(id);
+        if (field) field.disabled = !!appNow;
       });
       const label = document.getElementById('creditStepLabel');
       if (label) label.textContent = 'Step ' + creditStep + ' of 4 · ' + CREDIT_NAMES[creditStep];
       const cta = document.getElementById('creditApply');
-      const appNow = myCredit();
       const bannerTitle = document.querySelector('.credit-banner h2');
       const bannerCopy = document.querySelector('.credit-banner p');
       if (cta) cta.textContent = appNow ? (appNow.stage === 'approved' ? 'View credit line' : 'View application') : 'Apply for Credit';
@@ -2087,7 +2135,7 @@
         }
       }
       const back = document.getElementById('crBackReview');
-      if (back) back.classList.toggle('hidden', !!myCredit());
+      if (back) back.classList.remove('hidden');
     }
     function fillCreditForm() {
       const app = myCredit();
@@ -2193,15 +2241,18 @@
       paintCredit();
     }
     function goCredit(n) {
-      if (myCredit() && n < 4) return;
+      const app = myCredit();
+      if (!app && n > creditStep) {
+        toast('Finish this step with Continue before you move ahead.');
+        return;
+      }
       creditStep = n;
       paintCredit();
     }
     document.querySelectorAll('[data-crail]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const n = Number(btn.getAttribute('data-crail'));
-        if (myCredit()) { creditStep = 4; paintCredit(); return; }
-        if (n < creditStep) goCredit(n);
+        goCredit(n);
       });
     });
     document.querySelectorAll('[data-crback]').forEach((btn) => {
