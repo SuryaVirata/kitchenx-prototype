@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq' && h !== '#menu') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -75,6 +75,26 @@
       background: var(--orange);
     }
     .nav-link { color: #344054; font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .sk-wrap { display: grid; grid-template-columns: 1fr; gap: 22px; align-items: start; }
+    .sk-types { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+    .sk-type { display: flex; gap: 12px; align-items: flex-start; text-align: left; border: 1.5px solid #E8EAEE; background: #fff; border-radius: 16px; padding: 14px 16px; color: #98A2B3; }
+    .sk-type strong { display: block; font-size: 16px; font-weight: 800; color: #141517; }
+    .sk-type em { display: block; margin-top: 2px; font-style: normal; font-size: 13px; font-weight: 500; color: #667085; }
+    .sk-type.is-on { border-color: #FF4F18; background: #FFF1EC; color: #FF4F18; }
+    .sk-type svg { flex: none; margin-top: 2px; }
+    @media (min-width: 1100px) { .sk-wrap { grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.85fr); gap: 28px; } }
+    .sk-card { background: #fff; border-radius: 20px; padding: 22px; box-shadow: 0 10px 30px rgba(20,21,23,0.06); }
+    .sk-field { width: 100%; height: 48px; margin-top: 10px; border-radius: 12px; border: 1px solid #E4E7EC; background: #F7F8FA; padding: 0 14px; font-size: 15px; font-weight: 500; }
+    textarea.sk-field { height: 96px; padding: 12px 14px; resize: vertical; }
+    .sk-err { margin-top: 6px; font-size: 12px; font-weight: 600; color: #D92D20; text-align: left; }
+    .menu-form { max-width: 720px; margin: 28px auto 0; text-align: left; background: #fff; border: 1px solid #EEF0F3; border-radius: 18px; box-shadow: 0 8px 20px rgba(20, 21, 23, 0.04); padding: 22px; }
+    .menu-form h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; color: #141517; }
+    .menu-form > p { margin-top: 6px; font-size: 14px; font-weight: 600; line-height: 1.5; color: #667085; }
+    .menu-input { width: 100%; height: 44px; margin-top: 10px; border-radius: 999px; border: 1px solid #EEF0F3; background: #fff; padding: 0 16px; font-size: 14px; font-weight: 500; color: #141517; }
+    .menu-input::placeholder { color: #98A2B3; }
+    textarea.menu-input { height: 96px; border-radius: 18px; padding: 12px 16px; resize: vertical; }
+    .menu-form .faq-go { width: 100%; margin-top: 14px; }
+    @media (max-width: 900px) { .sk-wrap { grid-template-columns: 1fr; } }
     .nav-link:hover, .nav-link.is-on { color: var(--orange); }
     #mobileMenu .m-nav a.is-on { color: var(--orange); }
     body.is-blog #top { display: none; }
@@ -1387,8 +1407,8 @@
       .kx-hero-art::before,
       .kx-hero-art::after { transition: none; }
     }
-    #faq { scroll-margin-top: 80px; }
-    @media (min-width: 1200px) { #faq { scroll-margin-top: 88px; } }
+    #faq, #menu { scroll-margin-top: 80px; }
+    @media (min-width: 1200px) { #faq, #menu { scroll-margin-top: 88px; } }
     .faq-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
     .faq-kicker { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; color: #FF4F18; }
     .faq-title { margin-top: 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
@@ -1518,6 +1538,7 @@
         <a class="nav-link" href="#products" data-home-nav="products">Products</a>
         <a class="nav-link" href="#categories" data-home-nav="categories">Categories</a>
         <a class="nav-link" href="#businesses">For Business</a>
+        <a class="nav-link" href="#menu">Custom Menu</a>
         <a class="nav-link" href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a class="nav-link" href="#impact">About</a>
       </nav>
@@ -1526,7 +1547,7 @@
           <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98A2B3]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
           </span>
-          <input class="search h-10 w-52 rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-4 text-sm font-medium text-coal placeholder:text-[#98A2B3] min-[1440px]:w-64" placeholder="Search products, categories..." />
+          <input class="search h-10 w-28 rounded-full border border-[#E4E7EC] bg-fog pl-10 pr-3 text-sm font-medium text-coal placeholder:text-[#98A2B3] min-[1440px]:w-52" placeholder="Search" />
         </label>
         <div class="flex items-center gap-3 translate-x-[6px]">
           <a href="#login" data-auth-open="login" class="btn-login">Login</a>
@@ -1570,6 +1591,7 @@
         <a href="#products" data-home-nav="products">Products</a>
         <a href="#categories" data-home-nav="categories">Categories</a>
         <a href="#businesses">For Business</a>
+        <a href="#menu">Custom Menu</a>
         <a href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a href="#impact">About</a>
       </nav>
@@ -1933,6 +1955,36 @@
       <a href="#blog" data-blog="index" class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">All posts →</a>
     </section>
 
+    <section id="menu" class="faq-sec page-wrap py-12 lg:py-16" aria-labelledby="menuTitle">
+      <div class="faq-inner text-center">
+        <p class="faq-kicker">Consulting</p>
+        <h2 id="menuTitle" class="faq-title">Custom <span class="text-orange">menu</span></h2>
+        <p class="faq-lead">For a new restaurant, bakery, or sweet shop. Pick a menu. KitchenX designs it and runs a cost audit.</p>
+        <div class="faq-cats" id="skTypes">
+          <button type="button" class="faq-cat" data-kit="Cuisine"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v7a3 3 0 0 0 3 3M6 4v16M9 4v7"/><path d="M15 4c2.2 2.2 2.2 6.2 0 8.4V20"/></svg></span><b>Cuisine</b><small>A full kitchen plan</small></button>
+          <button type="button" class="faq-cat" data-kit="Burger"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9c0-2.8 3-5 7-5s7 2.2 7 5H5z"/><path d="M4 12h16M6 15h12c0 2-2.2 4-6 4s-6-2-6-4z"/></svg></span><b>Burger</b><small>Menu, cost, and supply</small></button>
+          <button type="button" class="faq-cat is-on" data-kit="Biryani"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14v2a7 7 0 0 1-14 0v-2z"/><path d="M8 11c.4-2 1.6-3.5 4-3.5S15.6 9 16 11"/></svg></span><b>Biryani</b><small>Recipe cost and sourcing</small></button>
+          <button type="button" class="faq-cat" data-kit="Pizza"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l8 14H4L12 4z"/><circle cx="12" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></span><b>Pizza</b><small>Oven line and ingredients</small></button>
+          <button type="button" class="faq-cat" data-kit="Not sure yet"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16.5A6.5 6.5 0 1 1 12.2 18L7 20l.6-3.2"/><path d="M9.5 11h.01M12 11h.01M14.5 11h.01"/></svg></span><b>Not sure yet</b><small>General consulting</small></button>
+        </div>
+        <form class="menu-form" id="skForm">
+          <h3>Express interest</h3>
+          <p>A relationship manager will call you.</p>
+          <input class="menu-input" id="skName" name="name" placeholder="Your name" autocomplete="name" />
+          <p class="sk-err hidden" id="skNameErr">Enter your name</p>
+          <input class="menu-input" id="skPhone" name="phone" placeholder="Phone number" inputmode="numeric" autocomplete="tel" />
+          <p class="sk-err hidden" id="skPhoneErr">Enter a 10-digit mobile number</p>
+          <input class="menu-input" id="skCity" name="city" placeholder="City" value="Hyderabad" autocomplete="address-level2" />
+          <textarea class="menu-input" id="skNote" name="note" placeholder="What are you planning to open?"></textarea>
+          <button class="faq-go" type="submit">Send interest</button>
+        </form>
+        <div class="menu-form hidden" id="skDone">
+          <h3>Interest received</h3>
+          <p id="skDoneCopy"></p>
+        </div>
+      </div>
+    </section>
+
     <section id="impact" class="page-wrap py-8 lg:py-12">
       <div class="impact-intro">
         <p class="impact-kicker">Trusted by food businesses</p>
@@ -2076,6 +2128,7 @@
             <a class="block hover:text-white" href="#businesses">Hotels</a>
             <a class="block hover:text-white" href="#businesses">Cloud Kitchens</a>
             <a class="block hover:text-white" href="#businesses">Caterers</a>
+            <a class="block hover:text-white" href="#menu">Custom Menu</a>
           </div>
         </div>
         <div>
@@ -3907,6 +3960,41 @@
         howRail.classList.add('how-live');
       }
     }
+  </script>
+  <script>
+    (function () {
+      var form = document.getElementById('skForm');
+      if (!form) return;
+      var kit = 'Biryani';
+      document.getElementById('skTypes').addEventListener('click', function (e) {
+        var btn = e.target.closest('.faq-cat');
+        if (!btn) return;
+        kit = btn.getAttribute('data-kit');
+        document.querySelectorAll('#skTypes .faq-cat').forEach(function (el) { el.classList.toggle('is-on', el === btn); });
+      });
+      function showErr(id, on) { document.getElementById(id).classList.toggle('hidden', !on); }
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = document.getElementById('skName').value.trim();
+        var phone = document.getElementById('skPhone').value.replace(/\D/g, '');
+        var city = document.getElementById('skCity').value.trim() || 'Hyderabad';
+        var note = document.getElementById('skNote').value.trim();
+        var nameBad = name.length < 2;
+        var phoneBad = !/^[6-9]\d{9}$/.test(phone);
+        showErr('skNameErr', nameBad);
+        showErr('skPhoneErr', phoneBad);
+        if (nameBad || phoneBad) return;
+        var lead = { name: name, phone: phone, city: city, kit: kit, note: note, at: Date.now() };
+        var key = 'kx-starter-leads';
+        var rows = [];
+        try { rows = JSON.parse(localStorage.getItem(key) || '[]'); } catch (err) { rows = []; }
+        rows.unshift(lead);
+        localStorage.setItem(key, JSON.stringify(rows.slice(0, 20)));
+        form.classList.add('hidden');
+        document.getElementById('skDoneCopy').textContent = 'Thanks, ' + name + '. We have your ' + kit + ' request. A relationship manager will contact you on ' + phone + '.';
+        document.getElementById('skDone').classList.remove('hidden');
+      });
+    })();
   </script>
 </body>
 </html>

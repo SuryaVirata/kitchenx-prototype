@@ -1842,14 +1842,14 @@
 
         <section id="leadsView" class="panel hidden">
           <h1 class="text-[32px] font-extrabold tracking-tight">Consulting leads</h1>
-          <p class="mt-1 text-sm font-medium text-[#667085]">Starter Kit and Procurement Audit pipeline. Assign an RM to own the conversation.</p>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Custom Menu and Procurement Audit pipeline. Assign an RM to own the conversation.</p>
           <article class="form-card mt-5 overflow-x-auto">
             <table class="line-table min-w-[680px]">
               <thead><tr><th>Lead</th><th>Product</th><th>Area</th><th>RM</th><th>Stage</th></tr></thead>
-              <tbody>
-                <tr><td class="font-bold">Ayesha Khan</td><td>Starter Kit · bakery</td><td>Gachibowli</td><td>Kavya Reddy</td><td><span class="badge badge-prog">Discovery</span></td></tr>
+              <tbody id="leadRows">
+                <tr><td class="font-bold">Ayesha Khan</td><td>Custom Menu · bakery</td><td>Gachibowli</td><td>Kavya Reddy</td><td><span class="badge badge-prog">Discovery</span></td></tr>
                 <tr><td class="font-bold">Ravi Teja</td><td>Procurement Audit</td><td>Madhapur</td><td>Unassigned</td><td><span class="badge badge-open">New</span></td></tr>
-                <tr><td class="font-bold">Meenakshi Iyer</td><td>Starter Kit · biryani</td><td>Secunderabad</td><td>Kavya Reddy</td><td><span class="badge badge-done">Proposal</span></td></tr>
+                <tr><td class="font-bold">Meenakshi Iyer</td><td>Custom Menu · biryani</td><td>Secunderabad</td><td>Kavya Reddy</td><td><span class="badge badge-done">Proposal</span></td></tr>
               </tbody>
             </table>
           </article>
@@ -2537,6 +2537,22 @@
     }
     window.addEventListener('resize', placeMNavBlob);
     requestAnimationFrame(placeMNavBlob);
+  </script>
+  <script>
+    (function () {
+      var body = document.getElementById('leadRows');
+      if (!body) return;
+      var rows = [];
+      try { rows = JSON.parse(localStorage.getItem('kx-starter-leads') || '[]'); } catch (e) { rows = []; }
+      rows.forEach(function (lead) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td class="font-bold"></td><td></td><td></td><td>Unassigned</td><td><span class="badge badge-open">New</span></td>';
+        tr.children[0].textContent = lead.name;
+        tr.children[1].textContent = 'Custom Menu · ' + lead.kit;
+        tr.children[2].textContent = lead.city || 'Hyderabad';
+        body.insertBefore(tr, body.firstChild);
+      });
+    })();
   </script>
 </body>
 </html>
