@@ -97,6 +97,14 @@
     .field { width: 100%; height: 44px; border: 1px solid #E4E7EC; border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 500; background: #fff; color: #141517; }
     textarea.field { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; }
     select.field { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .cat-sort { position: relative; width: 11rem; flex: 0 0 auto; }
+    .cat-sort-native { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .cat-sort-btn { display: flex; align-items: center; width: 100%; height: 40px; padding: 0 36px 0 14px; border: 1px solid #E4E7EC; border-radius: 12px; background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>") no-repeat right 12px center; font-size: 14px; font-weight: 500; color: #141517; text-align: left; }
+    .cat-sort-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; min-width: 100%; width: max-content; padding: 6px; border-radius: 12px; background: #fff; box-shadow: 0 16px 40px rgba(20,21,23,.12); }
+    .cat-sort-menu[hidden] { display: none; }
+    .cat-sort-opt { display: block; width: 100%; padding: 8px 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; font-size: 14px; font-weight: 600; color: #344054; white-space: nowrap; }
+    .cat-sort-opt:hover, .cat-sort-opt.is-on { background: #F7F8FA; }
+    .cat-sort-opt.is-on { color: #FF4F18; font-weight: 800; }
     .btn-save { height: 40px; padding: 0 16px; border-radius: 12px; border: 0; background: #FF4F18; font-size: 13px; font-weight: 800; color: #fff; }
     .btn-ghost { height: 40px; padding: 0 16px; border-radius: 12px; border: 1px solid #E4E7EC; background: #fff; font-size: 13px; font-weight: 800; color: #344054; }
     .btn-add { height: 36px; padding: 0 16px; border-radius: 999px; border: 1px solid #FF4F18; background: #fff; color: #FF4F18; font-size: 13px; font-weight: 800; }
@@ -711,7 +719,7 @@
         margin-left: auto;
       }
     }
-    #sideClose, .m-profile, .m-logout, .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create, .nav-settings { display: none !important; }
+    #sideClose, .m-profile, .m-logout, .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create { display: none !important; }
     #catCount { display: none !important; }
     .m-order-shortcuts { display: none !important; }
     @media (max-width: 767px) {
@@ -728,11 +736,12 @@
       .panel h1 { font-size: 1.75rem; }
     }
     @media (max-width: 1023px) {
-      body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); overflow-x: hidden; }
+      body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); overflow-x: clip; }
       #toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
       .stock-ok { display: none; }
       #listsGrid .btn-ghost, #listsGrid .btn-add { display: none; }
-      html, body, main, .panel { max-width: 100vw; overflow-x: hidden; }
+      html, body { max-width: 100vw; overflow-x: clip; }
+      main, .panel { max-width: 100vw; overflow-x: hidden; }
       #catChips {
         width: 100% !important;
         min-width: 0 !important;
@@ -878,7 +887,27 @@
         box-shadow: 8px 0 28px rgba(20, 21, 23, 0.14);
       }
       #sideClose, .m-profile, .m-logout { display: flex !important; }
-      .nav-settings { display: flex !important; }
+      #sideNav { flex: 0 0 auto; padding-bottom: 8px; }
+      #sidebar .help-box {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 8px;
+        padding: 10px 12px;
+      }
+      #sidebar .help-box > .flex { align-items: center; }
+      #sidebar .help-box > .flex > span { width: 32px; height: 32px; }
+      #sidebar .help-box .help-btn { height: 36px; margin-top: 8px; }
+      #sideLogout {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 16px;
+        width: calc(100% - 20px);
+        box-sizing: border-box;
+        justify-content: flex-start;
+        gap: 12px;
+        height: 40px;
+        padding: 0 12px;
+      }
       .desk-home { display: none !important; }
       .m-home { display: block !important; }
       .plus-add { display: none !important; }
@@ -921,11 +950,9 @@
       .acc-desk { display: none !important; }
       .acc-desk.is-open { display: grid !important; }
       .acc-m { display: block; }
-      .acc-m.is-hide { display: none !important; }
       #scrim { z-index: 50; background: rgba(20, 21, 23, 0.4); }
       .oos-note { color: #DC6803; font-size: 11px; font-weight: 800; }
       .oos-sub { color: #98A2B3; font-size: 10px; font-weight: 700; }
-      .nav-settings { display: flex; }
       .m-cat-bar { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
       .m-cat-bar button {
         display: inline-flex;
@@ -1052,7 +1079,6 @@
       .tl .dot { width: 18px; height: 18px; border-radius: 999px; background: #12B76A; color: #fff; display: grid; place-items: center; z-index: 1; }
       .tl .dot.is-wait { background: #EEF0F3; color: #98A2B3; }
       .tl .dot.is-now { background: #FF4F18; }
-      #orderTabs .ot-cancel { display: none; }
       .heart { width: 28px; height: 28px; }
       .plus-add.is-oos { border-color: #E4E7EC; color: #D0D5DD; pointer-events: none; }
       .order-card .badge { justify-self: start; width: max-content; }
@@ -1076,7 +1102,13 @@
       .order-card .order-actions .btn-add {
         width: 100%;
         min-width: 0;
+        height: 40px;
         padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        box-sizing: border-box;
       }
       .repeat-card .btn-add, .del-card .btn-add { margin-left: 0 !important; width: 100%; }
       .repeat-card .repeat-cta, .del-card .del-cta { grid-column: 1 / -1; }
@@ -1111,6 +1143,63 @@
     @media (min-width: 1024px) {
       .stack-m { display: none !important; }
       .table-desk { display: block; }
+      .acc-save-col {
+        flex-direction: column;
+        align-items: center;
+        width: max-content;
+        margin-top: -2px;
+        margin-left: auto;
+        gap: 14px;
+      }
+      .acc-desk-settings {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 2px;
+        border: 0;
+        background: transparent;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      #saveAcc {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      #orderList .order-card .order-actions {
+        display: grid;
+        grid-template-columns: 124px 124px;
+        gap: 8px;
+        margin-left: auto;
+        align-items: center;
+        flex: 0 0 auto;
+      }
+      #orderList .order-card .order-actions .btn-ghost,
+      #orderList .order-card .order-actions .btn-add {
+        width: 124px;
+        height: 40px;
+        margin: 0;
+        padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        box-sizing: border-box;
+        white-space: nowrap;
+      }
+      .list-tabs { display: flex !important; gap: 8px; margin-top: 12px; overflow-x: auto; }
+      #createListBtn {
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      #delList .del-card { flex-wrap: nowrap; }
+      #delList .del-card .del-cta { margin-left: auto; flex: 0 0 auto; }
     }
     .order-steps { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
     .order-steps::-webkit-scrollbar { display: none; }
@@ -1130,7 +1219,7 @@
     .order-layout { display: grid; gap: 16px; }
     @media (min-width: 1024px) {
       .order-layout { grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr); align-items: start; }
-      .order-side { position: sticky; top: 16px; }
+      .order-side { position: sticky; top: 88px; }
     }
     .slot-opt, .pay-opt {
       display: flex;
@@ -1220,10 +1309,6 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
           <span class="nav-label">My Account</span>
         </button>
-        <button data-panel="account" class="nav-btn nav-settings mb-0.5 hidden items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-          <span class="nav-label">Settings</span>
-        </button>
       </nav>
       <div class="help-box mx-4 mb-5 rounded-2xl bg-[#FFF8F6] px-4 py-4">
         <div class="flex items-start gap-3">
@@ -1247,7 +1332,7 @@
     </aside>
 
     <div class="flex min-h-screen min-w-0 flex-1 flex-col">
-      <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:px-6">
+      <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:sticky lg:top-0 lg:z-[25] lg:px-6">
         <div class="hdr-start">
         <a href="kitchenx-v2.html" class="hdr-mark" aria-label="KitchenX">
           <img src="assets/home/kitchenx-mark.png" alt="" />
@@ -1424,10 +1509,6 @@
             </div>
             <div class="flex shrink-0 items-center gap-2 hidden lg:flex">
               <button id="filterToggleDesk" class="btn-ghost hidden">Filters</button>
-              <button id="scanBtn" class="btn-ghost inline-flex items-center gap-2 rounded-full whitespace-nowrap" aria-label="Scan barcode">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 12h10"/></svg>
-                <span>Scan Barcode</span>
-              </button>
             </div>
           </div>
           <div class="cat-chip-row mt-4">
@@ -1513,12 +1594,23 @@
               </div>
               <div class="desk-cat-tools mb-3 flex items-center justify-end gap-3">
                 <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
-                <select id="catSort" class="field h-10 w-full sm:w-44">
-                  <option>Sort by: Relevance</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Name A–Z</option>
-                </select>
+                <div class="cat-sort">
+                  <select id="catSort" class="cat-sort-native" tabindex="-1" aria-hidden="true">
+                    <option>Sort by: Relevance</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Name A–Z</option>
+                  </select>
+                  <button type="button" id="catSortBtn" class="cat-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="catSortMenu">
+                    <span id="catSortLabel">Sort by: Relevance</span>
+                  </button>
+                  <div id="catSortMenu" class="cat-sort-menu" role="listbox" hidden>
+                    <button type="button" class="cat-sort-opt is-on" role="option" data-sort="Sort by: Relevance">Sort by: Relevance</button>
+                    <button type="button" class="cat-sort-opt" role="option" data-sort="Price: Low to High">Price: Low to High</button>
+                    <button type="button" class="cat-sort-opt" role="option" data-sort="Price: High to Low">Price: High to Low</button>
+                    <button type="button" class="cat-sort-opt" role="option" data-sort="Name A–Z">Name A–Z</button>
+                  </div>
+                </div>
               </div>
               <div id="alsoBlock" class="also-head mb-3 hidden">
                 <h2 id="alsoTitle" class="text-lg font-extrabold">Kitchens also order these vegetables</h2>
@@ -1740,7 +1832,13 @@
               <h1 class="text-3xl font-extrabold tracking-tight">My Account</h1>
               <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Manage your kitchen profile, addresses and preferences</p>
             </div>
-            <button id="saveAcc" class="btn-save hidden lg:inline-flex">Save Changes</button>
+            <div class="acc-save-col hidden lg:flex">
+              <button type="button" class="acc-desk-settings" aria-label="Settings">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+                <span>Settings</span>
+              </button>
+              <button id="saveAcc" class="btn-save" type="button">Save Changes</button>
+            </div>
             <button id="editAcc" class="text-sm font-extrabold text-orange lg:hidden" type="button">Edit</button>
           </div>
           <div class="acc-m mt-4">
@@ -1769,6 +1867,11 @@
             <button type="button" class="acc-row" data-panel="invoices">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
               <span class="text-sm font-bold">Invoices &amp; GST</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="acc-row" data-accgo="settings">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+              <span class="text-sm font-bold">Settings</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
             <button type="button" class="acc-row" data-accgo="prefs">
@@ -2511,7 +2614,6 @@
       toast('Account changes saved');
     });
     function openAccForm() {
-      document.querySelector('.acc-m').classList.add('is-hide');
       document.querySelector('.acc-desk').classList.add('is-open');
       document.getElementById('saveAcc').classList.remove('hidden');
     }
@@ -2519,6 +2621,7 @@
     document.querySelectorAll('[data-accgo]').forEach((btn) => btn.addEventListener('click', () => {
       const go = btn.getAttribute('data-accgo');
       if (go === 'terms') { toast('Terms & policies'); return; }
+      if (go === 'settings') return;
       openAccForm();
     }));
     function syncWish() {
@@ -2549,7 +2652,6 @@
       if (!e.target.closest('.wish-wrap')) document.getElementById('wishPanel').hidden = true;
     });
     document.getElementById('bellBtn').addEventListener('click', () => toast('No new notifications'));
-    document.getElementById('scanBtn').addEventListener('click', () => toast('Connect a scanner to this workstation'));
     function openDeals() {
       dealOnly = true;
       document.getElementById('topSearch').value = '';
@@ -2988,7 +3090,17 @@
       if (sort.includes('Name')) return list.slice().sort((a,b) => a.name.localeCompare(b.name));
       return list;
     }
+    function syncCatSortLabel() {
+      const sel = document.getElementById('catSort');
+      const label = document.getElementById('catSortLabel');
+      if (!sel || !label) return;
+      label.textContent = sel.value;
+      document.querySelectorAll('#catSortMenu [data-sort]').forEach((btn) => {
+        btn.classList.toggle('is-on', btn.getAttribute('data-sort') === sel.value);
+      });
+    }
     function renderCat() {
+      syncCatSortLabel();
       const q = (document.getElementById('topSearch').value || '').trim().toLowerCase();
       const sort = document.getElementById('catSort').value;
       let list = PRODUCTS.filter((p) => passesFilters(p, q));
@@ -3048,6 +3160,28 @@
     });
     ['minPrice','maxPrice','catSort'].forEach((id) => document.getElementById(id).addEventListener('input', renderCat));
     document.getElementById('catSort').addEventListener('change', renderCat);
+    document.getElementById('catSortBtn').addEventListener('click', () => {
+      const menu = document.getElementById('catSortMenu');
+      const open = menu.hidden;
+      menu.hidden = !open;
+      document.getElementById('catSortBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.getElementById('catSortMenu').addEventListener('click', (e) => {
+      const opt = e.target.closest('[data-sort]');
+      if (!opt) return;
+      const sel = document.getElementById('catSort');
+      sel.value = opt.getAttribute('data-sort');
+      document.getElementById('catSortMenu').hidden = true;
+      document.getElementById('catSortBtn').setAttribute('aria-expanded', 'false');
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.cat-sort')) return;
+      const menu = document.getElementById('catSortMenu');
+      if (!menu || menu.hidden) return;
+      menu.hidden = true;
+      document.getElementById('catSortBtn').setAttribute('aria-expanded', 'false');
+    });
     document.getElementById('stockOnly').addEventListener('change', renderCat);
     document.getElementById('offerDiscount').addEventListener('change', renderCat);
     document.getElementById('offerFlash').addEventListener('change', renderCat);
@@ -3459,7 +3593,7 @@
         </div>
         <p class="text-sm font-bold text-[#667085]">${r.items} items</p>
         <p class="text-sm font-extrabold">${money(r.total)}</p>
-        <div class="repeat-cta ml-auto"><button class="btn-add" data-rep="${r.name}">Repeat Now</button></div>
+        <div class="repeat-cta ml-auto"><button class="btn-add" data-rep="${r.name}">Repeat Order</button></div>
       </article>`).join('');
     document.getElementById('repeatList').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-rep]');
