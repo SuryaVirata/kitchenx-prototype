@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq' && h !== '#menu') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq' && h !== '#starter') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -1407,8 +1407,8 @@
       .kx-hero-art::before,
       .kx-hero-art::after { transition: none; }
     }
-    #faq, #menu { scroll-margin-top: 80px; }
-    @media (min-width: 1200px) { #faq, #menu { scroll-margin-top: 88px; } }
+    #faq, #starter { scroll-margin-top: 80px; }
+    @media (min-width: 1200px) { #faq, #starter { scroll-margin-top: 88px; } }
     .faq-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
     .faq-kicker { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; color: #FF4F18; }
     .faq-title { margin-top: 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
@@ -1538,7 +1538,7 @@
         <a class="nav-link" href="#products" data-home-nav="products">Products</a>
         <a class="nav-link" href="#categories" data-home-nav="categories">Categories</a>
         <a class="nav-link" href="#businesses">For Business</a>
-        <a class="nav-link" href="#menu">Custom Menu</a>
+        <a class="nav-link" href="#starter">Starter Kit</a>
         <a class="nav-link" href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a class="nav-link" href="#impact">About</a>
       </nav>
@@ -1591,7 +1591,7 @@
         <a href="#products" data-home-nav="products">Products</a>
         <a href="#categories" data-home-nav="categories">Categories</a>
         <a href="#businesses">For Business</a>
-        <a href="#menu">Custom Menu</a>
+        <a href="#starter">Starter Kit</a>
         <a href="#blog" data-blog="index" data-blog-nav>Blog</a>
         <a href="#impact">About</a>
       </nav>
@@ -1955,11 +1955,11 @@
       <a href="#blog" data-blog="index" class="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-coal md:hidden">All posts →</a>
     </section>
 
-    <section id="menu" class="faq-sec page-wrap py-12 lg:py-16" aria-labelledby="menuTitle">
+    <section id="starter" class="faq-sec page-wrap py-12 lg:py-16" aria-labelledby="menuTitle">
       <div class="faq-inner text-center">
         <p class="faq-kicker">Consulting</p>
-        <h2 id="menuTitle" class="faq-title">Custom <span class="text-orange">menu</span></h2>
-        <p class="faq-lead">For a new restaurant, bakery, or sweet shop. Pick a menu. KitchenX designs it and runs a cost audit.</p>
+        <h2 id="menuTitle" class="faq-title">Starter <span class="text-orange">kit</span></h2>
+        <p class="faq-lead">For a new restaurant, bakery, or sweet shop. Pick a kit. KitchenX designs it and runs a cost audit.</p>
         <div class="faq-cats" id="skTypes">
           <button type="button" class="faq-cat" data-kit="Cuisine"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v7a3 3 0 0 0 3 3M6 4v16M9 4v7"/><path d="M15 4c2.2 2.2 2.2 6.2 0 8.4V20"/></svg></span><b>Cuisine</b><small>A full kitchen plan</small></button>
           <button type="button" class="faq-cat" data-kit="Burger"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9c0-2.8 3-5 7-5s7 2.2 7 5H5z"/><path d="M4 12h16M6 15h12c0 2-2.2 4-6 4s-6-2-6-4z"/></svg></span><b>Burger</b><small>Menu, cost, and supply</small></button>
@@ -2128,7 +2128,7 @@
             <a class="block hover:text-white" href="#businesses">Hotels</a>
             <a class="block hover:text-white" href="#businesses">Cloud Kitchens</a>
             <a class="block hover:text-white" href="#businesses">Caterers</a>
-            <a class="block hover:text-white" href="#menu">Custom Menu</a>
+            <a class="block hover:text-white" href="#starter">Starter Kit</a>
           </div>
         </div>
         <div>

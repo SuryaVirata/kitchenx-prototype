@@ -365,7 +365,7 @@
                 <p class="kpi-label">Leads in pipeline</p>
                 <p class="kpi-delta">↑ 2</p>
                 <p class="kpi-value">5</p>
-                <p class="kpi-vs">Custom Menu</p>
+                <p class="kpi-vs">Starter Kit</p>
               </div>
             </article>
             <article class="kpi-card" style="background:#EAF8F0">
@@ -477,13 +477,13 @@
         </section>
         <section id="leadsView" class="panel hidden">
           <h1 class="text-[32px] font-extrabold tracking-tight">Consulting leads</h1>
-          <p class="mt-1 text-sm font-medium text-[#667085]">Custom Menu and Procurement Audit pipeline assigned to you.</p>
+          <p class="mt-1 text-sm font-medium text-[#667085]">Starter Kit and Procurement Audit pipeline assigned to you.</p>
           <article class="form-card mt-5 overflow-x-auto">
             <table class="line-table min-w-[680px]">
               <thead><tr><th>Lead</th><th>Product</th><th>Area</th><th>Stage</th><th></th></tr></thead>
               <tbody id="leadRows">
-                <tr><td class="font-bold">Ayesha Khan</td><td>Custom Menu · bakery</td><td>Gachibowli</td><td><span class="badge badge-prog">Discovery</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Call logged">Log call</button></td></tr>
-                <tr><td class="font-bold">Meenakshi Iyer</td><td>Custom Menu · biryani</td><td>Secunderabad</td><td><span class="badge badge-done">Proposal</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Proposal sent">Send proposal</button></td></tr>
+                <tr><td class="font-bold">Ayesha Khan</td><td>Starter Kit · bakery</td><td>Gachibowli</td><td><span class="badge badge-prog">Discovery</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Call logged">Log call</button></td></tr>
+                <tr><td class="font-bold">Meenakshi Iyer</td><td>Starter Kit · biryani</td><td>Secunderabad</td><td><span class="badge badge-done">Proposal</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Proposal sent">Send proposal</button></td></tr>
                 <tr><td class="font-bold">Ravi Teja</td><td>Procurement Audit</td><td>Madhapur</td><td><span class="badge badge-open">New</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Lead assigned to you">Own lead</button></td></tr>
               </tbody>
             </table>
@@ -682,7 +682,7 @@
         var tr = document.createElement('tr');
         tr.innerHTML = '<td class="font-bold"></td><td></td><td></td><td><span class="badge badge-open">New</span></td><td><button type="button" class="js-act text-sm font-extrabold text-orange" data-toast="Call logged">Log call</button></td>';
         tr.children[0].textContent = lead.name;
-        tr.children[1].textContent = 'Custom Menu · ' + lead.kit;
+        tr.children[1].textContent = 'Starter Kit · ' + lead.kit;
         tr.children[2].textContent = lead.city || 'Hyderabad';
         body.insertBefore(tr, body.firstChild);
       });
