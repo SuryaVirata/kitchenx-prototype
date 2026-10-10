@@ -1,0 +1,44 @@
+/* Custom dropdown for native <select>s (see kx-dropdown.js) */
+.kx-sel { position: relative; display: block; }
+.kx-sel.is-inline { display: inline-block; vertical-align: middle; }
+.kx-sel > select { opacity: 0; pointer-events: none; }
+
+.kx-sel-btn { position: absolute; inset: 0; display: flex; align-items: center; gap: 6px; text-align: left; cursor: pointer; }
+.kx-sel-val { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kx-sel-btn.field {
+  padding-right: 36px;
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>") no-repeat right 12px center;
+}
+.kx-sel.open .kx-sel-btn.field { border-color: #FF4F18; box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12); }
+.kx-sel-btn.field.kx-invalid { border-color: #F04438; }
+.kx-sel-btn.is-empty { color: #98A2B3; }
+
+/* Location pill under the dashboard date */
+.kx-sel.is-loc { display: block; width: fit-content; margin: 6px 0 0 auto; }
+.kx-sel.is-loc > select { position: absolute; inset: 0; width: 100%; height: 100%; }
+.is-loc .kx-sel-btn { position: static; height: 30px; padding: 0 10px; border: 1px solid #E4E7EC; border-radius: 999px; background: #fff; font-size: 12px; font-weight: 700; color: #344054; }
+.is-loc .kx-sel-btn:hover, .kx-sel.is-loc.open .kx-sel-btn { border-color: #FFC9B5; color: #FF4F18; }
+.is-loc .kx-sel-btn:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.14); }
+.is-loc .kx-caret { flex-shrink: 0; transition: transform .18s ease; }
+.kx-sel.is-loc.open .kx-caret { transform: rotate(180deg); }
+
+.kx-menu {
+  position: fixed; z-index: 80; display: none; margin: 0; padding: 6px; list-style: none; overflow-y: auto;
+  background: #fff; border: 1px solid #F2F4F7; border-radius: 14px; box-shadow: 0 16px 40px rgba(20, 21, 23, 0.14);
+}
+.kx-menu.show { display: block; }
+.kx-menu li {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 9px 10px; border-radius: 10px; font-size: 13px; font-weight: 700; color: #344054; cursor: pointer;
+}
+.kx-menu li:hover, .kx-menu li:focus { outline: none; background: #F7F8FA; }
+.kx-menu li.is-placeholder { color: #98A2B3; }
+.kx-menu li[aria-disabled="true"] { color: #D0D5DD; cursor: default; background: none; }
+.kx-menu li[aria-selected="true"] { color: #FF4F18; background: #FFF4F0; }
+.kx-menu li[aria-selected="true"]::after {
+  content: ""; flex-shrink: 0; width: 12px; height: 7px;
+  border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg) translateY(-2px);
+}
+.kx-menu li.is-placeholder[aria-selected="true"] { color: #98A2B3; background: none; }
+.kx-menu li.is-placeholder[aria-selected="true"]::after { content: none; }
+.kx-menu li.is-placeholder:hover, .kx-menu li.is-placeholder:focus { background: #F7F8FA; }
