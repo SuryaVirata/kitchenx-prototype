@@ -2063,6 +2063,10 @@
     const email = user.includes('@') ? user : 'orders@' + org.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.com';
     const initials = (function () {
       if (user && !user.includes('@')) {
+        if (user.trim().charAt(0) === '+') {
+          const digits = user.replace(/\D/g, '');
+          return (digits.slice(-2) || 'KX');
+        }
         const parts = user.split(/\s+/).filter(Boolean);
         return (parts.length >= 2 ? parts[0][0] + parts[1][0] : user.slice(0, 2)).toUpperCase();
       }
@@ -2649,7 +2653,7 @@
     document.getElementById('filterClose').addEventListener('click', closeFilters);
     filterScrim.addEventListener('click', closeFilters);
     function doLogout() {
-      ['kxRole','kxUser','kxOrg','kxBizType','kxNeeds','kxCity','kxArea','kxAddress','kxOutlets','kxLocation'].forEach((k) => sessionStorage.removeItem(k));
+      ['kxRole','kxUser','kxOrg','kxPhone','kxNewCustomer','kxBizType','kxNeeds','kxCity','kxArea','kxAddress','kxOutlets','kxLocation'].forEach((k) => sessionStorage.removeItem(k));
       window.location.href = 'kitchenx-v2.html';
     }
     document.getElementById('logoutBtn').addEventListener('click', doLogout);

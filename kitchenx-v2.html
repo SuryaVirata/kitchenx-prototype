@@ -50,6 +50,7 @@
       color: var(--coal);
     }
     img { max-width: 100%; }
+    .auth-mark { display: block; height: 34px; width: auto; max-width: 180px; margin: 0 auto 18px; object-fit: contain; }
     .kx-logo { display: block; height: 22px; width: auto; max-width: 148px; object-fit: contain; }
     @media (min-width: 768px) { .kx-logo { height: 24px; } }
     @media (min-width: 1200px) { .kx-logo { height: 26px; } }
@@ -2178,19 +2179,55 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
       </button>
 
+      <img class="auth-mark" src="assets/home/kitchenx-logo.png" alt="KitchenX" />
       <div class="auth-card rounded-[28px] border border-[#E8ECF1] bg-white p-6 shadow-[0_18px_50px_rgba(20,21,23,0.12)] sm:p-8">
         <div id="authLogin">
-          <div id="loginMain">
-            <h2 class="text-2xl font-extrabold tracking-tight">Login</h2>
-            <p class="mt-1 text-sm font-medium text-[#667085]">Choose Customer or Admin.</p>
-            <div class="mt-6 grid grid-cols-2 border-b border-[#E8ECF1]">
-              <button type="button" id="tabCustomer" class="tab-active border-b-2 py-3 text-sm font-extrabold">Customer</button>
-              <button type="button" id="tabAdmin" class="tab-idle border-b-2 py-3 text-sm font-extrabold">Admin</button>
+          <div id="custPhone">
+            <h2 class="text-[26px] font-extrabold tracking-tight">Continue with mobile</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Enter your mobile number to continue.</p>
+            <form id="phoneForm" class="mt-6 grid gap-4" autocomplete="off">
+              <span class="flex gap-2">
+                <select id="ccInput" class="field h-12 w-[92px] shrink-0 rounded-2xl border border-[#E4E7EC] bg-fog px-3 text-sm font-extrabold" aria-label="Country code">
+                  <option value="91" selected>+91</option>
+                  <option value="971">+971</option>
+                  <option value="65">+65</option>
+                  <option value="44">+44</option>
+                  <option value="1">+1</option>
+                </select>
+                <input id="phoneInput" class="field h-12 min-w-0 flex-1 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="10-digit mobile number" aria-label="Mobile number" />
+              </span>
+              <p id="phoneError" class="hidden text-sm font-bold text-orange"></p>
+              <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
+            </form>
+            <p class="mt-5 text-center text-sm font-medium text-[#667085]">
+              Prefer email? <button type="button" id="emailSignIn" class="font-extrabold text-orange">Sign in with email</button>
+            </p>
+          </div>
+
+          <div id="custOtp" class="hidden">
+            <h2 class="text-2xl font-extrabold tracking-tight">Enter the code</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Sent to <span id="otpPhone" class="font-bold text-coal"></span></p>
+            <div id="otpBoxes" class="mt-6 flex justify-between gap-2">
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 1" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 2" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 3" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 4" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 5" />
+              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" aria-label="Digit 6" />
             </div>
+            <p id="otpError" class="mt-3 hidden text-sm font-bold text-orange"></p>
+            <p id="otpTimer" class="mt-4 text-sm font-bold text-[#667085]">Resend code in 60s</p>
+            <button type="button" id="resendBtn" class="mt-1 hidden text-sm font-extrabold text-orange" disabled>Resend code</button>
+            <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Verify</button>
+          </div>
+
+          <div id="emailLogin" class="hidden">
+            <h2 class="text-[26px] font-extrabold tracking-tight">Sign in with email</h2>
+            <p class="mt-1 text-sm font-medium text-[#667085]">Enter your email and password to continue.</p>
             <form id="loginForm" class="mt-6 grid gap-4" autocomplete="off">
               <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Username or email</span>
-                <input id="userInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter username or email" />
+                <span class="text-sm font-bold">Email</span>
+                <input id="userInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" />
               </label>
               <label class="grid gap-1.5">
                 <span class="text-sm font-bold">Password</span>
@@ -2202,222 +2239,11 @@
                 </span>
               </label>
               <p id="formError" class="hidden text-sm font-bold text-orange"></p>
-              <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Login</button>
-            </form>
-            <div id="customerSocial" class="mt-5 grid gap-3">
-              <p class="or-line">or</p>
-              <div class="social-row">
-                <button type="button" class="social-btn" data-social="login-google" aria-label="Continue with Google">
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  <span><span class="social-pre">Continue with </span>Google</span>
-                </button>
-                <button type="button" class="social-btn" data-social="login-facebook" aria-label="Continue with Facebook">
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.5 0-1.96.93-1.96 1.89v2.26h3.34l-.53 3.49h-2.81V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
-                  <span><span class="social-pre">Continue with </span>Facebook</span>
-                </button>
-              </div>
-            </div>
-            <div id="customerExtras" class="mt-4 flex flex-wrap justify-between gap-2 text-sm font-bold">
-              <button type="button" id="forgotUserBtn" class="text-[#667085] hover:text-orange">Forgot username</button>
-              <button type="button" id="forgotPassBtn" class="text-[#667085] hover:text-orange">Forgot password</button>
-            </div>
-            <p id="createWrap" class="mt-5 text-center text-sm font-semibold text-[#667085]">
-              New business? <a href="#signup" data-auth-open="signup" class="font-extrabold text-orange">Create an account</a>
-            </p>
-          </div>
-          <div id="forgotPanel" class="hidden">
-            <h2 id="forgotTitle" class="text-2xl font-extrabold tracking-tight">Forgot password</h2>
-            <p class="mt-1 text-sm font-medium text-[#667085]">Enter the email on the account. This page does not send email.</p>
-            <label class="mt-6 grid gap-1.5">
-              <span class="text-sm font-bold">Email</span>
-              <input id="forgotEmail" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" type="email" />
-            </label>
-            <p id="forgotMsg" class="mt-3 hidden text-sm font-bold text-coal"></p>
-            <button type="button" id="forgotSubmit" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Submit</button>
-            <p class="mt-5 text-center text-sm font-semibold text-[#667085]">
-              <button type="button" id="forgotToLogin" class="font-extrabold text-orange">Login</button>
-              <span class="mx-2 text-[#D0D5DD]">·</span>
-              <a href="#signup" data-auth-open="signup" class="font-extrabold text-orange">Sign up</a>
-            </p>
-          </div>
-        </div>
-
-        <div id="authSignup" class="hidden">
-          <div id="signupStep">
-            <h2 class="text-2xl font-extrabold tracking-tight">Create an account</h2>
-            <p class="mt-1 text-sm font-medium text-[#667085]">For restaurants, cafes, hotels, cloud kitchens and caterers.</p>
-            <div class="mt-6 grid gap-3">
-              <div class="social-row">
-                <button type="button" class="social-btn" data-social="signup-google" aria-label="Continue with Google">
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  <span><span class="social-pre">Continue with </span>Google</span>
-                </button>
-                <button type="button" class="social-btn" data-social="signup-facebook" aria-label="Continue with Facebook">
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.5 0-1.96.93-1.96 1.89v2.26h3.34l-.53 3.49h-2.81V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
-                  <span><span class="social-pre">Continue with </span>Facebook</span>
-                </button>
-              </div>
-              <p class="or-line">or</p>
-            </div>
-            <form id="signupForm" class="mt-1 grid gap-4" autocomplete="off">
-              <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Organization name</span>
-                <input id="orgInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter organization name" />
-              </label>
-              <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Email</span>
-                <input id="emailInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" type="email" />
-              </label>
-              <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Password</span>
-                <span class="relative block">
-                  <input id="signupPass" class="field h-12 w-full rounded-2xl border border-[#E4E7EC] bg-fog px-4 pr-12 text-sm font-semibold" type="password" placeholder="Enter password" />
-                  <button type="button" class="auth-eye absolute right-3 top-1/2 -translate-y-1/2" data-eye="signupPass" aria-label="Show password">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
-                </span>
-              </label>
-              <p id="signupError" class="hidden text-sm font-bold text-orange"></p>
               <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
             </form>
-            <p class="mt-5 text-center text-sm font-semibold text-[#667085]">
-              Already have an account? <a href="#login" data-auth-open="login" class="font-extrabold text-orange">Login</a>
+            <p class="mt-5 text-center text-sm font-medium text-[#667085]">
+              Prefer mobile? <button type="button" id="mobileSignIn" class="font-extrabold text-orange">Continue with mobile</button>
             </p>
-          </div>
-          <div id="otpStep" class="hidden">
-            <h2 class="text-2xl font-extrabold tracking-tight">Verify email</h2>
-            <p class="mt-1 text-sm font-medium text-[#667085]">Enter the 6-digit code. This page does not send a real email. Any code you enter will confirm.</p>
-            <p id="otpEmailLabel" class="mt-3 text-sm font-bold text-coal"></p>
-            <div id="otpBoxes" class="mt-6 flex justify-between gap-2">
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-              <input class="otp field h-12 w-11 rounded-xl border border-[#E4E7EC] bg-fog text-center text-lg font-extrabold" maxlength="1" inputmode="numeric" />
-            </div>
-            <p id="otpTimer" class="mt-4 text-sm font-bold text-[#667085]">Resend OTP in 60s</p>
-            <button type="button" id="resendBtn" class="mt-1 hidden text-sm font-extrabold text-orange" disabled>Resend OTP</button>
-            <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white">Confirm</button>
-          </div>
-          <div id="setupStep" class="hidden">
-            <p id="socialNote" class="mb-4 hidden rounded-2xl bg-[#FFF4F0] px-3 py-2 text-sm font-bold text-[#344054]"></p>
-            <div class="mb-5 flex items-center gap-2">
-              <span class="step-dot is-on" data-setup-dot="1">1</span>
-              <span class="h-px flex-1 bg-[#E8ECF1]"></span>
-              <span class="step-dot" data-setup-dot="2">2</span>
-              <span class="h-px flex-1 bg-[#E8ECF1]"></span>
-              <span class="step-dot" data-setup-dot="3">3</span>
-            </div>
-            <div id="setupType">
-              <h2 class="text-2xl font-extrabold tracking-tight">What type of business do you run?</h2>
-              <p class="mt-1 text-sm font-medium text-[#667085]">This helps us show the right products and prices.</p>
-              <div id="typeGrid" class="mt-5 grid grid-cols-2 gap-3">
-                <button type="button" class="choice" data-type="Restaurant">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4z"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-                  <span class="text-sm font-extrabold">Restaurant</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">Dine-in kitchen</span>
-                </button>
-                <button type="button" class="choice" data-type="Cafe">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M9 19v-5h6v5"/></svg>
-                  <span class="text-sm font-extrabold">Cafe</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">Cafe / coffee shop</span>
-                </button>
-                <button type="button" class="choice" data-type="Hotel">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M10 21v-6h4v6"/></svg>
-                  <span class="text-sm font-extrabold">Hotel</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">Hotel / resort</span>
-                </button>
-                <button type="button" class="choice" data-type="Cloud Kitchen">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
-                  <span class="text-sm font-extrabold">Cloud Kitchen</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">Delivery-only</span>
-                </button>
-                <button type="button" class="choice" data-type="Caterer">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11a4 4 0 1 1 8 0"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/><path d="M12 11V4"/><path d="M9 7h6"/></svg>
-                  <span class="text-sm font-extrabold">Caterer</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">Events and bulk</span>
-                </button>
-                <button type="button" class="choice" data-type="Other">
-                  <svg class="choice-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                  <span class="text-sm font-extrabold">Other</span>
-                  <span class="text-[11px] font-semibold text-[#667085]">QSR, bakery, canteen</span>
-                </button>
-              </div>
-              <p id="typeError" class="mt-3 hidden text-sm font-bold text-orange">Select a business type to continue.</p>
-              <button type="button" id="typeNext" class="mt-5 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
-            </div>
-            <div id="setupNeeds" class="hidden">
-              <h2 class="text-2xl font-extrabold tracking-tight">What do you need for your business?</h2>
-              <p class="mt-1 text-sm font-medium text-[#667085]">Select all that you usually buy. You can change this later.</p>
-              <div id="needGrid" class="mt-5 grid grid-cols-2 gap-3">
-                <button type="button" class="choice" data-need="Fresh Produce"><span class="text-sm font-extrabold">Fresh Produce</span><span class="text-[11px] font-semibold text-[#667085]">Fruits and vegetables</span></button>
-                <button type="button" class="choice" data-need="Dairy & Eggs"><span class="text-sm font-extrabold">Dairy &amp; Eggs</span><span class="text-[11px] font-semibold text-[#667085]">Milk, butter, cream</span></button>
-                <button type="button" class="choice" data-need="Meat, Poultry & Seafood"><span class="text-sm font-extrabold">Meat &amp; Seafood</span><span class="text-[11px] font-semibold text-[#667085]">Poultry, meat, fish</span></button>
-                <button type="button" class="choice" data-need="Staples & Grains"><span class="text-sm font-extrabold">Staples &amp; Grains</span><span class="text-[11px] font-semibold text-[#667085]">Rice, flour, oil</span></button>
-                <button type="button" class="choice" data-need="Beverages"><span class="text-sm font-extrabold">Beverages</span><span class="text-[11px] font-semibold text-[#667085]">Tea, coffee, drinks</span></button>
-                <button type="button" class="choice" data-need="Packaging"><span class="text-sm font-extrabold">Packaging</span><span class="text-[11px] font-semibold text-[#667085]">Boxes, bags, wraps</span></button>
-                <button type="button" class="choice" data-need="Kitchen Appliances"><span class="text-sm font-extrabold">Kitchen Equipment</span><span class="text-[11px] font-semibold text-[#667085]">Tools and appliances</span></button>
-                <button type="button" class="choice" data-need="Cleaning & Hygiene"><span class="text-sm font-extrabold">Cleaning &amp; Hygiene</span><span class="text-[11px] font-semibold text-[#667085]">Kitchen sanitation</span></button>
-              </div>
-              <p id="needError" class="mt-3 hidden text-sm font-bold text-orange">Select at least one category.</p>
-              <div class="mt-5 grid grid-cols-2 gap-3">
-                <button type="button" id="needBack" class="h-12 rounded-full border border-[#E4E7EC] text-sm font-extrabold text-coal">Back</button>
-                <button type="button" id="needNext" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
-              </div>
-            </div>
-            <div id="setupLocation" class="hidden">
-              <h2 class="text-2xl font-extrabold tracking-tight">Where is your business located?</h2>
-              <p class="mt-1 text-sm font-medium text-[#667085]">We use this for delivery slots and serviceable areas.</p>
-              <div class="mt-5 grid gap-4">
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold">City</span>
-                  <select id="cityInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold">
-                    <option value="">Select city</option>
-                    <option>Delhi</option>
-                    <option>Mumbai</option>
-                    <option>Bengaluru</option>
-                    <option>Hyderabad</option>
-                    <option>Chennai</option>
-                    <option>Pune</option>
-                    <option>Kolkata</option>
-                    <option>Jaipur</option>
-                    <option>Ahmedabad</option>
-                  </select>
-                </label>
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold">Area / Pincode</span>
-                  <input id="areaInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Area or pincode" />
-                </label>
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold">Business address</span>
-                  <input id="addrInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Street, building, kitchen name" />
-                </label>
-                <div>
-                  <span class="text-sm font-bold">Number of outlets</span>
-                  <div id="outletGrid" class="mt-2 grid grid-cols-3 gap-2">
-                    <button type="button" class="outlet-chip is-on" data-outlets="1">1</button>
-                    <button type="button" class="outlet-chip" data-outlets="2-5">2–5</button>
-                    <button type="button" class="outlet-chip" data-outlets="6+">6+</button>
-                  </div>
-                </div>
-              </div>
-              <p id="locError" class="mt-3 hidden text-sm font-bold text-orange">Enter city and area or pincode.</p>
-              <div class="mt-5 grid grid-cols-2 gap-3">
-                <button type="button" id="locBack" class="h-12 rounded-full border border-[#E4E7EC] text-sm font-extrabold text-coal">Back</button>
-                <button type="button" id="locNext" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Finish setup</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -2570,18 +2396,18 @@
         cat: 'Buying',
         date: '4 Sep 2026',
         read: '3 min',
-        title: 'Why signup asks three questions',
-        excerpt: 'Business type, what you buy, and where you are. The shop then leads with the matching categories.',
+        title: 'A mobile number is the whole sign-in',
+        excerpt: 'New and existing kitchens use the same step. The account opens after the code is verified.',
         img: 'assets/home/hero-1.png',
         alt: 'A crate of fresh produce',
-        headings: ['The account comes first', 'Three questions, one catalogue order', 'What the Monday order actually needs'],
-        tip: 'Change the business type later from Account Settings — the catalogue order updates the next time you open it.',
+        headings: ['One number', 'The code comes before the account', 'What the Monday order actually needs'],
+        tip: 'Login and Create Account open the same mobile step. A new number becomes an account only after the code is verified.',
         body: [
-          'The account is created first. Google or Facebook sign-in does that and then asks the same three questions as an email signup. It does not skip them.',
-          'The first question is the business: restaurant, cafe, hotel, cloud kitchen, caterer, or other. Other covers a bakery, a QSR, and a canteen. The second is what you buy: produce, dairy and eggs, meat, staples, beverages. The third is where the kitchen is.',
-          'Those answers change the order of the catalogue. They do not hide the rest of the shop. A cafe still sees vegetables. They just are not the first row.',
-          'The point is the Monday order. The person placing it should see their usual crates before they see everything else KitchenX carries.',
-          'None of the three answers lock the account in. A caterer that picks up hotel work can add Hotels as a second business type without losing the original signup.'
+          'Customer sign-in is a mobile number and a 6-digit code. There is no separate create-account form, and no Google or Facebook step.',
+          'If the number already belongs to a kitchen, the code signs that account in. If it does not, the account is created after the code is verified. Submitting the number alone does not create one.',
+          'Business type, what you buy, and the kitchen address are not asked at this step. The catalogue is still the full shop.',
+          'The point is the Monday order. The person placing it should be able to open the account and reach the catalogue without filling a business profile first.',
+          'Email and password remain available from the same screen, under the mobile step.'
         ]
       },
       {
@@ -3445,56 +3271,47 @@
       manager: { user: 'Manager', pass: 'Manager@123', role: 'warehouse', persona: 'warehouse_manager', href: 'warehouse.html' }
     };
     const overlay = document.getElementById('authOverlay');
-    const authLogin = document.getElementById('authLogin');
-    const authSignup = document.getElementById('authSignup');
-    let loginMode = 'customer';
-    let pending = { org: '', email: '', type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
-    let setupIndex = 0;
+    const OTP_TTL = 5 * 60 * 1000;
+    const OTP_ATTEMPTS = 5;
     let otpSeconds = 60;
     let otpTimer = null;
+    let otpSentAt = 0;
+    let otpAttempts = 0;
+    let pendingPhone = '';
+    let pendingDisplay = '';
+    let signingIn = false;
     const eyeOpen = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
     const eyeOff = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.4"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-3.2 3.6"/><path d="M6.1 6.1A18 18 0 0 0 2 12s4 7 10 7a10.4 10.4 0 0 0 4.2-.9"/></svg>';
 
-    function openAuth(kind) {
+    function openAuth() {
       overlay.classList.add('is-open');
       document.body.classList.add('auth-open');
       setMobileMenuOpen(false);
-      document.getElementById('forgotPanel').classList.add('hidden');
-      document.getElementById('loginMain').classList.remove('hidden');
-      setupIndex = 0;
-      if (kind === 'signup') {
-        authLogin.classList.add('hidden');
-        authSignup.classList.remove('hidden');
-        document.getElementById('signupStep').classList.remove('hidden');
-        document.getElementById('otpStep').classList.add('hidden');
-        document.getElementById('setupStep').classList.add('hidden');
-      } else {
-        authSignup.classList.add('hidden');
-        authLogin.classList.remove('hidden');
-        setLoginMode('customer');
-      }
-      history.replaceState(null, '', kind === 'signup' ? '#signup' : '#login');
+      showCustomerPhone();
+      history.replaceState(null, '', '#login');
     }
 
     function closeAuth() {
       overlay.classList.remove('is-open');
       document.body.classList.remove('auth-open');
       clearInterval(otpTimer);
+      signingIn = false;
       if (location.hash === '#login' || location.hash === '#signup') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     }
 
-    function setLoginMode(next) {
-      loginMode = next;
-      document.getElementById('tabCustomer').className = next === 'customer' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
-      document.getElementById('tabAdmin').className = next === 'admin' ? 'tab-active border-b-2 py-3 text-sm font-extrabold' : 'tab-idle border-b-2 py-3 text-sm font-extrabold';
-      document.getElementById('customerExtras').classList.toggle('hidden', next === 'admin');
-      document.getElementById('customerSocial').classList.toggle('hidden', next === 'admin');
-      document.getElementById('createWrap').classList.toggle('hidden', next === 'admin');
+    function showCustomerPhone() {
+      document.getElementById('custPhone').classList.remove('hidden');
+      document.getElementById('custOtp').classList.add('hidden');
+      document.getElementById('emailLogin').classList.add('hidden');
+    }
+
+    function showEmail() {
+      document.getElementById('custPhone').classList.add('hidden');
+      document.getElementById('custOtp').classList.add('hidden');
+      document.getElementById('emailLogin').classList.remove('hidden');
       document.getElementById('formError').classList.add('hidden');
-      document.getElementById('userInput').value = '';
-      document.getElementById('passInput').value = '';
     }
 
     document.querySelectorAll('[data-auth-open]').forEach((el) => {
@@ -3522,24 +3339,12 @@
     }
     document.getElementById('authBackdrop').addEventListener('click', closeAuth);
     document.getElementById('authBack').addEventListener('click', () => {
-      if (!document.getElementById('setupStep').classList.contains('hidden') && setupIndex > 1) {
-        showSetup(setupIndex - 1);
+      if (!document.getElementById('custOtp').classList.contains('hidden')) {
+        showCustomerPhone();
         return;
       }
-      if (!document.getElementById('setupStep').classList.contains('hidden')) {
-        document.getElementById('setupStep').classList.add('hidden');
-        document.getElementById('signupStep').classList.remove('hidden');
-        setupIndex = 0;
-        return;
-      }
-      if (!document.getElementById('otpStep').classList.contains('hidden')) {
-        document.getElementById('otpStep').classList.add('hidden');
-        document.getElementById('signupStep').classList.remove('hidden');
-        clearInterval(otpTimer);
-        return;
-      }
-      if (!document.getElementById('forgotPanel').classList.contains('hidden')) {
-        showLoginMain();
+      if (!document.getElementById('emailLogin').classList.contains('hidden')) {
+        showCustomerPhone();
         return;
       }
       closeAuth();
@@ -3547,8 +3352,8 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeAuth();
     });
-    document.getElementById('tabCustomer').addEventListener('click', () => setLoginMode('customer'));
-    document.getElementById('tabAdmin').addEventListener('click', () => setLoginMode('admin'));
+    document.getElementById('emailSignIn').addEventListener('click', showEmail);
+    document.getElementById('mobileSignIn').addEventListener('click', showCustomerPhone);
 
     document.querySelectorAll('[data-eye]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -3571,64 +3376,65 @@
         formError.classList.remove('hidden');
         return;
       }
-      if (loginMode === 'admin') {
-        const key = user.toLowerCase();
-        const staff = Object.values(STAFF).find((s) => {
-          if (s.user.toLowerCase() === key && s.pass === pass) return true;
-          return (s.alts || []).some((a) => a.user.toLowerCase() === key && a.pass === pass);
-        });
-        if (staff) {
-          sessionStorage.setItem('kxRole', staff.role);
-          sessionStorage.setItem('kxPersona', staff.persona);
-          sessionStorage.setItem('kxUser', staff.user);
-          window.location.href = staff.href;
-          return;
-        }
-        formError.textContent = 'Username or password is incorrect.';
+      const key = user.toLowerCase();
+      const staff = Object.values(STAFF).find((s) => {
+        if (s.user.toLowerCase() === key && s.pass === pass) return true;
+        return (s.alts || []).some((a) => a.user.toLowerCase() === key && a.pass === pass);
+      });
+      if (!staff) {
+        formError.textContent = 'Email or password is incorrect.';
         formError.classList.remove('hidden');
         return;
       }
-      sessionStorage.setItem('kxRole', 'customer');
-      sessionStorage.setItem('kxUser', user);
-      window.location.href = 'customer.html';
+      sessionStorage.setItem('kxRole', staff.role);
+      sessionStorage.setItem('kxPersona', staff.persona);
+      sessionStorage.setItem('kxUser', staff.user);
+      window.location.href = staff.href;
     });
 
-    function showForgot(kind) {
-      document.getElementById('loginMain').classList.add('hidden');
-      document.getElementById('forgotPanel').classList.remove('hidden');
-      document.getElementById('forgotTitle').textContent = kind === 'user' ? 'Forgot username' : 'Forgot password';
-      document.getElementById('forgotMsg').classList.add('hidden');
-      document.getElementById('forgotEmail').value = '';
+    function phoneError(msg) {
+      const el = document.getElementById('phoneError');
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
     }
 
-    function showLoginMain() {
-      document.getElementById('forgotPanel').classList.add('hidden');
-      document.getElementById('loginMain').classList.remove('hidden');
+    function otpError(msg) {
+      const el = document.getElementById('otpError');
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
     }
 
-    document.getElementById('forgotUserBtn').addEventListener('click', () => showForgot('user'));
-    document.getElementById('forgotPassBtn').addEventListener('click', () => showForgot('pass'));
-    document.getElementById('forgotToLogin').addEventListener('click', showLoginMain);
-    document.getElementById('forgotSubmit').addEventListener('click', () => {
-      const email = document.getElementById('forgotEmail').value.trim();
-      const forgotMsg = document.getElementById('forgotMsg');
-      if (!email) {
-        forgotMsg.textContent = 'Enter an email first.';
-        forgotMsg.classList.remove('hidden');
-        return;
+    function formatMobile(cc, digits) {
+      if (cc === '91' && digits.length === 10) return '+91 ' + digits.slice(0, 5) + ' ' + digits.slice(5);
+      return '+' + cc + ' ' + digits;
+    }
+
+    function validMobile(cc, digits) {
+      if (cc === '91') return /^[6-9]\d{9}$/.test(digits);
+      return /^\d{8,15}$/.test(digits);
+    }
+
+    function readCustomers() {
+      try {
+        const book = JSON.parse(localStorage.getItem('kxCustomers') || '{}');
+        return book && typeof book === 'object' ? book : {};
+      } catch (err) {
+        return {};
       }
-      forgotMsg.textContent = 'If this email is on a KitchenX account, the next step would be sent there. This page does not send email.';
-      forgotMsg.classList.remove('hidden');
-    });
+    }
 
     function startOtpTimer() {
       otpSeconds = 60;
+      otpSentAt = Date.now();
+      otpAttempts = 0;
       const label = document.getElementById('otpTimer');
       const resend = document.getElementById('resendBtn');
+      const confirm = document.getElementById('confirmOtp');
       resend.classList.add('hidden');
       resend.disabled = true;
+      confirm.disabled = false;
       label.classList.remove('hidden');
-      label.textContent = 'Resend OTP in 60s';
+      label.textContent = 'Resend code in 60s';
       clearInterval(otpTimer);
       otpTimer = setInterval(() => {
         otpSeconds -= 1;
@@ -3639,152 +3445,112 @@
           resend.disabled = false;
           return;
         }
-        label.textContent = 'Resend OTP in ' + otpSeconds + 's';
+        label.textContent = 'Resend code in ' + otpSeconds + 's';
       }, 1000);
     }
 
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const org = document.getElementById('orgInput').value.trim();
-      const email = document.getElementById('emailInput').value.trim();
-      const pass = document.getElementById('signupPass').value;
-      const error = document.getElementById('signupError');
-      if (!org || !email || !pass) {
-        error.textContent = 'Enter organization name, email and password.';
-        error.classList.remove('hidden');
-        return;
-      }
-      pending = { org, email };
-      document.getElementById('signupStep').classList.add('hidden');
-      document.getElementById('otpStep').classList.remove('hidden');
-      document.getElementById('otpEmailLabel').textContent = 'Code for ' + email;
-      document.querySelectorAll('.otp').forEach((box) => { box.value = ''; });
-      document.querySelectorAll('.otp')[0].focus();
+    function showOtp() {
+      document.getElementById('custPhone').classList.add('hidden');
+      document.getElementById('emailLogin').classList.add('hidden');
+      document.getElementById('custOtp').classList.remove('hidden');
+      document.getElementById('otpPhone').textContent = pendingDisplay;
+      otpError('');
+      otpBoxes.forEach((box) => { box.value = ''; });
+      otpBoxes[0].focus();
       startOtpTimer();
+    }
+
+    document.getElementById('phoneInput').addEventListener('input', () => {
+      const input = document.getElementById('phoneInput');
+      input.value = input.value.replace(/\D/g, '').slice(0, 15);
+      phoneError('');
     });
 
-    const otpBoxes = [...document.querySelectorAll('.otp')];
+    document.getElementById('phoneForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const cc = document.getElementById('ccInput').value;
+      const digits = document.getElementById('phoneInput').value.replace(/\D/g, '');
+      if (!validMobile(cc, digits)) {
+        phoneError(cc === '91' ? 'Enter a 10-digit mobile number.' : 'Enter a valid mobile number.');
+        return;
+      }
+      pendingPhone = cc + digits;
+      pendingDisplay = formatMobile(cc, digits);
+      showOtp();
+    });
+
+    const otpBoxes = [...document.querySelectorAll('#otpBoxes .otp')];
     otpBoxes.forEach((box, i) => {
       box.addEventListener('input', () => {
-        box.value = box.value.replace(/\D/g, '').slice(0, 1);
+        box.value = box.value.replace(/\D/g, '').slice(-1);
+        otpError('');
         if (box.value && otpBoxes[i + 1]) otpBoxes[i + 1].focus();
       });
       box.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace' && !box.value && otpBoxes[i - 1]) otpBoxes[i - 1].focus();
       });
-    });
-    document.getElementById('resendBtn').addEventListener('click', () => {
-      otpBoxes.forEach((box) => { box.value = ''; });
-      otpBoxes[0].focus();
-      startOtpTimer();
-    });
-    document.getElementById('confirmOtp').addEventListener('click', () => {
-      document.getElementById('socialNote').classList.add('hidden');
-      showSetup(1);
+      box.addEventListener('paste', (e) => {
+        const text = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+        if (!text) return;
+        e.preventDefault();
+        otpBoxes.forEach((el, n) => { el.value = text[n] || ''; });
+        otpBoxes[Math.min(text.length, 5)].focus();
+      });
     });
 
-    function finishSetup() {
+    document.getElementById('resendBtn').addEventListener('click', () => {
+      if (otpSeconds > 0) return;
+      otpBoxes.forEach((box) => { box.value = ''; });
+      otpError('');
+      startOtpTimer();
+      otpBoxes[0].focus();
+    });
+
+    function issueCustomerSession(record, created) {
       sessionStorage.setItem('kxRole', 'customer');
-      sessionStorage.setItem('kxUser', pending.email);
-      sessionStorage.setItem('kxOrg', pending.org);
-      sessionStorage.setItem('kxBizType', pending.type);
-      sessionStorage.setItem('kxNeeds', pending.needs.join('|'));
-      sessionStorage.setItem('kxCity', pending.city);
-      sessionStorage.setItem('kxArea', pending.area);
-      sessionStorage.setItem('kxAddress', pending.address);
-      sessionStorage.setItem('kxOutlets', pending.outlets);
-      const loc = [pending.address || pending.org, pending.area, pending.city].filter(Boolean).join(', ');
-      sessionStorage.setItem('kxLocation', loc);
+      sessionStorage.setItem('kxUser', record.display);
+      sessionStorage.setItem('kxOrg', record.org || record.display);
+      sessionStorage.setItem('kxPhone', record.phone);
+      sessionStorage.setItem('kxNewCustomer', created ? '1' : '0');
+      ['kxPersona', 'kxBizType', 'kxNeeds', 'kxCity', 'kxArea', 'kxAddress', 'kxOutlets', 'kxLocation'].forEach((k) => sessionStorage.removeItem(k));
       window.location.href = 'customer.html';
     }
 
-    function showSetup(n) {
-      setupIndex = n;
-      document.getElementById('signupStep').classList.add('hidden');
-      document.getElementById('otpStep').classList.add('hidden');
-      document.getElementById('setupStep').classList.remove('hidden');
-      document.getElementById('setupType').classList.toggle('hidden', n !== 1);
-      document.getElementById('setupNeeds').classList.toggle('hidden', n !== 2);
-      document.getElementById('setupLocation').classList.toggle('hidden', n !== 3);
-      document.querySelectorAll('[data-setup-dot]').forEach((dot) => {
-        const i = Number(dot.getAttribute('data-setup-dot'));
-        dot.classList.toggle('is-on', i === n);
-        dot.classList.toggle('is-done', i < n);
-      });
-    }
-
-    const SOCIAL = {
-      google: { name: 'Surya Virata', email: 'surya.virata@gmail.com', via: 'Google' },
-      facebook: { name: 'Surya Virata', email: 'surya.virata@facebook.test', via: 'Facebook' }
-    };
-    document.querySelectorAll('[data-social]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const kind = btn.getAttribute('data-social');
-        if (kind.startsWith('login') && loginMode === 'admin') return;
-        const provider = kind.includes('google') ? SOCIAL.google : SOCIAL.facebook;
-        if (kind.startsWith('login') && sessionStorage.getItem('kxBizType')) {
-          sessionStorage.setItem('kxRole', 'customer');
-          sessionStorage.setItem('kxUser', sessionStorage.getItem('kxUser') || provider.email);
-          window.location.href = 'customer.html';
+    document.getElementById('confirmOtp').addEventListener('click', () => {
+      if (signingIn) return;
+      const code = otpBoxes.map((box) => box.value).join('');
+      if (Date.now() - otpSentAt > OTP_TTL) {
+        otpError('This code has expired. Resend a new one.');
+        return;
+      }
+      if (!/^\d{6}$/.test(code)) {
+        otpAttempts += 1;
+        if (otpAttempts >= OTP_ATTEMPTS) {
+          document.getElementById('confirmOtp').disabled = true;
+          otpError('Too many attempts. Resend a new code.');
           return;
         }
-        pending = { org: provider.name, email: provider.email, type: '', needs: [], city: '', area: '', address: '', outlets: '1' };
-        document.querySelectorAll('#typeGrid .choice, #needGrid .choice').forEach((el) => el.classList.remove('is-on'));
-        const note = document.getElementById('socialNote');
-        note.textContent = 'Signed in with ' + provider.via + ' as ' + provider.name + ' · ' + provider.email;
-        note.classList.remove('hidden');
-        authLogin.classList.add('hidden');
-        authSignup.classList.remove('hidden');
-        showSetup(1);
-      });
-    });
-
-    document.getElementById('typeGrid').addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-type]');
-      if (!btn) return;
-      document.querySelectorAll('#typeGrid .choice').forEach((el) => el.classList.toggle('is-on', el === btn));
-      pending.type = btn.getAttribute('data-type');
-      document.getElementById('typeError').classList.add('hidden');
-    });
-    document.getElementById('typeNext').addEventListener('click', () => {
-      if (!pending.type) {
-        document.getElementById('typeError').classList.remove('hidden');
+        otpError('Enter the 6-digit code.');
         return;
       }
-      showSetup(2);
-    });
-    document.getElementById('needGrid').addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-need]');
-      if (!btn) return;
-      btn.classList.toggle('is-on');
-      pending.needs = [...document.querySelectorAll('#needGrid .choice.is-on')].map((el) => el.getAttribute('data-need'));
-      document.getElementById('needError').classList.add('hidden');
-    });
-    document.getElementById('needBack').addEventListener('click', () => showSetup(1));
-    document.getElementById('needNext').addEventListener('click', () => {
-      if (!pending.needs.length) {
-        document.getElementById('needError').classList.remove('hidden');
-        return;
+      signingIn = true;
+      try {
+        const book = readCustomers();
+        const existing = book[pendingPhone];
+        const created = !existing;
+        const record = existing || { phone: pendingPhone, display: pendingDisplay, createdAt: Date.now() };
+        if (!record.display) record.display = pendingDisplay;
+        if (created) {
+          book[pendingPhone] = record;
+          localStorage.setItem('kxCustomers', JSON.stringify(book));
+          const saved = readCustomers();
+          if (!saved[pendingPhone]) throw new Error('save');
+        }
+        issueCustomerSession(record, created);
+      } catch (err) {
+        signingIn = false;
+        otpError('Could not finish sign-in. Try again.');
       }
-      showSetup(3);
-    });
-    document.getElementById('outletGrid').addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-outlets]');
-      if (!btn) return;
-      document.querySelectorAll('#outletGrid .outlet-chip').forEach((el) => el.classList.toggle('is-on', el === btn));
-      pending.outlets = btn.getAttribute('data-outlets');
-    });
-    document.getElementById('locBack').addEventListener('click', () => showSetup(2));
-    document.getElementById('locNext').addEventListener('click', () => {
-      pending.city = document.getElementById('cityInput').value;
-      pending.area = document.getElementById('areaInput').value.trim();
-      pending.address = document.getElementById('addrInput').value.trim();
-      const locError = document.getElementById('locError');
-      if (!pending.city || !pending.area) {
-        locError.classList.remove('hidden');
-        return;
-      }
-      finishSetup();
     });
 
     (function initFaq() {
@@ -3796,9 +3562,9 @@
         account: 'Account'
       };
       const FAQS = [
-        { id: 'what', cat: 'general', q: 'What is KitchenX?', a: 'KitchenX is a buying site for restaurants, cafes, hotels, cloud kitchens, and caterers. The catalogue covers produce, dairy, staples, and other kitchen supplies, and the shop leads with the categories you pick at signup.' },
-        { id: 'create', cat: 'general', q: 'How do I create a business account?', a: 'Choose Create Account, then add your organisation name, email, and password. Confirm the 6-digit code for that email, and the kitchen profile opens.' },
-        { id: 'onboard', cat: 'general', q: 'What does onboarding ask?', a: 'Three things: the type of business you run, what you usually buy, and where the kitchen is. That city, area, and address are used for delivery slots and serviceable areas. You can set the outlet count as 1, 2–5, or 6+.' },
+        { id: 'what', cat: 'general', q: 'What is KitchenX?', a: 'KitchenX is a buying site for restaurants, cafes, hotels, cloud kitchens, and caterers. The catalogue covers produce, dairy, staples, and other kitchen supplies.' },
+        { id: 'create', cat: 'general', q: 'How do I create a business account?', a: 'Enter your mobile number and the 6-digit code. If that number is new, the account is created after the code is verified. If it already has an account, the same step signs you in.' },
+        { id: 'onboard', cat: 'general', q: 'What does sign-in ask?', a: 'Only a mobile number and the one-time code. Business type, what you buy, and the kitchen address are not required to open the account.' },
         { id: 'types', cat: 'general', q: 'Which businesses can sign up?', a: 'Restaurant, cafe, hotel, cloud kitchen, caterer, and other food businesses such as a QSR, bakery, or canteen.' },
         { id: 'bulk', cat: 'orders', popular: true, q: 'How do I place a bulk order?', a: 'Open the catalogue, set the quantity on each product, and check out from the cart. Hotels and caterers use the same cart. The pack size is shown on the product.' },
         { id: 'min', cat: 'orders', q: 'Is there a minimum order quantity?', a: 'You order by the pack shown on each product. The cart does not add a second minimum-quantity rule. Delivery is free when the order is ₹500 or more. Under that, the cart adds a ₹40 delivery fee.' },
