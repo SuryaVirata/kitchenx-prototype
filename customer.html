@@ -204,20 +204,26 @@
     .prod-card .deal-badge { top: 8px; left: 8px; min-height: 20px; padding: 0 6px; font-size: 10px; }
     .prod-media { position: relative; background: #fff; }
     .prod-body { padding: 8px 12px 10px; display: flex; flex-direction: column; flex: 1; }
-    .prod-name { margin: 0; font-size: 13px; font-weight: 800; line-height: 1.25; color: #141517; }
+    .prod-name { margin: 0; font-size: 13px; font-weight: 800; line-height: 1.25; color: #141517; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .prod-brand { margin: 1px 0 0; font-size: 11px; font-weight: 600; color: #98A2B3; }
     .prod-pack { margin: 1px 0 0; font-size: 11px; font-weight: 600; color: #667085; }
-    .prod-deal-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 4px; }
+    .prod-deal-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 6px; }
     .prod-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 4px; }
     .prod-price-col { min-width: 0; display: flex; align-items: center; }
-    .prod-now { margin: 0; font-size: 13px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .prod-now { margin: 0; font-size: 15px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
     .prod-mrp { margin: 0; font-size: 12px; font-weight: 700; color: #98A2B3; text-decoration: line-through; white-space: nowrap; }
-    .prod-off { margin: 0; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .prod-off { margin: 0; font-size: 12px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .stock-ok, .stock-bad { display: flex; align-items: center; gap: 6px; margin: 4px 0 0; min-height: 18px; font-size: 12px; font-weight: 800; }
+    .stock-ok { color: #12B76A; }
+    .stock-bad { color: #DC6803; }
+    .stock-ok::before, .stock-bad::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+    .stock-ok::before { background: #12B76A; }
+    .stock-bad::before { background: #DC6803; }
     .prod-cta {
       position: relative;
-      flex: 0 0 auto;
-      width: 76px;
-      height: 28px;
+      flex: 0 0 92px;
+      width: 92px;
+      height: 32px;
       margin-left: auto;
       user-select: none;
     }
@@ -227,7 +233,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;
+      border-radius: 999px;
       box-sizing: border-box;
       font-family: inherit;
       line-height: 1;
@@ -235,30 +241,33 @@
     }
     .prod-add {
       z-index: 1;
+      gap: 5px;
       border: 1.5px solid #FF4F18;
       background: #fff;
       color: #FF4F18;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
-      padding: 0;
+      padding: 0 8px;
       cursor: pointer;
       -webkit-appearance: none;
       appearance: none;
     }
+    .prod-add svg { flex: 0 0 auto; display: block; }
     .prod-add:hover { background: #FFF4F0; }
     .prod-qty {
-      background: #FF4F18;
-      color: #fff;
+      background: #fff;
+      color: #FF4F18;
+      border: 1.5px solid #FF4F18;
       overflow: hidden;
       justify-content: space-between;
       padding: 0 2px;
     }
     .prod-qty button {
-      width: 28px;
+      width: 26px;
       height: 100%;
       border: 0;
       background: transparent;
-      color: #fff;
+      color: #FF4F18;
       font-size: 16px;
       font-weight: 800;
       font-family: inherit;
@@ -268,7 +277,7 @@
       -webkit-appearance: none;
       appearance: none;
     }
-    .prod-qty span { flex: 1; text-align: center; font-size: 13px; font-weight: 800; color: #fff; }
+    .prod-qty span { flex: 1; text-align: center; font-size: 13px; font-weight: 800; color: #FF4F18; }
     .prod-cta[data-state="add"] .prod-qty { opacity: 0; transform: scale(0.94); pointer-events: none; }
     .prod-cta[data-state="qty"] .prod-add { opacity: 0; transform: scale(0.94); pointer-events: none; z-index: 0; }
     .prod-cta[data-state="qty"] .prod-qty { z-index: 1; }
@@ -383,8 +392,11 @@
       .flash-banner .flash-cta { justify-self: end; }
       .flash-credit { justify-self: stretch; }
     }
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 10px; }
+    }
     @media (min-width: 1280px) {
-      .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+      .cat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 12px; }
     }
     .prod-img { height: 112px; display: grid; place-items: center; background: #fff; padding: 6px 10px 2px; }
     .prod-img img { max-height: 96px; max-width: 100%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 6px 6px rgba(20, 21, 23, 0.12)); }
@@ -792,7 +804,7 @@
     .hdr-search { min-width: 0; flex: 1 1 auto; }
     @media (min-width: 1024px) {
       header.topbar { flex-wrap: nowrap; }
-      header.topbar .loc-wrap { flex: 1 1 160px; min-width: 0; max-width: 280px; }
+      header.topbar .loc-wrap { flex: 1 1 160px; min-width: 0; max-width: 240px; }
       .hdr-search {
         flex: 1 1 180px;
         width: auto;
@@ -821,7 +833,7 @@
     @media (max-width: 1023px) {
       body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); overflow-x: clip; }
       #toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
-      .stock-ok { display: none; }
+      .stock-ok { font-size: 11px; }
       #listsGrid .btn-ghost, #listsGrid .btn-add { display: none; }
       html, body { max-width: 100vw; overflow-x: clip; }
       main, .panel { max-width: 100vw; overflow-x: hidden; }
@@ -880,25 +892,27 @@
       .qico { width: 40px; height: 40px; }
       .qa-sub { display: none; }
       .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-      .prod-img { height: 96px; padding: 8px 10px 4px; }
-      .prod-img img { max-height: 80px; max-width: 92%; }
-      .prod-body {
+      #catGrid .prod-img, #pdpSimilarGrid .prod-img { height: 96px; padding: 8px 10px 4px; }
+      #catGrid .prod-img img, #pdpSimilarGrid .prod-img img { max-height: 80px; max-width: 92%; }
+      #catGrid .prod-body, #pdpSimilarGrid .prod-body {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto auto auto auto;
-        grid-template-areas: "name name" "brand brand" "pack pack" "deal deal" "price plus";
+        grid-template-rows: auto auto auto auto auto auto;
+        grid-template-areas: "name name" "brand brand" "pack pack" "stock stock" "deal deal" "price plus";
         gap: 1px 8px;
         padding: 8px 10px 10px;
         align-items: end;
         flex: 1;
       }
-      .prod-name { grid-area: name; font-size: 12px; line-height: 1.25; padding-right: 2px; }
-      .prod-brand { grid-area: brand; font-size: 11px; margin: 0; }
-      .prod-pack { grid-area: pack; font-size: 11px; margin: 0; }
-      .prod-deal-line { grid-area: deal; margin-top: 4px; align-self: end; }
-      .prod-foot { display: contents; }
-      .prod-price-col { grid-area: price; align-self: end; padding-top: 4px; }
-      .prod-cta { grid-area: plus; margin-top: 4px; align-self: end; width: 68px; height: 28px; }
+      #catGrid .prod-name, #pdpSimilarGrid .prod-name { grid-area: name; font-size: 12px; line-height: 1.25; padding-right: 2px; }
+      #catGrid .prod-brand, #pdpSimilarGrid .prod-brand { grid-area: brand; font-size: 11px; margin: 0; }
+      #catGrid .prod-pack, #pdpSimilarGrid .prod-pack { grid-area: pack; font-size: 11px; margin: 0; }
+      #catGrid .stock-ok, #catGrid .stock-bad, #pdpSimilarGrid .stock-ok, #pdpSimilarGrid .stock-bad { grid-area: stock; margin-top: 2px; }
+      #catGrid .prod-deal-line, #pdpSimilarGrid .prod-deal-line { grid-area: deal; margin-top: 2px; align-self: end; }
+      #catGrid .prod-foot, #pdpSimilarGrid .prod-foot { display: contents; }
+      #catGrid .prod-price-col, #pdpSimilarGrid .prod-price-col { grid-area: price; align-self: end; padding-top: 4px; }
+      #catGrid .prod-now, #pdpSimilarGrid .prod-now { font-size: 13px; }
+      #catGrid .prod-cta, #pdpSimilarGrid .prod-cta { grid-area: plus; margin-top: 4px; align-self: end; flex-basis: 78px; width: 78px; height: 30px; }
       .oos-note, .oos-sub { display: none; }
       .heart { width: 28px; height: 28px; top: 8px; right: 8px; box-shadow: 0 2px 8px rgba(20,21,23,.08); }
       .heart svg { width: 14px; height: 14px; }
@@ -1220,7 +1234,7 @@
       .prod-img { height: 108px; padding: 8px 12px 4px; }
       .prod-img img { max-height: 92px; max-width: 90%; }
       .prod-body { padding: 8px 12px 10px; }
-      .prod-cta { width: 72px; height: 28px; }
+      .prod-cta { flex-basis: 84px; width: 84px; height: 30px; }
     }
     @media (min-width: 1024px) {
       .stack-m { display: none !important; }
@@ -1350,7 +1364,16 @@
       padding: 0 2px;
       background: transparent;
     }
-    .hdr-logo img { display: block; height: 26px; width: auto; }
+    .hdr-logo img {
+      display: block;
+      height: 22px;
+      width: auto;
+      max-width: 148px;
+      object-fit: contain;
+      object-position: left center;
+    }
+    @media (min-width: 768px) { .hdr-logo img { height: 24px; } }
+    @media (min-width: 1200px) { .hdr-logo img { height: 26px; } }
     #sidebar.kx-drawer {
       position: fixed;
       top: 0;
@@ -1473,15 +1496,14 @@
     #sidebar .nav-btn.is-active:hover { background: #FFF6F2; }
     @media (max-width: 1023px) {
       .hdr-logo { max-width: 148px; min-width: 0; }
-      .hdr-logo img { height: 22px; max-width: 148px; width: auto; object-fit: contain; object-position: left center; }
-      header.topbar .loc-wrap { max-width: 200px; }
+      header.topbar .loc-wrap { max-width: 180px; }
     }
     @media (max-width: 1023px) {
       header.topbar .hdr-start { flex: 0 0 auto; }
     }
     @media (max-width: 767px) {
-      .hdr-logo { max-width: 118px; }
-      .hdr-logo img { height: 20px; max-width: 118px; }
+      .hdr-logo { max-width: 112px; }
+      .hdr-logo img { height: 20px; max-width: 112px; }
       header.topbar .loc-wrap { order: 6; flex: 0 1 auto; width: auto; max-width: 42%; }
       header.topbar .hdr-search { order: 6; flex: 1 1 120px; width: auto; max-width: none; min-width: 0; }
     }
@@ -1507,14 +1529,14 @@
         <section class="kx-group">
           <h3>Home</h3>
           <div class="kx-card">
-            <button data-panel="catalogue" class="nav-btn kx-row is-active" type="button">
-              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
-              <span class="nav-label">Browse Catalogue</span>
+            <button data-panel="dashboard" class="nav-btn kx-row is-active" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+              <span class="nav-label">Home</span>
               <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
             </button>
-            <button data-panel="dashboard" class="nav-btn kx-row" type="button">
-              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-              <span class="nav-label">Dashboard</span>
+            <button data-panel="catalogue" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+              <span class="nav-label">Browse Catalogue</span>
               <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
             </button>
           </div>
@@ -1592,20 +1614,20 @@
         <button id="menuBtn" class="hdr-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
-        <button type="button" data-panel="catalogue" class="hdr-logo" aria-label="KitchenX">
+        <button type="button" data-panel="dashboard" class="hdr-logo" aria-label="KitchenX">
           <img src="assets/home/kitchenx-logo.png" alt="KitchenX" />
         </button>
         </div>
         <div class="loc-wrap relative min-w-0 lg:flex-none">
           <button id="locBtn" class="flex min-w-0 max-w-full items-center gap-2 rounded-xl px-1 py-1 text-left" title="Main Kitchen, Connaught Place, Delhi">
-            <span class="grid h-9 w-9 shrink-0 place-items-center text-orange">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span class="grid h-8 w-8 shrink-0 place-items-center text-orange">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
             </span>
             <span class="min-w-0">
-              <span class="hdr-loc-deliver block text-[11px] font-semibold text-[#98A2B3]">Deliver to</span>
-              <span id="locLabel" class="hdr-loc-full block max-w-[280px] truncate text-sm font-extrabold leading-tight">Main Kitchen, Connaught Place, Delhi</span>
+              <span class="hdr-loc-deliver block text-[10px] font-medium text-[#98A2B3]">Deliver to</span>
+              <span id="locLabel" class="hdr-loc-full block max-w-[200px] truncate text-[13px] font-semibold leading-tight">Main Kitchen, Connaught Place, Delhi</span>
               <span class="hdr-loc-compact">
-                <span id="locName" class="block truncate text-sm font-extrabold leading-tight">Main Kitchen</span>
+                <span id="locName" class="block truncate text-[13px] font-semibold leading-tight">Main Kitchen</span>
                 <span id="locArea" class="block truncate text-[11px] font-semibold text-[#98A2B3]">Connaught Place, Delhi</span>
               </span>
             </span>
@@ -2240,7 +2262,7 @@
 
   <nav id="mNav" aria-label="Customer">
     <span class="mnav-blob" id="mNavBlob" aria-hidden="true"></span>
-    <button type="button" data-panel="dashboard">
+    <button type="button" data-panel="dashboard" class="is-on">
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>
       Home
     </button>
@@ -2248,7 +2270,7 @@
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
       Lists
     </button>
-    <button type="button" data-panel="catalogue" class="is-on">
+    <button type="button" data-panel="catalogue">
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg></span>
       Shop
     </button>
@@ -2288,13 +2310,15 @@
       return org.replace(/[^a-zA-Z]/g, '').slice(0, 2).toUpperCase() || 'KX';
     })();
     document.getElementById('orgName').textContent = org;
-    document.getElementById('dashOrg').textContent = org;
+    const dashOrgEl = document.getElementById('dashOrg');
+    if (dashOrgEl) dashOrgEl.textContent = org;
     document.getElementById('orgType').textContent = bizType;
     document.getElementById('avatar').textContent = initials.length === 1 ? (initials + initials) : initials.slice(0, 2);
     document.getElementById('accOrg').value = org;
     document.getElementById('accEmail').value = email;
     document.getElementById('accBiz').value = bizType;
-    document.getElementById('greet').textContent = 'Good morning,';
+    const greetEl = document.getElementById('greet');
+    if (greetEl) greetEl.textContent = 'Good morning,';
     const av = document.getElementById('avatar').textContent;
     ['sideAvatar','accAvatar'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = av; });
     const sideName = document.getElementById('sideName');
@@ -2860,7 +2884,7 @@
         creditBanner.hidden = true;
       });
     }
-    let bootPanel = (location.hash || '#catalogue').slice(1);
+    let bootPanel = (location.hash || '#dashboard').slice(1);
 
     function toast(msg) {
       const el = document.getElementById('toast');
@@ -2904,7 +2928,8 @@
       if (name) {
         sessionStorage.setItem('kxOrg', name);
         document.getElementById('orgName').textContent = name;
-        document.getElementById('dashOrg').textContent = name;
+        const dashName = document.getElementById('dashOrg');
+        if (dashName) dashName.textContent = name;
       }
       toast('Account changes saved');
     });
@@ -2958,7 +2983,8 @@
       toast('Showing flash deals and discounts');
     }
     document.getElementById('viewDeals').addEventListener('click', openDeals);
-    document.getElementById('viewDealsM').addEventListener('click', openDeals);
+    const viewDealsM = document.getElementById('viewDealsM');
+    if (viewDealsM) viewDealsM.addEventListener('click', openDeals);
     document.getElementById('locBtn').addEventListener('click', (e) => { e.stopPropagation(); document.querySelector('.loc-wrap').classList.toggle('open'); document.querySelector('.user-wrap').classList.remove('open'); });
     document.querySelector('.loc-menu').addEventListener('click', (e) => {
       const btn = e.target.closest('.loc-opt');
@@ -3047,8 +3073,9 @@
     let catSig = '';
     function catPageSize() {
       const w = window.innerWidth;
-      if (w >= 1280) return 8;
-      if (w >= 768 && w < 1024) return 6;
+      if (w >= 1280) return 10;
+      if (w >= 1024) return 8;
+      if (w >= 768) return 6;
       return 4;
     }
     function catPageWindow(page, pages) {
@@ -3239,11 +3266,12 @@
     }
     function productCta(p) {
       const n = qty[p.id] || 0;
+      const cart = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M3 3h2l2.4 12.2a1 1 0 0 0 1 .8h9.8a1 1 0 0 0 1-.8L21 8H7"/></svg>';
       if (!p.stock) {
-        return '<div class="prod-cta is-oos" data-state="add"><button type="button" class="prod-add" disabled>Add</button></div>';
+        return '<div class="prod-cta is-oos" data-state="add"><button type="button" class="prod-add" disabled>' + cart + 'Add</button></div>';
       }
       return '<div class="prod-cta" data-state="' + (n < 1 ? 'add' : 'qty') + '">' +
-        '<button type="button" class="prod-add" data-add="' + p.id + '">Add</button>' +
+        '<button type="button" class="prod-add" data-add="' + p.id + '">' + cart + 'Add</button>' +
         '<div class="prod-qty" role="group" aria-label="Quantity">' +
           '<button type="button" data-q="-" aria-label="Decrease">−</button>' +
           '<span>' + Math.max(1, n) + '</span>' +
@@ -3273,8 +3301,8 @@
       const pack = packOf(p);
       const off = offOf(p);
       const stockLine = p.stock
-        ? '<p class="stock-ok mt-1 text-xs font-extrabold text-[#12B76A]">In Stock</p>'
-        : '<p class="oos-note mt-1">Out of stock</p><p class="oos-sub">Highly demanded · restocking soon</p>';
+        ? '<p class="prod-stock stock-ok">In Stock</p>'
+        : '<p class="prod-stock stock-bad" title="Highly demanded · restocking soon">Out of stock</p>';
       return `
         <article class="card prod-card" data-pid="${p.id}">
           <div class="prod-media">
@@ -3287,9 +3315,9 @@
           <div class="prod-body">
             <p class="prod-name">${p.name}</p>
             <p class="prod-brand">${p.brand}</p>
-            ${pack ? '<p class="prod-pack">' + pack + '</p>' : ''}
+            <p class="prod-pack">${pack || '&nbsp;'}</p>
             ${stockLine}
-            ${(p.was || off) ? '<div class="prod-deal-line">' + (p.was ? '<span class="prod-mrp">' + money(p.was) + '</span>' : '') + (off ? '<span class="prod-off">' + off + '% OFF</span>' : '') + '</div>' : ''}
+            <div class="prod-deal-line">${(p.was ? '<span class="prod-mrp">' + money(p.was) + '</span>' : '') + (off ? '<span class="prod-off">' + off + '% OFF</span>' : '')}</div>
             <div class="prod-foot">
               <div class="prod-price-col">
                 <span class="prod-now">${money(p.price)}</span>
@@ -3811,28 +3839,22 @@
     document.querySelector('.m-cats').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-gocat]');
       if (!btn) return;
-      chip = btn.getAttribute('data-gocat');
-      renderCatChips();
+      dealOnly = false;
+      const search = document.getElementById('topSearch');
+      if (search) search.value = '';
+      selectChip(btn.getAttribute('data-gocat'));
       showPanel('catalogue');
     });
     (function paintHomeCats() {
       const box = document.querySelector('.m-cats');
       if (!box) return;
-      const icons = {
-        'Fruits & Vegetables': ['🥦', 'Fruits & Vegetables'],
-        Dairy: ['🥛', 'Dairy'],
-        'Meat & Seafood': ['🥩', 'Meat & Seafood'],
-        'Pantry & Staples': ['🛒', 'Grocery'],
-        Bakery: ['🍞', 'Bakery'],
-        'Chicken & Eggs': ['🥚', 'Eggs'],
-        Beverages: ['☕', 'Drinks']
-      };
-      const fallback = ['Fruits & Vegetables', 'Dairy', 'Meat & Seafood', 'Pantry & Staples'];
-      const cats = [...leadCats()];
-      fallback.forEach((c) => { if (cats.length < 4 && cats.indexOf(c) < 0) cats.push(c); });
-      box.innerHTML = cats.slice(0, 4).map((c) => {
-        const row = icons[c] || ['•', c];
-        return '<button type="button" class="m-cat" data-gocat="' + c.replace(/&/g, '&amp;') + '"><span>' + row[0] + '</span><p>' + row[1].replace(/&/g, '&amp;') + '</p></button>';
+      const icons = { 'Fruits & Vegetables': '🥦', Dairy: '🥛', 'Meat & Seafood': '🥩', 'Pantry & Staples': '🛒', Bakery: '🍞', 'Chicken & Eggs': '🥚', Beverages: '☕' };
+      const labels = { 'Pantry & Staples': 'Grocery' };
+      const picked = [...leadCats()].slice(0, 4);
+      const cats = picked.length ? picked : ['Fruits & Vegetables', 'Dairy', 'Meat & Seafood', 'Pantry & Staples'];
+      box.innerHTML = cats.map((c) => {
+        const label = labels[c] || c;
+        return '<button type="button" class="m-cat" data-gocat="' + c.replace(/&/g, '&amp;') + '"><span>' + (icons[c] || '📦') + '</span><p>' + label.replace(/&/g, '&amp;') + '</p></button>';
       }).join('');
     })();
     document.getElementById('mSortBtn').addEventListener('click', () => {
@@ -3991,7 +4013,8 @@
     function openListModal() { document.getElementById('listName').value = ''; openModal('listModal'); showPanel('lists'); }
     document.getElementById('createListBtn').addEventListener('click', openListModal);
     document.getElementById('createListBtnM').addEventListener('click', openListModal);
-    document.getElementById('qaCreateList').addEventListener('click', openListModal);
+    const qaCreateList = document.getElementById('qaCreateList');
+    if (qaCreateList) qaCreateList.addEventListener('click', openListModal);
     document.getElementById('listForm').addEventListener('submit', (e) => {
       e.preventDefault();
       LISTS.push({ name: document.getElementById('listName').value.trim(), n: 0, pics: ['tomato'], tab: 'all' });
@@ -4123,7 +4146,7 @@
     });
     document.getElementById('supForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Support request sent'); e.target.reset(); });
     window.addEventListener('resize', placeMNavBlob);
-    showPanel(PANELS.includes(bootPanel) ? bootPanel : 'catalogue');
+    showPanel(PANELS.includes(bootPanel) ? bootPanel : 'dashboard');
     requestAnimationFrame(placeMNavBlob);
   </script>
 </body>

@@ -7,7 +7,7 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     (function () {
       var h = location.hash;
-      if (h && h !== '#login' && h !== '#signup' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq' && h !== '#starter') {
+      if (h && h !== '#login' && h !== '#signup' && h !== '#business-type' && h !== '#categories' && h !== '#products' && h.indexOf('#blog') !== 0 && h !== '#how' && h !== '#faq' && h !== '#starter') {
         history.replaceState(null, '', location.pathname + location.search);
       }
     })();
@@ -412,7 +412,9 @@
       html { scroll-behavior: auto; }
     }
     html:has(body.auth-open),
-    body.auth-open { overflow: hidden; overscroll-behavior: none; }
+    html:has(body.biz-open),
+    body.auth-open,
+    body.biz-open { overflow: hidden; overscroll-behavior: none; }
     #authOverlay {
       display: none;
       overflow-x: hidden;
@@ -609,6 +611,216 @@
       color: #344054;
     }
     .outlet-chip.is-on { border-color: #FF4F18; background: #FFF4F0; color: #FF4F18; }
+    .kxreg-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 12px;
+      background: rgba(20, 21, 23, 0.42);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .kxreg-overlay.is-open { display: flex; }
+    .kxreg-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
+      border-radius: 24px;
+      background: #fff;
+      padding: 22px 18px 18px;
+      box-shadow: 0 18px 50px rgba(20, 21, 23, 0.18);
+    }
+    .kxreg-dialog:focus { outline: none; }
+    .kxreg-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      color: #667085;
+    }
+    .kxreg-x:hover { background: #F2F4F7; color: #141517; }
+    .kxreg-x:focus-visible { outline: 2px solid #FF4F18; outline-offset: 2px; }
+    .kxreg-art {
+      display: grid;
+      place-items: center;
+      width: 148px;
+      height: 148px;
+      margin: 2px auto 0;
+      background: transparent;
+    }
+    .kxreg-art img {
+      width: 148px;
+      height: 148px;
+      max-width: none;
+      object-fit: contain;
+    }
+    .kxreg-logo {
+      display: block;
+      height: 26px;
+      width: auto;
+      max-width: 148px;
+      margin: 8px auto 0;
+      object-fit: contain;
+    }
+    .kxreg-title {
+      margin: 10px 0 0;
+      text-align: center;
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #141517;
+    }
+    .kxreg-sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .kxreg-options { display: grid; gap: 12px; margin-top: 18px; }
+    .kxreg-card {
+      display: block;
+      width: 100%;
+      border: 1.5px solid #E4E7EC;
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px 14px 14px 12px;
+      text-align: left;
+      color: #141517;
+      cursor: pointer;
+    }
+    .kxreg-card:not(.is-on) {
+      border-color: #E4E7EC;
+      background: #fff;
+    }
+    .kxreg-card.is-on {
+      border-color: #FF4F18;
+      background: #FFF6F2;
+    }
+    .kxreg-card:focus { outline: none; }
+    .kxreg-card:focus-visible {
+      outline: 2px solid #98A2B3;
+      outline-offset: 3px;
+    }
+    .kxreg-card.is-on:focus-visible { outline-color: #FF4F18; }
+    .kxreg-top { display: flex; align-items: flex-start; gap: 10px; }
+    .kxreg-ico {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-top: 1px;
+      flex-shrink: 0;
+      color: #344054;
+      background: transparent;
+      box-shadow: none;
+    }
+    .kxreg-card.is-on .kxreg-ico { color: #FF4F18; }
+    .kxreg-copy { min-width: 0; flex: 1; }
+    .kxreg-name { margin: 0; font-size: 15px; font-weight: 800; line-height: 1.3; color: #141517; }
+    .kxreg-sub { margin: 2px 0 0; font-size: 13px; font-weight: 600; line-height: 1.35; color: #667085; }
+    .kxreg-radio {
+      width: 22px;
+      height: 22px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      border-radius: 999px;
+      border: 2px solid #D0D5DD;
+      background: #fff;
+    }
+    .kxreg-card:not(.is-on) .kxreg-radio {
+      border-color: #D0D5DD;
+      background: #fff;
+    }
+    .kxreg-card.is-on .kxreg-radio {
+      border-color: #FF4F18;
+      background:
+        radial-gradient(circle at center, #FF4F18 0 4px, #fff 5px 7px, #FF4F18 8px);
+    }
+    .kxreg-reveal {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.28s ease;
+    }
+    .kxreg-card.is-on .kxreg-reveal { grid-template-rows: 1fr; }
+    .kxreg-reveal-inner { min-height: 0; overflow: hidden; }
+    .kxreg-perks {
+      margin: 10px 0 2px 38px;
+      display: grid;
+      gap: 6px;
+      padding: 0;
+      list-style: none;
+    }
+    .kxreg-perks li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #12B76A;
+    }
+    .kxreg-perks svg { flex-shrink: 0; margin-top: 2px; }
+    .kxreg-error {
+      margin: 12px 0 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #F04438;
+    }
+    .kxreg-continue {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 999px;
+      background: #FF4F18;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(255, 79, 24, 0.22);
+    }
+    .kxreg-continue:disabled {
+      background: #FFD2C2;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    .kxreg-continue:focus-visible { outline: 2px solid #FF4F18; outline-offset: 3px; }
+    @media (min-width: 640px) {
+      .kxreg-overlay { padding: 24px; }
+      .kxreg-dialog {
+        border-radius: 28px;
+        padding: 26px 22px 22px;
+        max-height: calc(100dvh - 48px);
+      }
+    }
+    @media (max-width: 389px) {
+      .kxreg-title { font-size: 20px; }
+      .kxreg-dialog { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kxreg-reveal { transition: none; }
+    }
+
     @media (max-width: 640px) {
       #authOverlay { padding: 12px; align-items: flex-start; }
       .auth-card { padding: 20px; }
@@ -2250,6 +2462,63 @@
     </div>
   </div>
 
+  <div id="bizTypeOverlay" class="kxreg-overlay">
+    <div id="bizDialog" class="kxreg-dialog" role="dialog" aria-modal="true" aria-labelledby="bizTypeTitle" aria-describedby="bizTypeHint" tabindex="-1">
+      <button type="button" id="bizClose" class="kxreg-x" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="kxreg-art" aria-hidden="true">
+        <img src="assets/home/biz-stall.png?v=2" alt="" />
+      </div>
+      <img class="kxreg-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" />
+      <h2 id="bizTypeTitle" class="kxreg-title">Select your business type</h2>
+      <p id="bizTypeHint" class="kxreg-sr">This choice is a declaration. It does not verify GST or FSSAI documents and does not approve credit.</p>
+      <div id="bizOptions" class="kxreg-options" role="radiogroup" aria-label="Business type">
+        <div class="kxreg-card" role="radio" tabindex="0" data-choice="registered" aria-checked="false">
+          <div class="kxreg-top">
+            <span class="kxreg-ico" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+            </span>
+            <span class="kxreg-copy">
+              <p class="kxreg-name">I have GST or FSSAI</p>
+              <p class="kxreg-sub">For registered businesses</p>
+            </span>
+            <span class="kxreg-radio" aria-hidden="true"></span>
+          </div>
+          <div class="kxreg-reveal">
+            <div class="kxreg-reveal-inner">
+              <ul class="kxreg-perks">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Better prices</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Potential eligibility for credit, subject to verification and approval</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="kxreg-card" role="radio" tabindex="-1" data-choice="unregistered" aria-checked="false">
+          <div class="kxreg-top">
+            <span class="kxreg-ico" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M14 3v5h5"/><path d="M16.5 14.5l4 4M13 18l.8 2.2L16 21l-2.2-.8z"/></svg>
+            </span>
+            <span class="kxreg-copy">
+              <p class="kxreg-name">I don’t have GST or FSSAI</p>
+              <p class="kxreg-sub">For non-registered businesses</p>
+            </span>
+            <span class="kxreg-radio" aria-hidden="true"></span>
+          </div>
+          <div class="kxreg-reveal">
+            <div class="kxreg-reveal-inner">
+              <ul class="kxreg-perks">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Easy onboarding (no documents required)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p id="bizError" class="kxreg-error hidden" role="alert"></p>
+      <button type="button" id="bizContinue" class="kxreg-continue" disabled>Continue</button>
+    </div>
+  </div>
+
   <script>
     const heroSlides = [...document.querySelectorAll('.kx-hero-art .hero-slide')];
     const dotsWrap = document.getElementById('heroDots');
@@ -2338,6 +2607,10 @@
       return sessionStorage.getItem('kxRole') === 'customer' && !!sessionStorage.getItem('kxUser');
     }
     function goCatalogue() {
+      if (customerNeedsBizType()) {
+        openBizType();
+        return;
+      }
       location.href = 'customer.html#catalogue';
     }
     function goHomeSection(id) {
@@ -3013,6 +3286,10 @@
         openAuth('login');
         return;
       }
+      if (customerNeedsBizType()) {
+        openBizType();
+        return;
+      }
       const query = (q || '').trim();
       location.href = query ? ('customer.html#catalogue?q=' + encodeURIComponent(query)) : 'customer.html#catalogue';
     }
@@ -3350,6 +3627,40 @@
       closeAuth();
     });
     document.addEventListener('keydown', (e) => {
+      const biz = document.getElementById('bizTypeOverlay');
+      if (biz && biz.classList.contains('is-open')) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeBizType();
+          return;
+        }
+        if (e.key === 'Tab') {
+          const nodes = [...biz.querySelectorAll('button, [role="radio"]')].filter((el) => !el.disabled && el.tabIndex >= 0);
+          if (!nodes.length) return;
+          const first = nodes[0];
+          const last = nodes[nodes.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+        const card = e.target.closest && e.target.closest('#bizOptions [role="radio"]');
+        if (card && (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowLeft')) {
+          e.preventDefault();
+          const cards = [...biz.querySelectorAll('#bizOptions [role="radio"]')];
+          const dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
+          const next = cards[(cards.indexOf(card) + dir + cards.length) % cards.length];
+          chooseBiz(next.getAttribute('data-choice'));
+          next.focus();
+        } else if (card && (e.key === ' ' || e.key === 'Enter')) {
+          e.preventDefault();
+          chooseBiz(card.getAttribute('data-choice'));
+        }
+        return;
+      }
       if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeAuth();
     });
     document.getElementById('emailSignIn').addEventListener('click', showEmail);
@@ -3506,14 +3817,143 @@
       otpBoxes[0].focus();
     });
 
+    function registrationChoice(record) {
+      const choice = record && record.registration && record.registration.choice;
+      return choice === 'registered' || choice === 'unregistered' ? choice : '';
+    }
+
+    function customerNeedsBizType() {
+      if (!isCustomerLoggedIn()) return false;
+      const phone = sessionStorage.getItem('kxPhone') || '';
+      if (!phone) return true;
+      try {
+        return !registrationChoice(readCustomers()[phone]);
+      } catch (err) {
+        return true;
+      }
+    }
+
+    function bizError(msg) {
+      const el = document.getElementById('bizError');
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
+    }
+
+    function resetBizForm() {
+      document.querySelectorAll('#bizOptions [role="radio"]').forEach((card, i) => {
+        card.classList.remove('is-on');
+        card.setAttribute('aria-checked', 'false');
+        card.tabIndex = i === 0 ? 0 : -1;
+      });
+      const btn = document.getElementById('bizContinue');
+      btn.disabled = true;
+      btn.textContent = 'Continue';
+      bizError('');
+    }
+
+    function chooseBiz(choice) {
+      if (choice !== 'registered' && choice !== 'unregistered') return;
+      document.querySelectorAll('#bizOptions [role="radio"]').forEach((card) => {
+        const on = card.getAttribute('data-choice') === choice;
+        card.classList.toggle('is-on', on);
+        card.setAttribute('aria-checked', on ? 'true' : 'false');
+        card.tabIndex = on ? 0 : -1;
+      });
+      document.getElementById('bizContinue').disabled = false;
+      bizError('');
+    }
+
+    function openBizType() {
+      closeAuth();
+      resetBizForm();
+      document.getElementById('bizTypeOverlay').classList.add('is-open');
+      document.body.classList.add('biz-open');
+      setMobileMenuOpen(false);
+      setHdrSearchOpen(false);
+      history.replaceState(null, '', '#business-type');
+      const dialog = document.getElementById('bizDialog');
+      if (dialog) dialog.focus();
+    }
+
+    function closeBizType() {
+      document.getElementById('bizTypeOverlay').classList.remove('is-open');
+      document.body.classList.remove('biz-open');
+      if (location.hash === '#business-type') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    }
+
+    let bizSaving = false;
+    function persistRegistration(choice) {
+      const phone = sessionStorage.getItem('kxPhone') || '';
+      if (!phone) throw new Error('phone');
+      const book = readCustomers();
+      const record = book[phone] || {
+        phone: phone,
+        display: sessionStorage.getItem('kxUser') || phone,
+        createdAt: Date.now()
+      };
+      record.registration = {
+        choice: choice,
+        declaredAt: Date.now(),
+        documentsVerified: false
+      };
+      delete record.creditApproved;
+      book[phone] = record;
+      localStorage.setItem('kxCustomers', JSON.stringify(book));
+      const saved = readCustomers()[phone];
+      const reg = saved && saved.registration;
+      if (!reg || reg.choice !== choice || reg.documentsVerified !== false || saved.creditApproved) throw new Error('save');
+      sessionStorage.setItem('kxRegistration', choice);
+    }
+
+    function submitBizType() {
+      if (bizSaving) return;
+      const chosen = document.querySelector('#bizOptions [role="radio"].is-on');
+      const choice = chosen && chosen.getAttribute('data-choice');
+      if (choice !== 'registered' && choice !== 'unregistered') {
+        bizError('Select a business type to continue.');
+        return;
+      }
+      bizSaving = true;
+      const btn = document.getElementById('bizContinue');
+      btn.disabled = true;
+      try {
+        persistRegistration(choice);
+        window.location.href = 'customer.html';
+      } catch (err) {
+        bizSaving = false;
+        btn.disabled = false;
+        bizError('Could not save your selection. Try again.');
+      }
+    }
+
+    document.getElementById('bizOptions').addEventListener('click', (e) => {
+      const card = e.target.closest('[role="radio"]');
+      if (!card) return;
+      chooseBiz(card.getAttribute('data-choice'));
+    });
+    document.getElementById('bizClose').addEventListener('click', closeBizType);
+    document.getElementById('bizTypeOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'bizTypeOverlay') closeBizType();
+    });
+    document.getElementById('bizContinue').addEventListener('click', submitBizType);
+
     function issueCustomerSession(record, created) {
       sessionStorage.setItem('kxRole', 'customer');
       sessionStorage.setItem('kxUser', record.display);
       sessionStorage.setItem('kxOrg', record.org || record.display);
       sessionStorage.setItem('kxPhone', record.phone);
       sessionStorage.setItem('kxNewCustomer', created ? '1' : '0');
-      ['kxPersona', 'kxBizType', 'kxNeeds', 'kxCity', 'kxArea', 'kxAddress', 'kxOutlets', 'kxLocation'].forEach((k) => sessionStorage.removeItem(k));
-      window.location.href = 'customer.html';
+      ['kxPersona', 'kxBizType', 'kxNeeds', 'kxCity', 'kxArea', 'kxAddress', 'kxOutlets', 'kxLocation', 'kxRegistration'].forEach((k) => sessionStorage.removeItem(k));
+      const choice = registrationChoice(record);
+      if (choice) {
+        sessionStorage.setItem('kxRegistration', choice);
+        window.location.href = 'customer.html';
+        return;
+      }
+      signingIn = false;
+      openBizType();
     }
 
     document.getElementById('confirmOtp').addEventListener('click', () => {
@@ -3564,7 +4004,7 @@
       const FAQS = [
         { id: 'what', cat: 'general', q: 'What is KitchenX?', a: 'KitchenX is a buying site for restaurants, cafes, hotels, cloud kitchens, and caterers. The catalogue covers produce, dairy, staples, and other kitchen supplies.' },
         { id: 'create', cat: 'general', q: 'How do I create a business account?', a: 'Enter your mobile number and the 6-digit code. If that number is new, the account is created after the code is verified. If it already has an account, the same step signs you in.' },
-        { id: 'onboard', cat: 'general', q: 'What does sign-in ask?', a: 'Only a mobile number and the one-time code. Business type, what you buy, and the kitchen address are not required to open the account.' },
+        { id: 'onboard', cat: 'general', q: 'What does sign-in ask?', a: 'A mobile number and the one-time code. After that, you declare whether the business has GST or FSSAI. That declaration does not verify documents or approve credit. Kitchen type and the kitchen address are not required to open the account.' },
         { id: 'types', cat: 'general', q: 'Which businesses can sign up?', a: 'Restaurant, cafe, hotel, cloud kitchen, caterer, and other food businesses such as a QSR, bakery, or canteen.' },
         { id: 'bulk', cat: 'orders', popular: true, q: 'How do I place a bulk order?', a: 'Open the catalogue, set the quantity on each product, and check out from the cart. Hotels and caterers use the same cart. The pack size is shown on the product.' },
         { id: 'min', cat: 'orders', q: 'Is there a minimum order quantity?', a: 'You order by the pack shown on each product. The cart does not add a second minimum-quantity rule. Delivery is free when the order is ₹500 or more. Under that, the cart adds a ₹40 delivery fee.' },
@@ -3706,7 +4146,9 @@
       } else sec.classList.add('is-shown');
     })();
 
-    if (location.hash === '#login') openAuth('login');
+    if (customerNeedsBizType()) openBizType();
+    else if (location.hash === '#business-type') history.replaceState(null, '', location.pathname + location.search);
+    else if (location.hash === '#login') openAuth('login');
     else if (location.hash === '#signup') openAuth('signup');
     else if (location.hash === '#faq') {
       const faq = document.getElementById('faq');
