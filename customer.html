@@ -8,6 +8,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/kitchenx-type.css" />
+  <script>
+    (function () {
+      if (sessionStorage.getItem('kxRole') !== 'customer') return;
+      var phone = sessionStorage.getItem('kxPhone') || '';
+      var choice = '';
+      try {
+        var book = JSON.parse(localStorage.getItem('kxCustomers') || '{}');
+        var rec = phone && book[phone];
+        choice = rec && rec.registration && rec.registration.choice;
+      } catch (err) {
+        choice = '';
+      }
+      if (choice !== 'registered' && choice !== 'unregistered') {
+        location.replace('kitchenx-v2.html#business-type');
+      }
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -97,9 +114,9 @@
     .field { width: 100%; height: 44px; border: 1px solid #E4E7EC; border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 500; background: #fff; color: #141517; }
     textarea.field { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; }
     select.field { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
-    .cat-sort { position: relative; width: 11rem; flex: 0 0 auto; }
+    .cat-sort { position: relative; width: max-content; flex: 0 0 auto; align-self: center; }
     .cat-sort-native { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .cat-sort-btn { display: flex; align-items: center; width: 100%; height: 40px; padding: 0 36px 0 14px; border: 1px solid #E4E7EC; border-radius: 12px; background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>") no-repeat right 12px center; font-size: 14px; font-weight: 500; color: #141517; text-align: left; }
+    .cat-sort-btn { display: flex; align-items: center; width: max-content; height: 40px; padding: 0 36px 0 14px; border: 1px solid #E4E7EC; border-radius: 12px; background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2398A2B3' stroke-width='2'><path d='M4 6l4 4 4-4'/></svg>") no-repeat right 12px center; font-size: 14px; font-weight: 500; color: #141517; text-align: left; white-space: nowrap; }
     .cat-sort-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; min-width: 100%; width: max-content; padding: 6px; border-radius: 12px; background: #fff; box-shadow: 0 16px 40px rgba(20,21,23,.12); }
     .cat-sort-menu[hidden] { display: none; }
     .cat-sort-opt { display: block; width: 100%; padding: 8px 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; font-size: 14px; font-weight: 600; color: #344054; white-space: nowrap; }
@@ -145,7 +162,7 @@
     .heart.is-on svg { fill: currentColor; }
     .cat-grid {
       display: grid;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
       grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       align-items: stretch;
@@ -156,23 +173,51 @@
       display: flex;
       flex-direction: column;
     }
-    .prod-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; }
+    .cat-pager {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .cat-pager[hidden] { display: none !important; }
+    .cat-pager-note { margin: 0; font-size: 13px; font-weight: 700; color: #667085; }
+    .cat-pager-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .cat-pager button {
+      min-width: 36px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid #E4E7EC;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      color: #344054;
+    }
+    .cat-pager button.is-on { background: #FF4F18; border-color: #FF4F18; color: #fff; }
+    .cat-pager button:disabled { color: #D0D5DD; background: #F9FAFB; }
+    .cat-pager .cat-ellipsis { min-width: 16px; text-align: center; font-size: 13px; font-weight: 800; color: #98A2B3; }
+    .prod-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; border-radius: 16px; }
+    .prod-card .heart { width: 32px; height: 32px; top: 8px; right: 8px; }
+    .prod-card .heart svg { width: 16px; height: 16px; }
+    .prod-card .deal-badge { top: 8px; left: 8px; min-height: 20px; padding: 0 6px; font-size: 10px; }
     .prod-media { position: relative; background: #fff; }
-    .prod-body { padding: 14px 18px 16px; display: flex; flex-direction: column; flex: 1; }
-    .prod-name { margin: 0; font-size: 14px; font-weight: 800; line-height: 1.3; color: #141517; }
-    .prod-brand { margin: 2px 0 0; font-size: 12px; font-weight: 600; color: #98A2B3; }
-    .prod-pack { margin: 2px 0 0; font-size: 12px; font-weight: 600; color: #667085; }
-    .prod-deal-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 8px; }
-    .prod-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 6px; }
+    .prod-body { padding: 8px 12px 10px; display: flex; flex-direction: column; flex: 1; }
+    .prod-name { margin: 0; font-size: 13px; font-weight: 800; line-height: 1.25; color: #141517; }
+    .prod-brand { margin: 1px 0 0; font-size: 11px; font-weight: 600; color: #98A2B3; }
+    .prod-pack { margin: 1px 0 0; font-size: 11px; font-weight: 600; color: #667085; }
+    .prod-deal-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 4px; }
+    .prod-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 4px; }
     .prod-price-col { min-width: 0; display: flex; align-items: center; }
-    .prod-now { margin: 0; font-size: 14px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
+    .prod-now { margin: 0; font-size: 13px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
     .prod-mrp { margin: 0; font-size: 12px; font-weight: 700; color: #98A2B3; text-decoration: line-through; white-space: nowrap; }
     .prod-off { margin: 0; font-size: 11px; font-weight: 800; color: #FF4F18; white-space: nowrap; }
     .prod-cta {
       position: relative;
       flex: 0 0 auto;
-      width: 92px;
-      height: 32px;
+      width: 76px;
+      height: 28px;
       margin-left: auto;
       user-select: none;
     }
@@ -341,8 +386,8 @@
     @media (min-width: 1280px) {
       .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
     }
-    .prod-img { height: 148px; display: grid; place-items: center; background: #fff; padding: 8px 16px 4px; }
-    .prod-img img { max-height: 132px; max-width: 100%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(20, 21, 23, 0.12)); }
+    .prod-img { height: 112px; display: grid; place-items: center; background: #fff; padding: 6px 10px 2px; }
+    .prod-img img { max-height: 96px; max-width: 100%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 6px 6px rgba(20, 21, 23, 0.12)); }
     .thumb { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; background: #fff; object-fit: contain; border: 1px solid #EEF0F3; padding: 3px; }
     .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; }
     .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -747,14 +792,17 @@
     .hdr-search { min-width: 0; flex: 1 1 auto; }
     @media (min-width: 1024px) {
       header.topbar { flex-wrap: nowrap; }
+      header.topbar .loc-wrap { flex: 1 1 160px; min-width: 0; max-width: 280px; }
       .hdr-search {
-        flex: 0 0 320px;
-        width: 320px;
-        max-width: 320px;
-        margin-left: auto;
+        flex: 1 1 180px;
+        width: auto;
+        min-width: 140px;
+        max-width: 360px;
+        margin-left: 8px;
       }
+      header.topbar .hdr-end { margin-left: auto; }
     }
-    #sideClose, .m-profile, .m-logout, .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create { display: none !important; }
+    .m-home, .plus-add, .acc-m, .m-cat-bar, .list-tabs, .m-create { display: none !important; }
     #catCount { display: none !important; }
     .m-order-shortcuts { display: none !important; }
     @media (max-width: 767px) {
@@ -831,26 +879,26 @@
       .qa { min-height: 0; padding: 14px; border-radius: 18px; }
       .qico { width: 40px; height: 40px; }
       .qa-sub { display: none; }
-      .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-      .prod-img { height: 128px; padding: 14px 12px 6px; }
-      .prod-img img { max-height: 112px; max-width: 92%; }
+      .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .prod-img { height: 96px; padding: 8px 10px 4px; }
+      .prod-img img { max-height: 80px; max-width: 92%; }
       .prod-body {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-rows: auto auto auto auto auto;
         grid-template-areas: "name name" "brand brand" "pack pack" "deal deal" "price plus";
-        gap: 2px 8px;
-        padding: 14px 16px 16px;
+        gap: 1px 8px;
+        padding: 8px 10px 10px;
         align-items: end;
         flex: 1;
       }
-      .prod-name { grid-area: name; font-size: 13px; line-height: 1.25; padding-right: 2px; }
+      .prod-name { grid-area: name; font-size: 12px; line-height: 1.25; padding-right: 2px; }
       .prod-brand { grid-area: brand; font-size: 11px; margin: 0; }
       .prod-pack { grid-area: pack; font-size: 11px; margin: 0; }
       .prod-deal-line { grid-area: deal; margin-top: 4px; align-self: end; }
       .prod-foot { display: contents; }
       .prod-price-col { grid-area: price; align-self: end; padding-top: 4px; }
-      .prod-cta { grid-area: plus; margin-top: 4px; align-self: end; width: 84px; height: 30px; }
+      .prod-cta { grid-area: plus; margin-top: 4px; align-self: end; width: 68px; height: 28px; }
       .oos-note, .oos-sub { display: none; }
       .heart { width: 28px; height: 28px; top: 8px; right: 8px; box-shadow: 0 2px 8px rgba(20,21,23,.08); }
       .heart svg { width: 14px; height: 14px; }
@@ -948,7 +996,6 @@
       .plus-add { display: none !important; }
       .acc-m { display: block !important; }
       .m-cat-bar { display: flex !important; align-items: center; gap: 8px; margin-top: 12px; }
-      .desk-cat-tools { display: none !important; }
       #orderRange, .m-order-shortcuts { display: none !important; }
       #orderTabs {
         display: flex;
@@ -1168,12 +1215,12 @@
       }
       .m-hero { display: none; }
       .m-cats { margin-top: 0; }
-      .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px; }
+      .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px; }
       #freqGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .prod-img { height: 148px; padding: 12px 14px 8px; }
-      .prod-img img { max-height: 128px; max-width: 90%; }
-      .prod-body { padding: 14px 16px 16px; }
-      .prod-cta { width: 92px; height: 32px; }
+      .prod-img { height: 108px; padding: 8px 12px 4px; }
+      .prod-img img { max-height: 92px; max-width: 90%; }
+      .prod-body { padding: 8px 12px 10px; }
+      .prod-cta { width: 72px; height: 28px; }
     }
     @media (min-width: 1024px) {
       .stack-m { display: none !important; }
@@ -1283,98 +1330,272 @@
       font-size: 34px;
       font-weight: 800;
     }
+    body.drawer-open { overflow: hidden; }
+    .hdr-menu {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 10px;
+      background: transparent;
+      color: #141517;
+    }
+    .hdr-menu:hover { background: #F2F4F7; }
+    .hdr-logo {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      height: 40px;
+      padding: 0 2px;
+      background: transparent;
+    }
+    .hdr-logo img { display: block; height: 26px; width: auto; }
+    #sidebar.kx-drawer {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      width: min(400px, 92vw);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0 22px 22px 0;
+      background: #F4F5F7;
+      box-shadow: none;
+      transform: translateX(-105%);
+      transition: transform 0.28s ease;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    #sidebar.kx-drawer.is-open {
+      transform: translateX(0);
+      box-shadow: 16px 0 48px rgba(20, 21, 23, 0.18);
+      pointer-events: auto;
+    }
+    #scrim.kx-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(20, 21, 23, 0.45);
+    }
+    .kx-who {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 16px 8px;
+    }
+    .kx-ava {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 999px;
+      background: #FFE8E0;
+      color: #FF4F18;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .kx-who #sideName { font-size: 16px; font-weight: 800; line-height: 1.2; color: #141517; }
+    .kx-who #sideType { margin-top: 2px; font-size: 13px; font-weight: 600; color: #98A2B3; }
+    #sideClose {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      margin-left: auto;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: transparent;
+      color: #667085;
+    }
+    #sideClose:hover { background: #fff; }
+    .kx-scroll {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 8px 14px 28px;
+    }
+    .kx-group { margin-top: 16px; }
+    .kx-group h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 2px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #141517;
+    }
+    .kx-group h3::before {
+      content: "";
+      width: 3px;
+      height: 14px;
+      border-radius: 2px;
+      background: #FF4F18;
+    }
+    .kx-card {
+      overflow: hidden;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(20, 21, 23, 0.04);
+    }
+    #sidebar .nav-btn,
+    #sidebar .kx-out {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin: 0;
+      padding: 14px 14px;
+      border: 0;
+      border-bottom: 1px solid #F2F4F7;
+      border-radius: 0;
+      background: #fff;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+    }
+    #sidebar .kx-card .kx-row:last-child { border-bottom: 0; }
+    #sidebar .nav-btn.is-active { color: #FF4F18; background: #FFF6F2; font-weight: 800; }
+    #sidebar .kx-ico { flex: 0 0 auto; color: #667085; }
+    #sidebar .nav-btn.is-active .kx-ico { color: #FF4F18; }
+    #sidebar .kx-chev { margin-left: auto; flex: 0 0 auto; color: #D0D5DD; }
+    #sidebar .nav-label { min-width: 0; }
+    #sidebar .kx-out { color: #F04438; }
+    #sidebar .kx-out .kx-ico { color: #F04438; }
+    #sidebar .kx-row:hover { background: #FAFBFC; }
+    #sidebar .nav-btn.is-active:hover { background: #FFF6F2; }
+    @media (max-width: 1023px) {
+      .hdr-logo { max-width: 148px; min-width: 0; }
+      .hdr-logo img { height: 22px; max-width: 148px; width: auto; object-fit: contain; object-position: left center; }
+      header.topbar .loc-wrap { max-width: 200px; }
+    }
+    @media (max-width: 1023px) {
+      header.topbar .hdr-start { flex: 0 0 auto; }
+    }
+    @media (max-width: 767px) {
+      .hdr-logo { max-width: 118px; }
+      .hdr-logo img { height: 20px; max-width: 118px; }
+      header.topbar .loc-wrap { order: 6; flex: 0 1 auto; width: auto; max-width: 42%; }
+      header.topbar .hdr-search { order: 6; flex: 1 1 120px; width: auto; max-width: none; min-width: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #sidebar.kx-drawer { transition: none; }
+    }
   </style>
 </head>
 <body class="min-h-screen">
   <div class="flex min-h-screen">
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
-      <div class="brand-row flex items-center gap-2 px-5 py-5">
-        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
-        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
-        <span class="brand-sub text-sm font-semibold text-[#98A2B3]">Customer</span>
-        <button id="sideClose" class="ml-auto grid h-10 w-10 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
+    <aside id="sidebar" class="kx-drawer" inert aria-hidden="true" aria-labelledby="sideName">
+      <div class="kx-who">
+        <span id="sideAvatar" class="kx-ava">CU</span>
+        <div class="min-w-0">
+          <p id="sideName" class="truncate">The Urban Table</p>
+          <p id="sideType" class="truncate">Restaurant</p>
+        </div>
+        <button id="sideClose" type="button" aria-label="Close menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
-      <div class="m-profile mx-4 mb-3 items-center gap-3 rounded-2xl bg-[#F7F8FA] px-3 py-3">
-        <span id="sideAvatar" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">CU</span>
-        <div class="min-w-0">
-          <p id="sideName" class="truncate text-sm font-extrabold">Customer</p>
-          <p id="sideEmail" class="truncate text-xs font-semibold text-[#98A2B3]">orders@kitchenx.com</p>
-        </div>
-      </div>
-      <nav id="sideNav" class="flex-1 overflow-y-auto pb-4">
-        <button data-panel="dashboard" class="nav-btn is-active mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          <span class="nav-label">Dashboard</span>
-        </button>
-        <button data-panel="catalogue" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
-          <span class="nav-label">Browse Catalogue</span>
-        </button>
-        <button data-panel="orders" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg>
-          <span class="nav-label">My Orders</span>
-        </button>
-        <button data-panel="repeat" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-          <span class="nav-label">Repeat Orders</span>
-        </button>
-        <button data-panel="lists" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span class="nav-label">My Lists</span>
-        </button>
-        <button data-panel="invoices" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
-          <span class="nav-label">Invoices &amp; Payments</span>
-        </button>
-        <button data-panel="credit" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          <span class="nav-label">Credit Line</span>
-        </button>
-        <button data-panel="deliveries" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
-          <span class="nav-label">Deliveries</span>
-        </button>
-        <button data-panel="returns" class="nav-btn mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-          <span class="nav-label">Returns &amp; Support</span>
-        </button>
-        <button data-panel="account" class="nav-btn flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
-          <span class="nav-label">My Account</span>
-        </button>
-      </nav>
-      <div class="help-box mx-4 mb-5 rounded-2xl bg-[#FFF8F6] px-4 py-4">
-        <div class="flex items-start gap-3">
-          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#FFE8E0] text-orange">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3h5zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3H3z"/></svg>
-          </span>
-          <div>
-            <p class="text-sm font-extrabold">Need help?</p>
-            <p class="text-xs font-semibold text-[#98A2B3]">Talk to our support team</p>
+      <nav id="sideNav" class="kx-scroll" aria-label="Customer menu">
+        <section class="kx-group">
+          <h3>Home</h3>
+          <div class="kx-card">
+            <button data-panel="catalogue" class="nav-btn kx-row is-active" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+              <span class="nav-label">Browse Catalogue</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="dashboard" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              <span class="nav-label">Dashboard</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
           </div>
-        </div>
-        <button data-panel="support" class="help-btn mt-3 w-full">Contact Support</button>
-      </div>
-      <button id="sideLogout" class="m-logout mx-4 mb-6 items-center justify-center gap-2 rounded-xl py-3 text-sm font-extrabold text-[#F04438]" type="button">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
-        Logout
-      </button>
-      <button id="collapseBtn" class="collapse-fab" aria-label="Collapse sidebar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
+        </section>
+        <section class="kx-group">
+          <h3>Orders</h3>
+          <div class="kx-card">
+            <button data-panel="orders" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg>
+              <span class="nav-label">My Orders</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="repeat" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+              <span class="nav-label">Repeat Orders</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="lists" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <span class="nav-label">My Lists</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="deliveries" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="2"/><path d="M16 10h4l3 3v4h-7"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+              <span class="nav-label">Deliveries</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+        <section class="kx-group">
+          <h3>Account</h3>
+          <div class="kx-card">
+            <button data-panel="invoices" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+              <span class="nav-label">Invoices &amp; Payments</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="credit" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+              <span class="nav-label">Credit Line</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="returns" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+              <span class="nav-label">Returns &amp; Support</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button data-panel="account" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+              <span class="nav-label">My Account</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+        <section class="kx-group">
+          <h3>Help</h3>
+          <div class="kx-card">
+            <button data-panel="support" class="nav-btn kx-row" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3h5zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3H3z"/></svg>
+              <span class="nav-label">Contact Support</span>
+              <svg class="kx-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button id="sideLogout" class="kx-row kx-out" type="button">
+              <svg class="kx-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </section>
+      </nav>
     </aside>
 
     <div class="flex min-h-screen min-w-0 flex-1 flex-col">
       <header class="topbar flex flex-wrap items-center gap-3 border-b border-[#EEF0F3] bg-white px-4 py-3 lg:sticky lg:top-0 lg:z-[25] lg:px-6">
         <div class="hdr-start">
-        <a href="kitchenx-v2.html" class="hdr-mark" aria-label="KitchenX">
-          <img src="assets/home/kitchenx-mark.png" alt="" />
-        </a>
-        <button id="menuBtn" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E4E7EC] lg:hidden" aria-label="Open menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <button id="menuBtn" class="hdr-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
+        <button type="button" data-panel="catalogue" class="hdr-logo" aria-label="KitchenX">
+          <img src="assets/home/kitchenx-logo.png" alt="KitchenX" />
+        </button>
+        </div>
         <div class="loc-wrap relative min-w-0 lg:flex-none">
           <button id="locBtn" class="flex min-w-0 max-w-full items-center gap-2 rounded-xl px-1 py-1 text-left" title="Main Kitchen, Connaught Place, Delhi">
             <span class="grid h-9 w-9 shrink-0 place-items-center text-orange">
@@ -1394,7 +1615,6 @@
             <button data-loc="Main Kitchen, Connaught Place, Delhi" class="loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog">Main Kitchen, Connaught Place, Delhi</button>
             <button data-loc="Prep Hub, Nehru Place, Delhi" class="loc-opt w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-fog">Prep Hub, Nehru Place, Delhi</button>
           </div>
-        </div>
         </div>
         <label class="hdr-search relative min-w-0">
           <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
@@ -1421,15 +1641,14 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#344054" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
           <span class="bell-dot" aria-hidden="true"></span>
         </button>
-        </button>
         <div class="user-wrap relative shrink-0">
           <button id="userBtn" class="flex items-center gap-2 rounded-xl px-1 py-1" aria-haspopup="menu" aria-expanded="false">
             <span id="avatar" class="grid h-10 w-10 place-items-center rounded-full bg-[#FFE8E0] text-xs font-extrabold text-orange">RC</span>
-            <div class="hidden text-left xl:block">
+            <div class="hidden text-left lg:block">
               <p id="orgName" class="text-sm font-extrabold leading-tight">The Urban Table</p>
               <p id="orgType" class="text-[11px] font-semibold text-[#98A2B3]">Restaurant</p>
             </div>
-            <svg class="hidden xl:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            <svg class="hidden lg:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="userMenu" class="user-menu" role="menu">
             <button data-panel="account" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#344054] hover:bg-fog">My Account</button>
@@ -1537,13 +1756,27 @@
               <div id="pdpSimilarGrid" class="cat-grid pdp-similar-grid"></div>
             </section>
           </div>
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div class="min-w-0 hidden lg:block">
+          <div class="cat-head hidden items-center justify-between gap-4 lg:flex">
+            <div class="min-w-0">
               <h1 class="text-3xl font-extrabold tracking-tight">Product Catalogue</h1>
               <p class="mt-1 text-sm font-medium text-[#667085]">Explore high-quality products from trusted brands</p>
             </div>
-            <div class="flex shrink-0 items-center gap-2 hidden lg:flex">
-              <button id="filterToggleDesk" class="btn-ghost hidden">Filters</button>
+            <div class="cat-sort">
+              <select id="catSort" class="cat-sort-native" tabindex="-1" aria-hidden="true">
+                <option>Sort by: Relevance</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Name A–Z</option>
+              </select>
+              <button type="button" id="catSortBtn" class="cat-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="catSortMenu">
+                <span id="catSortLabel">Sort by: Relevance</span>
+              </button>
+              <div id="catSortMenu" class="cat-sort-menu" role="listbox" hidden>
+                <button type="button" class="cat-sort-opt is-on" role="option" data-sort="Sort by: Relevance">Sort by: Relevance</button>
+                <button type="button" class="cat-sort-opt" role="option" data-sort="Price: Low to High">Price: Low to High</button>
+                <button type="button" class="cat-sort-opt" role="option" data-sort="Price: High to Low">Price: High to Low</button>
+                <button type="button" class="cat-sort-opt" role="option" data-sort="Name A–Z">Name A–Z</button>
+              </div>
             </div>
           </div>
           <div class="cat-chip-row mt-4">
@@ -1627,31 +1860,13 @@
                   <span class="flash-cta-short">View →</span>
                 </button>
               </div>
-              <div class="desk-cat-tools mb-3 flex items-center justify-end gap-3">
-                <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
-                <div class="cat-sort">
-                  <select id="catSort" class="cat-sort-native" tabindex="-1" aria-hidden="true">
-                    <option>Sort by: Relevance</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Name A–Z</option>
-                  </select>
-                  <button type="button" id="catSortBtn" class="cat-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="catSortMenu">
-                    <span id="catSortLabel">Sort by: Relevance</span>
-                  </button>
-                  <div id="catSortMenu" class="cat-sort-menu" role="listbox" hidden>
-                    <button type="button" class="cat-sort-opt is-on" role="option" data-sort="Sort by: Relevance">Sort by: Relevance</button>
-                    <button type="button" class="cat-sort-opt" role="option" data-sort="Price: Low to High">Price: Low to High</button>
-                    <button type="button" class="cat-sort-opt" role="option" data-sort="Price: High to Low">Price: High to Low</button>
-                    <button type="button" class="cat-sort-opt" role="option" data-sort="Name A–Z">Name A–Z</button>
-                  </div>
-                </div>
-              </div>
+              <p id="catCount" class="text-sm font-bold text-[#667085]">1,248 products</p>
               <div id="alsoBlock" class="also-head mb-3 hidden">
                 <h2 id="alsoTitle" class="text-lg font-extrabold">Kitchens also order these vegetables</h2>
                 <p class="mt-1 text-sm font-medium text-[#667085]">Suggested with your search, from the same produce run.</p>
               </div>
               <div id="catGrid" class="cat-grid min-w-0"></div>
+              <nav id="catPager" class="cat-pager" aria-label="Catalogue pages" hidden></nav>
             </div>
           </div>
         </section>
@@ -2025,7 +2240,7 @@
 
   <nav id="mNav" aria-label="Customer">
     <span class="mnav-blob" id="mNavBlob" aria-hidden="true"></span>
-    <button type="button" data-panel="dashboard" class="is-on">
+    <button type="button" data-panel="dashboard">
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>
       Home
     </button>
@@ -2033,7 +2248,7 @@
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
       Lists
     </button>
-    <button type="button" data-panel="catalogue">
+    <button type="button" data-panel="catalogue" class="is-on">
       <span class="mnav-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg></span>
       Shop
     </button>
@@ -2046,7 +2261,7 @@
       Account
     </button>
   </nav>
-  <div id="scrim" class="fixed inset-0 z-30 hidden bg-black/30 lg:hidden"></div>
+  <div id="scrim" class="kx-scrim hidden"></div>
   <div id="filterScrim" class="fixed inset-0 z-50 hidden bg-black/30 lg:hidden"></div>
   <div id="toast" role="status"></div>
   <div id="orderModal" class="modal-scrim"><div class="card w-full max-w-lg p-6"><div class="flex items-start justify-between gap-3"><h3 id="omTitle" class="text-lg font-extrabold"></h3><button data-close="orderModal" class="btn-ghost h-9 px-3">Close</button></div><div id="omBody" class="mt-4"></div></div></div>
@@ -2083,9 +2298,9 @@
     const av = document.getElementById('avatar').textContent;
     ['sideAvatar','accAvatar'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = av; });
     const sideName = document.getElementById('sideName');
-    if (sideName) sideName.textContent = user && !user.includes('@') ? user : org;
-    const sideEmail = document.getElementById('sideEmail');
-    if (sideEmail) sideEmail.textContent = email;
+    if (sideName) sideName.textContent = org;
+    const sideType = document.getElementById('sideType');
+    if (sideType) sideType.textContent = bizType;
     const accHeadName = document.getElementById('accHeadName');
     if (accHeadName) accHeadName.textContent = user && !user.includes('@') ? user : org;
     const accHeadEmail = document.getElementById('accHeadEmail');
@@ -2129,13 +2344,34 @@
 
     const sidebar = document.getElementById('sidebar');
     const scrim = document.getElementById('scrim');
-    function closeSide() { sidebar.classList.add('-translate-x-full'); scrim.classList.add('hidden'); }
-    document.getElementById('menuBtn').addEventListener('click', () => { sidebar.classList.toggle('-translate-x-full'); scrim.classList.toggle('hidden'); });
+    const menuBtn = document.getElementById('menuBtn');
+    function closeSide() {
+      const open = sidebar.classList.contains('is-open');
+      sidebar.classList.remove('is-open');
+      sidebar.setAttribute('inert', '');
+      sidebar.setAttribute('aria-hidden', 'true');
+      scrim.classList.add('hidden');
+      document.body.classList.remove('drawer-open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      if (open) menuBtn.focus();
+    }
+    function openSide() {
+      sidebar.classList.add('is-open');
+      sidebar.removeAttribute('inert');
+      sidebar.setAttribute('aria-hidden', 'false');
+      scrim.classList.remove('hidden');
+      document.body.classList.add('drawer-open');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.getElementById('sideClose').focus();
+    }
+    menuBtn.addEventListener('click', () => {
+      if (sidebar.classList.contains('is-open')) closeSide();
+      else openSide();
+    });
     document.getElementById('sideClose').addEventListener('click', closeSide);
     scrim.addEventListener('click', closeSide);
-    document.getElementById('collapseBtn').addEventListener('click', () => {
-      sidebar.classList.toggle('collapsed');
-      document.getElementById('collapseBtn').setAttribute('aria-label', sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar');
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('is-open')) closeSide();
     });
 
     const PANELS = ['dashboard','catalogue','orders','repeat','lists','invoices','credit','checkout','deliveries','returns','account','support'];
@@ -2165,13 +2401,17 @@
     function showPanel(id) {
       closeDeskPdp();
       document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('hidden', el.getAttribute('data-view') !== id));
-      document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id));
+      document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => {
+        const on = btn.getAttribute('data-panel') === id;
+        btn.classList.toggle('is-active', on);
+        if (on) btn.setAttribute('aria-current', 'page');
+        else btn.removeAttribute('aria-current');
+      });
       const tab = M_TAB[id] || 'dashboard';
       document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === tab));
       placeMNavBlob();
       if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
-      sidebar.classList.add('-translate-x-full');
-      scrim.classList.add('hidden');
+      closeSide();
       closeFilters();
       window.scrollTo(0, 0);
       if (id === 'catalogue') renderCat();
@@ -2620,7 +2860,7 @@
         creditBanner.hidden = true;
       });
     }
-    let bootPanel = (location.hash || '#dashboard').slice(1);
+    let bootPanel = (location.hash || '#catalogue').slice(1);
 
     function toast(msg) {
       const el = document.getElementById('toast');
@@ -2653,7 +2893,7 @@
     document.getElementById('filterClose').addEventListener('click', closeFilters);
     filterScrim.addEventListener('click', closeFilters);
     function doLogout() {
-      ['kxRole','kxUser','kxOrg','kxPhone','kxNewCustomer','kxBizType','kxNeeds','kxCity','kxArea','kxAddress','kxOutlets','kxLocation'].forEach((k) => sessionStorage.removeItem(k));
+      ['kxRole','kxUser','kxOrg','kxPhone','kxNewCustomer','kxBizType','kxNeeds','kxCity','kxArea','kxAddress','kxOutlets','kxLocation','kxRegistration'].forEach((k) => sessionStorage.removeItem(k));
       window.location.href = 'kitchenx-v2.html';
     }
     document.getElementById('logoutBtn').addEventListener('click', doLogout);
@@ -2803,6 +3043,24 @@
     PRODUCTS.forEach((p) => { qty[p.id] = 0; });
     let chip = 'All Categories';
     let dealOnly = false;
+    let catPage = 1;
+    let catSig = '';
+    function catPageSize() {
+      const w = window.innerWidth;
+      if (w >= 1280) return 8;
+      if (w >= 768 && w < 1024) return 6;
+      return 4;
+    }
+    function catPageWindow(page, pages) {
+      if (pages <= 6) return Array.from({ length: pages }, (_, i) => i + 1);
+      const nums = [...new Set([1, pages, page - 1, page, page + 1].filter((n) => n >= 1 && n <= pages))].sort((a, b) => a - b);
+      const out = [];
+      nums.forEach((n, i) => {
+        if (i && n - nums[i - 1] > 1) out.push('…');
+        out.push(n);
+      });
+      return out;
+    }
     const FLASH_END = Date.now() + (2 * 3600 + 15 * 60 + 43) * 1000;
     function flashParts() {
       let left = Math.max(0, Math.floor((FLASH_END - Date.now()) / 1000));
@@ -3188,7 +3446,29 @@
       alsoBlock.classList.toggle('hidden', !related.length);
       document.getElementById('catCount').textContent = list.length + (related.length ? ' match' + (list.length === 1 ? '' : 'es') + ' · ' + related.length + ' also ordered' : ' products');
       const cards = list.concat(related);
-      document.getElementById('catGrid').innerHTML = cards.map(productCard).join('') || '<article class="card p-4 col-span-2"><p class="oos-note">Currently out of stock</p><p class="oos-sub mt-1">Highly demanded in kitchens · we are restocking this line</p></article>';
+      const sig = [q, sort, chip, dealOnly ? '1' : '0', activeChecks('.f-cat').join(','), activeChecks('.f-brand').join(','), document.getElementById('minPrice').value, document.getElementById('maxPrice').value, document.getElementById('stockOnly').checked ? '1' : '0', document.getElementById('offerDiscount').checked ? '1' : '0', document.getElementById('offerFlash').checked ? '1' : '0'].join('|');
+      if (sig !== catSig) { catPage = 1; catSig = sig; }
+      const size = catPageSize();
+      const pages = Math.max(1, Math.ceil(cards.length / size));
+      if (catPage > pages) catPage = pages;
+      if (catPage < 1) catPage = 1;
+      const start = (catPage - 1) * size;
+      const slice = cards.slice(start, start + size);
+      const pager = document.getElementById('catPager');
+      document.getElementById('catGrid').innerHTML = slice.map(productCard).join('') || '<article class="card p-4 col-span-2"><p class="oos-note">Currently out of stock</p><p class="oos-sub mt-1">Highly demanded in kitchens · we are restocking this line</p></article>';
+      if (!pager) return;
+      if (cards.length <= size) {
+        pager.hidden = true;
+        pager.innerHTML = '';
+        return;
+      }
+      const from = start + 1;
+      const to = start + slice.length;
+      const nums = catPageWindow(catPage, pages).map((n) => n === '…'
+        ? '<span class="cat-ellipsis" aria-hidden="true">…</span>'
+        : '<button type="button" data-cat-page="' + n + '"' + (n === catPage ? ' class="is-on" aria-current="page"' : '') + '>' + n + '</button>').join('');
+      pager.hidden = false;
+      pager.innerHTML = '<p class="cat-pager-note">Showing ' + from + '–' + to + ' of ' + cards.length + '</p><div class="cat-pager-btns"><button type="button" data-cat-page="prev"' + (catPage === 1 ? ' disabled' : '') + '>Prev</button>' + nums + '<button type="button" data-cat-page="next"' + (catPage === pages ? ' disabled' : '') + '>Next</button></div>';
     }
     document.getElementById('catChips').addEventListener('click', (e) => {
       const more = e.target.closest('#catMoreBtn');
@@ -3403,6 +3683,26 @@
       openPdp(p);
     }
     document.getElementById('catGrid').addEventListener('click', onProductCardClick);
+    document.getElementById('catPager').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cat-page]');
+      if (!btn || btn.disabled) return;
+      const val = btn.getAttribute('data-cat-page');
+      if (val === 'prev') catPage -= 1;
+      else if (val === 'next') catPage += 1;
+      else catPage = Number(val);
+      renderCat();
+      const grid = document.getElementById('catGrid');
+      const top = grid.getBoundingClientRect().top + window.scrollY - 88;
+      window.scrollTo({ top: Math.max(0, top), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+    let catResizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(catResizeTimer);
+      catResizeTimer = setTimeout(() => {
+        const cat = document.querySelector('[data-view="catalogue"]');
+        if (cat && !cat.classList.contains('hidden')) renderCat();
+      }, 150);
+    });
     document.getElementById('freqGrid').innerHTML = PRODUCTS.filter((p) => p.stock && !p.variant).slice(0, 4).map(productCard).join('');
     document.getElementById('freqGrid').addEventListener('click', onProductCardClick);
     function hideZoom(root) {
@@ -3823,7 +4123,7 @@
     });
     document.getElementById('supForm').addEventListener('submit', (e) => { e.preventDefault(); toast('Support request sent'); e.target.reset(); });
     window.addEventListener('resize', placeMNavBlob);
-    showPanel(PANELS.includes(bootPanel) ? bootPanel : 'dashboard');
+    showPanel(PANELS.includes(bootPanel) ? bootPanel : 'catalogue');
     requestAnimationFrame(placeMNavBlob);
   </script>
 </body>
