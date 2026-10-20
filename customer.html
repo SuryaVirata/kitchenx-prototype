@@ -1218,6 +1218,25 @@
         font-weight: 800;
         line-height: 1;
       }
+      .acc-desk > [data-accpane="settings"] { display: none; }
+      [data-view="account"].is-sub .acc-head { display: none !important; }
+      [data-view="account"].is-sub .acc-desk > article { display: none !important; }
+      [data-view="account"].is-sub .acc-desk > article.is-acc-on {
+        display: block !important;
+        grid-column: 1 / -1;
+      }
+      [data-view="account"].is-sub .acc-back {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 6px;
+        margin: 4px 0 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #344054;
+        font-size: 14px;
+        font-weight: 800;
+      }
       #saveAcc {
         display: inline-flex;
         align-items: center;
@@ -1902,7 +1921,7 @@
               <p class="mt-1 text-sm font-medium text-[#667085] desk-copy">Manage your kitchen profile, addresses and preferences</p>
             </div>
             <div class="acc-save-col hidden lg:flex">
-              <button type="button" class="acc-desk-settings" aria-label="Settings">
+              <button type="button" class="acc-desk-settings" data-accgo="settings" aria-label="Settings">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.3.6.9 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
                 <span>Settings</span>
               </button>
@@ -1991,10 +2010,17 @@
             </article>
             <article class="card p-5" data-accpane="prefs">
               <h3 class="text-base font-extrabold">Order Preferences</h3>
-              <div class="pref-row mt-2"><span>Order email notifications</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></label></div>
-              <div class="pref-row"><span>Low stock reminders</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-ui"></span></label></div>
-              <div class="pref-row"><span>Allow COD orders</span><label class="toggle"><input type="checkbox" /><span class="toggle-ui"></span></label></div>
-              <div class="pref-row"><span>Marketing emails</span><label class="toggle"><input type="checkbox" /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row mt-2"><span>Order email notifications</span><label class="toggle"><input type="checkbox" data-pref="mail" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Low stock reminders</span><label class="toggle"><input type="checkbox" data-pref="stock" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Allow COD orders</span><label class="toggle"><input type="checkbox" data-pref="cod" /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Marketing emails</span><label class="toggle"><input type="checkbox" data-pref="market" /><span class="toggle-ui"></span></label></div>
+            </article>
+            <article class="card p-5" data-accpane="settings">
+              <h3 class="text-base font-extrabold">Settings</h3>
+              <div class="pref-row mt-2"><span>Order email notifications</span><label class="toggle"><input type="checkbox" data-pref="mail" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Low stock reminders</span><label class="toggle"><input type="checkbox" data-pref="stock" checked /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Allow COD orders</span><label class="toggle"><input type="checkbox" data-pref="cod" /><span class="toggle-ui"></span></label></div>
+              <div class="pref-row"><span>Marketing emails</span><label class="toggle"><input type="checkbox" data-pref="market" /><span class="toggle-ui"></span></label></div>
             </article>
             <article class="card p-5">
               <h3 class="text-base font-extrabold">Credit Summary</h3>
@@ -2736,13 +2762,17 @@
     document.querySelectorAll('[data-accgo]').forEach((btn) => btn.addEventListener('click', () => {
       const go = btn.getAttribute('data-accgo');
       if (go === 'terms') { toast('Terms & policies'); return; }
-      if (go === 'settings') return;
-      if (window.matchMedia('(max-width: 1023px)').matches && (go === 'profile' || go === 'addr' || go === 'prefs')) {
+      if (go === 'settings' || (window.matchMedia('(max-width: 1023px)').matches && (go === 'profile' || go === 'addr' || go === 'prefs'))) {
         openAccScreen(go);
         return;
       }
       openAccForm();
     }));
+    document.querySelector('[data-view="account"]').addEventListener('change', (e) => {
+      const key = e.target.getAttribute('data-pref');
+      if (!key) return;
+      document.querySelectorAll('[data-pref="' + key + '"]').forEach((el) => { el.checked = e.target.checked; });
+    });
     function syncWish() {
       const saved = PRODUCTS.filter((p) => fav[p.id]);
       const count = document.getElementById('wishCount');
