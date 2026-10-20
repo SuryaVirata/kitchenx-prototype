@@ -1003,6 +1003,25 @@
         font-size: 14px;
         font-weight: 800;
       }
+      [data-view="account"].is-sub.is-edit:not(.hidden) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 12px;
+      }
+      [data-view="account"].is-sub.is-edit .acc-back { grid-column: 1; grid-row: 1; margin: 0; justify-self: start; }
+      [data-view="account"].is-sub.is-edit .acc-head {
+        display: flex !important;
+        grid-column: 2;
+        grid-row: 1;
+        justify-content: flex-end;
+        margin: 0;
+      }
+      [data-view="account"].is-sub.is-edit .acc-head > :not(.acc-save-col),
+      [data-view="account"].is-sub.is-edit .acc-desk-settings { display: none !important; }
+      [data-view="account"].is-sub.is-edit .acc-save-col { display: flex !important; width: auto; margin: 0; }
+      [data-view="account"].is-sub.is-edit .acc-desk,
+      [data-view="account"].is-sub.is-edit .acc-m { grid-column: 1 / -1; }
       #scrim { z-index: 50; background: rgba(20, 21, 23, 0.4); }
       .oos-note { color: #DC6803; font-size: 11px; font-weight: 800; }
       .oos-sub { color: #98A2B3; font-size: 10px; font-weight: 700; }
@@ -2222,7 +2241,7 @@
     function closeAccSub() {
       const account = document.querySelector('[data-view="account"]');
       if (!account) return;
-      account.classList.remove('is-sub');
+      account.classList.remove('is-sub', 'is-edit');
       account.querySelectorAll('.acc-desk > article').forEach((el) => el.classList.remove('is-acc-on'));
       const desk = account.querySelector('.acc-desk');
       if (desk) desk.classList.remove('is-open');
@@ -2234,6 +2253,7 @@
       const desk = account.querySelector('.acc-desk');
       desk.classList.remove('is-open');
       account.classList.add('is-sub');
+      account.classList.toggle('is-edit', !pane);
       account.querySelectorAll('.acc-desk > article').forEach((el) => {
         el.classList.toggle('is-acc-on', !pane || el.getAttribute('data-accpane') === pane);
       });
