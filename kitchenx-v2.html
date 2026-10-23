@@ -1964,11 +1964,11 @@
         <div class="faq-cats" id="skTypes">
           <button type="button" class="faq-cat" data-kit="Cuisine"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v7a3 3 0 0 0 3 3M6 4v16M9 4v7"/><path d="M15 4c2.2 2.2 2.2 6.2 0 8.4V20"/></svg></span><b>Cuisine</b><small>A full kitchen plan</small></button>
           <button type="button" class="faq-cat" data-kit="Burger"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9c0-2.8 3-5 7-5s7 2.2 7 5H5z"/><path d="M4 12h16M6 15h12c0 2-2.2 4-6 4s-6-2-6-4z"/></svg></span><b>Burger</b><small>Menu, cost, and supply</small></button>
-          <button type="button" class="faq-cat is-on" data-kit="Biryani"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14v2a7 7 0 0 1-14 0v-2z"/><path d="M8 11c.4-2 1.6-3.5 4-3.5S15.6 9 16 11"/></svg></span><b>Biryani</b><small>Recipe cost and sourcing</small></button>
+          <button type="button" class="faq-cat" data-kit="Biryani"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14v2a7 7 0 0 1-14 0v-2z"/><path d="M8 11c.4-2 1.6-3.5 4-3.5S15.6 9 16 11"/></svg></span><b>Biryani</b><small>Recipe cost and sourcing</small></button>
           <button type="button" class="faq-cat" data-kit="Pizza"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l8 14H4L12 4z"/><circle cx="12" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></span><b>Pizza</b><small>Oven line and ingredients</small></button>
           <button type="button" class="faq-cat" data-kit="Not sure yet"><span class="faq-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16.5A6.5 6.5 0 1 1 12.2 18L7 20l.6-3.2"/><path d="M9.5 11h.01M12 11h.01M14.5 11h.01"/></svg></span><b>Not sure yet</b><small>General consulting</small></button>
         </div>
-        <form class="menu-form" id="skForm">
+        <form class="menu-form hidden" id="skForm">
           <h3>Express interest</h3>
           <p>A relationship manager will call you.</p>
           <input class="menu-input" id="skName" name="name" placeholder="Your name" autocomplete="name" />
@@ -3731,12 +3731,13 @@
     (function () {
       var form = document.getElementById('skForm');
       if (!form) return;
-      var kit = 'Biryani';
+      var kit = '';
       document.getElementById('skTypes').addEventListener('click', function (e) {
         var btn = e.target.closest('.faq-cat');
         if (!btn) return;
         kit = btn.getAttribute('data-kit');
         document.querySelectorAll('#skTypes .faq-cat').forEach(function (el) { el.classList.toggle('is-on', el === btn); });
+        form.classList.remove('hidden');
       });
       function showErr(id, on) { document.getElementById(id).classList.toggle('hidden', !on); }
       form.addEventListener('submit', function (e) {
@@ -3749,7 +3750,7 @@
         var phoneBad = !/^[6-9]\d{9}$/.test(phone);
         showErr('skNameErr', nameBad);
         showErr('skPhoneErr', phoneBad);
-        if (nameBad || phoneBad) return;
+        if (!kit || nameBad || phoneBad) return;
         var lead = { name: name, phone: phone, city: city, kit: kit, note: note, at: Date.now() };
         var key = 'kx-starter-leads';
         var rows = [];
