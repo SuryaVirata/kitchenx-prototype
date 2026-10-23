@@ -2449,17 +2449,16 @@
       paintCredit();
     }
     function goCredit(n) {
-      const app = myCredit();
-      if (!app && n > creditStep) {
-        toast('Finish this step with Continue before you move ahead.');
-        return;
-      }
       creditStep = n;
       paintCredit();
     }
     document.querySelectorAll('[data-crail]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const n = Number(btn.getAttribute('data-crail'));
+        if (!myCredit() && n > creditStep) {
+          toast('Finish this step with Continue before you move ahead.');
+          return;
+        }
         goCredit(n);
       });
     });
