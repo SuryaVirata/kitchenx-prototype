@@ -1295,13 +1295,27 @@
     @media (min-width: 1024px) {
       .order-layout { grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr); align-items: start; }
       .order-side { position: sticky; top: 88px; }
-      /* Catalogue filters stay under the top bar while the products scroll. */
+      /* Category buttons stay under the 73px top bar. The band is the 36px chip plus 16px of page colour above and below it. */
+      [data-view="catalogue"] {
+        --cat-stick-top: 73px;
+        --cat-stick-band: 68px;
+      }
+      [data-view="catalogue"] .cat-chip-row {
+        position: sticky;
+        top: var(--cat-stick-top);
+        z-index: 20;
+        margin-top: 0;
+        margin-bottom: -16px;
+        padding: 16px 0;
+        background: #F7F8FA;
+      }
+      /* Catalogue filters stay under those buttons while the products scroll. */
       #filterPane {
         position: sticky;
-        top: 88px;
+        top: calc(var(--cat-stick-top) + var(--cat-stick-band));
         z-index: 15;
         align-self: start;
-        max-height: calc(100vh - 104px);
+        max-height: calc(100vh - var(--cat-stick-top) - var(--cat-stick-band) - 16px);
         overflow: auto;
       }
     }
