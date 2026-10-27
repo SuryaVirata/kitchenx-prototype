@@ -3283,7 +3283,29 @@
     const eyeOpen = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
     const eyeOff = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.4"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-3.2 3.6"/><path d="M6.1 6.1A18 18 0 0 0 2 12s4 7 10 7a10.4 10.4 0 0 0 4.2-.9"/></svg>';
 
+    function sessionHome() {
+      const role = sessionStorage.getItem('kxRole');
+      const user = sessionStorage.getItem('kxUser');
+      const persona = sessionStorage.getItem('kxPersona') || '';
+      if (!user) return '';
+      if (role === 'customer') return 'customer.html';
+      if (role === 'warehouse') return 'warehouse.html';
+      if (role === 'admin') {
+        if (persona === 'finance') return 'finance.html';
+        if (persona === 'technical') return 'technical.html';
+        if (persona === 'rm') return 'rm.html';
+        if (persona.indexOf('warehouse') === 0) return 'warehouse.html';
+        if (persona === 'platform' || persona === 'admin') return 'admin.html';
+      }
+      return '';
+    }
+
     function openAuth() {
+      const home = sessionHome();
+      if (home) {
+        location.replace(home);
+        return;
+      }
       overlay.classList.add('is-open');
       document.body.classList.add('auth-open');
       setMobileMenuOpen(false);
@@ -3389,7 +3411,7 @@
       sessionStorage.setItem('kxRole', staff.role);
       sessionStorage.setItem('kxPersona', staff.persona);
       sessionStorage.setItem('kxUser', staff.user);
-      window.location.href = staff.href;
+      location.replace(staff.href);
     });
 
     function phoneError(msg) {
@@ -3507,13 +3529,18 @@
     });
 
     function issueCustomerSession(record, created) {
+      const home = sessionHome();
+      if (home && sessionStorage.getItem('kxRole') !== 'customer') {
+        location.replace(home);
+        return;
+      }
       sessionStorage.setItem('kxRole', 'customer');
       sessionStorage.setItem('kxUser', record.display);
       sessionStorage.setItem('kxOrg', record.org || record.display);
       sessionStorage.setItem('kxPhone', record.phone);
       sessionStorage.setItem('kxNewCustomer', created ? '1' : '0');
       ['kxPersona', 'kxBizType', 'kxNeeds', 'kxCity', 'kxArea', 'kxAddress', 'kxOutlets', 'kxLocation'].forEach((k) => sessionStorage.removeItem(k));
-      window.location.href = 'customer.html';
+      location.replace('customer.html');
     }
 
     document.getElementById('confirmOtp').addEventListener('click', () => {
@@ -3706,7 +3733,14 @@
       } else sec.classList.add('is-shown');
     })();
 
-    if (location.hash === '#login') openAuth('login');
+    window.addEventListener('pageshow', () => {
+      signingIn = false;
+      const home = sessionHome();
+      if (home && (location.hash === '#login' || location.hash === '#signup')) location.replace(home);
+    });
+
+    if (sessionHome() && (location.hash === '#login' || location.hash === '#signup')) location.replace(sessionHome());
+    else if (location.hash === '#login') openAuth('login');
     else if (location.hash === '#signup') openAuth('signup');
     else if (location.hash === '#faq') {
       const faq = document.getElementById('faq');

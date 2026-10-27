@@ -240,8 +240,8 @@
   <div class="flex min-h-screen">
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
       <div class="brand-row flex items-center gap-2 px-5 py-5">
-        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
-        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
+        <a href="#dashboard" class="brand-full shrink-0" data-panel="dashboard" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
+        <a href="#dashboard" class="brand-mark text-[22px] font-extrabold tracking-tight" data-panel="dashboard" aria-label="KitchenX">K<span class="text-orange">X</span></a>
         <span id="brandSub" class="brand-sub text-sm font-semibold text-[#98A2B3]">Relationship Manager</span>
         <button id="sideClose" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -637,14 +637,17 @@
       document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === tab));
       placeMNavBlob();
     }
-    function showPanel(id) {
+    function showPanel(id, hist) {
       document.querySelectorAll('main .panel').forEach((el) => el.classList.add('hidden'));
       const view = document.getElementById(id + 'View');
       if (view) view.classList.remove('hidden');
       document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => {
         btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id);
       });
-      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      if (hist !== 'silent' && location.hash !== '#' + id) {
+        if (hist === 'replace') history.replaceState(null, '', '#' + id);
+        else history.pushState(null, '', '#' + id);
+      }
       sidebar.classList.add('-translate-x-full');
       scrim.classList.add('hidden');
       syncMNav(id);
@@ -667,7 +670,12 @@
     }
     document.querySelectorAll('.js-act').forEach((b) => b.addEventListener('click', () => toast(b.getAttribute('data-toast') || 'Saved')));
     const start = (location.hash || '#dashboard').slice(1);
-    if (document.getElementById(start + 'View')) showPanel(start);
+    if (document.getElementById(start + 'View')) showPanel(start, 'replace');
+    window.addEventListener('popstate', () => {
+      let id = (location.hash || '#dashboard').slice(1);
+      if (!document.getElementById(id + 'View')) id = 'dashboard';
+      showPanel(id, location.hash === '#' + id ? 'silent' : 'replace');
+    });
     window.addEventListener('resize', placeMNavBlob);
     requestAnimationFrame(placeMNavBlob);
     
