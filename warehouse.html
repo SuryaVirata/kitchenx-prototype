@@ -170,8 +170,8 @@
   <div class="flex min-h-screen">
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
       <div class="flex items-center gap-2 px-5 py-5">
-        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
-        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight">K<span class="text-orange">X</span></a>
+        <a href="#home" class="brand-full shrink-0" data-panel="home" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
+        <a href="#home" class="brand-mark text-[22px] font-extrabold tracking-tight" data-panel="home">K<span class="text-orange">X</span></a>
         <span id="brandSub" class="brand-sub text-sm font-semibold text-[#98A2B3]">Warehouse</span>
         <button id="sideClose" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -508,12 +508,17 @@
       document.querySelectorAll('#mNav [data-panel]').forEach((btn) => btn.classList.toggle('is-on', btn.getAttribute('data-panel') === tab));
       placeMNavBlob();
     }
-    function show(id) {
-      if (!isMgr && document.getElementById(id + 'View') && document.getElementById(id + 'View').classList.contains('mgr-only')) return;
+    function show(id, hist) {
+      const requested = document.getElementById(id + 'View');
+      if (!requested || (!isMgr && requested.classList.contains('mgr-only'))) id = 'home';
       document.querySelectorAll('main .panel').forEach((el) => el.classList.add('hidden'));
       const view = document.getElementById(id + 'View');
       if (view) view.classList.remove('hidden');
       document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id));
+      if (hist !== 'silent' && location.hash !== '#' + id) {
+        if (hist === 'replace') history.replaceState(null, '', '#' + id);
+        else history.pushState(null, '', '#' + id);
+      }
       sidebar.classList.add('-translate-x-full');
       scrim.classList.add('hidden');
       syncMNav(id);
@@ -537,6 +542,13 @@
     document.getElementById('countSave').addEventListener('click', () => toast('Count submitted for review'));
     document.querySelectorAll('.js-ok').forEach((b) => b.addEventListener('click', () => toast('Approved')));
     document.querySelectorAll('.js-deny').forEach((b) => b.addEventListener('click', () => toast('Sent back to supervisor')));
+    const start = (location.hash || '#home').slice(1);
+    show(document.getElementById(start + 'View') ? start : 'home', 'replace');
+    window.addEventListener('popstate', () => {
+      let id = (location.hash || '#home').slice(1);
+      if (!document.getElementById(id + 'View')) id = 'home';
+      show(id, location.hash === '#' + id ? 'silent' : 'replace');
+    });
   </script>
 </body>
 </html>

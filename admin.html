@@ -280,8 +280,8 @@
   <div class="flex min-h-screen">
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[248px] -translate-x-full flex-col border-r border-[#EEF0F3] bg-white transition-all lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 lg:self-start">
       <div class="brand-row flex items-center gap-2 px-5 py-5">
-        <a href="kitchenx-v2.html" class="brand-full shrink-0" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
-        <a href="kitchenx-v2.html" class="brand-mark text-[22px] font-extrabold tracking-tight" aria-label="KitchenX">K<span class="text-orange">X</span></a>
+        <a href="#dashboard" class="brand-full shrink-0" data-panel="dashboard" aria-label="KitchenX"><img class="kx-logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
+        <a href="#dashboard" class="brand-mark text-[22px] font-extrabold tracking-tight" data-panel="dashboard" aria-label="KitchenX">K<span class="text-orange">X</span></a>
         <span id="brandSub" class="brand-sub text-sm font-semibold text-[#98A2B3]">Admin</span>
         <button id="sideClose" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#667085]" type="button" aria-label="Close menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -1694,7 +1694,9 @@
                 <article class="form-card">
                   <h2 class="form-title">Logo &amp; Branding</h2>
                   <div class="flex flex-wrap items-center gap-4">
-                    <div class="flex h-24 w-[220px] shrink-0 items-center justify-center rounded-2xl border border-[#EEF0F3] bg-white text-[22px] font-extrabold tracking-tight whitespace-nowrap">Kitchen<span class="text-orange">X</span></div>
+                    <div class="flex h-24 w-[220px] shrink-0 items-center justify-center rounded-2xl border border-[#EEF0F3] bg-white px-3">
+                      <img src="assets/home/kitchenx-logo.png" alt="KitchenX" class="kx-logo max-w-full" />
+                    </div>
                     <label class="dropzone flex-1" id="setDrop">
                       <input id="setFile" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
                       <p class="text-sm font-bold text-[#344054]">Drag &amp; drop logo here</p>
@@ -2106,7 +2108,7 @@
       toast(act === 'finance' ? 'Case sent to finance' : act === 'skip' ? 'Marked as no visit needed' : 'Visit registered');
     });
 
-    function showPanel(id, title) {
+    function showPanel(id, title, hist) {
       const isDash = id === 'dashboard';
       const isForm = FORM_PANELS.includes(id);
       document.getElementById('dashboardView').classList.toggle('hidden', !isDash);
@@ -2122,7 +2124,10 @@
       document.querySelectorAll('#sideNav .nav-btn').forEach((btn) => {
         btn.classList.toggle('is-active', btn.getAttribute('data-panel') === id);
       });
-      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      if (hist !== 'silent' && location.hash !== '#' + id) {
+        if (hist === 'replace') history.replaceState(null, '', '#' + id);
+        else history.pushState(null, '', '#' + id);
+      }
       sidebar.classList.add('-translate-x-full');
       scrim.classList.add('hidden');
       syncMNav(id);
@@ -2533,8 +2538,14 @@
     if (start) {
       const btn = document.querySelector('#sideNav [data-panel="' + start + '"]');
       const visible = btn && btn.offsetParent !== null;
-      if (visible) showPanel(start, btn.getAttribute('data-title'));
-    }
+      if (visible) showPanel(start, btn.getAttribute('data-title'), 'replace');
+    } else history.replaceState(null, '', '#dashboard');
+    window.addEventListener('popstate', () => {
+      const id = (location.hash || '#dashboard').replace('#', '');
+      const btn = document.querySelector('#sideNav [data-panel="' + id + '"]');
+      if (!btn) return;
+      showPanel(id, btn.getAttribute('data-title'), 'silent');
+    });
     window.addEventListener('resize', placeMNavBlob);
     requestAnimationFrame(placeMNavBlob);
   </script>
