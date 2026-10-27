@@ -1557,7 +1557,7 @@
               <h2 id="mHeroTitle">Fresh supplies for a better tomorrow</h2>
               <p id="mHeroSub">Quality ingredients. Stronger kitchens.</p>
               <button type="button" id="mHeroCta" data-panel="catalogue" class="btn-save">Shop Now →</button>
-              <img id="mHeroArt" class="m-hero-art" src="assets/home/hero-1.png" alt="" />
+              <img id="mHeroArt" class="m-hero-art" src="assets/home/hero-1.webp" alt="" />
               <div id="mHeroDots" class="m-hero-dots"></div>
             </article>
             <div class="m-cats">
@@ -2852,7 +2852,7 @@
     });
 
     function money(n) { return '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-    function picSrc(kind) { return 'assets/customer/products/' + (kind || 'tomato') + '.png'; }
+    function picSrc(kind) { return 'assets/customer/products/' + (kind || 'tomato') + '.webp'; }
     function pic(kind, cls) {
       return '<img class="' + (cls || 'thumb') + '" src="' + picSrc(kind) + '" alt="" />';
     }
@@ -2938,10 +2938,10 @@
     setInterval(tickFlash, 1000);
 
     const HERO_SLIDES = [
-      { title: 'Fresh supplies for a better tomorrow', sub: 'Quality ingredients. Stronger kitchens.', cta: 'Shop Now →', img: 'assets/home/hero-1.png' },
-      { title: 'Plated with kitchen-ready produce', sub: 'From crate to service, same-day freshness.', cta: 'Browse Produce →', img: 'assets/home/hero-2.png?v=2' },
-      { title: 'Farm-fresh vegetables, every morning', sub: 'Seasonal picks sourced for professional kitchens.', cta: 'Shop Produce →', img: 'assets/home/hero-3.png' },
-      { title: 'Fulfilment you can count on', sub: 'Packed, picked and delivered on your schedule.', cta: 'Shop Now →', img: 'assets/home/hero-4.png' }
+      { title: 'Fresh supplies for a better tomorrow', sub: 'Quality ingredients. Stronger kitchens.', cta: 'Shop Now →', img: 'assets/home/hero-1.webp' },
+      { title: 'Plated with kitchen-ready produce', sub: 'From crate to service, same-day freshness.', cta: 'Browse Produce →', img: 'assets/home/hero-2.webp?v=2' },
+      { title: 'Farm-fresh vegetables, every morning', sub: 'Seasonal picks sourced for professional kitchens.', cta: 'Shop Produce →', img: 'assets/home/hero-3.webp' },
+      { title: 'Fulfilment you can count on', sub: 'Packed, picked and delivered on your schedule.', cta: 'Shop Now →', img: 'assets/home/hero-4.webp' }
     ];
     const mHeroTitle = document.getElementById('mHeroTitle');
     const mHeroSub = document.getElementById('mHeroSub');
