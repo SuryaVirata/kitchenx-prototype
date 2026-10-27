@@ -1279,7 +1279,18 @@
     }
     .order-step.is-on { background: #141517; color: #fff; }
     .order-step.is-done { color: #12B76A; }
-    .order-layout { display: grid; gap: 16px; }
+    .order-layout { display: grid; gap: 16px; min-width: 0; max-width: 100%; }
+    #orderFlow, .order-side, .order-steps { min-width: 0; max-width: 100%; }
+    .cart-line { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .cart-line-end { display: flex; align-items: center; gap: 10px; flex: none; }
+    .cart-price { white-space: nowrap; text-align: right; font-size: 14px; font-weight: 800; }
+    .bill-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; min-width: 0; }
+    .bill-row > span:first-child { min-width: 0; }
+    .bill-row > span:last-child { flex: none; white-space: nowrap; }
+    @media (max-width: 639px) {
+      .cart-line { flex-wrap: wrap; }
+      .cart-line-end { flex: 1 0 100%; justify-content: space-between; padding-left: 52px; }
+    }
     @media (min-width: 1024px) {
       .order-layout { grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr); align-items: start; }
       .order-side { position: sticky; top: 88px; }
@@ -1324,6 +1335,7 @@
     .cart-step { display: inline-flex; align-items: center; height: 32px; border-radius: 10px; background: #FF4F18; color: #fff; overflow: hidden; }
     .cart-step button { width: 28px; height: 32px; font-size: 16px; font-weight: 800; color: #fff; }
     .cart-step span { min-width: 18px; text-align: center; font-size: 13px; font-weight: 800; }
+    .ok-mark {
       display: grid;
       width: 72px;
       height: 72px;
@@ -2120,6 +2132,22 @@
   <div id="raiseModal" class="modal-scrim"><form id="raiseForm" class="card w-full max-w-md p-6"><h3 class="text-lg font-extrabold">Raise Request</h3><label class="mt-4 block text-sm font-bold">Type<select id="raiseType" class="field mt-1"><option>Return</option><option>Replacement</option><option>Complaint</option><option>Refund</option></select></label><label class="mt-3 block text-sm font-bold">Order ID<input id="raiseOrder" class="field mt-1" placeholder="#ORD12456" /></label><label class="mt-3 block text-sm font-bold">Details<textarea id="raiseNote" class="field mt-1" required></textarea></label><div class="mt-5 flex justify-end gap-2"><button type="button" data-close="raiseModal" class="btn-ghost">Cancel</button><button class="btn-save" type="submit">Submit</button></div></form></div>
 
   <script>
+    (function () {
+      var role = sessionStorage.getItem('kxRole');
+      if (!role || role === 'customer') return;
+      var persona = sessionStorage.getItem('kxPersona') || '';
+      var home = '';
+      if (role === 'warehouse') home = 'warehouse.html';
+      else if (role === 'admin') {
+        if (persona === 'finance') home = 'finance.html';
+        else if (persona === 'technical') home = 'technical.html';
+        else if (persona === 'rm') home = 'rm.html';
+        else if (persona.indexOf('warehouse') === 0) home = 'warehouse.html';
+        else if (persona === 'platform' || persona === 'admin' || !persona) home = 'admin.html';
+        else home = 'kitchenx-v2.html#login';
+      } else home = 'kitchenx-v2.html#login';
+      if (home) window.location.replace(home);
+    })();
     const org = sessionStorage.getItem('kxOrg') || 'The Urban Table';
     const user = sessionStorage.getItem('kxUser') || '';
     const bizType = sessionStorage.getItem('kxBizType') || 'Restaurant';
@@ -2541,20 +2569,23 @@
         '<span class="order-step' + (i === at ? ' is-on' : i < at ? ' is-done' : '') + '">' + (i + 1) + ' ' + s[1] + '</span>'
       ).join('') + '</div>';
     }
+    function productCountLabel(n) {
+      return n + ' ' + (n === 1 ? 'product' : 'products');
+    }
     function lineRow(p) {
-      return '<article class="card flex items-center gap-3 p-3">' +
+      return '<article class="card cart-line p-3">' +
         pic(p.pic) +
         '<div class="min-w-0 flex-1"><p class="truncate font-extrabold">' + p.name + '</p><p class="text-xs font-semibold text-[#667085]">' + (packOf(p) || p.brand) + '</p></div>' +
-        '<div class="cart-step" role="group"><button type="button" data-cq="-" data-id="' + p.id + '" aria-label="Decrease">−</button><span>' + qty[p.id] + '</span><button type="button" data-cq="+" data-id="' + p.id + '" aria-label="Increase">+</button></div>' +
-        '<p class="w-20 text-right text-sm font-extrabold">' + money(p.price * qty[p.id]) + '</p></article>';
+        '<div class="cart-line-end"><div class="cart-step" role="group"><button type="button" data-cq="-" data-id="' + p.id + '" aria-label="Decrease">−</button><span>' + qty[p.id] + '</span><button type="button" data-cq="+" data-id="' + p.id + '" aria-label="Increase">+</button></div>' +
+        '<p class="cart-price">' + money(p.price * qty[p.id]) + '</p></div></article>';
     }
     function summaryCard(total, action) {
       const fee = deliveryFee(total);
       return '<aside class="order-side card p-5">' +
         '<p class="text-xs font-extrabold uppercase tracking-wide text-[#98A2B3]">Bill summary</p>' +
-        '<div class="mt-3 grid gap-2 text-sm font-bold"><div class="flex justify-between"><span class="text-[#667085]">Items</span><span>' + money(total) + '</span></div>' +
-        '<div class="flex justify-between"><span class="text-[#667085]">Delivery</span><span>' + (fee ? money(fee) : 'Free') + '</span></div>' +
-        '<div class="flex justify-between border-t border-[#EEF0F3] pt-2 text-base"><span>Total</span><span>' + money(total + fee) + '</span></div></div>' +
+        '<div class="mt-3 grid gap-2 text-sm font-bold"><div class="bill-row"><span class="text-[#667085]">Items</span><span>' + money(total) + '</span></div>' +
+        '<div class="bill-row"><span class="text-[#667085]">Delivery</span><span>' + (fee ? money(fee) : 'Free') + '</span></div>' +
+        '<div class="bill-row border-t border-[#EEF0F3] pt-2 text-base"><span>Total</span><span>' + money(total + fee) + '</span></div></div>' +
         '<p class="mt-2 text-xs font-semibold text-[#98A2B3]">Free delivery on orders above ₹500</p>' +
         action + '</aside>';
     }
@@ -2565,14 +2596,14 @@
       if (orderStep === 'track' && liveOrder) { root.innerHTML = trackHtml(liveOrder); return; }
       const items = cartLines();
       if (!items.length) {
-        root.innerHTML = '<h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><article class="card mt-4 p-5"><p class="font-extrabold">Nothing added yet</p><p class="mt-1 text-sm font-semibold text-[#667085]">Add a product, then come back here.</p><button type="button" class="btn-save mt-4" data-shop="1">Browse catalogue</button></article>';
+        root.innerHTML = '<h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><p class="mt-1 text-sm font-medium text-[#667085]">' + productCountLabel(items.length) + ' for this kitchen.</p><article class="card mt-4 p-5"><p class="font-extrabold">Nothing added yet</p><p class="mt-1 text-sm font-semibold text-[#667085]">Add a product, then come back here.</p><button type="button" class="btn-save mt-4" data-shop="1">Browse catalogue</button></article>';
         return;
       }
       const total = cartTotal();
       if (orderStep === 'pay') { root.innerHTML = payHtml(items, total); return; }
       root.innerHTML =
         stepPills('cart') +
-        '<div class="mt-4 flex flex-wrap items-end justify-between gap-3"><div><h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><p class="mt-1 text-sm font-medium text-[#667085]">' + items.length + ' products for this kitchen.</p></div>' +
+        '<div class="mt-4 flex flex-wrap items-end justify-between gap-3"><div class="min-w-0"><h1 class="text-3xl font-extrabold tracking-tight">Cart</h1><p class="mt-1 text-sm font-medium text-[#667085]">' + productCountLabel(items.length) + ' for this kitchen.</p></div>' +
         '<button type="button" class="btn-ghost h-10 px-4" data-shop="1">Continue shopping</button></div>' +
         '<div class="order-layout mt-4"><div class="grid gap-3">' + items.map(lineRow).join('') + '</div>' +
         summaryCard(total, '<button type="button" class="btn-save mt-4 w-full" data-go="pay">Proceed to checkout</button>') +
@@ -2659,7 +2690,7 @@
         extra: Math.max(0, items.reduce((n, p) => n + qty[p.id], 0) - pics.length),
         pics: pics.length ? pics : ['tomato'],
         track: true,
-        items: items.length + ' products · ' + money(due),
+        items: productCountLabel(items.length) + ' · ' + money(due),
         addr: (document.getElementById('locLabel') && document.getElementById('locLabel').textContent) || 'Main Kitchen',
         slot: orderSlot,
         pay: orderPay
