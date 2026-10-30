@@ -411,10 +411,11 @@
       html { scroll-behavior: auto; }
     }
     /* Customer login sheet: full screen on phones, a light card on larger screens */
-    .auth-sheet { max-width: 420px; background: #fff; padding: 16px 20px 28px; }
+    .auth-sheet { max-width: 440px; background: #fff; padding: 12px 20px 28px; }
+    .auth-head { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; margin-bottom: 26px; }
     .auth-back { display: grid; place-items: center; width: 40px; height: 40px; margin-left: -8px; border: 0; border-radius: 50%; background: transparent; color: #141517; cursor: pointer; }
     .auth-back:hover { background: #F2F4F7; }
-    .auth-mark { display: block; width: 190px; max-width: 60%; height: auto; margin: 10px auto 30px; }
+    .auth-mark { display: block; width: 180px; max-width: 100%; height: auto; margin: 0 auto; }
     .auth-title { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
     .auth-sub { margin: 6px 0 0; font-size: 15px; font-weight: 500; color: #667085; }
     .auth-form { display: grid; gap: 14px; margin-top: 24px; }
@@ -432,13 +433,25 @@
     .otp-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 24px; }
     .otp { width: 100%; min-width: 0; height: 52px; padding: 0; border: 1px solid #E4E7EC; border-radius: 12px; background: #F8F9FB; text-align: center; font: inherit; font-size: 20px; font-weight: 800; color: #141517; outline: none; transition: border-color .15s, box-shadow .15s, background .15s; }
     .otp:focus { background: #fff; border-color: rgba(255, 79, 24, 0.7); box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.12); }
-    .auth-timer { margin: 16px 0 0; font-size: 14px; font-weight: 700; color: #667085; }
-    .auth-link { margin-top: 12px; border: 0; background: none; padding: 0; font: inherit; font-size: 14px; font-weight: 800; color: #FF4F18; cursor: pointer; }
+    .auth-phone { font-weight: 800; color: #141517; }
+    .auth-edit { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-left: 4px; vertical-align: middle; border: 0; border-radius: 50%; background: #FFF1EC; color: #FF4F18; cursor: pointer; }
+    .auth-edit:hover { background: #FFE2D8; }
+    .otp-clock { margin: 18px 0 0; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: #141517; }
+    .otp-resend { margin: 4px 0 0; font-size: 14px; font-weight: 500; color: #667085; }
+    .auth-link { display: inline; margin: 0; padding: 0; border: 0; background: none; font: inherit; font-weight: 800; color: #FF4F18; cursor: pointer; }
+    .auth-link:disabled { color: #98A2B3; cursor: default; }
+    .auth-check { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; font-size: 14px; font-weight: 500; line-height: 1.4; color: #344054; cursor: pointer; }
+    .auth-check:first-of-type { margin-top: 20px; }
+    .auth-check input { appearance: none; -webkit-appearance: none; flex: 0 0 auto; width: 20px; height: 20px; margin: 1px 0 0; border: 1.5px solid #D0D5DD; border-radius: 6px; background: #fff; cursor: pointer; transition: background .12s, border-color .12s; }
+    .auth-check input:checked { border-color: #FF4F18; background: #FF4F18 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M2.5 6.2l2.4 2.4 4.6-5'/></svg>") no-repeat center; }
+    .auth-check input:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(255, 79, 24, 0.18); }
+    .auth-check a { font-weight: 800; color: #FF4F18; text-decoration: none; }
+    .auth-check a:hover { text-decoration: underline; }
     @media (min-width: 640px) {
-      .auth-sheet { padding: 20px 32px 32px; border-radius: 24px; box-shadow: 0 24px 60px rgba(20, 21, 23, 0.14), 0 2px 8px rgba(20, 21, 23, 0.05); }
+      .auth-sheet { padding: 18px 32px 32px; border-radius: 24px; box-shadow: 0 24px 60px rgba(20, 21, 23, 0.14), 0 2px 8px rgba(20, 21, 23, 0.05); }
     }
     @media (max-width: 359px) {
-      .auth-sheet { padding: 12px 16px 24px; }
+      .auth-sheet { padding: 8px 16px 24px; }
       .otp-row { gap: 6px; }
     }
     html:has(body.auth-open),
@@ -2202,11 +2215,13 @@
   <div id="authOverlay" class="fixed inset-0 z-[80] items-stretch justify-center overflow-y-auto sm:items-center sm:px-4 sm:py-10">
     <button type="button" id="authBackdrop" class="absolute inset-0 bg-[#F2F4F7]/55 backdrop-blur-[10px]" aria-label="Close"></button>
     <div class="auth-sheet relative z-10 w-full">
-      <button type="button" id="authBack" class="auth-back" aria-label="Back">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-      </button>
-
-      <img class="auth-mark" src="assets/home/kitchenx-logo-lg.webp" width="720" height="84" alt="KitchenX" />
+      <div class="auth-head">
+        <button type="button" id="authBack" class="auth-back" aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </button>
+        <img class="auth-mark" src="assets/home/kitchenx-logo-lg.webp" width="720" height="84" alt="KitchenX" />
+        <span aria-hidden="true"></span>
+      </div>
 
       <div id="authLogin">
         <div id="custPhone">
@@ -2230,7 +2245,11 @@
 
         <div id="custOtp" class="hidden">
           <h2 class="auth-title">Enter the code</h2>
-          <p class="auth-sub">Sent to <span id="otpPhone" class="font-bold text-coal"></span></p>
+          <p class="auth-sub">Sent to <span id="otpPhone" class="auth-phone"></span>
+            <button type="button" id="editPhone" class="auth-edit" aria-label="Change mobile number">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+            </button>
+          </p>
           <div id="otpBoxes" class="otp-row">
             <input class="otp" maxlength="1" inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1" />
             <input class="otp" maxlength="1" inputmode="numeric" aria-label="Digit 2" />
@@ -2240,8 +2259,10 @@
             <input class="otp" maxlength="1" inputmode="numeric" aria-label="Digit 6" />
           </div>
           <p id="otpError" class="auth-err hidden"></p>
-          <p id="otpTimer" class="auth-timer">Resend code in 60s</p>
-          <button type="button" id="resendBtn" class="auth-link hidden" disabled>Resend code</button>
+          <p id="otpTimer" class="otp-clock" aria-live="off">01:00</p>
+          <p class="otp-resend">Didn't receive the OTP? <button type="button" id="resendBtn" class="auth-link" disabled>Resend now</button></p>
+          <label class="auth-check"><input type="checkbox" id="agreeTerms" checked /><span>I agree to KitchenX <a href="#" id="termsLink">terms &amp; conditions</a></span></label>
+          <label class="auth-check"><input type="checkbox" id="optWhatsapp" checked /><span>Send me offers and updates on WhatsApp</span></label>
           <button type="button" id="confirmOtp" class="auth-btn">Verify</button>
         </div>
       </div>
@@ -3381,29 +3402,27 @@
       }
     }
 
+    function otpClock(sec) {
+      return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+    }
+
     function startOtpTimer() {
       otpSeconds = 60;
       otpSentAt = Date.now();
       otpAttempts = 0;
       const label = document.getElementById('otpTimer');
       const resend = document.getElementById('resendBtn');
-      const confirm = document.getElementById('confirmOtp');
-      resend.classList.add('hidden');
       resend.disabled = true;
-      confirm.disabled = false;
-      label.classList.remove('hidden');
-      label.textContent = 'Resend code in 60s';
+      document.getElementById('confirmOtp').disabled = false;
+      label.textContent = otpClock(otpSeconds);
       clearInterval(otpTimer);
       otpTimer = setInterval(() => {
-        otpSeconds -= 1;
-        if (otpSeconds <= 0) {
+        otpSeconds = Math.max(otpSeconds - 1, 0);
+        label.textContent = otpClock(otpSeconds);
+        if (otpSeconds === 0) {
           clearInterval(otpTimer);
-          label.classList.add('hidden');
-          resend.classList.remove('hidden');
           resend.disabled = false;
-          return;
         }
-        label.textContent = 'Resend code in ' + otpSeconds + 's';
       }, 1000);
     }
 
@@ -3460,6 +3479,14 @@
       });
     });
 
+    document.getElementById('editPhone').addEventListener('click', () => {
+      clearInterval(otpTimer);
+      showCustomerPhone();
+      document.getElementById('phoneInput').focus();
+    });
+    document.getElementById('termsLink').addEventListener('click', (e) => e.preventDefault());
+    document.getElementById('agreeTerms').addEventListener('change', () => otpError(''));
+
     document.getElementById('resendBtn').addEventListener('click', () => {
       if (otpSeconds > 0) return;
       otpBoxes.forEach((box) => { box.value = ''; });
@@ -3485,6 +3512,10 @@
 
     document.getElementById('confirmOtp').addEventListener('click', () => {
       if (signingIn) return;
+      if (!document.getElementById('agreeTerms').checked) {
+        otpError('Accept the terms & conditions to continue.');
+        return;
+      }
       const code = otpBoxes.map((box) => box.value).join('');
       if (Date.now() - otpSentAt > OTP_TTL) {
         otpError('This code has expired. Resend a new one.');
@@ -3507,9 +3538,10 @@
         const created = !existing;
         const record = existing || { phone: pendingPhone, display: pendingDisplay, createdAt: Date.now() };
         if (!record.display) record.display = pendingDisplay;
+        record.whatsappOptIn = document.getElementById('optWhatsapp').checked;
+        book[pendingPhone] = record;
+        localStorage.setItem('kxCustomers', JSON.stringify(book));
         if (created) {
-          book[pendingPhone] = record;
-          localStorage.setItem('kxCustomers', JSON.stringify(book));
           const saved = readCustomers();
           if (!saved[pendingPhone]) throw new Error('save');
         }
