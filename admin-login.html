@@ -115,6 +115,13 @@
     @media (max-height: 599px) {
       .page { justify-content: flex-start; }
     }
+
+    /* Phones and tablets: keep it quiet, just the form on a plain background */
+    @media (max-width: 1023px) {
+      body { background: #F7F8FA; }
+      .bg, .spark, .feats, .lede-2 { display: none; }
+      .card { box-shadow: 0 1px 3px rgba(20, 21, 23, 0.06), 0 8px 24px rgba(20, 21, 23, 0.05); }
+    }
   </style>
 </head>
 <body>
@@ -123,7 +130,7 @@
   <main class="page">
     <a href="kitchenx-v2.html" aria-label="KitchenX home"><img class="logo" src="assets/home/kitchenx-logo.png" alt="KitchenX" /></a>
     <h1>Welcome to <em>KitchenX</em></h1>
-    <p class="lede">Your one-stop platform for kitchen supplies, groceries and more. <br />Sign in to manage your business, orders and inventory.</p>
+    <p class="lede">Your one-stop platform for kitchen supplies, groceries and more. <br /><span class="lede-2">Sign in to manage your business, orders and inventory.</span></p>
 
     <div class="card-wrap">
       <svg class="spark l" viewBox="0 0 44 44" aria-hidden="true"><path d="M10 4l14 22"/><path d="M4 32l22 8"/></svg>
