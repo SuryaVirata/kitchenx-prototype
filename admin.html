@@ -1939,13 +1939,13 @@
   <script>
     const PERSONA = sessionStorage.getItem('kxPersona') || 'platform';
     if (sessionStorage.getItem('kxRole') !== 'admin') {
-      window.location.href = 'kitchenx-v2.html#login';
+      window.location.href = 'admin-login.html';
     }
     if (PERSONA === 'finance') window.location.href = 'finance.html';
     else if (PERSONA === 'technical') window.location.href = 'technical.html';
     else if (PERSONA === 'rm') window.location.href = 'rm.html';
     else if (String(PERSONA).indexOf('warehouse') === 0) window.location.href = 'warehouse.html';
-    else if (PERSONA !== 'platform' && PERSONA !== 'admin') window.location.href = 'kitchenx-v2.html#login';
+    else if (PERSONA !== 'platform' && PERSONA !== 'admin') window.location.href = 'admin-login.html';
     const PEOPLE = {
       platform: { name: 'Rahul Sharma', role: 'Platform Admin', initial: 'R', hello: 'Good morning, Rahul!', sub: 'Onboarding, catalogue and Hyderabad exceptions for today.' },
       admin: { name: 'Rahul Sharma', role: 'Platform Admin', initial: 'R', hello: 'Good morning, Rahul!', sub: 'Onboarding, catalogue and Hyderabad exceptions for today.' },
@@ -2141,7 +2141,7 @@
       sessionStorage.removeItem('kxRole');
       sessionStorage.removeItem('kxPersona');
       sessionStorage.removeItem('kxUser');
-      window.location.href = 'kitchenx-v2.html';
+      window.location.href = 'admin-login.html';
     });
 
     function toast(msg) {

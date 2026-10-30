@@ -440,7 +440,7 @@
   <script>
     const persona = sessionStorage.getItem('kxPersona') || '';
     if (sessionStorage.getItem('kxRole') !== 'warehouse') {
-      window.location.href = 'kitchenx-v2.html#login';
+      window.location.href = 'admin-login.html';
     }
     const isMgr = persona === 'warehouse_manager';
     const people = {
@@ -482,7 +482,7 @@
       sessionStorage.removeItem('kxRole');
       sessionStorage.removeItem('kxPersona');
       sessionStorage.removeItem('kxUser');
-      window.location.href = 'kitchenx-v2.html';
+      window.location.href = 'admin-login.html';
     });
 
     let mnavReady = false;

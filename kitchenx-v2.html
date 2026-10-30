@@ -421,7 +421,6 @@
       -webkit-overflow-scrolling: touch;
     }
     #authOverlay.is-open { display: flex; }
-    .auth-eye { color: #667085; }
     .tab-active { color: #FF4F18; border-color: #FF4F18; }
     .tab-idle { color: #667085; border-color: transparent; }
     .page-wrap {
@@ -2199,9 +2198,6 @@
               <p id="phoneError" class="hidden text-sm font-bold text-orange"></p>
               <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
             </form>
-            <p class="mt-5 text-center text-sm font-medium text-[#667085]">
-              Prefer email? <button type="button" id="emailSignIn" class="font-extrabold text-orange">Sign in with email</button>
-            </p>
           </div>
 
           <div id="custOtp" class="hidden">
@@ -2219,31 +2215,6 @@
             <p id="otpTimer" class="mt-4 text-sm font-bold text-[#667085]">Resend code in 60s</p>
             <button type="button" id="resendBtn" class="mt-1 hidden text-sm font-extrabold text-orange" disabled>Resend code</button>
             <button type="button" id="confirmOtp" class="mt-6 h-12 w-full rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Verify</button>
-          </div>
-
-          <div id="emailLogin" class="hidden">
-            <h2 class="text-[26px] font-extrabold tracking-tight">Sign in with email</h2>
-            <p class="mt-1 text-sm font-medium text-[#667085]">Enter your email and password to continue.</p>
-            <form id="loginForm" class="mt-6 grid gap-4" autocomplete="off">
-              <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Email</span>
-                <input id="userInput" class="field h-12 rounded-2xl border border-[#E4E7EC] bg-fog px-4 text-sm font-semibold" placeholder="Enter email" />
-              </label>
-              <label class="grid gap-1.5">
-                <span class="text-sm font-bold">Password</span>
-                <span class="relative block">
-                  <input id="passInput" class="field h-12 w-full rounded-2xl border border-[#E4E7EC] bg-fog px-4 pr-12 text-sm font-semibold" type="password" placeholder="Enter password" />
-                  <button type="button" class="auth-eye absolute right-3 top-1/2 -translate-y-1/2" data-eye="passInput" aria-label="Show password">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
-                </span>
-              </label>
-              <p id="formError" class="hidden text-sm font-bold text-orange"></p>
-              <button type="submit" class="h-12 rounded-full bg-orange text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(255,79,24,0.22)]">Continue</button>
-            </form>
-            <p class="mt-5 text-center text-sm font-medium text-[#667085]">
-              Prefer mobile? <button type="button" id="mobileSignIn" class="font-extrabold text-orange">Continue with mobile</button>
-            </p>
           </div>
         </div>
       </div>
@@ -3262,14 +3233,6 @@
       e.target.reset();
     });
 
-    const STAFF = {
-      admin: { user: 'Admin', pass: 'Admin@123', role: 'admin', persona: 'platform', href: 'admin.html' },
-      finance: { user: 'FinanceAdmin', pass: 'FinanceAdmin@123', role: 'admin', persona: 'finance', href: 'finance.html' },
-      technical: { user: 'TechnicalAdmin', pass: 'TechnicalAdmin@123', role: 'admin', persona: 'technical', href: 'technical.html' },
-      rm: { user: 'RM', pass: 'RM@123', role: 'admin', persona: 'rm', href: 'rm.html', alts: [{ user: 'RelationshipManager', pass: 'RelationshipManager@123' }] },
-      supervisor: { user: 'Supervisor', pass: 'Supervisor@123', role: 'warehouse', persona: 'warehouse_supervisor', href: 'warehouse.html' },
-      manager: { user: 'Manager', pass: 'Manager@123', role: 'warehouse', persona: 'warehouse_manager', href: 'warehouse.html' }
-    };
     const overlay = document.getElementById('authOverlay');
     const OTP_TTL = 5 * 60 * 1000;
     const OTP_ATTEMPTS = 5;
@@ -3280,8 +3243,6 @@
     let pendingPhone = '';
     let pendingDisplay = '';
     let signingIn = false;
-    const eyeOpen = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
-    const eyeOff = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.4"/><path d="M9.9 5.2A11 11 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-3.2 3.6"/><path d="M6.1 6.1A18 18 0 0 0 2 12s4 7 10 7a10.4 10.4 0 0 0 4.2-.9"/></svg>';
 
     function sessionHome() {
       const role = sessionStorage.getItem('kxRole');
@@ -3326,14 +3287,6 @@
     function showCustomerPhone() {
       document.getElementById('custPhone').classList.remove('hidden');
       document.getElementById('custOtp').classList.add('hidden');
-      document.getElementById('emailLogin').classList.add('hidden');
-    }
-
-    function showEmail() {
-      document.getElementById('custPhone').classList.add('hidden');
-      document.getElementById('custOtp').classList.add('hidden');
-      document.getElementById('emailLogin').classList.remove('hidden');
-      document.getElementById('formError').classList.add('hidden');
     }
 
     document.querySelectorAll('[data-auth-open]').forEach((el) => {
@@ -3365,55 +3318,11 @@
         showCustomerPhone();
         return;
       }
-      if (!document.getElementById('emailLogin').classList.contains('hidden')) {
-        showCustomerPhone();
-        return;
-      }
       closeAuth();
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeAuth();
     });
-    document.getElementById('emailSignIn').addEventListener('click', showEmail);
-    document.getElementById('mobileSignIn').addEventListener('click', showCustomerPhone);
-
-    document.querySelectorAll('[data-eye]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const input = document.getElementById(btn.getAttribute('data-eye'));
-        const show = input.type === 'password';
-        input.type = show ? 'text' : 'password';
-        btn.innerHTML = show ? eyeOff : eyeOpen;
-        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-      });
-    });
-
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const user = document.getElementById('userInput').value.trim();
-      const pass = document.getElementById('passInput').value;
-      const formError = document.getElementById('formError');
-      formError.classList.add('hidden');
-      if (!user || !pass) {
-        formError.textContent = 'Enter both fields to continue.';
-        formError.classList.remove('hidden');
-        return;
-      }
-      const key = user.toLowerCase();
-      const staff = Object.values(STAFF).find((s) => {
-        if (s.user.toLowerCase() === key && s.pass === pass) return true;
-        return (s.alts || []).some((a) => a.user.toLowerCase() === key && a.pass === pass);
-      });
-      if (!staff) {
-        formError.textContent = 'Email or password is incorrect.';
-        formError.classList.remove('hidden');
-        return;
-      }
-      sessionStorage.setItem('kxRole', staff.role);
-      sessionStorage.setItem('kxPersona', staff.persona);
-      sessionStorage.setItem('kxUser', staff.user);
-      location.replace(staff.href);
-    });
-
     function phoneError(msg) {
       const el = document.getElementById('phoneError');
       el.textContent = msg || '';
@@ -3473,7 +3382,6 @@
 
     function showOtp() {
       document.getElementById('custPhone').classList.add('hidden');
-      document.getElementById('emailLogin').classList.add('hidden');
       document.getElementById('custOtp').classList.remove('hidden');
       document.getElementById('otpPhone').textContent = pendingDisplay;
       otpError('');

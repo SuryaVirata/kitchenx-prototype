@@ -566,7 +566,7 @@
   <script>
     const NEED = 'finance';
     if (sessionStorage.getItem('kxRole') !== 'admin' || sessionStorage.getItem('kxPersona') !== NEED) {
-      window.location.href = 'kitchenx-v2.html#login';
+      window.location.href = 'admin-login.html';
     }
     const sidebar = document.getElementById('sidebar');
     const scrim = document.getElementById('scrim');
@@ -698,7 +698,7 @@
       sessionStorage.removeItem('kxRole');
       sessionStorage.removeItem('kxPersona');
       sessionStorage.removeItem('kxUser');
-      window.location.href = 'kitchenx-v2.html';
+      window.location.href = 'admin-login.html';
     });
     function toast(msg) {
       const el = document.getElementById('toast');
