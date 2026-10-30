@@ -2259,7 +2259,7 @@
             <input class="otp" maxlength="1" inputmode="numeric" aria-label="Digit 6" />
           </div>
           <p id="otpError" class="auth-err hidden"></p>
-          <p id="otpTimer" class="otp-clock" aria-live="off">01:00</p>
+          <p id="otpTimer" class="otp-clock" aria-live="off">02:00</p>
           <p class="otp-resend">Didn't receive the OTP? <button type="button" id="resendBtn" class="auth-link" disabled>Resend now</button></p>
           <label class="auth-check"><input type="checkbox" id="agreeTerms" checked /><span>I agree to KitchenX <a href="#" id="termsLink">terms &amp; conditions</a></span></label>
           <label class="auth-check"><input type="checkbox" id="optWhatsapp" checked /><span>Send me offers and updates on WhatsApp</span></label>
@@ -3284,7 +3284,7 @@
     const overlay = document.getElementById('authOverlay');
     const OTP_TTL = 5 * 60 * 1000;
     const OTP_ATTEMPTS = 5;
-    let otpSeconds = 60;
+    let otpSeconds = 120;
     let otpTimer = null;
     let otpSentAt = 0;
     let otpAttempts = 0;
@@ -3407,7 +3407,7 @@
     }
 
     function startOtpTimer() {
-      otpSeconds = 60;
+      otpSeconds = 120;
       otpSentAt = Date.now();
       otpAttempts = 0;
       const label = document.getElementById('otpTimer');
